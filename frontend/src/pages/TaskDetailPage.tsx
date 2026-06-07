@@ -38,7 +38,7 @@ import type {
   SignoffStatus,
   TaskDetail,
   WorkspaceFileSummary,
-} from '@/types/chipflow'
+} from '@/types/chiporchestra'
 
 const stageToneClass = {
   running: 'bg-indigo-100 text-indigo-700 border-indigo-200',
@@ -168,7 +168,7 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
 
     await submitStageApproval(taskId, 'signoff', {
       decision: 'approve',
-      comment: 'Final approval requested from the routed ChipFlowAI UI.',
+      comment: 'Final approval requested from the routedChip Orchestra UI.',
     })
 
     const updatedSignoff = await getSignoffStatus(taskId)
@@ -300,7 +300,7 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
                         <div className='flex items-center gap-2 text-sm text-slate-400'>
                           <span>{event.time}</span>
                           <span>•</span>
-                          <span>ChipFlowAI</span>
+                          <span>ChipOrchestra</span>
                         </div>
                         <p className='mt-1 font-semibold text-slate-900'>{event.title}</p>
                         <p className='mt-2 text-sm leading-6 text-slate-500'>{event.detail}</p>

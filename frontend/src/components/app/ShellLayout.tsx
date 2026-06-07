@@ -59,7 +59,7 @@ export function ShellLayout() {
             <div className='flex items-start justify-between gap-3'>
               <div>
                 <p className='text-xs font-semibold uppercase tracking-widest text-slate-400'>AI-native chip design</p>
-                <h1 className='mt-2 text-3xl font-semibold tracking-tight text-blue-600'>ChipFlowAI</h1>
+                <h1 className='mt-2 text-3xl font-semibold tracking-tight text-blue-600'>ChipOrchestra</h1>
               </div>
               <div className='flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-400 px-1 text-xs font-semibold leading-none text-white shadow-lg'>
                 <MaterialIcon name='memory' className='text-[24px]' />
@@ -121,7 +121,7 @@ export function ShellLayout() {
                 <div className='grid grid-cols-2 gap-3 text-sm'>
                   <div>
                     <p className='text-xs uppercase tracking-wide text-slate-400'>Repo</p>
-                    <p className='mt-1 font-medium'>chipflowai/digital-demo</p>
+                    <p className='mt-1 font-medium'>chiporchestra/digital-demo</p>
                   </div>
                   <div>
                     <p className='text-xs uppercase tracking-wide text-slate-400'>PDK</p>
@@ -167,7 +167,7 @@ export function ShellLayout() {
               <div className='max-w-3xl'>
                 <p className='text-sm font-medium text-slate-400'>Product proposal companion wireframe</p>
                 <h2 className='mt-2 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl'>
-                  ChipFlowAI digital IC platform
+                 Chip Orchestra digital IC platform
                 </h2>
                 <p className='mt-3 max-w-3xl text-sm leading-6 text-slate-500 sm:text-base'>
                   An interactive mockup for a browser-based digital design platform where AI agents, verification loops,

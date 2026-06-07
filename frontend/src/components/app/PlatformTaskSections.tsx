@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom'
 import { AlertCircle, CheckCircle2, Clock3, FileCode2, ListChecks, PackageCheck } from 'lucide-react'
 
-import type { ArtifactItem, DiagnosisItem, RunbookEvent, SignoffStatus, TaskDetail, WorkspaceFileSummary } from '@/types/chipflow'
+import type { ArtifactItem, DiagnosisItem, RunbookEvent, SignoffStatus, TaskDetail, WorkspaceFileSummary } from '@/types/chiporchestra'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'

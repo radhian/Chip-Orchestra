@@ -1,4 +1,4 @@
-import type { TaskFilter, TaskSummary, WorkflowStep } from '@/types/chipflow'
+import type { TaskFilter, TaskSummary, WorkflowStep } from '@/types/chiporchestra'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'

@@ -4,14 +4,14 @@ import { useNavigate } from 'react-router-dom'
 import { createTask } from '@/api/tasks'
 import { PlatformCreateSection } from '@/components/app/PlatformCreateSection'
 import { PlatformLayout } from '@/components/app/PlatformLayout'
-import type { CreateTaskInput } from '@/types/chipflow'
+import type { CreateTaskInput } from '@/types/chiporchestra'
 
 const launchForm = {
   taskName: 'fft_accelerator_1024p digital flow',
   launchMode: 'Full flow with gated approvals',
   designBrief: 'Streaming FFT accelerator, AXI-lite config, throughput > 500 MHz target, moderate area sensitivity.',
   repositorySource:
-    'Link `git@repo/chipflowai/fft-accelerator.git` or create a new repo from the `digital-block-starter` template.',
+    'Link `git@repo/chiporchestra/fft-accelerator.git` or create a new repo from the `digital-block-starter` template.',
   bootstrapOption: 'Use template: digital-block-starter',
   pdkLibrary: 'Sky130 HD + SRAM macro pack',
   reviewGate: 'Require engineer approval before synthesis and before signoff packaging',
@@ -27,7 +27,7 @@ export function PlatformCreateTaskPage() {
         name: launchForm.taskName,
         launch_mode: 'FULL_FLOW_GATED',
         design_brief: launchForm.designBrief,
-        repo_id: 'git@repo/chipflowai/fft-accelerator.git',
+        repo_id: 'git@repo/chiporchestra/fft-accelerator.git',
         repo_branch: 'main',
         repo_mode: 'EXISTING',
         template_id: 'digital-block-starter',
