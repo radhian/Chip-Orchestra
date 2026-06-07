@@ -1,6 +1,6 @@
 import type {
   ApprovalPayload,
-  ChipflowSnapshot,
+  ChiporchestraSnapshot,
   CreateTaskInput,
   ExportBundleResponse,
   ListTasksParams,
@@ -9,9 +9,9 @@ import type {
   TaskSummary,
   WaiverPayload,
   WorkflowStep,
-} from '@/types/chipflow'
+} from '@/types/chiporchestra'
 
-const STORAGE_KEY = 'chipflowai.mock.snapshot.v2'
+const STORAGE_KEY = 'chiporchestra.mock.snapshot.v2'
 const CURRENT_USER_ID = 'radhian.armansyah'
 const CURRENT_USER_NAME = 'Radhian'
 
@@ -50,7 +50,7 @@ const workflowSteps: WorkflowStep[] = [
   },
 ]
 
-const seedSnapshot: ChipflowSnapshot = {
+const seedSnapshot: ChiporchestraSnapshot = {
   workflowSteps,
   tasks: [
     {
@@ -63,7 +63,7 @@ const seedSnapshot: ChipflowSnapshot = {
       etaLabel: '38 min',
       statusLabel: 'Running',
       tone: 'running',
-      repoName: 'chipflowai/fft-accelerator-demo',
+      repoName: 'chiporchestra/fft-accelerator-demo',
       mine: true,
     },
     {
@@ -76,7 +76,7 @@ const seedSnapshot: ChipflowSnapshot = {
       etaLabel: '12 min',
       statusLabel: 'Needs review',
       tone: 'review',
-      repoName: 'chipflowai/aes-core-refresh',
+      repoName: 'chiporchestra/aes-core-refresh',
       needsReview: true,
     },
     {
@@ -89,7 +89,7 @@ const seedSnapshot: ChipflowSnapshot = {
       etaLabel: 'Ready',
       statusLabel: 'Passed',
       tone: 'passed',
-      repoName: 'chipflowai/uart-lite',
+      repoName: 'chiporchestra/uart-lite',
     },
     {
       id: 'gpio-bridge',
@@ -101,7 +101,7 @@ const seedSnapshot: ChipflowSnapshot = {
       etaLabel: '19 min',
       statusLabel: 'Failed',
       tone: 'failed',
-      repoName: 'chipflowai/gpio-bridge',
+      repoName: 'chiporchestra/gpio-bridge',
     },
   ],
   taskDetails: {
@@ -116,7 +116,7 @@ const seedSnapshot: ChipflowSnapshot = {
       etaLabel: '38 min',
       statusLabel: 'Running',
       tone: 'running',
-      repoName: 'chipflowai/fft-accelerator-demo',
+      repoName: 'chiporchestra/fft-accelerator-demo',
       pdkLabel: 'Sky130 HD + SRAM macro pack',
       reviewGateLabel: 'Require engineer approval before synthesis and before signoff packaging',
       runtimeLabel: 'Agent + EDA pods',
@@ -140,7 +140,7 @@ const seedSnapshot: ChipflowSnapshot = {
       etaLabel: '12 min',
       statusLabel: 'Needs review',
       tone: 'review',
-      repoName: 'chipflowai/aes-core-refresh',
+      repoName: 'chiporchestra/aes-core-refresh',
       pdkLabel: 'Sky130 default stack',
       reviewGateLabel: 'Review gate on lint waiver and retry',
       runtimeLabel: 'Lint and simulation pod',
@@ -164,7 +164,7 @@ const seedSnapshot: ChipflowSnapshot = {
       etaLabel: 'Ready',
       statusLabel: 'Passed',
       tone: 'passed',
-      repoName: 'chipflowai/uart-lite',
+      repoName: 'chiporchestra/uart-lite',
       pdkLabel: 'GF180 reference flow',
       reviewGateLabel: 'Approval complete',
       runtimeLabel: 'Signoff packaging pod',
@@ -188,7 +188,7 @@ const seedSnapshot: ChipflowSnapshot = {
       etaLabel: '19 min',
       statusLabel: 'Failed',
       tone: 'failed',
-      repoName: 'chipflowai/gpio-bridge',
+      repoName: 'chiporchestra/gpio-bridge',
       pdkLabel: 'Sky130 reference flow',
       reviewGateLabel: 'Human retry required',
       runtimeLabel: 'Simulation pod',
@@ -314,8 +314,8 @@ endmodule`,
   },
 }
 
-function cloneSnapshot(snapshot: ChipflowSnapshot): ChipflowSnapshot {
-  return JSON.parse(JSON.stringify(snapshot)) as ChipflowSnapshot
+function cloneSnapshot(snapshot: ChiporchestraSnapshot): ChiporchestraSnapshot {
+  return JSON.parse(JSON.stringify(snapshot)) as ChiporchestraSnapshot
 }
 
 function formatReviewGateLabel(reviewGates: ReviewGate[]) {
@@ -346,7 +346,7 @@ function getRepoName(task: CreateTaskInput['task']) {
   return task.repo_id ?? 'Unspecified repo'
 }
 
-export function loadMockSnapshot(): ChipflowSnapshot {
+export function loadMockSnapshot(): ChiporchestraSnapshot {
   if (typeof window === 'undefined') {
     return cloneSnapshot(seedSnapshot)
   }
@@ -359,7 +359,7 @@ export function loadMockSnapshot(): ChipflowSnapshot {
   }
 
   try {
-    return JSON.parse(raw) as ChipflowSnapshot
+    return JSON.parse(raw) as ChiporchestraSnapshot
   } catch {
     const snapshot = cloneSnapshot(seedSnapshot)
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(snapshot))
@@ -367,7 +367,7 @@ export function loadMockSnapshot(): ChipflowSnapshot {
   }
 }
 
-export function saveMockSnapshot(snapshot: ChipflowSnapshot) {
+export function saveMockSnapshot(snapshot: ChiporchestraSnapshot) {
   if (typeof window === 'undefined') return
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(snapshot))
 }

@@ -14,7 +14,7 @@ export function EmptyState({ title, detail }: { title: string; detail: string })
   )
 }
 
-export function LoadingState({ label = 'Loading ChipFlowAI data…' }: { label?: string }) {
+export function LoadingState({ label = 'LoadingChip Orchestra data…' }: { label?: string }) {
   return (
     <Card className='rounded-3xl border-slate-200 shadow-none'>
       <CardContent className='p-8 text-sm text-slate-500'>{label}</CardContent>

@@ -1,6 +1,6 @@
-# ChipFlowAI Frontend
+#Chip Orchestra Frontend
 
-A GitHub-ready React + TypeScript + Vite frontend for the **ChipFlowAI digital IC design platform** mockup.
+A GitHub-ready React + TypeScript + Vite frontend for the **Chip Orchestra digital IC design platform** mockup.
 
 This repo now includes:
 
@@ -61,7 +61,7 @@ This is controlled by:
 
 Mock data lives in:
 
-- `src/mocks/chipflow.ts`
+- `src/mocks/chiporchestra.ts`
 
 ---
 
@@ -92,8 +92,8 @@ This repository is npm-friendly. You can run it with standard npm commands.
 ### 1. Clone the repository
 
 ```bash
-git clone <your-repo-url> chipflowai-frontend
-cd chipflowai-frontend
+git clone <your-repo-url>Chip Orchestra-frontend
+cdChip Orchestra-frontend
 ```
 
 ### 2. Install dependencies
@@ -179,7 +179,7 @@ npm run preview
 ## Project structure
 
 ```text
-chipflowai-frontend/
+chiporchestra-frontend/
 ├─ public/                      # Static public assets
 ├─ src/
 │  ├─ api/
@@ -192,13 +192,13 @@ chipflowai-frontend/
 │  ├─ hooks/                    # Shared hooks
 │  ├─ lib/                      # Utilities
 │  ├─ mocks/
-│  │  └─ chipflow.ts            # Local mock snapshot + fallback state
+│  │  └─ chiporchestra.ts            # Local mock snapshot + fallback state
 │  ├─ pages/
 │  │  ├─ OverviewPage.tsx       # /overview
 │  │  ├─ CreateTaskPage.tsx     # /tasks/new
 │  │  └─ TaskDetailPage.tsx     # /tasks/:id, /rtl, /signoff
 │  ├─ types/
-│  │  └─ chipflow.ts            # Shared frontend domain types
+│  │  └─ chiporchestra.ts            # Shared frontend domain types
 │  ├─ App.tsx                   # Route definitions + sidebar nav
 │  ├─ App.css                   # App-level styles
 │  ├─ index.css                 # Tailwind base/styles

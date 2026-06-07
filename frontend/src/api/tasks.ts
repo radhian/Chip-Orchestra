@@ -5,7 +5,7 @@ import {
   createMockTask,
   filterMockTasks,
   loadMockSnapshot,
-} from '@/mocks/chipflow'
+} from '@/mocks/chiporchestra'
 import type {
   ApprovalPayload,
   ArtifactItem,
@@ -22,7 +22,7 @@ import type {
   WorkflowStep,
   WorkspaceFileContent,
   WorkspaceFileSummary,
-} from '@/types/chipflow'
+} from '@/types/chiporchestra'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, '')
 const SHOULD_USE_MOCKS = import.meta.env.VITE_USE_MOCKS !== 'false'
@@ -60,7 +60,7 @@ async function withFallback<T>(remote: () => Promise<T>, mock: () => T | Promise
     return await remote()
   } catch (error) {
     if (SHOULD_USE_MOCKS) {
-      console.warn('ChipFlowAI API unavailable, falling back to mock data.', error)
+      console.warn('Chip Orchestra API unavailable, falling back to mock data.', error)
       return mock()
     }
 

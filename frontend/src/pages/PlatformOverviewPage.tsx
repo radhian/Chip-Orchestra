@@ -5,7 +5,7 @@ import { getWorkflowSteps, listTasks } from '@/api/tasks'
 import { PlatformLayout } from '@/components/app/PlatformLayout'
 import { PlatformOverviewSection } from '@/components/app/PlatformOverviewSection'
 import { ErrorState, LoadingState } from '@/components/app/shared'
-import type { TaskFilter, TaskSummary, WorkflowStep } from '@/types/chipflow'
+import type { TaskFilter, TaskSummary, WorkflowStep } from '@/types/chiporchestra'
 
 const defaultTaskId = 'fft-1024p'
 
@@ -51,7 +51,7 @@ export function PlatformOverviewPage() {
   if (loading) {
     return (
       <PlatformLayout activeSection='overview' detailHref={`/tasks/${tasks[0]?.id ?? defaultTaskId}`}>
-        <LoadingState label='Loading ChipFlowAI overview…' />
+        <LoadingState label='LoadingChip Orchestra overview…' />
       </PlatformLayout>
     )
   }

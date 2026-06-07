@@ -33,7 +33,7 @@ export function PlatformLayout({
             <div className='flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between'>
               <div className='max-w-4xl'>
                 <p className='text-sm font-medium text-slate-400'>Product proposal companion wireframe</p>
-                <h2 className='mt-2 text-[2.35rem] font-semibold tracking-tight text-slate-900'>ChipFlowAI digital IC platform</h2>
+                <h2 className='mt-2 text-[2.35rem] font-semibold tracking-tight text-slate-900'>Chip Orchestra digital IC platform</h2>
                 <p className='mt-3 max-w-4xl text-sm leading-7 text-slate-500 sm:text-base'>
                   An interactive mockup for a browser-based digital design platform where AI agents, verification loops,
                   synthesis, and signoff all behave like managed tasks with clear ownership and status.

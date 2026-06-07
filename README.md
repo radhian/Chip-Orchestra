@@ -1,4 +1,4 @@
-# ChipFlow AI: End\-to\-end AI\-Native Digital Chip Design Platform 
+# Chip Orchestra: End\-to\-end AI\-Native Digital Chip Design Platform 
 
 ## Background
 
@@ -6,7 +6,7 @@
 
 **Chipster** already demonstrates the right technical direction: AI\-assisted Verilog generation, automated verification loops, OpenLane integration, and standard\-cell generation\. Based on the current public project baseline, the next product step should not be just “more models”. This should be a **unified execution surface** that makes complex hardware flows feel as manageable as modern AI generation tasks\.
 
-The product proposal below reframes **Chipster** onto **ChipFlowAI**, such have four experience pillars:
+The product proposal below reframes **Chipster** onto **Chip Orchestra**, such have four experience pillars:
 
 1. **Task\-first orchestration** so users launch and track digital design work as structured jobs rather than ad hoc scripts\.
 
@@ -16,7 +16,7 @@ The product proposal below reframes **Chipster** onto **ChipFlowAI**, such have 
 
 4. **Tapeout\-oriented delivery** so the end state is not just “generated RTL”, but a clean handoff package with reports, waivers, and approvals\.
 
-To ground the proposal in the current ChipFlowAI baseline, the recommendations below focus on rebranding the platform into a more explicit AI\-native digital IC and SoC execution system\.
+To ground the proposal in the current Chip Orchestra baseline, the recommendations below focus on rebranding the platform into a more explicit AI\-native digital IC and SoC execution system\.
 
 ---
 
@@ -24,7 +24,7 @@ To ground the proposal in the current ChipFlowAI baseline, the recommendations b
 
 ### What we are building
 
-**ChipFlowAI Digital** is a browser\-based platform for digital IC and SoC development that combines:
+**Chip Orchestra Digital** is a browser\-based platform for digital IC and SoC development that combines:
 
 - AI agent planning
 
@@ -36,9 +36,9 @@ To ground the proposal in the current ChipFlowAI baseline, the recommendations b
 
 - Production\-minded signoff and export workflows
 
-### Why this is the right continuation of ChipFlowAI
+### Why this is the right continuation ofChip Orchestra
 
-The current ChipFlowAI documentation already describes a flow from natural language prompt to Verilog, testbench generation, simulation, synthesis, and GDS output\. The missing layer is the **product operating model** around that flow:
+The currentChip Orchestra documentation already describes a flow from natural language prompt to Verilog, testbench generation, simulation, synthesis, and GDS output\. The missing layer is the **product operating model** around that flow:
 
 - how tasks are created
 
@@ -54,7 +54,7 @@ The current ChipFlowAI documentation already describes a flow from natural langu
 
 That operating model is what this proposal provides\.
 
-### Current ChipFlowAI strength
+### CurrentChip Orchestra strength
 
 - Strong AI\-assisted generation story
 
@@ -238,7 +238,7 @@ In chip design, value often comes from explaining **why** a run failed\. The pro
 
 The target experience should reuse the strongest interaction patterns from modern managed generation products, but adapt them for hardware:
 
-|Pattern|Why it works|ChipFlowAI adaptation|
+|Pattern|Why it works|Chip Orchestra adaptation|
 |---|---|---|
 |Task list with strong filters|Lets users scan many runs quickly and find blockers fast|Filter by repo, module, stage, toolchain, PDK, owner, and status|
 |Task detail page with timeline|Turns long\-running work into understandable steps|Show spec → RTL → TB → sim → lint → synth → PnR → signoff as linked stages|

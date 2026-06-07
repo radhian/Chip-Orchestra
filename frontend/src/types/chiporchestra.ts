@@ -165,7 +165,7 @@ export interface ExportBundleResponse {
   status: string
 }
 
-export interface ChipflowSnapshot {
+export interface ChiporchestraSnapshot {
   tasks: TaskSummary[]
   workflowSteps: WorkflowStep[]
   taskDetails: Record<string, TaskDetail>

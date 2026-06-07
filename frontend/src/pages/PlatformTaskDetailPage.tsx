@@ -5,7 +5,7 @@ import { getSignoffStatus, getTask, getTaskArtifacts, getTaskDiagnosis, getTaskE
 import { PlatformLayout } from '@/components/app/PlatformLayout'
 import { PlatformTaskSections } from '@/components/app/PlatformTaskSections'
 import { ErrorState, LoadingState } from '@/components/app/shared'
-import type { ArtifactItem, DiagnosisItem, RunbookEvent, SignoffStatus, TaskDetail, WorkspaceFileSummary } from '@/types/chipflow'
+import type { ArtifactItem, DiagnosisItem, RunbookEvent, SignoffStatus, TaskDetail, WorkspaceFileSummary } from '@/types/chiporchestra'
 
 type DetailTab = 'runbook' | 'rtl' | 'signoff'
 

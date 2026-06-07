@@ -6,7 +6,7 @@ import { EmptyState, ErrorState, LoadingState } from '@/components/app/shared'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import type { ListTasksParams, TaskFilter, TaskSummary, WorkflowStep } from '@/types/chipflow'
+import type { ListTasksParams, TaskFilter, TaskSummary, WorkflowStep } from '@/types/chiporchestra'
 
 const filterItems: { key: TaskFilter; label: string }[] = [
   { key: 'all', label: 'All repos' },

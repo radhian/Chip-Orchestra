@@ -22,11 +22,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input'
 import { Progress } from '@/components/ui/progress'
 import { Textarea } from '@/components/ui/textarea'
-import type { CreateTaskInput } from '@/types/chipflow'
+import type { CreateTaskInput } from '@/types/chiporchestra'
 
 const defaultForm = {
   taskName: 'FFT Accelerator 1024p signoff push',
-  repoSource: 'github.com/chipflowai/fft-accelerator-demo',
+  repoSource: 'github.com/chiporchestra/fft-accelerator-demo',
   designBrief:
     'Build a compact FFT accelerator flow that can ingest a prior RTL baseline, run lint and simulation, recover common timing regressions, and produce a signoff-ready package with explicit artifact lineage.',
   launchMode: 'FULL_FLOW_GATED' as const,

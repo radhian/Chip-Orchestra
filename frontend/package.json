@@ -1,8 +1,8 @@
 {
-  "name": "chipflowai-frontend",
+  "name": "chiporchestra-frontend",
   "private": true,
   "version": "1.0.0",
-  "description": "Open-source React frontend for the ChipFlowAI digital IC design platform mockup.",
+  "description": "Open-source React frontend for theChip Orchestra digital IC design platform mockup.",
   "type": "module",
   "engines": {
     "node": ">=18"

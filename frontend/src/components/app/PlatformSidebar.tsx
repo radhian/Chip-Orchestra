@@ -28,7 +28,7 @@ export function PlatformSidebar({
         <div className='flex items-start justify-between gap-3'>
           <div>
             <p className='text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400'>AI-native chip design</p>
-            <h1 className='mt-2 text-[2rem] font-semibold tracking-tight text-[#2563eb]'>ChipFlowAI</h1>
+            <h1 className='mt-2 text-[2rem] font-semibold tracking-tight text-[#2563eb]'>ChipOrchestra</h1>
           </div>
           <div className='flex h-14 w-14 items-center justify-center rounded-[18px] bg-gradient-to-br from-[#4f7cff] via-[#3ea6ff] to-[#2dd4bf] text-white shadow-lg shadow-cyan-200/70'>
             <MaterialIcon name='memory' className='text-[24px]' />
@@ -88,7 +88,7 @@ export function PlatformSidebar({
             </div>
 
             <div className='grid gap-3 text-sm'>
-              <InfoCell label='Repo' value='chipflowai/digital-demo' />
+              <InfoCell label='Repo' value='chiporchestra/digital-demo' />
               <div className='grid grid-cols-2 gap-3'>
                 <InfoCell label='PDK' value='Sky130 / GF180' />
                 <InfoCell label='Runtime' value='Agent + EDA pods' />
