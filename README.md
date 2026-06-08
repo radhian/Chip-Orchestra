@@ -1,5 +1,16 @@
 # Chip Orchestra: End\-to\-end AI\-Native Digital Chip Design Platform 
 
+> **Now with a working agentic backend.** The frontend is wired to a FastAPI
+> service powered by a LangGraph agent (adapted from
+> [GarudaChip](https://github.com/adeirman46/GarudaChip)) that turns a
+> natural\-language brief into verified Verilog RTL and a LibreLane\-hardened
+> GDSII — streamed live into the task screens.
+>
+> - **Agentic RTL→GDSII:** plan → web\-research + RAG (crawl4ai + FAISS) → generate → simulate (Icarus) → self\-correct → harden (LibreLane) → signoff, all on a local `qwen3.5:9b` via Ollama.
+> - **Auto\-persistence:** a fresh clone boots with an **empty** database + bucket; every run auto\-saves its **logs, files, and state** to **PostgreSQL** + **S3/MinIO object storage** (config\-driven; falls back to a local file store with no infra).
+> - **Run everything:** `./run.sh` &nbsp;→&nbsp; frontend `http://localhost:5173`, backend `http://localhost:8000` (also starts Postgres + MinIO via Docker)
+> - **Setup & operations:** [docs/SETUP.md](docs/SETUP.md) · **Architecture:** [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) · **Backend:** [backend/README.md](backend/README.md)
+
 ## Background
 
 **North star:** turn Chipster from a collection of AI\-assisted design tools into a **task\-centric digital IC and SoC Platform** where RTL generation, verification, synthesis, and tapeout preparation are orchestrated as observable browser\-native workflows\.

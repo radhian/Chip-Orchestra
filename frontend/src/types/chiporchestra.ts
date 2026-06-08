@@ -8,6 +8,7 @@ export type LaunchMode = 'FULL_FLOW_GATED' | 'GEN_ONLY' | 'VERIFY_RESCUE' | 'SYN
 export type RepoMode = 'EXISTING' | 'TEMPLATE'
 export type ReviewGate = 'BEFORE_SYNTH' | 'BEFORE_SIGNOFF'
 export type AgentAutonomyLevel = 'LOW' | 'BALANCED' | 'HIGH'
+export type ResearchDepth = 'SMALL' | 'MEDIUM' | 'DEEP'
 
 export interface WorkflowStep {
   label: string
@@ -135,6 +136,9 @@ export interface CreateTaskPayload {
   agent_policy: AgentPolicy
   owner_id?: string
   owner_name?: string
+  model?: string
+  clock_period_ns?: number
+  research_depth?: ResearchDepth
 }
 
 export interface CreateTaskInput {

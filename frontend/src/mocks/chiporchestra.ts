@@ -11,16 +11,18 @@ import type {
   WorkflowStep,
 } from '@/types/chiporchestra'
 
-const STORAGE_KEY = 'chiporchestra.mock.snapshot.v2'
-const CURRENT_USER_ID = 'radhian.armansyah'
-const CURRENT_USER_NAME = 'Radhian'
+const STORAGE_KEY = 'chiporchestra.mock.snapshot.v3'
+const CURRENT_USER_ID = 'engineer'
+const CURRENT_USER_NAME = 'Engineer'
 
+// The 5-step RTL-to-GDS strip shown on the Overview console. This is real product
+// copy (not placeholder task data), so it is kept even when mocks are disabled.
 const workflowSteps: WorkflowStep[] = [
   {
     label: 'description',
     title: '1. Ingest spec',
     detail:
-      'Prompt, markdown spec, prior RTL, or IP catalog references feed the task planner and retrieval layer.',
+      'A natural-language design brief feeds the task planner and the web-research / RAG retrieval layer.',
     tone: 'violet',
   },
   {
@@ -50,268 +52,18 @@ const workflowSteps: WorkflowStep[] = [
   },
 ]
 
+// No seed tasks: the app runs against the real backend. The mock layer only
+// provides offline fallback state when VITE_USE_MOCKS=true.
 const seedSnapshot: ChiporchestraSnapshot = {
   workflowSteps,
-  tasks: [
-    {
-      id: 'fft-1024p',
-      name: 'FFT Accelerator 1024p',
-      description: 'Streaming FFT block running through synthesis after passing simulation and lint.',
-      ownerName: CURRENT_USER_NAME,
-      ownerId: CURRENT_USER_ID,
-      currentStage: 'Synthesis',
-      etaLabel: '38 min',
-      statusLabel: 'Running',
-      tone: 'running',
-      repoName: 'chiporchestra/fft-accelerator-demo',
-      mine: true,
-    },
-    {
-      id: 'aes-refresh',
-      name: 'AES-128 Core Refresh',
-      description: 'Task-centric design object with artifact lineage',
-      ownerName: 'Alice',
-      ownerId: 'alice',
-      currentStage: 'Lint rescue',
-      etaLabel: '12 min',
-      statusLabel: 'Needs review',
-      tone: 'review',
-      repoName: 'chiporchestra/aes-core-refresh',
-      needsReview: true,
-    },
-    {
-      id: 'uart-lite',
-      name: 'UART Controller Lite',
-      description: 'Task-centric design object with artifact lineage',
-      ownerName: 'Nadia',
-      ownerId: 'nadia',
-      currentStage: 'Signoff package',
-      etaLabel: 'Ready',
-      statusLabel: 'Passed',
-      tone: 'passed',
-      repoName: 'chiporchestra/uart-lite',
-    },
-    {
-      id: 'gpio-bridge',
-      name: 'RISC-V GPIO Bridge',
-      description: 'Task-centric design object with artifact lineage',
-      ownerName: 'Ben',
-      ownerId: 'ben',
-      currentStage: 'Simulation',
-      etaLabel: '19 min',
-      statusLabel: 'Failed',
-      tone: 'failed',
-      repoName: 'chiporchestra/gpio-bridge',
-    },
-  ],
-  taskDetails: {
-    'fft-1024p': {
-      id: 'fft-1024p',
-      name: 'FFT Accelerator 1024p',
-      description:
-        'Streaming FFT block running through synthesis after passing simulation and lint.',
-      ownerName: CURRENT_USER_NAME,
-      ownerId: CURRENT_USER_ID,
-      currentStage: 'Synthesis',
-      etaLabel: '38 min',
-      statusLabel: 'Running',
-      tone: 'running',
-      repoName: 'chiporchestra/fft-accelerator-demo',
-      pdkLabel: 'Sky130 HD + SRAM macro pack',
-      reviewGateLabel: 'Require engineer approval before synthesis and before signoff packaging',
-      runtimeLabel: 'Agent + EDA pods',
-      artifactLineageCount: 12,
-      attempts: [{ id: 'attempt-4', status: 'running', startedAt: '09:12', updatedAt: '09:31' }],
-      stages: [
-        { key: 'spec-intake', label: 'Spec intake', status: 'done' },
-        { key: 'agent-planning', label: 'Agent planning', status: 'done' },
-        { key: 'verification-loop', label: 'Verification loop', status: 'done' },
-        { key: 'implementation', label: 'Implementation', status: 'active' },
-        { key: 'delivery', label: 'Delivery', status: 'queued' },
-      ],
-    },
-    'aes-refresh': {
-      id: 'aes-refresh',
-      name: 'AES-128 Core Refresh',
-      description: 'Task waiting on human review after lint rescue and staged timing fixes.',
-      ownerName: 'Alice',
-      ownerId: 'alice',
-      currentStage: 'Lint rescue',
-      etaLabel: '12 min',
-      statusLabel: 'Needs review',
-      tone: 'review',
-      repoName: 'chiporchestra/aes-core-refresh',
-      pdkLabel: 'Sky130 default stack',
-      reviewGateLabel: 'Review gate on lint waiver and retry',
-      runtimeLabel: 'Lint and simulation pod',
-      artifactLineageCount: 8,
-      attempts: [{ id: 'attempt-2', status: 'pending approval', startedAt: '08:03', updatedAt: '08:48' }],
-      stages: [
-        { key: 'spec-intake', label: 'Spec intake', status: 'done' },
-        { key: 'agent-planning', label: 'Agent planning', status: 'done' },
-        { key: 'verification-loop', label: 'Verification loop', status: 'done', pendingApproval: true },
-        { key: 'implementation', label: 'Implementation', status: 'queued' },
-        { key: 'delivery', label: 'Delivery', status: 'queued' },
-      ],
-    },
-    'uart-lite': {
-      id: 'uart-lite',
-      name: 'UART Controller Lite',
-      description: 'Task has completed signoff packaging and is ready for delivery.',
-      ownerName: 'Nadia',
-      ownerId: 'nadia',
-      currentStage: 'Signoff package',
-      etaLabel: 'Ready',
-      statusLabel: 'Passed',
-      tone: 'passed',
-      repoName: 'chiporchestra/uart-lite',
-      pdkLabel: 'GF180 reference flow',
-      reviewGateLabel: 'Approval complete',
-      runtimeLabel: 'Signoff packaging pod',
-      artifactLineageCount: 16,
-      attempts: [{ id: 'attempt-4', status: 'succeeded', startedAt: 'Yesterday', updatedAt: 'Today' }],
-      stages: [
-        { key: 'spec-intake', label: 'Spec intake', status: 'done' },
-        { key: 'agent-planning', label: 'Agent planning', status: 'done' },
-        { key: 'verification-loop', label: 'Verification loop', status: 'done' },
-        { key: 'implementation', label: 'Implementation', status: 'done' },
-        { key: 'delivery', label: 'Delivery', status: 'done' },
-      ],
-    },
-    'gpio-bridge': {
-      id: 'gpio-bridge',
-      name: 'RISC-V GPIO Bridge',
-      description: 'Task failed in simulation and is waiting on retry triage.',
-      ownerName: 'Ben',
-      ownerId: 'ben',
-      currentStage: 'Simulation',
-      etaLabel: '19 min',
-      statusLabel: 'Failed',
-      tone: 'failed',
-      repoName: 'chiporchestra/gpio-bridge',
-      pdkLabel: 'Sky130 reference flow',
-      reviewGateLabel: 'Human retry required',
-      runtimeLabel: 'Simulation pod',
-      artifactLineageCount: 5,
-      attempts: [{ id: 'attempt-7', status: 'failed', startedAt: '11:04', updatedAt: '11:23' }],
-      stages: [
-        { key: 'spec-intake', label: 'Spec intake', status: 'done' },
-        { key: 'agent-planning', label: 'Agent planning', status: 'done' },
-        { key: 'verification-loop', label: 'Verification loop', status: 'failed' },
-        { key: 'implementation', label: 'Implementation', status: 'queued' },
-        { key: 'delivery', label: 'Delivery', status: 'queued' },
-      ],
-    },
-  },
-  events: {
-    'fft-1024p': [
-      {
-        id: 'event-1',
-        time: '09:12',
-        title: 'Planner generated execution graph',
-        detail: 'Split task into lint cleanup, synthesis staging, and waveform regression branches.',
-        tone: 'info',
-      },
-      {
-        id: 'event-2',
-        time: '09:19',
-        title: 'Simulation and lint closed cleanly',
-        detail: 'Verification baseline was frozen and the task advanced into synthesis with manual review still enforced before signoff.',
-        tone: 'warning',
-      },
-      {
-        id: 'event-3',
-        time: '09:31',
-        title: 'Artifacts & reports versioned',
-        detail: 'RTL diff, lint summary, timing trend, and handoff manifest were attached to the task object.',
-        tone: 'success',
-      },
-    ],
-  },
-  artifacts: {
-    'fft-1024p': [
-      { id: 'artifact-1', name: 'fft_core.sv', type: 'RTL', owner: 'Workspace Agent' },
-      { id: 'artifact-2', name: 'lint_summary.html', type: 'Report', owner: 'Verification Loop' },
-      { id: 'artifact-3', name: 'timing_snapshot.json', type: 'Metric', owner: 'EDA Runtime' },
-      { id: 'artifact-4', name: 'handoff_manifest.yaml', type: 'Delivery', owner: 'Signoff Agent' },
-    ],
-  },
-  diagnoses: {
-    'fft-1024p': [
-      {
-        id: 'diag-1',
-        title: 'Review RTL diff before the next synthesis pass',
-        detail:
-          'Compare the latest FFT core update against the previous accepted revision, then rerun the verification slice before manual signoff review.',
-        confidence: 'High · based on stable verification and improving WNS',
-        primaryFile: 'rtl/fft_core.sv',
-        suggestedBy: 'Verification loop agent',
-      },
-    ],
-  },
-  workspaceFiles: {
-    'fft-1024p': [
-      { path: 'rtl/fft_core.sv', name: 'fft_core.sv', note: 'Primary FFT core draft for synthesis handoff', status: 'RTL draft' },
-      { path: 'tb/fft_core_tb.sv', name: 'fft_core_tb.sv', note: 'Regression suite with staged verification hooks', status: 'Healthy' },
-      { path: 'constraints/constraints.sdc', name: 'constraints.sdc', note: 'Clock and IO timing constraints', status: 'Diff aware' },
-    ],
-  },
-  workspaceContent: {
-    'fft-1024p': {
-      'rtl/fft_core.sv': `module fft_core #(
-  parameter WIDTH = 16,
-  parameter STAGES = 10
-) (
-  input  logic              clk,
-  input  logic              rst_n,
-  input  logic              valid_i,
-  input  logic [WIDTH-1:0]  sample_re_i,
-  input  logic [WIDTH-1:0]  sample_im_i,
-  output logic              valid_o,
-  output logic [WIDTH-1:0]  sample_re_o,
-  output logic [WIDTH-1:0]  sample_im_o
-);
-
-// Next MVP action: review RTL diff and rerun verification
-...`,
-      'tb/fft_core_tb.sv': `module fft_core_tb;
-  // Regression suite placeholder
-endmodule`,
-      'constraints/constraints.sdc': `create_clock -period 5 [get_ports clk]`,
-    },
-  },
-  signoff: {
-    'fft-1024p': {
-      stateLabel: 'Awaiting final approval',
-      message:
-        'Export GDS, netlist, liberty views, constraints, reports, and design note generated from task history.',
-      packageContents: [
-        'GDS, netlist, timing, and waiver manifest',
-        'Final RTL snapshot and verification report bundle',
-        'Approval trail with owner and review metadata',
-      ],
-      checklist: [
-        {
-          id: 'check-1',
-          label: 'DRC/LVS package ready',
-          detail: 'Rule summaries, waivers, and ownership metadata bundled for review.',
-          done: true,
-        },
-        {
-          id: 'check-2',
-          label: 'Power and timing guardrail accepted',
-          detail: 'PPA deltas remain within agreed thresholds for the selected PDK corner set.',
-          done: true,
-        },
-        {
-          id: 'check-3',
-          label: 'Tapeout handoff approved',
-          detail: 'Awaiting final human review gate and release signature.',
-          done: false,
-        },
-      ],
-    },
-  },
+  tasks: [],
+  taskDetails: {},
+  events: {},
+  artifacts: {},
+  diagnoses: {},
+  workspaceFiles: {},
+  workspaceContent: {},
+  signoff: {},
 }
 
 function cloneSnapshot(snapshot: ChiporchestraSnapshot): ChiporchestraSnapshot {
@@ -331,10 +83,8 @@ function formatReviewGateLabel(reviewGates: ReviewGate[]) {
 }
 
 function formatPdkLabel(pdkId: string, stdcellLibId: string) {
-  if (pdkId === 'sky130' && stdcellLibId === 'gf180-mixed-eval') {
-    return 'Sky130 HD + SRAM macro pack'
-  }
-
+  if (pdkId.startsWith('sky130')) return 'Sky130 HD'
+  if (pdkId.startsWith('gf180')) return 'GF180MCU'
   return `${pdkId} / ${stdcellLibId}`
 }
 
@@ -405,7 +155,7 @@ export function createMockTask(input: CreateTaskInput): TaskDetail {
     repoName,
     pdkLabel: formatPdkLabel(task.pdk_id, task.stdcell_lib_id),
     reviewGateLabel,
-    runtimeLabel: 'EDA pod with synthesis + verification queue',
+    runtimeLabel: 'Agent + EDA pods',
     artifactLineageCount: 0,
     attempts: [{ id: `attempt-${Date.now().toString(36)}`, status: 'queued', startedAt: 'Just now', updatedAt: 'Just now' }],
     stages: [
@@ -420,7 +170,7 @@ export function createMockTask(input: CreateTaskInput): TaskDetail {
   snapshot.tasks.unshift({
     id,
     name: detail.name,
-    description: 'Task-centric design object with artifact lineage',
+    description: detail.description,
     ownerName: detail.ownerName,
     ownerId: detail.ownerId,
     currentStage: detail.currentStage,

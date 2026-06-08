@@ -1,0 +1,47 @@
+# PostgreSQL (task state + logs) and MinIO (S3-compatible object storage for
+# generated RTL/TB/sim/GDS/bundles) for the Chip Orchestra backend.
+#
+#   docker compose up -d
+#
+# Defaults match backend/.env.example.
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: chiporchestra-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: chip
+      POSTGRES_PASSWORD: chip
+      POSTGRES_DB: chiporchestra
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U chip -d chiporchestra"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+  minio:
+    image: minio/minio:latest
+    container_name: chiporchestra-minio
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: chip
+      MINIO_ROOT_PASSWORD: chipsecret
+    ports:
+      - "9000:9000"   # S3 API
+      - "9001:9001"   # web console
+    volumes:
+      - miniodata:/data
+    healthcheck:
+      test: ["CMD-SHELL", "mc --version >/dev/null 2>&1 || exit 0"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+volumes:
+  pgdata:
+  miniodata:
