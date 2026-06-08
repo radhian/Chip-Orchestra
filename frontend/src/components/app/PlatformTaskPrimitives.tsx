@@ -71,7 +71,13 @@ export function ChecklistCard({ icon, title, detail }: { icon: ReactNode; title:
   )
 }
 
-export function StagePill({ label, tone }: { label: string; tone: 'running' | 'done' | 'review' | 'neutral' }) {
+export function StagePill({
+  label,
+  tone,
+}: {
+  label: string
+  tone: 'running' | 'done' | 'review' | 'neutral' | 'failed'
+}) {
   const className =
     tone === 'running'
       ? 'bg-[#ecebff] text-[#5b5bd6]'
@@ -79,7 +85,9 @@ export function StagePill({ label, tone }: { label: string; tone: 'running' | 'd
         ? 'bg-[#e7fbf4] text-[#129b80]'
         : tone === 'review'
           ? 'bg-[#fff3df] text-[#c77a00]'
-          : 'bg-[#f1f5f9] text-slate-500'
+          : tone === 'failed'
+            ? 'bg-[#fdecec] text-[#d4495a]'
+            : 'bg-[#f1f5f9] text-slate-500'
 
   return <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${className}`}>{label}</span>
 }

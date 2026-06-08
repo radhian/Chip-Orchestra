@@ -1,7 +1,19 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
-import { getSignoffStatus, getTask, getTaskArtifacts, getTaskDiagnosis, getTaskEvents, getWorkspaceFile, getWorkspaceFiles } from '@/api/tasks'
+import {
+  cancelTask,
+  getSignoffStatus,
+  getTask,
+  getTaskArtifacts,
+  getTaskDiagnosis,
+  getTaskEvents,
+  getWorkspaceFile,
+  getWorkspaceFiles,
+  resumeTask,
+  retryTask,
+  stopTask,
+} from '@/api/tasks'
 import { PlatformLayout } from '@/components/app/PlatformLayout'
 import { PlatformTaskSections } from '@/components/app/PlatformTaskSections'
 import { ErrorState, LoadingState } from '@/components/app/shared'
@@ -27,11 +39,10 @@ export function PlatformTaskDetailPage({ tab }: { tab: DetailTab }) {
     if (!taskId) return
 
     let mounted = true
+    // Track the auto-selected file across polls without retriggering the effect.
+    let autoSelected = ''
 
-    async function load() {
-      setLoading(true)
-      setError(null)
-
+    async function refresh(initial: boolean) {
       try {
         const [task, taskEvents, taskArtifacts, taskDiagnosis, workspaceFiles, signoffStatus] = await Promise.all([
           getTask(taskId),
@@ -50,29 +61,32 @@ export function PlatformTaskDetailPage({ tab }: { tab: DetailTab }) {
         setDiagnoses(taskDiagnosis)
         setFiles(workspaceFiles)
         setSignoff(signoffStatus)
+        setError(null)
 
+        // Auto-open the first file once it appears; don't fight the user's choice afterwards.
         const firstPath = workspaceFiles[0]?.path ?? ''
-        setSelectedFile(firstPath)
-
-        if (firstPath) {
+        if (firstPath && !autoSelected) {
+          autoSelected = firstPath
+          setSelectedFile(firstPath)
           const file = await getWorkspaceFile(taskId, firstPath)
-          if (!mounted) return
-          setSelectedFileContent(file.content)
-        } else {
-          setSelectedFileContent('')
+          if (mounted) setSelectedFileContent(file.content)
         }
       } catch (err) {
         if (!mounted) return
-        setError(err instanceof Error ? err.message : 'Failed to load task detail')
+        if (initial) setError(err instanceof Error ? err.message : 'Failed to load task detail')
       } finally {
-        if (mounted) setLoading(false)
+        if (mounted && initial) setLoading(false)
       }
     }
 
-    void load()
+    setLoading(true)
+    setError(null)
+    void refresh(true)
+    const interval = window.setInterval(() => void refresh(false), 4000)
 
     return () => {
       mounted = false
+      window.clearInterval(interval)
     }
   }, [taskId])
 
@@ -83,9 +97,18 @@ export function PlatformTaskDetailPage({ tab }: { tab: DetailTab }) {
     setSelectedFileContent(file.content)
   }
 
+  async function runControl(action: (id: string) => Promise<unknown>) {
+    if (!taskId) return
+    await action(taskId)
+    // Immediately refresh the header + log so the controls reflect the new state.
+    const [task, taskEvents] = await Promise.all([getTask(taskId), getTaskEvents(taskId)])
+    setDetail(task)
+    setEvents(taskEvents)
+  }
+
   if (!taskId) {
     return (
-      <PlatformLayout activeSection='detail' detailHref='/tasks/fft-1024p'>
+      <PlatformLayout activeSection='detail' detailHref='/tasks/new'>
         <ErrorState title='Missing task id' detail='No task id was provided in the route.' />
       </PlatformLayout>
     )
@@ -120,6 +143,10 @@ export function PlatformTaskDetailPage({ tab }: { tab: DetailTab }) {
         signoff={signoff}
         activeTab={tab}
         onSelectFile={(path) => void handleSelectFile(path)}
+        onStop={() => void runControl(stopTask)}
+        onResume={() => void runControl(resumeTask)}
+        onCancel={() => void runControl(cancelTask)}
+        onRetry={() => void runControl(retryTask)}
       />
     </PlatformLayout>
   )

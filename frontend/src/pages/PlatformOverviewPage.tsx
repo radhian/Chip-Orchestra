@@ -7,8 +7,6 @@ import { PlatformOverviewSection } from '@/components/app/PlatformOverviewSectio
 import { ErrorState, LoadingState } from '@/components/app/shared'
 import type { TaskFilter, TaskSummary, WorkflowStep } from '@/types/chiporchestra'
 
-const defaultTaskId = 'fft-1024p'
-
 export function PlatformOverviewPage() {
   const navigate = useNavigate()
   const [activeFilter, setActiveFilter] = useState<TaskFilter>('all')
@@ -20,9 +18,11 @@ export function PlatformOverviewPage() {
   useEffect(() => {
     let mounted = true
 
-    async function load() {
-      setLoading(true)
-      setError(null)
+    async function load(initial: boolean) {
+      if (initial) {
+        setLoading(true)
+        setError(null)
+      }
 
       try {
         const [fetchedTasks, fetchedWorkflow] = await Promise.all([
@@ -33,41 +33,46 @@ export function PlatformOverviewPage() {
         if (!mounted) return
         setTasks(fetchedTasks)
         setWorkflowSteps(fetchedWorkflow)
+        setError(null)
       } catch (err) {
         if (!mounted) return
-        setError(err instanceof Error ? err.message : 'Failed to load overview data')
+        if (initial) setError(err instanceof Error ? err.message : 'Failed to load overview data')
       } finally {
-        if (mounted) setLoading(false)
+        if (mounted && initial) setLoading(false)
       }
     }
 
-    void load()
+    void load(true)
+    const interval = window.setInterval(() => void load(false), 5000)
 
     return () => {
       mounted = false
+      window.clearInterval(interval)
     }
   }, [activeFilter])
 
+  const detailHref = tasks[0]?.id ? `/tasks/${tasks[0].id}` : '/tasks/new'
+
   if (loading) {
     return (
-      <PlatformLayout activeSection='overview' detailHref={`/tasks/${tasks[0]?.id ?? defaultTaskId}`}>
-        <LoadingState label='LoadingChip Orchestra overview…' />
+      <PlatformLayout activeSection='overview' detailHref={detailHref}>
+        <LoadingState label='Loading Chip Orchestra overview…' />
       </PlatformLayout>
     )
   }
 
   if (error) {
     return (
-      <PlatformLayout activeSection='overview' detailHref={`/tasks/${tasks[0]?.id ?? defaultTaskId}`}>
+      <PlatformLayout activeSection='overview' detailHref={detailHref}>
         <ErrorState title='Unable to load overview console' detail={error} />
       </PlatformLayout>
     )
   }
 
-  const selectedTaskId = tasks[0]?.id ?? defaultTaskId
+  const selectedTaskId = tasks[0]?.id ?? ''
 
   return (
-    <PlatformLayout activeSection='overview' detailHref={`/tasks/${selectedTaskId}`}>
+    <PlatformLayout activeSection='overview' detailHref={detailHref}>
       <PlatformOverviewSection
         activeFilter={activeFilter}
         selectedTaskId={selectedTaskId}

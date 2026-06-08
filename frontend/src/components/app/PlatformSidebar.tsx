@@ -8,7 +8,7 @@ type SidebarSection = 'overview' | 'create' | 'detail'
 const navItems: { key: SidebarSection; label: string; icon: string; href: string }[] = [
   { key: 'overview', label: 'Overview Console', icon: 'space_dashboard', href: '/overview' },
   { key: 'create', label: 'Create Design Task', icon: 'add_circle', href: '/tasks/new' },
-  { key: 'detail', label: 'Task Detail & Runbook', icon: 'manufacturing', href: '/tasks/fft-1024p' },
+  { key: 'detail', label: 'Task Detail & Runbook', icon: 'manufacturing', href: '/tasks/new' },
 ]
 
 function MaterialIcon({ name, className = '' }: { name: string; className?: string }) {
@@ -36,10 +36,10 @@ export function PlatformSidebar({
         </div>
 
         <div className='mt-4 rounded-[24px] bg-gradient-to-br from-[#4969ff] via-[#2f83ff] to-[#18c3de] p-4 text-white shadow-[0_16px_42px_rgba(63,121,255,0.35)]'>
-          <p className='text-[11px] font-semibold uppercase tracking-[0.22em] text-white/70'>Wireframe direction</p>
-          <h2 className='mt-3 text-[1.75rem] font-semibold leading-8'>Task-centric UX modeled after modern AI generation consoles</h2>
+          <p className='text-[11px] font-semibold uppercase tracking-[0.22em] text-white/70'>How it works</p>
+          <h2 className='mt-3 text-[1.75rem] font-semibold leading-8'>Task-centric UX for agentic RTL-to-GDS</h2>
           <p className='mt-4 text-sm leading-6 text-white/85'>
-            List → create → run → diagnose → signoff, all surfaced in a browser-native hardware workflow.
+            Create → run → diagnose → signoff, all surfaced in a browser-native hardware workflow.
           </p>
         </div>
       </div>
@@ -47,7 +47,7 @@ export function PlatformSidebar({
       <div className='rounded-[24px] bg-slate-50 p-3'>
         {navItems.map((item) => {
           const active = item.key === activeSection
-          const href = item.key === 'detail' ? detailHref ?? '/tasks/fft-1024p' : item.href
+          const href = item.key === 'detail' ? detailHref ?? '/tasks/new' : item.href
 
           return (
             <NavLink
@@ -88,10 +88,10 @@ export function PlatformSidebar({
             </div>
 
             <div className='grid gap-3 text-sm'>
-              <InfoCell label='Repo' value='chiporchestra/digital-demo' />
+              <InfoCell label='Repo' value='per-task workspace' />
               <div className='grid grid-cols-2 gap-3'>
                 <InfoCell label='PDK' value='Sky130 / GF180' />
-                <InfoCell label='Runtime' value='Agent + EDA pods' />
+                <InfoCell label='Runtime' value='Ollama + iverilog' />
               </div>
             </div>
           </CardContent>

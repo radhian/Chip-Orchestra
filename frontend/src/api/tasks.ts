@@ -127,6 +127,27 @@ export async function retryTask(id: string): Promise<{ status: string }> {
   )
 }
 
+export async function stopTask(id: string): Promise<{ status: string }> {
+  return withFallback(
+    () => requestJson<{ status: string }>(`/api/tasks/${id}/stop`, { method: 'POST' }),
+    () => ({ status: 'noop' }),
+  )
+}
+
+export async function resumeTask(id: string): Promise<{ status: string }> {
+  return withFallback(
+    () => requestJson<{ status: string }>(`/api/tasks/${id}/resume`, { method: 'POST' }),
+    () => ({ status: 'noop' }),
+  )
+}
+
+export async function cancelTask(id: string): Promise<{ status: string }> {
+  return withFallback(
+    () => requestJson<{ status: string }>(`/api/tasks/${id}/cancel`, { method: 'POST' }),
+    () => ({ status: 'noop' }),
+  )
+}
+
 export async function getTaskEvents(id: string): Promise<RunbookEvent[]> {
   return withFallback(
     () => requestJson<RunbookEvent[]>(`/api/tasks/${id}/attempts/latest/events`),
