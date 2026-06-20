@@ -1,8 +1,8 @@
 {
-  "name": "chiporchestra-frontend",
+  "name": "chip-orchestra-frontend",
   "private": true,
   "version": "1.0.0",
-  "description": "Open-source React frontend for theChip Orchestra digital IC design platform mockup.",
+  "description": "React frontend for the Chip Orchestra digital IC design platform.",
   "type": "module",
   "engines": {
     "node": ">=18"
@@ -15,6 +15,7 @@
     "typecheck": "tsc -b"
   },
   "dependencies": {
+    "@rdservices/aime-code-inspector": "latest",
     "@hookform/resolvers": "^3.10.0",
     "@radix-ui/react-accordion": "^1.2.2",
     "@radix-ui/react-alert-dialog": "^1.1.4",
@@ -46,7 +47,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "1.0.0",
-    "date-fns": "^3.4.0",
+    "date-fns": "^4.1.0",
     "embla-carousel-react": "^8.5.2",
     "framer-motion": "^12.15.0",
     "input-otp": "^1.4.2",

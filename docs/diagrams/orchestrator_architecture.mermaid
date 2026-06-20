@@ -1,0 +1,33 @@
+flowchart TD
+  subgraph Experience["Experience Plane"]
+    SPA["Browser SPA<br/>React / TypeScript"]
+  end
+
+  subgraph Orchestrator["Orchestrator Plane"]
+    OrchSvc["Orchestrator Service<br/>Go / Gin / GORM / go-redis"]
+  end
+
+  subgraph Execution["Execution Plane"]
+    Agent["Agent Service<br/>Python / FastAPI<br/>LangChain Deep Agent"]
+    EDA["EDA Service / Chipster V2<br/>Python / FastAPI"]
+  end
+
+  subgraph Data["Data Plane"]
+    MySQL[("MySQL<br/>users, tasks, stages,<br/>stage attempts, memory, jobs")]
+    Redis[("Redis<br/>artifact cache, job queue,<br/>pub/sub, WS event fan-out")]
+  end
+
+  SPA -->|"REST /api/v1/auth"| OrchSvc
+  SPA -->|"REST /api/v1/tasks"| OrchSvc
+  SPA -->|"REST task detail / workspace / signoff"| OrchSvc
+  SPA -->|"WebSocket /ws/tasks/:id/events"| OrchSvc
+
+  OrchSvc -->|"POST /agent/invoke"| Agent
+  OrchSvc -->|"POST /eda/jobs"| EDA
+  OrchSvc -->|"GET /eda/jobs/:id/status"| EDA
+  OrchSvc -->|"GET /eda/jobs/:id/report"| EDA
+  OrchSvc -->|"GET /eda/jobs/:id/logs"| EDA
+  OrchSvc -->|"DELETE /eda/jobs/:id"| EDA
+
+  OrchSvc -->|"persist users, tasks,<br/>stages, attempts, memory, jobs"| MySQL
+  OrchSvc -->|"cache, queue,<br/>pub/sub, event fan-out"| Redis

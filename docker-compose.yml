@@ -1,47 +1,124 @@
-# PostgreSQL (task state + logs) and MinIO (S3-compatible object storage for
-# generated RTL/TB/sim/GDS/bundles) for the Chip Orchestra backend.
-#
-#   docker compose up -d
-#
-# Defaults match backend/.env.example.
 services:
-  postgres:
-    image: postgres:16-alpine
-    container_name: chiporchestra-postgres
-    restart: unless-stopped
+  mysql:
+    image: mysql:8.4
     environment:
-      POSTGRES_USER: chip
-      POSTGRES_PASSWORD: chip
-      POSTGRES_DB: chiporchestra
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     ports:
-      - "5432:5432"
+      - "${MYSQL_PORT}:3306"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - mysql_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U chip -d chiporchestra"]
-      interval: 5s
-      timeout: 3s
-      retries: 30
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
 
-  minio:
-    image: minio/minio:latest
-    container_name: chiporchestra-minio
-    restart: unless-stopped
-    command: server /data --console-address ":9001"
-    environment:
-      MINIO_ROOT_USER: chip
-      MINIO_ROOT_PASSWORD: chipsecret
+  redis:
+    image: redis:7.2-alpine
+    command: ["redis-server", "--appendonly", "yes"]
     ports:
-      - "9000:9000"   # S3 API
-      - "9001:9001"   # web console
+      - "${REDIS_PORT}:6379"
     volumes:
-      - miniodata:/data
+      - redis_data:/data
     healthcheck:
-      test: ["CMD-SHELL", "mc --version >/dev/null 2>&1 || exit 0"]
-      interval: 5s
-      timeout: 3s
-      retries: 30
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  orchestrator-service:
+    build:
+      context: ./orchestrator-service
+    environment:
+      PORT: 8080
+      MYSQL_DSN: ${MYSQL_USER}:${MYSQL_PASSWORD}@tcp(mysql:3306)/${MYSQL_DATABASE}?charset=utf8mb4&parseTime=True&loc=UTC
+      REDIS_ADDR: redis:6379
+      JWT_SECRET: ${JWT_SECRET}
+      AGENT_SERVICE_URL: http://agent-service:8001
+      EDA_SERVICE_URL: http://eda-service:8002
+      DEFAULT_USERNAME: ${DEFAULT_USERNAME}
+      DEFAULT_FULL_NAME: ${DEFAULT_FULL_NAME}
+      DEFAULT_EMAIL: ${DEFAULT_EMAIL}
+      DEFAULT_PASSWORD: ${DEFAULT_PASSWORD}
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      agent-service:
+        condition: service_started
+      eda-service:
+        condition: service_started
+    ports:
+      - "${OPERATOR_PORT}:8080"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/health >/dev/null 2>&1 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  agent-service:
+    build:
+      context: ./agent-service
+    environment:
+      DATABASE_URL: mysql+pymysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql:3306/${MYSQL_DATABASE}
+      REDIS_URL: redis://redis:6379/0
+      DEFAULT_USERNAME: ${DEFAULT_USERNAME}
+      DEFAULT_FULL_NAME: ${DEFAULT_FULL_NAME}
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "${AGENT_PORT}:8001"
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8001/health')\" || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  eda-service:
+    build:
+      context: ./eda-service
+    environment:
+      DATABASE_URL: mysql+pymysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql:3306/${MYSQL_DATABASE}
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "${EDA_PORT}:8002"
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8002/health')\" || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  frontend:
+    build:
+      context: ./frontend
+    environment:
+      VITE_API_BASE_URL: http://orchestrator-service:8080
+      VITE_USE_MOCKS: "true"
+      VITE_DEFAULT_USERNAME: ${DEFAULT_USERNAME}
+      VITE_DEFAULT_PASSWORD: ${DEFAULT_PASSWORD}
+    depends_on:
+      orchestrator-service:
+        condition: service_healthy
+    ports:
+      - "${FRONTEND_PORT}:4173"
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"http=require('http');http.get('http://localhost:4173',res=>process.exit(res.statusCode===200?0:1)).on('error',()=>process.exit(1))\""]
+      interval: 10s
+      timeout: 5s
+      retries: 12
 
 volumes:
-  pgdata:
-  miniodata:
+  mysql_data:
+  redis_data:

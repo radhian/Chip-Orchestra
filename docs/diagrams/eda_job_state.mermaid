@@ -1,0 +1,30 @@
+stateDiagram-v2
+    [*] --> QUEUED: "POST /eda/jobs"
+    QUEUED --> RUNNING: "worker dequeues"
+    RUNNING --> RUNNING: "progress updates"
+    RUNNING --> COMPLETED: "report saved"
+    RUNNING --> FAILED: "error saved"
+    COMPLETED --> [*]: "DELETE /eda/jobs/:id"
+    FAILED --> [*]: "DELETE /eda/jobs/:id"
+
+    note right of QUEUED
+      "GET /eda/jobs/:id/status"
+      "polls MySQL-backed status"
+    end note
+
+    note right of RUNNING
+      "GET /eda/jobs/:id/logs"
+      "streams SSE from Redis pub/sub"
+      "plus stored log lines"
+    end note
+
+    note right of COMPLETED
+      "GET /eda/jobs/:id/report"
+      "returns saved report"
+    end note
+
+    note left of FAILED
+      "DELETE /eda/jobs/:id"
+      "removes persisted job state"
+      "after any stage"
+    end note

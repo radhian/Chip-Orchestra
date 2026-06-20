@@ -1,0 +1,15 @@
+stateDiagram-v2
+    [*] --> NOT_STARTED
+    NOT_STARTED --> QUEUED: "dependencies satisfied"
+    QUEUED --> DISPATCHING
+    DISPATCHING --> RUNNING
+    RUNNING --> SUCCEEDED
+    RUNNING --> FAILED
+    FAILED --> RETRY_WAIT: "retry allowed"
+    RETRY_WAIT --> QUEUED: "after backoff"
+    FAILED --> BLOCKED: "manual review needed"
+    BLOCKED --> QUEUED: "manual retry"
+    SUCCEEDED --> AWAITING_APPROVAL: "gated stage"
+    AWAITING_APPROVAL --> RELEASED: "approval granted"
+    SUCCEEDED --> [*]: "ungated stage"
+    RELEASED --> [*]
