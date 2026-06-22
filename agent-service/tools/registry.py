@@ -32,8 +32,8 @@ class ToolRegistry:
         return {
             "task_id": task_id,
             "stage": stage,
-            "default_user": os.getenv("DEFAULT_FULL_NAME", "Radhian Ferel Armansyah"),
-            "username": os.getenv("DEFAULT_USERNAME", "radhian.armansyah"),
+            "default_user": os.getenv("DEFAULT_FULL_NAME", "Admin Admin"),
+            "username": os.getenv("DEFAULT_USERNAME", "admin"),
         }
 
     def submit_eda_job(self, task_id: str, stage: str, payload: Dict[str, Any]):

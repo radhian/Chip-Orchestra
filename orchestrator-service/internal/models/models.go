@@ -53,7 +53,7 @@ type User struct {
 	Email        string    `gorm:"size:255;uniqueIndex;not null" json:"email"`
 	FullName     string    `gorm:"size:255;not null" json:"full_name"`
 	PasswordHash string    `gorm:"size:128;not null" json:"-"`
-	Roles        string    `gorm:"type:text;not null;default:'DESIGNER'" json:"roles"`
+	Roles        string    `gorm:"type:varchar(255);not null;default:'DESIGNER'" json:"roles"`
 	CreatedAt    time.Time `json:"created_at"`
 	UpdatedAt    time.Time `json:"updated_at"`
 }

@@ -70,7 +70,7 @@ flowchart TB
    - EDA Service: `http://localhost:8002`
 
 ## Default local credentials
-- Username: `radhian.armansyah`
+- Username: `admin`
 - Password: `chip-orchestra`
 
 ## Core decisions applied in this refactor

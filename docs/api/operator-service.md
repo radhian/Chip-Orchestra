@@ -5,7 +5,7 @@
 Request:
 ```json
 {
-  "username": "radhian.armansyah",
+  "username": "admin",
   "password": "chip-orchestra"
 }
 ```

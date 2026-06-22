@@ -31,6 +31,7 @@ if [ ! -f "$ROOT_DIR/.env" ]; then
   echo "Created .env from .env.example"
 fi
 
-docker compose pull mysql redis || true
+# TODO: reconfig later
+# docker compose pull mysql redis || true
 
 echo "Setup complete. Review .env if you want to customize ports or credentials."

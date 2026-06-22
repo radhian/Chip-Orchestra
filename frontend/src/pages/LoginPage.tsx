@@ -57,7 +57,7 @@ export function LoginPage() {
                   <Input
                     value={username}
                     onChange={(event) => setUsername(event.target.value)}
-                    placeholder='radhian.armansyah'
+                    placeholder='admin'
                     autoComplete='username'
                     className='h-11 rounded-2xl border-slate-200 pl-9'
                     required

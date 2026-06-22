@@ -30,9 +30,9 @@ func main() {
 	agentURL := getenv("AGENT_SERVICE_URL", "http://agent-service:8001")
 	edaURL := getenv("EDA_SERVICE_URL", "http://eda-service:8002")
 	port := getenv("PORT", "8080")
-	seedUsername := getenv("DEFAULT_USERNAME", "radhian.armansyah")
-	seedFullName := getenv("DEFAULT_FULL_NAME", "Radhian Ferel Armansyah")
-	seedEmail := getenv("DEFAULT_EMAIL", "radhian.armansyah@bytedance.com")
+	seedUsername := getenv("DEFAULT_USERNAME", "admin")
+	seedFullName := getenv("DEFAULT_FULL_NAME", "Admin Admin")
+	seedEmail := getenv("DEFAULT_EMAIL", "admn@admin.com")
 	seedPassword := getenv("DEFAULT_PASSWORD", "chip-orchestra")
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})

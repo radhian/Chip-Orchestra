@@ -152,7 +152,7 @@ Issue an MVP JWT using username or email and password.
 **Request**
 ```json
 {
-  "username": "radhian.armansyah",
+  "username": "admin",
   "password": "********"
 }
 ```
@@ -165,8 +165,8 @@ Issue an MVP JWT using username or email and password.
   "expires_in": 3600,
   "user": {
     "id": "usr_123",
-    "username": "radhian.armansyah",
-    "full_name": "Radhian Ferel Armansyah",
+    "username": "admin",
+    "full_name": "Admin Admind",
     "roles": ["designer", "admin"]
   }
 }
@@ -210,7 +210,7 @@ List tasks with filtering and pagination.
       "current_stage": "SIM",
       "owner": {
         "id": "usr_123",
-        "full_name": "Radhian Ferel Armansyah"
+        "full_name": "Admin Admin"
       },
       "latest_attempt": 2,
       "eta_seconds": 540,
@@ -746,8 +746,8 @@ Get owner profile, preferred defaults, and project-level preferences.
 {
   "user": {
     "id": "usr_123",
-    "username": "radhian.armansyah",
-    "full_name": "Radhian Ferel Armansyah",
+    "username": "admin",
+    "full_name": "Admin Admin",
     "preferences": {
       "language": "verilog",
       "pdk_id": "sky130"

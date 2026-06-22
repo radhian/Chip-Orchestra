@@ -172,7 +172,7 @@ The Orchestrator Service is the system-of-record and control-plane entry point f
 **Request**
 ```json
 {
-  "username": "radhian.armansyah",
+  "username": "admin",
   "password": "********"
 }
 ```
@@ -185,8 +185,8 @@ The Orchestrator Service is the system-of-record and control-plane entry point f
   "expires_in": 3600,
   "user": {
     "id": "usr_123",
-    "username": "radhian.armansyah",
-    "full_name": "Radhian Ferel Armansyah",
+    "username": "admin",
+    "full_name": "Admin Admind",
     "roles": ["ADMIN", "DESIGNER"]
   }
 }
@@ -232,7 +232,7 @@ The Orchestrator Service is the system-of-record and control-plane entry point f
   "id": "tsk_001",
   "name": "uart_tx_controller",
   "description": "UART TX controller with APB interface",
-  "ownerName": "Radhian Ferel Armansyah",
+  "ownerName": "operator 1",
   "ownerId": "usr_123",
   "currentStage": "SIM",
   "etaLabel": "9m left",
