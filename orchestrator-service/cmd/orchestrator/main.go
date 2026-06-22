@@ -31,8 +31,8 @@ func main() {
 	edaURL := getenv("EDA_SERVICE_URL", "http://eda-service:8002")
 	port := getenv("PORT", "8080")
 	seedUsername := getenv("DEFAULT_USERNAME", "admin")
-	seedFullName := getenv("DEFAULT_FULL_NAME", "Admin Admin")
-	seedEmail := getenv("DEFAULT_EMAIL", "admn@admin.com")
+	seedFullName := getenv("DEFAULT_FULL_NAME", "Admin")
+	seedEmail := getenv("DEFAULT_EMAIL", "admin@chip-orchestra.local")
 	seedPassword := getenv("DEFAULT_PASSWORD", "chip-orchestra")
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
@@ -75,14 +75,17 @@ func main() {
 
 func seedDefaultUser(ctx context.Context, db *gorm.DB, username, fullName, email, password string) error {
 	var user models.User
-	err := db.WithContext(ctx).Where("username = ?", username).First(&user).Error
+	adminRole := string(models.UserRoleAdmin)
+	err := db.WithContext(ctx).
+		Where("username = ? OR roles = ? OR roles LIKE ? OR roles LIKE ? OR roles LIKE ?", username, adminRole, adminRole+",%", "%,"+adminRole+",%", "%,"+adminRole).
+		First(&user).Error
 	if err == nil {
 		return nil
 	}
 	if err != gorm.ErrRecordNotFound {
 		return err
 	}
-	user = models.User{ID: uuid.NewString(), Username: username, FullName: fullName, Email: email, PasswordHash: middleware.HashPassword(password), Roles: strings.Join([]string{string(models.UserRoleAdmin), string(models.UserRoleDesigner)}, ",")}
+	user = models.User{ID: uuid.NewString(), Username: username, FullName: fullName, Email: email, PasswordHash: middleware.HashPassword(password), Roles: adminRole}
 	return db.WithContext(ctx).Create(&user).Error
 }
 
