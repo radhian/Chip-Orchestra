@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import type { LucideIcon } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 
 import { Card, CardContent } from '@/components/ui/card'
 
@@ -14,10 +15,13 @@ export function EmptyState({ title, detail }: { title: string; detail: string })
   )
 }
 
-export function LoadingState({ label = 'LoadingChip Orchestra data…' }: { label?: string }) {
+export function LoadingState({ label = 'Loading Chip Orchestra data…' }: { label?: string }) {
   return (
     <Card className='rounded-3xl border-slate-200 shadow-none'>
-      <CardContent className='p-8 text-sm text-slate-500'>{label}</CardContent>
+      <CardContent className='flex items-center gap-3 p-8 text-sm text-slate-500'>
+        <Loader2 className='h-4 w-4 animate-spin text-blue-600' />
+        <span>{label}</span>
+      </CardContent>
     </Card>
   )
 }

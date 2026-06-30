@@ -1,19 +1,6 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import {
-  ArrowRight,
-  Bot,
-  CircuitBoard,
-  Cpu,
-  FlaskConical,
-  FolderGit2,
-  Layers3,
-  Link2,
-  PackageCheck,
-  PlayCircle,
-  ShieldCheck,
-  Sparkles,
-} from 'lucide-react'
+import { ArrowRight, Bot, CircuitBoard, Cpu, FolderGit2, Layers3, Link2, PackageCheck, PlayCircle, ShieldCheck, Sparkles } from 'lucide-react'
 
 import { createTask } from '@/api/tasks'
 import { Field, SummaryRow } from '@/components/app/shared'
@@ -22,20 +9,20 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input'
 import { Progress } from '@/components/ui/progress'
 import { Textarea } from '@/components/ui/textarea'
-import type { CreateTaskInput } from '@/types/chiporchestra'
+import type { CreateTaskInput } from '@/types/orchestra'
 
-const defaultForm = {
-  taskName: 'FFT Accelerator 1024p signoff push',
-  repoSource: 'github.com/chiporchestra/fft-accelerator-demo',
-  designBrief:
-    'Build a compact FFT accelerator flow that can ingest a prior RTL baseline, run lint and simulation, recover common timing regressions, and produce a signoff-ready package with explicit artifact lineage.',
+const initialForm = {
+  taskName: '',
+  repoSource: '',
+  description: '',
+  designBrief: '',
   launchMode: 'FULL_FLOW_GATED' as const,
   repoMode: 'EXISTING' as const,
   repoBranch: 'main',
-  templateId: 'digital-block-starter',
+  templateId: '',
   pdkId: 'sky130',
-  stdcellLibId: 'gf180-mixed-eval',
-  pdkLabel: 'Sky130 / GF180 mixed evaluation stack',
+  stdcellLibId: 'sky130_fd_sc_hd',
+  pdkLabel: 'sky130 / sky130_fd_sc_hd',
   reviewGates: ['BEFORE_SIGNOFF'] as const,
   reviewGateLabel: 'Human approval required before signoff package',
   agentPolicy: {
@@ -46,47 +33,35 @@ const defaultForm = {
 }
 
 const stepCards = [
-  {
-    icon: Layers3,
-    title: 'Choose scope',
-    detail: 'Start from a reusable design object, IP template, or repo branch.',
-    status: 'Step 1',
-  },
-  {
-    icon: FolderGit2,
-    title: 'Connect source / repo',
-    detail: 'Attach Git repo, upload a brief, or select from a design starter kit.',
-    status: 'Step 2',
-  },
-  {
-    icon: Cpu,
-    title: 'Pick environment',
-    detail: 'Select PDK, libraries, runtime image, and verification presets.',
-    status: 'Step 3',
-  },
-  {
-    icon: Bot,
-    title: 'Set agent policy',
-    detail: 'Define autonomy, review gate, escalation path, and artifact expectations.',
-    status: 'Step 4',
-  },
+  { icon: Layers3, title: 'Choose scope', detail: 'Define the task, design goal, and review boundary.', status: 'Step 1' },
+  { icon: FolderGit2, title: 'Connect source / repo', detail: 'Point the task at a repository or starter template.', status: 'Step 2' },
+  { icon: Cpu, title: 'Pick environment', detail: 'Select PDK and standard-cell library defaults.', status: 'Step 3' },
+  { icon: Bot, title: 'Set agent policy', detail: 'Keep a human gate before signoff while automation handles execution.', status: 'Step 4' },
 ]
 
 export function CreateTaskPage() {
   const navigate = useNavigate()
-  const [form, setForm] = useState(defaultForm)
+  const [form, setForm] = useState(initialForm)
   const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const readiness = useMemo(() => {
+    const required = [form.taskName, form.repoSource, form.designBrief]
+    const completed = required.filter((value) => value.trim().length > 0).length
+    return Math.round((completed / required.length) * 100)
+  }, [form.designBrief, form.repoSource, form.taskName])
 
   async function handleSubmit() {
     const payload: CreateTaskInput = {
       task: {
-        name: form.taskName,
+        name: form.taskName.trim(),
+        description: form.description.trim(),
         launch_mode: form.launchMode,
-        design_brief: form.designBrief,
-        repo_id: form.repoSource,
-        repo_branch: form.repoBranch,
+        design_brief: form.designBrief.trim(),
+        repo_id: form.repoSource.trim(),
+        repo_branch: form.repoBranch.trim(),
         repo_mode: form.repoMode,
-        template_id: form.templateId,
+        template_id: form.templateId.trim() || undefined,
         pdk_id: form.pdkId,
         stdcell_lib_id: form.stdcellLibId,
         review_gates: [...form.reviewGates],
@@ -95,29 +70,30 @@ export function CreateTaskPage() {
     }
 
     setSubmitting(true)
+    setError(null)
+
     try {
       const task = await createTask(payload)
       navigate(`/tasks/${task.id}`)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to create task')
     } finally {
       setSubmitting(false)
     }
   }
 
-  const sourceSummary =
-    form.repoSource === defaultForm.repoSource ? 'FFT accelerator demo repo and markdown brief' : form.repoSource
+  const sourceSummary = form.repoSource.trim() || 'Repository will be attached after you enter one.'
 
   return (
     <div className='space-y-6'>
       <div className='flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between'>
         <div>
           <h3 className='text-2xl font-semibold text-slate-900'>Create design task</h3>
-          <p className='mt-1 text-sm text-slate-500'>
-            A four-step setup flow that keeps RTL, environment selection, and review policy in one place.
-          </p>
+          <p className='mt-1 text-sm text-slate-500'>Submit a real Orchestrator Service task. The form posts directly to POST /api/v1/tasks.</p>
         </div>
         <div className='flex items-center gap-2 rounded-full bg-blue-50 px-4 py-2 text-sm font-medium text-blue-700'>
           <Sparkles className='h-4 w-4' />
-          Agent draft mode enabled
+          Live task submission enabled
         </div>
       </div>
 
@@ -148,36 +124,53 @@ export function CreateTaskPage() {
         <Card className='rounded-3xl border-slate-200 shadow-none'>
           <CardHeader>
             <CardTitle className='text-xl'>Task configuration</CardTitle>
-            <CardDescription>Set the task name, design brief, and source of truth.</CardDescription>
+            <CardDescription>Set the task name, design brief, and live source of truth.</CardDescription>
           </CardHeader>
           <CardContent className='space-y-5'>
             <div className='grid gap-5 md:grid-cols-2'>
-              <Field label='Task name' hint='Human-readable and sharable across the design team'>
+              <Field label='Task name' hint='Human-readable and shareable across the design team'>
                 <Input
                   value={form.taskName}
                   onChange={(event) => setForm((current) => ({ ...current, taskName: event.target.value }))}
                   className='h-12 rounded-2xl border-slate-200'
+                  placeholder='FFT accelerator signoff push'
                 />
               </Field>
-              <Field label='Repository or template' hint='Git URL, monorepo path, or starter design object'>
+              <Field label='Repository or template' hint='Git URL, monorepo path, or source repository id'>
                 <Input
                   value={form.repoSource}
                   onChange={(event) => setForm((current) => ({ ...current, repoSource: event.target.value }))}
                   className='h-12 rounded-2xl border-slate-200'
+                  placeholder='github.com/org/repo or internal repo id'
                 />
               </Field>
             </div>
 
             <div className='grid gap-5 md:grid-cols-2'>
-              <Field label='PDK / library' hint='Select the environment used for synthesis and signoff'>
-                <div className='flex h-12 items-center rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-700'>
-                  {form.pdkLabel}
-                </div>
+              <Field label='Description' hint='Optional short summary shown in the task list'>
+                <Input
+                  value={form.description}
+                  onChange={(event) => setForm((current) => ({ ...current, description: event.target.value }))}
+                  className='h-12 rounded-2xl border-slate-200'
+                  placeholder='Short summary for the task list'
+                />
               </Field>
-              <Field label='Review gate' hint='Decide how much autonomy agents receive before escalation'>
-                <div className='flex h-12 items-center rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-700'>
-                  {form.reviewGateLabel}
-                </div>
+              <Field label='Repository branch' hint='Used when creating the task in existing repo mode'>
+                <Input
+                  value={form.repoBranch}
+                  onChange={(event) => setForm((current) => ({ ...current, repoBranch: event.target.value }))}
+                  className='h-12 rounded-2xl border-slate-200'
+                  placeholder='main'
+                />
+              </Field>
+            </div>
+
+            <div className='grid gap-5 md:grid-cols-2'>
+              <Field label='PDK / library' hint='Defaults are passed through to the Orchestrator Service'>
+                <div className='flex h-12 items-center rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-700'>{form.pdkLabel}</div>
+              </Field>
+              <Field label='Review gate' hint='This task keeps a human approval checkpoint before signoff'>
+                <div className='flex h-12 items-center rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-700'>{form.reviewGateLabel}</div>
               </Field>
             </div>
 
@@ -186,28 +179,16 @@ export function CreateTaskPage() {
                 className='min-h-40 rounded-3xl border-slate-200'
                 value={form.designBrief}
                 onChange={(event) => setForm((current) => ({ ...current, designBrief: event.target.value }))}
+                placeholder='Describe the intended design, verification scope, and expected outputs.'
               />
             </Field>
 
+            {error ? <p className='rounded-2xl bg-rose-50 px-4 py-3 text-sm text-rose-700'>{error}</p> : null}
+
             <div className='grid gap-5 lg:grid-cols-3'>
-              <InfoCard
-                icon={Link2}
-                tone='blue'
-                title='Connected source'
-                detail='Repo context, markdown spec, and artifact cache are attached as design inputs.'
-              />
-              <InfoCard
-                icon={FlaskConical}
-                tone='emerald'
-                title='Verification preset'
-                detail='Smoke regressions, lint checks, and waveform checkpoints enabled by default.'
-              />
-              <InfoCard
-                icon={Bot}
-                tone='violet'
-                title='Agent policy'
-                detail='Auto-diagnose failures, suggest fixes, and wait at the final review gate.'
-              />
+              <InfoCard icon={Link2} tone='blue' title='Connected source' detail='Repository and branch settings are submitted exactly as entered.' />
+              <InfoCard icon={CircuitBoard} tone='emerald' title='Environment defaults' detail='PDK and library selections are sent with the task payload.' />
+              <InfoCard icon={Bot} tone='violet' title='Agent policy' detail='Balanced autonomy plus retry budget is included in the live request.' />
             </div>
           </CardContent>
         </Card>
@@ -215,30 +196,34 @@ export function CreateTaskPage() {
         <Card className='rounded-3xl border-slate-200 shadow-none'>
           <CardHeader>
             <CardTitle className='text-xl'>Launch preview</CardTitle>
-            <CardDescription>Summary of what this task will create when submitted.</CardDescription>
+            <CardDescription>Summary of the live payload that will be sent when you submit.</CardDescription>
           </CardHeader>
           <CardContent className='space-y-5'>
             <div className='rounded-3xl bg-slate-50 p-4'>
               <div className='flex items-center justify-between'>
                 <div>
                   <p className='text-xs uppercase tracking-widest text-slate-400'>Task readiness</p>
-                  <p className='mt-2 text-3xl font-semibold text-slate-900'>92%</p>
+                  <p className='mt-2 text-3xl font-semibold text-slate-900'>{readiness}%</p>
                 </div>
                 <div className='flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 text-white'>
                   <PlayCircle className='h-5 w-5' />
                 </div>
               </div>
-              <Progress value={92} className='mt-4 h-2 bg-blue-100' />
+              <Progress value={readiness} className='mt-4 h-2 bg-blue-100' />
             </div>
 
             <div className='space-y-3 rounded-3xl border border-slate-200 p-4'>
-              <SummaryRow icon={CircuitBoard} title='Runtime' value='EDA pod with synthesis + verification queue' />
+              <SummaryRow icon={Cpu} title='Launch mode' value={form.launchMode} />
               <SummaryRow icon={FolderGit2} title='Source' value={sourceSummary} />
-              <SummaryRow icon={ShieldCheck} title='Review policy' value='Human gate before signoff and delivery' />
-              <SummaryRow icon={PackageCheck} title='Artifacts' value='RTL diff, waveform report, timing snapshot, handoff bundle' />
+              <SummaryRow icon={ShieldCheck} title='Review policy' value={form.reviewGateLabel} />
+              <SummaryRow icon={PackageCheck} title='Artifacts' value='Artifacts will be generated by the backend and attached to the task over time.' />
             </div>
 
-            <Button disabled={submitting} onClick={handleSubmit} className='h-12 w-full rounded-2xl bg-blue-600 text-base hover:bg-blue-700'>
+            <Button
+              disabled={submitting || readiness < 100}
+              onClick={handleSubmit}
+              className='h-12 w-full rounded-2xl bg-blue-600 text-base hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300'
+            >
               {submitting ? 'Creating task…' : 'Create task'}
             </Button>
           </CardContent>

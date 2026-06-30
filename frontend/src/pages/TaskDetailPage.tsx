@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { NavLink, useParams } from 'react-router-dom'
 import {
   AlertCircle,
@@ -9,20 +9,24 @@ import {
   ListChecks,
   PackageCheck,
   PlayCircle,
+  RefreshCw,
   ShieldCheck,
   Wrench,
   XCircle,
 } from 'lucide-react'
 
 import {
+  connectTaskEvents,
   getSignoffStatus,
   getTask,
   getTaskArtifacts,
   getTaskDiagnosis,
   getTaskEvents,
+  getTaskStages,
   getWorkspaceFile,
   getWorkspaceFiles,
   proposeWorkspacePatch,
+  retryTaskStage,
   submitStageApproval,
 } from '@/api/tasks'
 import { EmptyState, ErrorState, LoadingState, MetricCard, SummaryRow } from '@/components/app/shared'
@@ -31,14 +35,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
-import type {
-  ArtifactItem,
-  DiagnosisItem,
-  RunbookEvent,
-  SignoffStatus,
-  TaskDetail,
-  WorkspaceFileSummary,
-} from '@/types/chiporchestra'
+import type { ArtifactItem, DiagnosisItem, RunbookEvent, SignoffStatus, TaskDetail, TaskStage, WorkspaceFileSummary } from '@/types/orchestra'
 
 const stageToneClass = {
   running: 'bg-indigo-100 text-indigo-700 border-indigo-200',
@@ -52,9 +49,6 @@ const eventToneClass = {
   success: 'bg-emerald-100 text-emerald-700',
   warning: 'bg-amber-100 text-amber-700',
 } as const
-
-const defaultRecommendation =
-  'Re-run the fast simulation slice after register insertion, then promote the updated artifact set into the signoff package draft.'
 
 type DetailTab = 'runbook' | 'rtl' | 'signoff'
 
@@ -72,114 +66,195 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [actionMessage, setActionMessage] = useState('')
+  const [actionError, setActionError] = useState<string | null>(null)
+  const [fileLoading, setFileLoading] = useState(false)
+  const [liveConnected, setLiveConnected] = useState(false)
+  const [refreshKey, setRefreshKey] = useState(0)
+  const [retryingStage, setRetryingStage] = useState<string | null>(null)
 
-  useEffect(() => {
-    if (!taskId) return
-    let mounted = true
-
-    async function load() {
-      setLoading(true)
-      setError(null)
-      setActionMessage('')
-
-      try {
-        const [task, taskEvents, taskArtifacts, taskDiagnosis, workspaceFiles, signoffStatus] = await Promise.all([
-          getTask(taskId),
-          getTaskEvents(taskId),
-          getTaskArtifacts(taskId),
-          getTaskDiagnosis(taskId),
-          getWorkspaceFiles(taskId),
-          getSignoffStatus(taskId),
-        ])
-
-        if (!mounted) return
-
-        setDetail(task)
-        setEvents(taskEvents)
-        setArtifacts(taskArtifacts)
-        setDiagnoses(taskDiagnosis)
-        setFiles(workspaceFiles)
-        setSignoff(signoffStatus)
-
-        const firstPath = workspaceFiles[0]?.path ?? ''
-        setSelectedFile(firstPath)
-
-        if (firstPath) {
-          const content = await getWorkspaceFile(taskId, firstPath)
-          if (!mounted) return
-          setSelectedFileContent(content.content)
-        } else {
-          setSelectedFileContent('')
-        }
-      } catch (err) {
-        if (!mounted) return
-        setError(err instanceof Error ? err.message : 'Failed to load task detail')
-      } finally {
-        if (mounted) setLoading(false)
-      }
+  const loadTask = useCallback(async () => {
+    if (!taskId) {
+      return
     }
 
-    void load()
-    return () => {
-      mounted = false
+    setLoading(true)
+    setError(null)
+    setActionMessage('')
+    setActionError(null)
+
+    try {
+      const [task, stageList, taskEvents, taskArtifacts, taskDiagnosis, workspaceFiles, signoffStatus] = await Promise.all([
+        getTask(taskId),
+        getTaskStages(taskId),
+        getTaskEvents(taskId),
+        getTaskArtifacts(taskId),
+        getTaskDiagnosis(taskId),
+        getWorkspaceFiles(taskId),
+        getSignoffStatus(taskId),
+      ])
+
+      const mergedTask = { ...task, stages: stageList }
+      setDetail(mergedTask)
+      setEvents(taskEvents)
+      setArtifacts(taskArtifacts)
+      setDiagnoses(taskDiagnosis)
+      setFiles(workspaceFiles)
+      setSignoff(signoffStatus)
+
+      const firstPath = workspaceFiles[0]?.path ?? ''
+      setSelectedFile(firstPath)
+
+      if (firstPath) {
+        setFileLoading(true)
+        try {
+          const content = await getWorkspaceFile(taskId, firstPath)
+          setSelectedFileContent(content.content)
+        } finally {
+          setFileLoading(false)
+        }
+      } else {
+        setSelectedFileContent('')
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load task detail')
+    } finally {
+      setLoading(false)
     }
   }, [taskId])
 
-  const currentRecommendation = useMemo(() => {
-    return diagnoses[0]?.detail ?? defaultRecommendation
-  }, [diagnoses])
+  useEffect(() => {
+    void loadTask()
+  }, [loadTask, refreshKey])
 
-  const verificationSummary = useMemo(
-    () => [
-      {
-        label: 'Lint',
-        value: detail?.tone === 'failed' ? '1 blocking' : '0 blocking',
-        tone: detail?.tone === 'failed' ? 'text-rose-600' : 'text-emerald-600',
+  useEffect(() => {
+    if (!taskId) {
+      return
+    }
+
+    const socket = connectTaskEvents(taskId, {
+      onMessage(event) {
+        setLiveConnected(true)
+        setEvents((current) => {
+          if (current.some((item) => item.id === event.id)) {
+            return current
+          }
+          return [...current, event]
+        })
+        void loadTask()
       },
-      { label: 'Sim regressions', value: detail?.tone === 'failed' ? '38 / 42 pass' : '42 / 42 pass', tone: 'text-sky-600' },
-      {
-        label: 'Timing slack',
-        value: detail?.tone === 'failed' ? '-0.02 ns' : '+0.11 ns',
-        tone: detail?.tone === 'failed' ? 'text-rose-600' : 'text-violet-600',
+      onError() {
+        setLiveConnected(false)
       },
-    ],
-    [detail],
-  )
+    })
+
+    socket.onopen = () => setLiveConnected(true)
+    socket.onclose = () => setLiveConnected(false)
+
+    return () => {
+      socket.close()
+    }
+  }, [loadTask, taskId])
+
+  const currentRecommendation = useMemo(() => diagnoses[0]?.detail ?? 'No recommendation is available yet.', [diagnoses])
+
+  const verificationSummary = useMemo(() => {
+    const stageList = detail?.stages ?? []
+    const completed = stageList.filter((stage) => stage.status === 'done').length
+    const failed = stageList.filter((stage) => stage.status === 'failed').length
+    const active = stageList.filter((stage) => stage.status === 'active').length
+
+    return [
+      { label: 'Completed stages', value: `${completed} / ${stageList.length || 0}`, tone: 'text-emerald-600' },
+      { label: 'Active stages', value: String(active), tone: 'text-sky-600' },
+      { label: 'Failed stages', value: String(failed), tone: failed ? 'text-rose-600' : 'text-slate-500' },
+    ]
+  }, [detail?.stages])
 
   async function handleFileSelect(path: string) {
-    if (!taskId) return
+    if (!taskId) {
+      return
+    }
+
     setSelectedFile(path)
-    const file = await getWorkspaceFile(taskId, path)
-    setSelectedFileContent(file.content)
+    setFileLoading(true)
+    setActionError(null)
+
+    try {
+      const file = await getWorkspaceFile(taskId, path)
+      setSelectedFileContent(file.content)
+    } catch (err) {
+      setActionError(err instanceof Error ? err.message : 'Failed to load file')
+    } finally {
+      setFileLoading(false)
+    }
   }
 
   async function handleApproveNextAction() {
-    if (!taskId) return
+    if (!taskId) {
+      return
+    }
 
-    const result = await proposeWorkspacePatch(taskId, {
-      instruction: currentRecommendation,
-    })
+    setActionError(null)
+    setActionMessage('')
 
-    setActionMessage(`Next action queued: ${result.status}`)
+    try {
+      const result = await proposeWorkspacePatch(taskId, {
+        instruction: currentRecommendation,
+      })
+      setActionMessage(`Next action queued: ${result.status}`)
+      setRefreshKey((value) => value + 1)
+    } catch (err) {
+      setActionError(err instanceof Error ? err.message : 'Unable to queue the next action')
+    }
   }
 
   async function handleRequestFinalApproval() {
-    if (!taskId) return
+    if (!taskId) {
+      return
+    }
 
-    await submitStageApproval(taskId, 'signoff', {
-      decision: 'approve',
-      comment: 'Final approval requested from the routedChip Orchestra UI.',
-    })
+    setActionError(null)
+    setActionMessage('')
 
-    const updatedSignoff = await getSignoffStatus(taskId)
-    setSignoff(updatedSignoff)
-    setActionMessage('Final approval request recorded.')
+    try {
+      await submitStageApproval(taskId, 'signoff', {
+        decision: 'approve',
+        comment: 'Final approval requested from the Chip Orchestra workspace.',
+      })
+
+      const updatedSignoff = await getSignoffStatus(taskId)
+      setSignoff(updatedSignoff)
+      setActionMessage('Final approval request recorded.')
+      setRefreshKey((value) => value + 1)
+    } catch (err) {
+      setActionError(err instanceof Error ? err.message : 'Unable to request final approval')
+    }
+  }
+
+  async function handleRetryStage(stage: TaskStage) {
+    if (!taskId) {
+      return
+    }
+
+    setRetryingStage(stage.key)
+    setActionError(null)
+    setActionMessage('')
+
+    try {
+      const result = await retryTaskStage(taskId, stage.key)
+      setActionMessage(`Retry queued for ${stage.label}: ${result.status}`)
+      setRefreshKey((value) => value + 1)
+    } catch (err) {
+      setActionError(err instanceof Error ? err.message : `Unable to retry ${stage.label}`)
+    } finally {
+      setRetryingStage(null)
+    }
   }
 
   if (!taskId) return <ErrorState title='Missing task id' detail='No task id was provided in the route.' />
   if (loading) return <LoadingState label='Loading task detail…' />
   if (error || !detail) {
-    return <ErrorState title='Unable to load task detail' detail={error ?? 'Task not found'} onRetry={() => window.location.reload()} />
+    return <ErrorState title='Unable to load task detail' detail={error ?? 'Task not found'} onRetry={() => setRefreshKey((value) => value + 1)} />
   }
 
   return (
@@ -207,17 +282,17 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
               <div className='flex items-center justify-between'>
                 <div>
                   <p className='text-sm font-semibold text-slate-900'>Phase timeline</p>
-                  <p className='mt-1 text-sm text-slate-500'>From planner kickoff to signoff package.</p>
+                  <p className='mt-1 text-sm text-slate-500'>GET /api/v1/tasks/:id and GET /api/v1/tasks/:id/stages keep this timeline in sync.</p>
                 </div>
                 <Badge variant='secondary' className='rounded-full bg-white text-slate-500'>
-                  Live status
+                  {liveConnected ? 'WebSocket connected' : 'WebSocket reconnecting'}
                 </Badge>
               </div>
 
               <div className='mt-5 grid gap-3 xl:grid-cols-5'>
                 {detail.stages.map((stage) => (
                   <div key={stage.key} className='rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-100'>
-                    <div className='flex items-center justify-between'>
+                    <div className='flex items-center justify-between gap-2'>
                       <p className='text-sm font-semibold text-slate-900'>{stage.label}</p>
                       {stage.status === 'done' ? <CheckCircle2 className='h-4 w-4 text-emerald-500' /> : null}
                       {stage.status === 'active' ? <PlayCircle className='h-4 w-4 text-blue-500' /> : null}
@@ -237,6 +312,19 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
                         }`}
                       />
                     </div>
+                    <div className='mt-4 flex items-center justify-between text-xs text-slate-400'>
+                      <span>Retries: {stage.retryCount ?? 0}</span>
+                      <Button
+                        variant='outline'
+                        size='sm'
+                        className='rounded-full border-slate-200'
+                        disabled={retryingStage === stage.key || stage.status === 'active'}
+                        onClick={() => void handleRetryStage(stage)}
+                      >
+                        <RefreshCw className={`mr-2 h-3.5 w-3.5 ${retryingStage === stage.key ? 'animate-spin' : ''}`} />
+                        Retry
+                      </Button>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -247,7 +335,7 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
         <Card className='rounded-3xl border-slate-200 shadow-none'>
           <CardHeader>
             <CardTitle className='text-xl'>AI diagnosis</CardTitle>
-            <CardDescription>Operator-friendly summary of the current issue and next action.</CardDescription>
+            <CardDescription>Live diagnosis returned by the Orchestrator Service.</CardDescription>
           </CardHeader>
           <CardContent className='space-y-4'>
             {diagnoses[0] ? (
@@ -271,6 +359,8 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
             ) : (
               <EmptyState title='No diagnosis available' detail='This task has no AI diagnosis yet.' />
             )}
+            {actionMessage ? <p className='rounded-2xl bg-emerald-50 px-4 py-3 text-sm text-emerald-700'>{actionMessage}</p> : null}
+            {actionError ? <p className='rounded-2xl bg-rose-50 px-4 py-3 text-sm text-rose-700'>{actionError}</p> : null}
           </CardContent>
         </Card>
       </div>
@@ -286,29 +376,33 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
           <Card className='rounded-3xl border-slate-200 shadow-none'>
             <CardHeader>
               <CardTitle className='text-xl'>Execution log</CardTitle>
-              <CardDescription>Chronological activity from planning through diagnosis.</CardDescription>
+              <CardDescription>Chronological events from GET /api/v1/tasks/:id/attempts/latest/events and the live WebSocket stream.</CardDescription>
             </CardHeader>
             <CardContent>
-              <ScrollArea className='h-80 pr-4'>
-                <div className='space-y-4'>
-                  {events.map((event) => (
-                    <div key={event.id} className='flex gap-4 rounded-2xl border border-slate-200 p-4'>
-                      <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl ${eventToneClass[event.tone]}`}>
-                        <Clock3 className='h-4 w-4' />
-                      </div>
-                      <div>
-                        <div className='flex items-center gap-2 text-sm text-slate-400'>
-                          <span>{event.time}</span>
-                          <span>•</span>
-                          <span>ChipOrchestra</span>
+              {events.length ? (
+                <ScrollArea className='h-80 pr-4'>
+                  <div className='space-y-4'>
+                    {events.map((event) => (
+                      <div key={event.id} className='flex gap-4 rounded-2xl border border-slate-200 p-4'>
+                        <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl ${eventToneClass[event.tone] ?? eventToneClass.info}`}>
+                          <Clock3 className='h-4 w-4' />
                         </div>
-                        <p className='mt-1 font-semibold text-slate-900'>{event.title}</p>
-                        <p className='mt-2 text-sm leading-6 text-slate-500'>{event.detail}</p>
+                        <div>
+                          <div className='flex items-center gap-2 text-sm text-slate-400'>
+                            <span>{event.time}</span>
+                            <span>•</span>
+                            <span>Orchestrator Service</span>
+                          </div>
+                          <p className='mt-1 font-semibold text-slate-900'>{event.title}</p>
+                          <p className='mt-2 text-sm leading-6 text-slate-500'>{event.detail}</p>
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              </ScrollArea>
+                    ))}
+                  </div>
+                </ScrollArea>
+              ) : (
+                <EmptyState title='No execution events yet' detail='The backend has not published any runbook events for this task.' />
+              )}
             </CardContent>
           </Card>
 
@@ -324,12 +418,10 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
                     <div key={artifact.id} className='flex items-center justify-between rounded-2xl border border-slate-200 p-4'>
                       <div>
                         <p className='font-semibold text-slate-900'>{artifact.name}</p>
-                        <p className='mt-1 text-sm text-slate-500'>
-                          {artifact.type} · owned by {artifact.owner}
-                        </p>
+                        <p className='mt-1 text-sm text-slate-500'>{artifact.type} · owned by {artifact.owner}</p>
                       </div>
-                      <Button variant='outline' className='rounded-full border-slate-200'>
-                        Open
+                      <Button variant='outline' className='rounded-full border-slate-200' disabled={!artifact.url && !artifact.path}>
+                        {artifact.url || artifact.path ? 'Open' : 'Unavailable'}
                       </Button>
                     </div>
                   ))
@@ -343,10 +435,7 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
               <CardHeader>
                 <CardTitle className='text-xl'>Current recommendation</CardTitle>
               </CardHeader>
-              <CardContent className='rounded-b-3xl bg-slate-50 text-sm leading-6 text-slate-600'>
-                {currentRecommendation}
-                {actionMessage ? <p className='mt-3 font-medium text-emerald-700'>{actionMessage}</p> : null}
-              </CardContent>
+              <CardContent className='rounded-b-3xl bg-slate-50 text-sm leading-6 text-slate-600'>{currentRecommendation}</CardContent>
             </Card>
           </div>
         </div>
@@ -357,7 +446,7 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
           <Card className='rounded-3xl border-slate-200 shadow-none'>
             <CardHeader>
               <CardTitle className='text-xl'>RTL editor surface</CardTitle>
-              <CardDescription>Open tabs and verification context stay adjacent to the code.</CardDescription>
+              <CardDescription>Workspace files are loaded from the Orchestrator Service on demand.</CardDescription>
             </CardHeader>
             <CardContent className='space-y-4'>
               <div className='flex flex-wrap gap-2'>
@@ -366,9 +455,7 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
                     key={file.path}
                     onClick={() => void handleFileSelect(file.path)}
                     className={`rounded-full px-3 py-1 text-sm ${
-                      selectedFile === file.path || (!selectedFile && index === 0)
-                        ? 'bg-slate-900 text-white'
-                        : 'bg-slate-100 text-slate-600'
+                      selectedFile === file.path || (!selectedFile && index === 0) ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-600'
                     }`}
                   >
                     {file.name}
@@ -381,7 +468,7 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
                   {selectedFile || 'No file selected'}
                 </div>
                 <pre className='overflow-x-auto p-4 text-sm leading-7 text-slate-300'>
-                  {selectedFileContent || '// No file content available'}
+                  {fileLoading ? '// Loading file…' : selectedFileContent || '// No file content available'}
                 </pre>
               </div>
             </CardContent>
@@ -391,7 +478,7 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
             <Card className='rounded-3xl border-slate-200 shadow-none'>
               <CardHeader>
                 <CardTitle className='text-xl'>Verification status</CardTitle>
-                <CardDescription>At-a-glance health for the current workspace snapshot.</CardDescription>
+                <CardDescription>Derived from live stage state instead of placeholder metrics.</CardDescription>
               </CardHeader>
               <CardContent className='space-y-3'>
                 {verificationSummary.map((item) => (
@@ -435,7 +522,7 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
             <Card className='rounded-3xl border-slate-200 shadow-none'>
               <CardHeader>
                 <CardTitle className='text-xl'>Tapeout checklist</CardTitle>
-                <CardDescription>Capture the final release gate in the same task object.</CardDescription>
+                <CardDescription>Live signoff status from GET /api/v1/tasks/:id/signoff/status.</CardDescription>
               </CardHeader>
               <CardContent className='space-y-4'>
                 {signoff.checklist.map((item) => (
@@ -475,10 +562,9 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
                   </ul>
                 </div>
                 <Separator />
-                <div className='rounded-3xl border border-blue-100 bg-blue-50 p-4 text-sm leading-6 text-blue-800'>
-                  {signoff.message}
-                </div>
-                {actionMessage ? <p className='text-sm font-medium text-emerald-700'>{actionMessage}</p> : null}
+                <div className='rounded-3xl border border-blue-100 bg-blue-50 p-4 text-sm leading-6 text-blue-800'>{signoff.message}</div>
+                {actionMessage ? <p className='rounded-2xl bg-emerald-50 px-4 py-3 text-sm text-emerald-700'>{actionMessage}</p> : null}
+                {actionError ? <p className='rounded-2xl bg-rose-50 px-4 py-3 text-sm text-rose-700'>{actionError}</p> : null}
                 <Button onClick={() => void handleRequestFinalApproval()} className='h-12 w-full rounded-2xl bg-blue-600 text-base hover:bg-blue-700'>
                   Request final approval
                 </Button>
@@ -495,12 +581,7 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
 
 function TabLink({ to, label, active }: { to: string; label: string; active: boolean }) {
   return (
-    <NavLink
-      to={to}
-      className={`rounded-2xl py-3 text-center text-sm font-medium transition ${
-        active ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'
-      }`}
-    >
+    <NavLink to={to} className={`rounded-2xl py-3 text-center text-sm font-medium transition ${active ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}>
       {label}
     </NavLink>
   )

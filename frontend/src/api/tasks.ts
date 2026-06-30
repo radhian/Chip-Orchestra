@@ -1,11 +1,4 @@
-import {
-  applyMockApproval,
-  applyMockWaiver,
-  createMockExportBundle,
-  createMockTask,
-  filterMockTasks,
-  loadMockSnapshot,
-} from '@/mocks/chiporchestra'
+import { getStoredToken, getTaskEventsWebSocketUrl } from '@/api/auth'
 import type {
   ApprovalPayload,
   ArtifactItem,
@@ -18,30 +11,39 @@ import type {
   TaskDetail,
   TaskStage,
   TaskSummary,
-  WaiverPayload,
-  WorkflowStep,
   WorkspaceFileContent,
   WorkspaceFileSummary,
-} from '@/types/chiporchestra'
+} from '@/types/orchestra'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, '')
-const SHOULD_USE_MOCKS = import.meta.env.VITE_USE_MOCKS !== 'false'
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8080').replace(/\/$/, '')
+
+async function parseError(response: Response): Promise<string> {
+  try {
+    const payload = (await response.json()) as { error?: string; message?: string }
+    return payload.error ?? payload.message ?? `${response.status} ${response.statusText}`
+  } catch {
+    return `${response.status} ${response.statusText}`
+  }
+}
 
 async function requestJson<T>(path: string, init?: RequestInit): Promise<T> {
-  if (!API_BASE_URL) {
-    throw new Error('Missing VITE_API_BASE_URL')
+  const token = getStoredToken()
+  const headers = new Headers(init?.headers ?? undefined)
+
+  if (!headers.has('Content-Type') && init?.body) {
+    headers.set('Content-Type', 'application/json')
+  }
+  if (token) {
+    headers.set('Authorization', `Bearer ${token}`)
   }
 
   const response = await fetch(`${API_BASE_URL}${path}`, {
-    headers: {
-      'Content-Type': 'application/json',
-      ...(init?.headers ?? {}),
-    },
     ...init,
+    headers,
   })
 
   if (!response.ok) {
-    throw new Error(`API request failed: ${response.status} ${response.statusText}`)
+    throw new Error(await parseError(response))
   }
 
   if (response.status === 204) {
@@ -51,198 +53,170 @@ async function requestJson<T>(path: string, init?: RequestInit): Promise<T> {
   return (await response.json()) as T
 }
 
-async function withFallback<T>(remote: () => Promise<T>, mock: () => T | Promise<T>): Promise<T> {
-  if (!API_BASE_URL && SHOULD_USE_MOCKS) {
-    return mock()
-  }
-
-  try {
-    return await remote()
-  } catch (error) {
-    if (SHOULD_USE_MOCKS) {
-      console.warn('Chip Orchestra API unavailable, falling back to mock data.', error)
-      return mock()
-    }
-
-    throw error
+function mapStageStatus(status: string): TaskStage['status'] {
+  switch (status) {
+    case 'SUCCEEDED':
+    case 'RELEASED':
+      return 'done'
+    case 'RUNNING':
+    case 'DISPATCHING':
+      return 'active'
+    case 'FAILED':
+      return 'failed'
+    default:
+      return 'queued'
   }
 }
 
-function getSnapshot() {
-  return loadMockSnapshot()
+function mapTaskSummary(item: Record<string, unknown>): TaskSummary {
+  const owner = (item.owner as { id?: string; full_name?: string } | undefined) ?? {}
+  return {
+    id: String(item.id ?? item.task_id ?? ''),
+    name: String(item.name ?? 'Untitled task'),
+    description: String(item.description ?? 'No description provided.'),
+    ownerName: String(item.ownerName ?? owner.full_name ?? 'Unassigned'),
+    ownerId: String(item.ownerId ?? owner.id ?? ''),
+    currentStage: String(item.currentStage ?? item.current_stage ?? 'Unknown'),
+    etaLabel: String(item.etaLabel ?? 'Unknown'),
+    statusLabel: String(item.statusLabel ?? item.status ?? 'Unknown'),
+    tone: String(item.tone ?? 'running') as TaskSummary['tone'],
+    repoName: String(item.repoName ?? item.repo_source ?? item.template_id ?? 'N/A'),
+  }
 }
 
-export async function getWorkflowSteps(): Promise<WorkflowStep[]> {
-  return withFallback(
-    () => Promise.resolve(getSnapshot().workflowSteps),
-    () => getSnapshot().workflowSteps,
-  )
+function mapTaskDetail(payload: TaskDetail): TaskDetail {
+  return {
+    ...payload,
+    description: payload.description || payload.name,
+    repoName: payload.repoName || 'N/A',
+    stages: payload.stages ?? [],
+    attempts: payload.attempts ?? [],
+  }
 }
 
-export async function listTasks(params: ListTasksParams = {}): Promise<TaskSummary[]> {
+export async function listTasks(params: ListTasksParams = {}): Promise<{ items: TaskSummary[]; total: number }> {
   const query = new URLSearchParams()
+
   Object.entries(params).forEach(([key, value]) => {
-    if (value !== undefined && value !== '') {
+    if (value !== undefined && value !== '' && value !== null) {
       query.set(key, String(value))
     }
   })
 
-  return withFallback(
-    async () => requestJson<TaskSummary[]>(`/api/tasks${query.size ? `?${query.toString()}` : ''}`),
-    () => filterMockTasks(getSnapshot().tasks, params),
-  )
+  const response = await requestJson<{ items?: Array<Record<string, unknown>> }>(`/api/v1/tasks${query.size ? `?${query.toString()}` : ''}`)
+  const items = (response.items ?? []).map(mapTaskSummary)
+
+  return {
+    items,
+    total: items.length,
+  }
 }
 
 export async function createTask(input: CreateTaskInput): Promise<TaskDetail> {
-  return withFallback(
-    () => requestJson<TaskDetail>('/api/tasks', { method: 'POST', body: JSON.stringify(input) }),
-    () => createMockTask(input),
-  )
+  const created = await requestJson<{ id?: string; task_id?: string }>('/api/v1/tasks', {
+    method: 'POST',
+    body: JSON.stringify(input),
+  })
+
+  const id = String(created.id ?? created.task_id ?? '')
+  if (!id) {
+    throw new Error('Task was created but no task id was returned.')
+  }
+
+  return getTask(id)
 }
 
 export async function getTask(id: string): Promise<TaskDetail> {
-  return withFallback(
-    () => requestJson<TaskDetail>(`/api/tasks/${id}`),
-    () => {
-      const detail = getSnapshot().taskDetails[id]
-      if (!detail) {
-        throw new Error(`Task ${id} not found`)
-      }
-      return detail
-    },
-  )
+  const payload = await requestJson<TaskDetail>(`/api/v1/tasks/${id}`)
+  return mapTaskDetail(payload)
+}
+
+export async function updateTask(id: string, payload: { description?: string; status?: string; current_stage?: string }) {
+  return requestJson<TaskDetail>(`/api/v1/tasks/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify(payload),
+  })
 }
 
 export async function getTaskStages(id: string): Promise<TaskStage[]> {
-  return withFallback(
-    () => requestJson<TaskStage[]>(`/api/tasks/${id}/stages`),
-    async () => (await getTask(id)).stages,
-  )
+  const response = await requestJson<{ stages?: Array<{ name: string; status: string; retry_count?: number }> }>(`/api/v1/tasks/${id}/stages`)
+  return (response.stages ?? []).map((stage) => ({
+    key: stage.name.toLowerCase(),
+    label: stage.name.replace(/_/g, ' '),
+    status: mapStageStatus(stage.status),
+    retryCount: Number(stage.retry_count ?? 0),
+  }))
 }
 
-export async function retryTask(id: string): Promise<{ status: string }> {
-  return withFallback(
-    () => requestJson<{ status: string }>(`/api/tasks/${id}/retry`, { method: 'POST' }),
-    () => ({ status: 'queued' }),
-  )
-}
-
-export async function stopTask(id: string): Promise<{ status: string }> {
-  return withFallback(
-    () => requestJson<{ status: string }>(`/api/tasks/${id}/stop`, { method: 'POST' }),
-    () => ({ status: 'noop' }),
-  )
-}
-
-export async function resumeTask(id: string): Promise<{ status: string }> {
-  return withFallback(
-    () => requestJson<{ status: string }>(`/api/tasks/${id}/resume`, { method: 'POST' }),
-    () => ({ status: 'noop' }),
-  )
-}
-
-export async function cancelTask(id: string): Promise<{ status: string }> {
-  return withFallback(
-    () => requestJson<{ status: string }>(`/api/tasks/${id}/cancel`, { method: 'POST' }),
-    () => ({ status: 'noop' }),
-  )
+export async function retryTaskStage(id: string, stage: string): Promise<{ status: string; stage?: string }> {
+  return requestJson<{ status: string; stage?: string }>(`/api/v1/tasks/${id}/stages/${stage}/retry`, { method: 'POST' })
 }
 
 export async function getTaskEvents(id: string): Promise<RunbookEvent[]> {
-  return withFallback(
-    () => requestJson<RunbookEvent[]>(`/api/tasks/${id}/attempts/latest/events`),
-    () => getSnapshot().events[id] ?? [],
-  )
+  return requestJson<RunbookEvent[]>(`/api/v1/tasks/${id}/attempts/latest/events`)
 }
 
 export async function getTaskArtifacts(id: string): Promise<ArtifactItem[]> {
-  return withFallback(
-    () => requestJson<ArtifactItem[]>(`/api/tasks/${id}/attempts/latest/artifacts`),
-    () => getSnapshot().artifacts[id] ?? [],
-  )
+  return requestJson<ArtifactItem[]>(`/api/v1/tasks/${id}/attempts/latest/artifacts`)
 }
 
 export async function getTaskDiagnosis(id: string): Promise<DiagnosisItem[]> {
-  return withFallback(
-    () => requestJson<DiagnosisItem[]>(`/api/tasks/${id}/attempts/latest/diagnosis`),
-    () => getSnapshot().diagnoses[id] ?? [],
-  )
+  return requestJson<DiagnosisItem[]>(`/api/v1/tasks/${id}/attempts/latest/diagnosis`)
 }
 
 export async function getWorkspaceFiles(id: string): Promise<WorkspaceFileSummary[]> {
-  return withFallback(
-    () => requestJson<WorkspaceFileSummary[]>(`/api/tasks/${id}/workspace/files`),
-    () => getSnapshot().workspaceFiles[id] ?? [],
-  )
+  return requestJson<WorkspaceFileSummary[]>(`/api/v1/tasks/${id}/workspace/files`)
 }
 
 export async function getWorkspaceFile(id: string, path: string): Promise<WorkspaceFileContent> {
   const query = new URLSearchParams({ path })
-
-  return withFallback(
-    () => requestJson<WorkspaceFileContent>(`/api/tasks/${id}/workspace/file?${query.toString()}`),
-    () => ({ path, content: getSnapshot().workspaceContent[id]?.[path] ?? '// File not found in mock workspace' }),
-  )
+  return requestJson<WorkspaceFileContent>(`/api/v1/tasks/${id}/workspace/file?${query.toString()}`)
 }
 
-export async function proposeWorkspacePatch(
-  id: string,
-  payload: { instruction: string },
-): Promise<{ status: string }> {
-  return withFallback(
-    () =>
-      requestJson<{ status: string }>(`/api/tasks/${id}/workspace/propose-patch`, {
-        method: 'POST',
-        body: JSON.stringify(payload),
-      }),
-    () => ({ status: 'queued' }),
-  )
+export async function proposeWorkspacePatch(id: string, payload: { instruction: string }): Promise<{ status: string; recommended_next?: string }> {
+  return requestJson<{ status: string; recommended_next?: string }>(`/api/v1/tasks/${id}/workspace/propose-patch`, {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  })
 }
 
 export async function getSignoffStatus(id: string): Promise<SignoffStatus> {
-  return withFallback(
-    () => requestJson<SignoffStatus>(`/api/tasks/${id}/signoff/status`),
-    () => {
-      const signoff = getSnapshot().signoff[id]
-      if (!signoff) {
-        throw new Error(`Signoff status for task ${id} not found`)
-      }
-      return signoff
-    },
-  )
+  return requestJson<SignoffStatus>(`/api/v1/tasks/${id}/signoff/status`)
 }
 
-export async function submitStageApproval(
-  id: string,
-  stage: string,
-  payload: ApprovalPayload,
-): Promise<{ status: string }> {
-  return withFallback(
-    () =>
-      requestJson<{ status: string }>(`/api/tasks/${id}/approvals/${stage}`, {
-        method: 'POST',
-        body: JSON.stringify(payload),
-      }),
-    () => {
-      applyMockApproval(id, stage, payload)
-      return { status: 'recorded' }
-    },
-  )
+export async function submitStageApproval(id: string, stage: string, payload: ApprovalPayload): Promise<{ status: string }> {
+  return requestJson<{ status: string }>(`/api/v1/tasks/${id}/approvals/${stage}`, {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  })
 }
 
-export async function createWaiver(id: string, payload: WaiverPayload): Promise<{ status: string }> {
-  return withFallback(
-    () => requestJson<{ status: string }>(`/api/tasks/${id}/waivers`, { method: 'POST', body: JSON.stringify(payload) }),
-    () => {
-      applyMockWaiver(id, payload)
-      return { status: 'queued' }
-    },
-  )
+export async function createWaiver(id: string, payload: { title: string; detail: string }): Promise<{ status: string }> {
+  return requestJson<{ status: string }>(`/api/v1/tasks/${id}/waivers`, {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  })
 }
 
 export async function exportBundle(id: string): Promise<ExportBundleResponse> {
-  return withFallback(
-    () => requestJson<ExportBundleResponse>(`/api/tasks/${id}/export-bundle`, { method: 'POST' }),
-    () => createMockExportBundle(id),
-  )
+  return requestJson<ExportBundleResponse>(`/api/v1/tasks/${id}/export-bundle`, { method: 'POST' })
+}
+
+export function connectTaskEvents(taskId: string, handlers: { onMessage: (event: RunbookEvent) => void; onError?: () => void }) {
+  const socket = new WebSocket(getTaskEventsWebSocketUrl(taskId))
+
+  socket.onmessage = (message) => {
+    try {
+      const payload = JSON.parse(message.data) as RunbookEvent
+      handlers.onMessage(payload)
+    } catch {
+      handlers.onError?.()
+    }
+  }
+
+  socket.onerror = () => {
+    handlers.onError?.()
+  }
+
+  return socket
 }

@@ -1,0 +1,21 @@
+services:
+  orchestrator-service:
+    environment:
+      GIN_MODE: debug
+    volumes:
+      - ./orchestrator-service:/app
+
+  agent-service:
+    command: uvicorn main:app --host 0.0.0.0 --port 8001 --reload
+    volumes:
+      - ./agent-service:/app
+
+  eda-service:
+    command: uvicorn main:app --host 0.0.0.0 --port 8002 --reload
+    volumes:
+      - ./eda-service:/app
+
+  frontend:
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0 --port 4173"
+    volumes:
+      - ./frontend:/app
