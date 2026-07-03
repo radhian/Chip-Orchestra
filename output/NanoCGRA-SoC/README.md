@@ -327,7 +327,33 @@ flowchart TB
 - 🛠️ **Consistent Flow:** Ensures reliable OpenLane/GF180MCU execution.
 - 🏅 **First-Silicon Confidence:** Automated DRC/LVS/STA signoff.
 
+## Estimated Development Time Comparison
+
+| Stage | Manual Workflow | With ChipOrchestra | Estimated Improvement |
+|-------|----------------:|-------------------:|----------------------:|
+| RTL Coding | 3–5 days | 1–2 hours | ~24–60× faster |
+| Testbench Writing | 2–3 days | 30–60 minutes | ~16–48× faster |
+| Verification & Debug | 1–2 weeks | 2–4 days | ~3–5× faster |
+| Physical Design Setup | 2–3 days | <1 day | ~2–3× faster |
+| Full RTL → GDSII | 3–5 weeks | 3–7 days | ~5–7× faster |
+
+> **Note:** These values are estimated for a small research-scale SoC (e.g., Nano CGRA) and assume an AI-assisted design flow using ChipOrchestra with open-source EDA tools (Verilator, Slang, SymbiYosys, Yosys, OpenROAD, Magic, and OpenLane). Actual results depend on design complexity, compute resources, and the number of verification iterations.
+
+## Target Design Specification
+
+| **Parameter** | **Target** |
+|---------------|------------|
+| Technology | GF180MCU |
+| CPU | FAZYRV RV32I (8-bit chunksize) |
+| Accelerator | 2×2 CGRA (4 × 8-bit Processing Elements) |
+| SRAM | 1 KB |
+| UART | Memory-mapped |
+| Operating Frequency | 10 MHz |
+| Target Die Area | ≤ 3.0 mm² |
+| Target Power | < 0.3 mW |
+
 ---
+
 
 # Verification Plan
 
