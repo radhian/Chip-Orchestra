@@ -8,7 +8,7 @@ Rather than treating RTL generation, verification, synthesis, and physical imple
 
 The platform enables engineers to:
 
-- Generate RTL to Produce tapeout-ready deliverable from natural-language specifications
+- Generate RTL and produce tapeout-ready deliverables from natural-language specifications
 - Automatically verify and repair generated designs
 - Execute synthesis, place-and-route, and signoff
 - Track every artifact, decision, and execution stage
