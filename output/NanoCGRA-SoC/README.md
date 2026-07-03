@@ -339,18 +339,20 @@ flowchart TB
 
 > **Note:** These values are estimated for a small research-scale SoC (e.g., Nano CGRA) and assume an AI-assisted design flow using ChipOrchestra with open-source EDA tools (Verilator, Slang, SymbiYosys, Yosys, OpenROAD, Magic, and OpenLane). Actual results depend on design complexity, compute resources, and the number of verification iterations.
 
-## Target Design Specification
+## Expected Design Target
 
 | **Parameter** | **Target** |
 |---------------|------------|
-| Technology | GF180MCU |
+| Technology | GF180MCU (180 nm) |
 | CPU | FAZYRV RV32I (8-bit chunksize) |
-| Accelerator | 2×2 CGRA (4 × 8-bit Processing Elements) |
+| Accelerator | 2×2 CGRA (4 × 8-bit PEs) |
 | SRAM | 1 KB |
 | UART | Memory-mapped |
-| Operating Frequency | 10 MHz |
-| Target Die Area | ≤ 3.0 mm² |
-| Target Power | < 0.3 mW |
+| Maximum Die Size | **0.5 mm × 0.5 mm (0.25 mm²)** |
+| Target Frequency | **5–10 MHz** |
+| Target Power | **< 0.10 mW (100 µW)** |
+| Core Utilization | 60–70% |
+| Timing Goal | Positive setup/hold slack at TT corner |
 
 ---
 
