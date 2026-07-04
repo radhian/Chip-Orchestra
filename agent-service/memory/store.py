@@ -17,7 +17,7 @@ class Base(DeclarativeBase):
 class AgentMemory(Base):
     __tablename__ = "agent_memories"
 
-    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    id: Mapped[str] = mapped_column(String(128), primary_key=True)
     task_id: Mapped[str] = mapped_column(String(64), index=True)
     stage: Mapped[str] = mapped_column(String(64), index=True)
     agent_name: Mapped[str] = mapped_column(String(64))

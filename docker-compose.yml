@@ -73,6 +73,13 @@ services:
       DEFAULT_FULL_NAME: ${DEFAULT_FULL_NAME:-Admin Admin}
       WORKSPACE_ROOT: ${WORKSPACE_ROOT:-/tmp/chip-orchestra/workspaces}
       AGENT_ARTIFACT_ROOT: ${AGENT_ARTIFACT_ROOT:-/tmp/chip-orchestra/workspaces}
+      LLM_PROVIDER: ${LLM_PROVIDER:-ollama}
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen3.5:9b}
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY:-}
+      GOOGLE_MODEL: ${GOOGLE_MODEL:-gemini-2.5-pro}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     depends_on:
       mysql:
         condition: service_healthy

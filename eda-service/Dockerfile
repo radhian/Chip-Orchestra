@@ -2,17 +2,15 @@ FROM python:3.12-slim
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-ARG LIBRELANE_FLAKE=github:librelane/librelane
 ARG PDK_ROOT=/opt/pdk
 
 ENV DEBIAN_FRONTEND=noninteractive \
-    NIX_CONFIG="experimental-features = nix-command flakes" \
     PDK_ROOT=${PDK_ROOT} \
     IVERILOG_BIN=iverilog \
     VVP_BIN=vvp \
-    LIBRELANE_BIN=librelane \
-    PATH="/root/.nix-profile/bin:/nix/var/nix/profiles/default/bin:${PATH}"
+    LIBRELANE_BIN=librelane
 
+# System tools: iverilog for RTL simulation
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         bash \
@@ -23,11 +21,10 @@ RUN apt-get update \
         xz-utils \
     && rm -rf /var/lib/apt/lists/*
 
-RUN mkdir -m 0755 /nix \
-    && chown root /nix \
-    && curl -L https://nixos.org/nix/install | sh -s -- --no-daemon \
-    && . /root/.nix-profile/etc/profile.d/nix.sh \
-    && nix profile add ${LIBRELANE_FLAKE} --accept-flake-config \
+# LibreLane via pip (Python package — no Nix required)
+# openlane is the stable PyPI release; librelane is the newer fork.
+# We install both so either binary resolves from PATH.
+RUN pip install --no-cache-dir librelane || pip install --no-cache-dir openlane \
     && mkdir -p "${PDK_ROOT}"
 
 WORKDIR /app
