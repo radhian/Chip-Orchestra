@@ -9,11 +9,13 @@ from typing import Any, Dict
 from uuid import uuid4
 
 from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import StreamingResponse
+from fastapi.responses import FileResponse, StreamingResponse
 from pydantic import BaseModel, Field
 from redis.asyncio import Redis
 
 from jobs import EDAJobManager
+from toolchain.artifacts import UnsafePathError, list_artifacts, resolve_artifact_path
+from workspace import resolve_workspace
 
 
 class CreateEDAJobRequest(BaseModel):
@@ -22,6 +24,27 @@ class CreateEDAJobRequest(BaseModel):
     spec: str = Field(default="")
     metadata: Dict[str, Any] = Field(default_factory=dict)
     artifacts: Dict[str, str] = Field(default_factory=dict)
+    # New optional fields (backwards compatible). Top-level values win over
+    # equivalent keys nested under ``metadata``.
+    workspace_root: str | None = None
+    top_module: str | None = None
+    clock_port: str | None = None
+    clock_period: float | None = None
+    stage_options: Dict[str, Any] = Field(default_factory=dict)
+
+    def resolved_workspace_root(self) -> str:
+        return self.workspace_root or str(self.metadata.get("workspace_root") or "")
+
+    def build_options(self) -> Dict[str, Any]:
+        meta = self.metadata or {}
+        return {
+            "top_module": self.top_module or meta.get("top_module") or meta.get("top") or "",
+            "clock_port": self.clock_port or meta.get("clock_port") or "clk",
+            "clock_period": self.clock_period if self.clock_period is not None else meta.get("clock_period", 10.0),
+            "stage_options": self.stage_options or meta.get("stage_options") or {},
+            "spec": self.spec,
+            "metadata": meta,
+        }
 
 
 def build_services():
@@ -72,7 +95,14 @@ def create_app(*, redis_client: Redis | None = None, manager: EDAJobManager | No
     @app.post("/eda/jobs")
     async def create_job(request: CreateEDAJobRequest, fastapi_request: Request):
         job_id = f"job-{uuid4()}"
-        fastapi_request.app.state.manager.create_job(job_id=job_id, task_id=request.task_id, stage=request.stage)
+        fastapi_request.app.state.manager.create_job(
+            job_id=job_id,
+            task_id=request.task_id,
+            stage=request.stage,
+            workspace_root=request.resolved_workspace_root(),
+            stage_options=request.build_options(),
+            artifacts=request.artifacts,
+        )
         await fastapi_request.app.state.manager.enqueue_job(job_id)
         return {"job_id": job_id, "status": "QUEUED", "message": f"{request.stage} job accepted"}
 
@@ -97,6 +127,28 @@ def create_app(*, redis_client: Redis | None = None, manager: EDAJobManager | No
         if job is None:
             raise HTTPException(status_code=404, detail="Job not found")
         return json.loads(job.report_json or "{}")
+
+    @app.get("/eda/jobs/{job_id}/artifacts")
+    async def get_job_artifacts(job_id: str, request: Request):
+        job = request.app.state.manager.get_job(job_id)
+        if job is None:
+            raise HTTPException(status_code=404, detail="Job not found")
+        artifacts = list_artifacts(json.loads(job.artifact_index or "[]"))
+        return {"job_id": job.id, "task_id": job.task_id, "stage": job.stage, "artifacts": artifacts}
+
+    @app.get("/eda/jobs/{job_id}/file")
+    async def get_job_file(job_id: str, path: str, request: Request):
+        job = request.app.state.manager.get_job(job_id)
+        if job is None:
+            raise HTTPException(status_code=404, detail="Job not found")
+        workspace = resolve_workspace(job.task_id, job.workspace_root)
+        try:
+            target = resolve_artifact_path(workspace, path)
+        except UnsafePathError:
+            raise HTTPException(status_code=400, detail="Invalid path")
+        except FileNotFoundError:
+            raise HTTPException(status_code=404, detail="File not found")
+        return FileResponse(str(target))
 
     @app.get("/eda/jobs/{job_id}/logs")
     async def stream_job_logs(job_id: str, request: Request):

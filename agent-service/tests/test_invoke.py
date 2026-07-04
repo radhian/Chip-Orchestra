@@ -57,6 +57,8 @@ def test_invoke_endpoint_returns_graph_response() -> None:
         "artifacts": [{"id": "artifact-1", "name": "summary.md"}],
         "workspace_files": {"notes/orchestrator_patch.md": "content"},
         "recommended_next": "Continue DAG",
+        "structured_conclusion": {},
+        "artifact_refs": [],
     }
     deep_agent_graph.invoke.assert_called_once_with(
         {
@@ -67,5 +69,9 @@ def test_invoke_endpoint_returns_graph_response() -> None:
             "context": {"mode": "patch"},
             "artifacts": {},
             "instructions": {},
+            "workspace_root": None,
+            "artifact_inventory": [],
+            "eda_reports": [],
+            "reference_files": [],
         }
     )

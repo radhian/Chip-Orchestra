@@ -2,16 +2,16 @@ services:
   mysql:
     image: mysql:8.4
     environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-chip_orchestra}
+      MYSQL_USER: ${MYSQL_USER:-chip}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-chip}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-chiproot}
     ports:
-      - "${MYSQL_PORT}:3306"
+      - "${MYSQL_PORT:-3306}:3306"
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD-SHELL", "mysqladmin ping -h localhost -p${MYSQL_ROOT_PASSWORD}"]
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -p${MYSQL_ROOT_PASSWORD:-chiproot}"]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -20,7 +20,7 @@ services:
     image: redis:7.2-alpine
     command: ["redis-server", "--appendonly", "yes"]
     ports:
-      - "${REDIS_PORT}:6379"
+      - "${REDIS_PORT:-6379}:6379"
     volumes:
       - redis_data:/data
     healthcheck:
@@ -34,15 +34,16 @@ services:
       context: ./orchestrator-service
     environment:
       PORT: 8080
-      MYSQL_DSN: ${MYSQL_USER}:${MYSQL_PASSWORD}@tcp(mysql:3306)/${MYSQL_DATABASE}?charset=utf8mb4&parseTime=True&loc=UTC
+      MYSQL_DSN: ${MYSQL_USER:-chip}:${MYSQL_PASSWORD:-chip}@tcp(mysql:3306)/${MYSQL_DATABASE:-chip_orchestra}?charset=utf8mb4&parseTime=True&loc=UTC
       REDIS_ADDR: redis:6379
-      JWT_SECRET: ${JWT_SECRET}
+      JWT_SECRET: ${JWT_SECRET:-chip-orchestra-secret}
       AGENT_SERVICE_URL: http://agent-service:8001
       EDA_SERVICE_URL: http://eda-service:8002
-      DEFAULT_USERNAME: ${DEFAULT_USERNAME}
-      DEFAULT_FULL_NAME: ${DEFAULT_FULL_NAME}
-      DEFAULT_EMAIL: ${DEFAULT_EMAIL}
-      DEFAULT_PASSWORD: ${DEFAULT_PASSWORD}
+      DEFAULT_USERNAME: ${DEFAULT_USERNAME:-admin}
+      DEFAULT_FULL_NAME: ${DEFAULT_FULL_NAME:-Admin Admin}
+      DEFAULT_EMAIL: ${DEFAULT_EMAIL:-admin.local}
+      DEFAULT_PASSWORD: ${DEFAULT_PASSWORD:-chip-orchestra}
+      WORKSPACE_ROOT: ${WORKSPACE_ROOT:-/tmp/chip-orchestra/workspaces}
     depends_on:
       mysql:
         condition: service_healthy
@@ -53,7 +54,9 @@ services:
       eda-service:
         condition: service_started
     ports:
-      - "${OPERATOR_PORT}:8080"
+      - "${OPERATOR_PORT:-8080}:8080"
+    volumes:
+      - workspace_data:${WORKSPACE_ROOT:-/tmp/chip-orchestra/workspaces}
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://localhost:8080/health >/dev/null 2>&1 || exit 1"]
       interval: 10s
@@ -64,17 +67,21 @@ services:
     build:
       context: ./agent-service
     environment:
-      DATABASE_URL: mysql+pymysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql:3306/${MYSQL_DATABASE}
+      DATABASE_URL: mysql+pymysql://${MYSQL_USER:-chip}:${MYSQL_PASSWORD:-chip}@mysql:3306/${MYSQL_DATABASE:-chip_orchestra}
       REDIS_URL: redis://redis:6379/0
-      DEFAULT_USERNAME: ${DEFAULT_USERNAME}
-      DEFAULT_FULL_NAME: ${DEFAULT_FULL_NAME}
+      DEFAULT_USERNAME: ${DEFAULT_USERNAME:-admin}
+      DEFAULT_FULL_NAME: ${DEFAULT_FULL_NAME:-Admin Admin}
+      WORKSPACE_ROOT: ${WORKSPACE_ROOT:-/tmp/chip-orchestra/workspaces}
+      AGENT_ARTIFACT_ROOT: ${AGENT_ARTIFACT_ROOT:-/tmp/chip-orchestra/workspaces}
     depends_on:
       mysql:
         condition: service_healthy
       redis:
         condition: service_healthy
     ports:
-      - "${AGENT_PORT}:8001"
+      - "${AGENT_PORT:-8001}:8001"
+    volumes:
+      - workspace_data:${WORKSPACE_ROOT:-/tmp/chip-orchestra/workspaces}
     healthcheck:
       test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8001/health')\" || exit 1"]
       interval: 10s
@@ -84,16 +91,32 @@ services:
   eda-service:
     build:
       context: ./eda-service
+      args:
+        PDK_ROOT: ${PDK_ROOT:-/opt/pdk}
     environment:
-      DATABASE_URL: mysql+pymysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql:3306/${MYSQL_DATABASE}
+      DATABASE_URL: mysql+pymysql://${MYSQL_USER:-chip}:${MYSQL_PASSWORD:-chip}@mysql:3306/${MYSQL_DATABASE:-chip_orchestra}
       REDIS_URL: redis://redis:6379/0
+      WORKSPACE_ROOT: ${WORKSPACE_ROOT:-/tmp/chip-orchestra/workspaces}
+      IVERILOG_BIN: ${IVERILOG_BIN:-iverilog}
+      IVERILOG_PATH: ${IVERILOG_PATH:-}
+      VVP_BIN: ${VVP_BIN:-vvp}
+      VVP_PATH: ${VVP_PATH:-}
+      LIBRELANE_BIN: ${LIBRELANE_BIN:-librelane}
+      LIBRELANE_PATH: ${LIBRELANE_PATH:-}
+      PDK: ${PDK:-sky130A}
+      PDK_ROOT: ${PDK_ROOT:-/opt/pdk}
+      EDA_JOB_TIMEOUT_SIM: ${EDA_JOB_TIMEOUT_SIM:-600}
+      EDA_JOB_TIMEOUT_HARDEN: ${EDA_JOB_TIMEOUT_HARDEN:-3600}
     depends_on:
       mysql:
         condition: service_healthy
       redis:
         condition: service_healthy
     ports:
-      - "${EDA_PORT}:8002"
+      - "${EDA_PORT:-8002}:8002"
+    volumes:
+      - workspace_data:${WORKSPACE_ROOT:-/tmp/chip-orchestra/workspaces}
+      - pdk_data:${PDK_ROOT:-/opt/pdk}
     healthcheck:
       test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8002/health')\" || exit 1"]
       interval: 10s
@@ -104,15 +127,15 @@ services:
     build:
       context: ./frontend
     environment:
-      VITE_API_BASE_URL: http://orchestrator-service:8080
-      VITE_USE_MOCKS: "true"
-      VITE_DEFAULT_USERNAME: ${DEFAULT_USERNAME}
-      VITE_DEFAULT_PASSWORD: ${DEFAULT_PASSWORD}
+      VITE_API_BASE_URL: http://localhost:8080
+      VITE_USE_MOCKS: "false"
+      VITE_DEFAULT_USERNAME: ${DEFAULT_USERNAME:-admin}
+      VITE_DEFAULT_PASSWORD: ${DEFAULT_PASSWORD:-chip-orchestra}
     depends_on:
       orchestrator-service:
         condition: service_healthy
     ports:
-      - "${FRONTEND_PORT}:4173"
+      - "${FRONTEND_PORT:-4173}:4173"
     healthcheck:
       test: ["CMD-SHELL", "node -e \"http=require('http');http.get('http://localhost:4173',res=>process.exit(res.statusCode===200?0:1)).on('error',()=>process.exit(1))\""]
       interval: 10s
@@ -122,3 +145,5 @@ services:
 volumes:
   mysql_data:
   redis_data:
+  workspace_data:
+  pdk_data:

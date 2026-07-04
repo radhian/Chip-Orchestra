@@ -4,6 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"os"
+	"path/filepath"
 	"sort"
 	"strings"
 	"sync"
@@ -18,6 +20,8 @@ import (
 	"gorm.io/gorm"
 )
 
+const defaultWorkspaceRoot = "/tmp/chip-orchestra/workspaces"
+
 type StageDefinition struct {
 	Name      string
 	DependsOn []string
@@ -26,20 +30,29 @@ type StageDefinition struct {
 }
 
 type Service struct {
-	db        *gorm.DB
-	redis     *redis.Client
-	agent     *dispatcher.Client
-	eda       *edaclient.Client
-	stageDefs []StageDefinition
-	inFlight  sync.Map
+	db            *gorm.DB
+	redis         *redis.Client
+	agent         *dispatcher.Client
+	eda           *edaclient.Client
+	stageDefs     []StageDefinition
+	workspaceRoot string
+	inFlight      sync.Map
+}
+
+func workspaceRootFromEnv() string {
+	if v := strings.TrimSpace(os.Getenv("WORKSPACE_ROOT")); v != "" {
+		return v
+	}
+	return defaultWorkspaceRoot
 }
 
 func NewService(db *gorm.DB, redisClient *redis.Client, agent *dispatcher.Client, eda *edaclient.Client) *Service {
 	return &Service{
-		db:    db,
-		redis: redisClient,
-		agent: agent,
-		eda:   eda,
+		db:            db,
+		redis:         redisClient,
+		agent:         agent,
+		eda:           eda,
+		workspaceRoot: workspaceRootFromEnv(),
 		stageDefs: []StageDefinition{
 			{Name: "SPEC_INGEST", Kind: "agent"},
 			{Name: "PLAN", DependsOn: []string{"SPEC_INGEST"}, Kind: "agent"},
@@ -264,19 +277,7 @@ func (s *Service) dispatchStage(ctx context.Context, taskID, stageID string) {
 		_ = s.db.WithContext(ctx).Save(&stage).Error
 		_ = s.publishEvent(ctx, taskID, map[string]any{"type": "stage.updated", "task_id": taskID, "stage": stage.Name, "status": stage.Status, "progress": stage.Progress, "timestamp": time.Now().UTC().Format(time.RFC3339)})
 
-		resp, err := s.agent.Invoke(ctx, dispatcher.InvokeRequest{
-			TaskID: taskID,
-			Stage:  stage.Name,
-			Prompt: prompt,
-			Tools:  []string{"update_task_status", "track_task_progress", "get_user_context", "submit_eda_job", "get_eda_result", "read_artifact", "write_artifact"},
-			Context: map[string]any{
-				"task_name":      task.Name,
-				"task_status":    task.Status,
-				"current_stage":  task.CurrentStage,
-				"pdk_id":         task.PDKID,
-				"stdcell_lib_id": task.StdcellLibID,
-			},
-		})
+		resp, err := s.agent.Invoke(ctx, s.buildInvokeRequest(taskID, task, stage.Name, prompt))
 		if err != nil {
 			s.failStage(ctx, &stage, &attempt, err.Error())
 			return
@@ -304,7 +305,17 @@ func (s *Service) dispatchStage(ctx context.Context, taskID, stageID string) {
 	_ = s.db.WithContext(ctx).Save(&stage).Error
 	_ = s.publishEvent(ctx, taskID, map[string]any{"type": "stage.updated", "task_id": taskID, "stage": stage.Name, "status": stage.Status, "progress": stage.Progress, "timestamp": time.Now().UTC().Format(time.RFC3339)})
 
-	jobResp, err := s.eda.CreateJob(ctx, edaclient.CreateJobRequest{TaskID: taskID, Stage: stage.Name, Spec: task.DesignBrief})
+	jobResp, err := s.eda.CreateJob(ctx, edaclient.CreateJobRequest{
+		TaskID:        taskID,
+		Stage:         stage.Name,
+		Spec:          task.DesignBrief,
+		WorkspaceRoot: s.taskWorkspace(taskID),
+		ClockPort:     "clk",
+		StageOptions: map[string]any{
+			"pdk_id":         task.PDKID,
+			"stdcell_lib_id": task.StdcellLibID,
+		},
+	})
 	if err != nil {
 		s.failStage(ctx, &stage, &attempt, err.Error())
 		return
@@ -403,6 +414,49 @@ func (s *Service) ApproveStage(ctx context.Context, taskID, stageName string) er
 		return err
 	}
 	return s.evaluateTask(ctx, taskID)
+}
+
+func (s *Service) taskWorkspace(taskID string) string {
+	return filepath.Join(s.workspaceRoot, taskID)
+}
+
+// edaReportPaths returns the relative report file names produced by the EDA
+// stages, used to give downstream agent stages (SIGNOFF/EXPORT) evidence to
+// consume from the shared workspace.
+func (s *Service) edaReportPaths() []string {
+	paths := make([]string, 0, len(s.stageDefs))
+	for _, def := range s.stageDefs {
+		if def.Kind == "eda" {
+			paths = append(paths, fmt.Sprintf("reports/%s_report.json", strings.ToLower(def.Name)))
+		}
+	}
+	return paths
+}
+
+// buildInvokeRequest assembles the agent invoke request for a stage, wiring the
+// shared workspace root and (for signoff/export) the EDA report inventory.
+func (s *Service) buildInvokeRequest(taskID string, task models.Task, stageName, prompt string) dispatcher.InvokeRequest {
+	workspace := s.taskWorkspace(taskID)
+	req := dispatcher.InvokeRequest{
+		TaskID:        taskID,
+		Stage:         stageName,
+		Prompt:        prompt,
+		Tools:         []string{"update_task_status", "track_task_progress", "get_user_context", "submit_eda_job", "get_eda_result", "read_artifact", "write_artifact"},
+		WorkspaceRoot: workspace,
+		Context: map[string]any{
+			"task_name":      task.Name,
+			"task_status":    task.Status,
+			"current_stage":  task.CurrentStage,
+			"pdk_id":         task.PDKID,
+			"stdcell_lib_id": task.StdcellLibID,
+			"design_brief":   task.DesignBrief,
+			"workspace_root": workspace,
+		},
+	}
+	if stageName == "SIGNOFF" || stageName == "EXPORT" {
+		req.EDAReports = s.edaReportPaths()
+	}
+	return req
 }
 
 func (s *Service) definition(name string) StageDefinition {

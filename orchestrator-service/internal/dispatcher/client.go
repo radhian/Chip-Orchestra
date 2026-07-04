@@ -22,6 +22,11 @@ type InvokeRequest struct {
 	Context      map[string]any    `json:"context"`
 	Artifacts    map[string]string `json:"artifacts,omitempty"`
 	Instructions map[string]any    `json:"instructions,omitempty"`
+	// Optional workspace-aware fields (additive, omitted when empty).
+	WorkspaceRoot     string   `json:"workspace_root,omitempty"`
+	ArtifactInventory []string `json:"artifact_inventory,omitempty"`
+	EDAReports        []string `json:"eda_reports,omitempty"`
+	ReferenceFiles    []string `json:"reference_files,omitempty"`
 }
 
 type InvokeResponse struct {
@@ -31,6 +36,9 @@ type InvokeResponse struct {
 	Artifacts       []map[string]any  `json:"artifacts"`
 	WorkspaceFiles  map[string]string `json:"workspace_files"`
 	RecommendedNext string            `json:"recommended_next"`
+	// New optional structured fields (ignored if the agent omits them).
+	StructuredConclusion map[string]any `json:"structured_conclusion,omitempty"`
+	ArtifactRefs         []string       `json:"artifact_refs,omitempty"`
 }
 
 func NewClient(baseURL string) *Client {
