@@ -10,8 +10,9 @@ The platform enables engineers to:
 
 - Generate RTL and produce tapeout-ready deliverables from natural-language specifications
 - Automatically verify and repair generated designs
-- Execute synthesis, place-and-route, and signoff
+- Execute simulation, lint, hardening, GDS generation, and signoff
 - Track every artifact, decision, and execution stage
+- Download generated RTL, reports, and workspace files directly from the browser
 - Review AI reasoning before accepting changes
 
 ---
@@ -37,13 +38,15 @@ The platform combines AI planning, verification, EDA execution, artifact managem
 ## Features
 
 - AI-assisted RTL-to-GDSII design flow
+- Full 11-stage orchestration pipeline from spec ingest to export
 - Multi-agent orchestration
 - Automated verification and repair
 - Browser-native task management
-- Artifact and execution tracking
+- Runbook artifact downloads for generated `.sv`, `.json`, and `.md` outputs
+- RTL Workspace per-file downloads
 - Human-in-the-loop review
 - Self-hosted LLM support
-- Modular microservice architectur
+- Modular microservice architecture
 
 ---
 
@@ -57,12 +60,12 @@ flowchart TB
 
     subgraph OP[Orchestrator Plane]
         OPS[Orchestrator Service\nGo + Gin + GORM]
-        DAG[DAG Scheduler\nStage State Machine]
+        DAG[DAG Scheduler\n11-stage State Machine]
     end
 
     subgraph EXEC[Execution Plane]
         AG[Agent Service\nFastAPI + LangGraph]
-        EDA[EDA Service\nFastAPI + Job Queue]
+        EDA[EDA Service\nFastAPI + OpenLane / LibreLane Runner]
     end
 
     subgraph DATA[Data Plane]
@@ -81,6 +84,17 @@ flowchart TB
     EDA --> MYSQL
     EDA --> REDIS
 ```
+
+Chip Orchestra now runs with **6 containers in Docker Compose**:
+
+- Frontend
+- Orchestrator Service
+- Agent Service
+- EDA Service
+- MySQL
+- Redis
+
+The **EDA Service** is the newest application service in the stack. It runs on port `8002` and is responsible for OpenLane / LibreLane execution, GDS generation, and signoff-oriented outputs.
 
 ---
 
@@ -109,101 +123,101 @@ chip-orchestra/
 
 ## RTL-to-GDSII Workflow
 
-
 ```mermaid
 flowchart TB
-    subgraph STAGE1["📥 Stage 01 · Ingest Spec"]
+    subgraph STAGE1["📥 Stage 01 · Spec Intake"]
         direction LR
-        SPEC["Natural Language Spec\nRTL Repo · Constraints · PDK"]
-        MANIFEST["Design Manifest"]
-        SPEC --> MANIFEST
+        SPEC_INGEST["SPEC_INGEST\nNatural-language spec normalization"]
     end
-    subgraph STAGE2["🧠 Stage 02 · Agent Plan"]
+
+    subgraph STAGE2["🧠 Stage 02 · Planning"]
         direction LR
-        PLAN["AI Planning\nLangGraph Agent"]
-        RUNBOOK["Runbook & Tool Config\nOpenLane / OpenROAD flow\nPDK corner set selection"]
-        PLAN --> RUNBOOK
+        PLAN["PLAN\nAI planning and runbook generation"]
     end
-    subgraph STAGE3["🔁 Stage 03 · Verify Loop"]
+
+    subgraph STAGE3["🧾 Stage 03 · Design Authoring"]
         direction LR
-        RTL["RTL Generation\nVerilog / SystemVerilog"]
-        TB["Testbench Generation\nCocotb / SystemVerilog TB"]
-        VERIFY["Simulation → Verilator\nLint → Verilator / Slang\nFormal → SymbiYosys\nSTA → OpenSTA"]
-        PASS{"Pass?"}
-        RTL --> TB --> VERIFY --> PASS
+        RTL_GEN["RTL_GEN\nRTL generation"]
+        TB_GEN["TB_GEN\nTestbench generation"]
     end
-    subgraph STAGE4["⚙️ Stage 04 · Implementation"]
+
+    subgraph STAGE4["🔍 Stage 04 · Verification"]
         direction LR
-        SYN["Synthesis\nYosys"]
-        PNR["Floorplan & Place/Route\nOpenROAD"]
-        SIGNOFF["DRC → Magic\nLVS → Netgen\nTiming → OpenSTA"]
-        SYN --> PNR --> SIGNOFF
+        SIM["SIM\nSimulation"]
+        LINT["LINT\nStatic lint checks"]
     end
-    subgraph STAGE5["📦 Stage 05 · Deliver"]
+
+    subgraph STAGE5["⚙️ Stage 05 · Implementation"]
         direction LR
-        GDS["GDSII\nKLayout export"]
-        REPORT["Timing · Power · Area\nSignoff Reports"]
-        PKG["Tapeout Package\nFoundry-ready"]
-        GDS --> REPORT --> PKG
+        SYNTH["SYNTH\nSynthesis"]
+        PNR["PNR\nPlace and route"]
+        DRC_LVS["DRC_LVS\nPhysical verification"]
     end
-    STAGE1 --> STAGE2
-    STAGE2 --> STAGE3
-    PASS -- Yes --> STAGE4
-    PASS -- No --> STAGE2
-    STAGE4 --> STAGE5
-    classDef ingest  fill:#dbeafe,stroke:#3b82f6,color:#1e3a8a,stroke-width:1.5px
-    classDef plan    fill:#ede9fe,stroke:#7c3aed,color:#3b0764,stroke-width:1.5px
-    classDef verify  fill:#fef9c3,stroke:#ca8a04,color:#713f12,stroke-width:1.5px
-    classDef impl    fill:#dcfce7,stroke:#16a34a,color:#14532d,stroke-width:1.5px
-    classDef deliver fill:#ffedd5,stroke:#ea580c,color:#7c2d12,stroke-width:1.5px
-    classDef gate    fill:#fee2e2,stroke:#dc2626,color:#7f1d1d,stroke-width:2px
-    class SPEC,MANIFEST ingest
-    class PLAN,RUNBOOK plan
-    class RTL,TB,VERIFY verify
-    class PASS gate
-    class SYN,PNR,SIGNOFF impl
-    class GDS,REPORT,PKG deliver
+
+    subgraph STAGE6["🏁 Stage 06 · Signoff & Delivery"]
+        direction LR
+        GDS["GDS\nGDS generation"]
+        SIGNOFF["SIGNOFF\nTiming / reports / signoff review"]
+        EXPORT["EXPORT\nBundle packaging and delivery"]
+    end
+
+    SPEC_INGEST --> PLAN
+    PLAN --> RTL_GEN
+    PLAN --> TB_GEN
+    RTL_GEN --> SIM
+    TB_GEN --> SIM
+    RTL_GEN --> LINT
+    SIM --> SYNTH
+    LINT --> SYNTH
+    SYNTH --> PNR
+    PNR --> DRC_LVS
+    DRC_LVS --> GDS
+    GDS --> SIGNOFF
+    SIGNOFF --> EXPORT
 ```
 
 ```text
-Natural Language Specification
-                │
-                ▼
-        Create Design Task
-                │
-                ▼
-          AI Planning
-                │
-                ▼
- Repository Context + RAG
-                │
-                ▼
-         RTL Generation
-                │
-                ▼
-    Testbench Generation
-                │
-                ▼
-     Simulation & Linting
-                │
-                ▼
-      AI Self-Repair Loop
-                │
-                ▼
-          Synthesis
-                │
-                ▼
-       Place & Route
-                │
-                ▼
-     STA / DRC / LVS
-                │
-                ▼
-           Signoff
-                │
-                ▼
-      Tapeout Package
+SPEC_INGEST
+    │
+    ▼
+PLAN
+    │
+    ├──► RTL_GEN
+    │        │
+    │        ├──► SIM ──┐
+    │        └──► LINT ─┴──► SYNTH
+    │
+    └──► TB_GEN ───────────► SIM
+                              │
+                              ▼
+                             PNR
+                              │
+                              ▼
+                           DRC_LVS
+                              │
+                              ▼
+                              GDS
+                              │
+                              ▼
+                           SIGNOFF
+                              │
+                              ▼
+                            EXPORT
 ```
+
+The default pipeline now covers **11 orchestrated stages**:
+
+1. `SPEC_INGEST`
+2. `PLAN`
+3. `RTL_GEN`
+4. `TB_GEN`
+5. `SIM`
+6. `LINT`
+7. `SYNTH`
+8. `PNR`
+9. `DRC_LVS`
+10. `SIGNOFF`
+11. `EXPORT`
 
 Every stage is fully observable with:
 
@@ -214,6 +228,33 @@ Every stage is fully observable with:
 - Reports and metrics
 - Human approval checkpoints
 
+---
+
+## Browser Experience
+
+### Runbook artifact downloads
+
+The **Runbook** tab now exposes working download actions for generated artifacts, including common outputs such as:
+
+- `.sv`
+- `.json`
+- `.md`
+
+This makes it easier to inspect generated deliverables outside the UI or attach them to downstream review workflows.
+
+### RTL Workspace downloads
+
+The **RTL Workspace** tab now supports per-file download actions, so engineers can export individual workspace files directly from the browser instead of copying content manually.
+
+### Direct browser downloads with JWT
+
+Chip Orchestra supports browser-friendly authenticated downloads by accepting a JWT in the query string:
+
+```text
+?token=<jwt>
+```
+
+This is useful when opening a direct download URL in a new tab or triggering a browser-native file download flow.
 
 ---
 
@@ -229,7 +270,7 @@ AI should never behave like a black box. Every prompt, retrieved context, genera
 
 ### Unified EDA execution
 
-Simulation, linting, synthesis, place-and-route, and signoff execute within one orchestrated pipeline with complete artifact lineage.
+Simulation, linting, synthesis, physical implementation, GDS generation, and signoff execute within one orchestrated pipeline with complete artifact lineage.
 
 ### Human-in-the-loop
 
@@ -244,8 +285,9 @@ Critical engineering decisions—including RTL modifications, implementation, an
 - Verification and self-repair loops
 - Browser-native design task management
 - RTL-to-GDSII automation
+- OpenLane / LibreLane-backed hardening flow through the EDA Service
 - Execution trace visualization
-- Artifact management
+- Artifact management and direct download flows
 - Self-hosted LLM inference via Ollama
 - Modular service-oriented architecture
 
@@ -255,14 +297,14 @@ Critical engineering decisions—including RTL modifications, implementation, an
 
 | Layer | Technology |
 |--------|------------|
-| Frontend | React |
+| Frontend | React, Vite |
 | Orchestrator | Go, Gin, GORM |
 | Agent | Python, FastAPI, LangGraph |
 | EDA | Python, FastAPI |
 | Database | MySQL |
 | Cache & Messaging | Redis |
 | AI Models | Ollama (Qwen, GLM, Mistral, etc.) |
-| EDA Toolchain | Icarus Verilog, OpenLane, OpenROAD |
+| EDA Toolchain | Icarus Verilog, OpenLane, LibreLane, OpenROAD |
 
 ---
 
@@ -278,6 +320,7 @@ The control plane responsible for:
 - Authentication
 - Metadata management
 - API gateway
+- Workspace and artifact download endpoints
 
 ### Agent Service (Python)
 
@@ -298,7 +341,8 @@ Responsible for:
 - Simulation
 - Lint
 - Synthesis
-- Place & Route
+- Place & route
+- GDS generation
 - Signoff
 - Report generation
 - Artifact management
@@ -307,29 +351,45 @@ Responsible for:
 
 ## Quick Start
 
-### 1. Clone the repository
+### 1. Start the full stack with Docker Compose
 
 ```bash
-git clone https://github.com/<your-org>/chip-orchestra.git
-cd chip-orchestra
-```
-
-### 2. Copy environment variables
-
-```bash
+unzip chip_orchestra_feat_eda.zip
+cd chip_orchestra_feat_eda
 cp .env.example .env
+docker compose up --build
 ```
 
-### 3. Run the setup
+Frontend:
 
-```bash
-bash scripts/setup.sh
+```text
+http://localhost:4173
 ```
 
-### 4. Start the platform
+> The Dockerized frontend runs with `VITE_USE_MOCKS=true` by default. This is useful for UI walkthroughs, but it is not the recommended mode for validating the live backend flow.
+
+### 2. Test against the real backend
 
 ```bash
-bash scripts/start.sh
+cd frontend
+cp .env.example .env
+npm install
+npm run dev
+```
+
+Frontend:
+
+```text
+http://localhost:5173
+```
+
+Use this mode when you want to exercise the real Orchestrator, Agent, and EDA services instead of the default mock-mode frontend container.
+
+### 3. Sign in
+
+```text
+Username: admin
+Password: chip-orchestra
 ```
 
 ---
@@ -338,10 +398,13 @@ bash scripts/start.sh
 
 | Service | URL |
 |----------|-----|
-| Frontend | http://localhost:4173 |
+| Frontend (Docker / mock mode) | http://localhost:4173 |
+| Frontend (local dev / real backend) | http://localhost:5173 |
 | Orchestrator Service | http://localhost:8080 |
 | Agent Service | http://localhost:8001 |
 | EDA Service | http://localhost:8002 |
+| MySQL | localhost:3306 |
+| Redis | localhost:6379 |
 
 ---
 
@@ -351,6 +414,25 @@ bash scripts/start.sh
 Username: admin
 Password: chip-orchestra
 ```
+
+---
+
+## API Highlights
+
+### Authentication
+
+- `POST /api/v1/auth/login`
+- `GET /api/v1/auth/me`
+
+### Task and workspace APIs
+
+- `GET /api/v1/tasks/:id/attempts/latest/events`
+- `GET /api/v1/tasks/:id/attempts/latest/artifacts`
+- `GET /api/v1/tasks/:id/workspace/files`
+- `GET /api/v1/tasks/:id/workspace/file?path=<file>`
+- `GET /api/v1/tasks/:id/workspace/download?path=<file>`
+
+The download endpoint streams workspace files as attachments, which powers the browser download actions in the Runbook and RTL Workspace views.
 
 ---
 
