@@ -1,3 +1,3 @@
-from .manager import EDAJobManager, Base, EDAJob
+from .manager import Base, EDAJob, EDAJobManager, run_stage
 
-__all__ = ["EDAJobManager", "Base", "EDAJob"]
+__all__ = ["EDAJobManager", "Base", "EDAJob", "run_stage"]

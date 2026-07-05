@@ -61,7 +61,7 @@ def test_submit_eda_job_returns_mock_job_descriptor() -> None:
 
     result = registry.submit_eda_job("task-9", "SIM", {"summary": "run sim"})
 
-    assert result == {"job_id": "mock-task-9-sim", "status": "queued"}
+    assert result == {"job_id": "mock-task-9-sim", "status": "queued", "owner": "orchestrator"}
 
 
 def test_get_eda_result_returns_mock_completion_payload() -> None:
@@ -74,6 +74,7 @@ def test_get_eda_result_returns_mock_completion_payload() -> None:
         "stage": "SYNTH",
         "status": "completed",
         "summary": "Mock EDA result",
+        "owner": "orchestrator",
     }
 
 

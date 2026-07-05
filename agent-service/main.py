@@ -21,6 +21,11 @@ class AgentInvokeRequest(BaseModel):
     context: Dict[str, Any] = Field(default_factory=dict)
     artifacts: Dict[str, str] = Field(default_factory=dict)
     instructions: Dict[str, Any] = Field(default_factory=dict)
+    # New optional fields for evidence-backed, workspace-aware execution.
+    workspace_root: str | None = Field(default=None)
+    artifact_inventory: List[str] = Field(default_factory=list)
+    eda_reports: List[str] = Field(default_factory=list)
+    reference_files: List[str] = Field(default_factory=list)
 
 
 def build_services():
@@ -87,6 +92,8 @@ def create_app(
             "artifacts": result.artifacts,
             "workspace_files": result.workspace_files,
             "recommended_next": result.recommended_next,
+            "structured_conclusion": result.structured_conclusion,
+            "artifact_refs": result.artifact_refs,
         }
 
     return app

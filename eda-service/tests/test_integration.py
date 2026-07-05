@@ -14,6 +14,7 @@ if str(ROOT) not in sys.path:
 
 from jobs import EDAJobManager
 from main import create_app
+from toolchain.reports import LintReport
 
 
 async def _fast_sleep(_: float) -> None:
@@ -28,12 +29,16 @@ async def test_eda_api_integration_post_status_report_flow(tmp_path: Path) -> No
     app = create_app(redis_client=redis_client, manager=manager, run_worker=False)
     transport = httpx.ASGITransport(app=app)
 
+    fake_report = LintReport(clean=True)
+    fake_report.summary = "integration report"
+    fake_report.metrics = {"power_mw": 12.4}
+
     with patch("main.uuid4", return_value="integration"), patch(
         "jobs.manager.asyncio.sleep",
         new=AsyncMock(side_effect=_fast_sleep),
     ), patch(
-        "jobs.manager.run_mock_toolchain",
-        new=AsyncMock(return_value={"summary": "integration report", "metrics": {"power_mw": 12.4}}),
+        "jobs.manager.run_stage",
+        return_value=fake_report,
     ):
         async with httpx.AsyncClient(transport=transport, base_url="http://testserver") as client:
             create_response = await client.post(
@@ -51,7 +56,8 @@ async def test_eda_api_integration_post_status_report_flow(tmp_path: Path) -> No
     assert job_id == "job-integration"
     assert status_response.status_code == 200
     assert status_response.json()["status"] == "COMPLETED"
-    assert status_response.json()["report"] == {"summary": "integration report", "metrics": {"power_mw": 12.4}}
-
+    report = report_response.json()
     assert report_response.status_code == 200
-    assert report_response.json() == {"summary": "integration report", "metrics": {"power_mw": 12.4}}
+    assert report["summary"] == "integration report"
+    assert report["metrics"] == {"power_mw": 12.4}
+    assert report["stage"] == "LINT"

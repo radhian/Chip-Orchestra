@@ -1,19 +1,31 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 from langgraph.graph import END, StateGraph
 
+from context import files as wsfiles
 
-@dataclass
-class AgentResult:
-    agent_name: str
-    summary: str
-    diagnostics: List[Dict[str, Any]]
-    artifacts: List[Dict[str, Any]]
-    workspace_files: Dict[str, str]
-    recommended_next: str
+from .result import AgentResult
+from .stage_handlers import StageContext, dispatch
+
+__all__ = ["AgentResult", "DeepAgentGraph"]
+
+# Stage -> agent role mapping (preserved from the original graph).
+STAGE_AGENTS = {
+    "SPEC_INGEST": "SpecInterpreter",
+    "PLAN": "FlowAssistant",
+    "RTL_GEN": "RTLAuthor",
+    "TB_GEN": "Verifier",
+    "SIM": "Verifier",
+    "LINT": "Diagnoser",
+    "SYNTH": "Diagnoser",
+    "PNR": "Diagnoser",
+    "DRC_LVS": "Diagnoser",
+    "SIGNOFF": "FlowAssistant",
+    "EXPORT": "FlowAssistant",
+    "FLOW_ASSISTANT": "FlowAssistant",
+}
 
 
 class DeepAgentGraph:
@@ -48,79 +60,44 @@ class DeepAgentGraph:
 
     def select_agent(self, state: Dict[str, Any]) -> Dict[str, Any]:
         stage = state.get("stage", "FLOW_ASSISTANT")
-        mapping = {
-            "SPEC_INGEST": "SpecInterpreter",
-            "PLAN": "FlowAssistant",
-            "RTL_GEN": "RTLAuthor",
-            "TB_GEN": "Verifier",
-            "SIM": "Verifier",
-            "LINT": "Diagnoser",
-            "SYNTH": "Diagnoser",
-            "PNR": "Diagnoser",
-            "DRC_LVS": "Diagnoser",
-            "SIGNOFF": "FlowAssistant",
-            "EXPORT": "FlowAssistant",
-            "FLOW_ASSISTANT": "FlowAssistant",
-        }
-        state["agent_name"] = mapping.get(stage, "FlowAssistant")
+        state["agent_name"] = STAGE_AGENTS.get(stage, "FlowAssistant")
         return state
 
     def execute_agent(self, state: Dict[str, Any]) -> Dict[str, Any]:
-        agent_name = state["agent_name"]
-        prompt = state.get("prompt", "")
-        task_id = state.get("task_id", "")
         stage = state.get("stage", "FLOW_ASSISTANT")
-        context = state.get("context", {})
-        memories = state.get("memories", [])
+        task_id = state.get("task_id", "")
+        agent_name = state.get("agent_name", "FlowAssistant")
+        context = dict(state.get("context", {}))
+        context.setdefault("agent_name", agent_name)
 
-        memory_hint = memories[0].decision if memories else "No prior diagnosis stored."
-        summary = f"{agent_name} completed {stage} for task {task_id}. {prompt[:160]}"
-        recommended_next = {
-            "SpecInterpreter": "Review the structured plan and advance to PLAN.",
-            "RTLAuthor": "Validate generated RTL and queue verification stages.",
-            "Verifier": "Review verification notes and move into the next scheduled EDA stage.",
-            "Diagnoser": "Inspect the diagnosis and retry the affected stage if needed.",
-            "FlowAssistant": "Confirm orchestrator approval and continue the remaining DAG.",
-        }[agent_name]
+        workspace_root = state.get("workspace_root") or context.get("workspace_root")
+        try:
+            workspace = wsfiles.resolve_workspace(task_id, workspace_root)
+        except Exception:  # noqa: BLE001 - never fail stage on workspace resolution
+            workspace = None
 
-        diagnostics = [{
-            "id": f"diag-{stage.lower()}",
-            "title": f"{agent_name} summary for {stage}",
-            "detail": f"Prior memory: {memory_hint}. Current context: {context}",
-            "confidence": "High · deterministic graph execution",
-            "primaryFile": self._primary_file(stage),
-            "suggestedBy": agent_name,
-        }]
-
-        artifacts = [{
-            "id": f"artifact-{stage.lower()}",
-            "name": f"{stage.lower()}_summary.md",
-            "type": "REPORT",
-            "owner": agent_name,
-        }]
-
-        workspace_files: Dict[str, str] = {}
-        if stage == "RTL_GEN":
-            workspace_files["rtl/generated_top.v"] = self._rtl_template(task_id)
-        elif stage in {"TB_GEN", "SIM"}:
-            workspace_files["tb/generated_tb.sv"] = self._tb_template(task_id)
-        elif stage == "FLOW_ASSISTANT":
-            workspace_files["notes/orchestrator_patch.md"] = f"# Orchestrator patch\n\nPrompt: {prompt}\n\nNext step: {recommended_next}\n"
-        else:
-            workspace_files[f"reports/{stage.lower()}_notes.md"] = f"# {stage} notes\n\n{summary}\n"
+        stage_ctx = StageContext(
+            task_id=task_id,
+            stage=stage,
+            prompt=state.get("prompt", ""),
+            context=context,
+            workspace=workspace,
+            memories=state.get("memories", []),
+            artifact_inventory=state.get("artifact_inventory", []),
+            eda_reports=state.get("eda_reports", []),
+            reference_files=state.get("reference_files", []),
+        )
+        result = dispatch(stage_ctx)
 
         for tool_name in state.get("tools", []):
             if tool_name in self.tool_registry.tools:
-                self.tool_registry.tools[tool_name](task_id=task_id, stage=stage, payload={"summary": summary, "agent": agent_name})
+                self.tool_registry.tools[tool_name](
+                    task_id=task_id,
+                    stage=stage,
+                    payload={"summary": result.summary, "agent": result.agent_name},
+                )
 
-        state["result"] = AgentResult(
-            agent_name=agent_name,
-            summary=summary,
-            diagnostics=diagnostics,
-            artifacts=artifacts,
-            workspace_files=workspace_files,
-            recommended_next=recommended_next,
-        )
+        state["result"] = result
         return state
 
     def persist_feedback(self, state: Dict[str, Any]) -> Dict[str, Any]:
@@ -132,6 +109,8 @@ class DeepAgentGraph:
             prompt=state.get("prompt", ""),
             decision=result.summary,
             diagnosis=result.diagnostics[0]["detail"] if result.diagnostics else "",
+            artifact_refs=result.artifact_refs,
+            structured_conclusion=result.structured_conclusion,
         )
         self.memory_store.write_diagnosis_to_redis(state.get("task_id", ""), {
             "agent": result.agent_name,
@@ -140,27 +119,3 @@ class DeepAgentGraph:
             "recommended_next": result.recommended_next,
         })
         return state
-
-    @staticmethod
-    def _primary_file(stage: str) -> str:
-        mapping = {
-            "SPEC_INGEST": "spec/design_brief.md",
-            "PLAN": "plans/execution_plan.md",
-            "RTL_GEN": "rtl/generated_top.v",
-            "TB_GEN": "tb/generated_tb.sv",
-            "SIM": "reports/sim_notes.md",
-            "LINT": "reports/lint_notes.md",
-            "SYNTH": "reports/synth_notes.md",
-            "PNR": "reports/pnr_notes.md",
-            "DRC_LVS": "reports/drc_lvs_notes.md",
-            "SIGNOFF": "reports/signoff_notes.md",
-        }
-        return mapping.get(stage, "notes/orchestrator_patch.md")
-
-    @staticmethod
-    def _rtl_template(task_id: str) -> str:
-        return f"module generated_top #(parameter WIDTH = 32) (\n  input logic clk,\n  input logic rst_n,\n  input logic [WIDTH-1:0] data_i,\n  output logic [WIDTH-1:0] data_o\n);\n\n  always_ff @(posedge clk or negedge rst_n) begin\n    if (!rst_n) data_o <= '0;\n    else data_o <= data_i;\n  end\nendmodule\n// generated for {task_id}\n"
-
-    @staticmethod
-    def _tb_template(task_id: str) -> str:
-        return f"module generated_tb;\n  initial begin\n    $display(\"Running smoke verification for {task_id}\");\n  end\nendmodule\n"

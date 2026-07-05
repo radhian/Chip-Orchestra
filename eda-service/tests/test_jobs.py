@@ -54,7 +54,21 @@ async def test_job_endpoint_crud_handlers() -> None:
         "status": "QUEUED",
         "message": "SIM job accepted",
     }
-    manager.create_job.assert_called_once_with(job_id="job-fixed", task_id="task-1", stage="SIM")
+    manager.create_job.assert_called_once_with(
+        job_id="job-fixed",
+        task_id="task-1",
+        stage="SIM",
+        workspace_root="",
+        stage_options={
+            "top_module": "",
+            "clock_port": "clk",
+            "clock_period": 10.0,
+            "stage_options": {},
+            "spec": "run sim",
+            "metadata": {},
+        },
+        artifacts={},
+    )
     manager.enqueue_job.assert_awaited_once_with("job-fixed")
 
     assert status_response.status_code == 200

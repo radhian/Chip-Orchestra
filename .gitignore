@@ -57,3 +57,6 @@ pnpm-debug.log*
 # local coverage / cache
 coverage/
 .eslintcache
+
+#python
+*.pyc

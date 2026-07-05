@@ -1,213 +1,81 @@
-# Nano CGRA SoC 
+# NanoCGRA v1 SoC
 
-Open-source Nano CGRA SoC targeting GF180MCU.
+> **Open-source CGRA-centric SoC targeting GF180MCU for TinyML and Edge AI.**
 
 **Technology:** GF180MCU  
-**Target Die Size:** 0.25 mm × 0.25 mm (0.0625 mm²)
+**Target Die Size:** **≤ 0.40 mm × 0.40 mm (0.16 mm²)**
 
 ---
 
 # Motivation & Design Goals
 
-## Motivation
-
-- Demonstrate software-controlled CGRA acceleration
-- Minimal-area SoC for GF180MCU
-- Simple architecture for first-silicon success
-- Low power and easy verification
+NanoCGRA v1 is a **CGRA-first** research SoC. Unlike conventional microcontroller-centric SoCs, most silicon area is dedicated to a reconfigurable compute array while the CPU acts only as a lightweight host controller.
 
 ## Design Targets
 
 | Component | Specification |
-|-----------|---------------|
+|---|---|
 | CPU | FazyRV RV32I (8-bit chunksize) |
-| Accelerator | 2×2 CGRA |
-| Processing Element | 8-bit ALU |
-| SRAM | 1 KB |
-| Peripheral | UART |
-| Interface | Memory-Mapped |
+| Accelerator | 2×2 NanoCGRA |
+| Processing Elements | 4 × 8-bit |
+| Operations | ADD, SUB, AND, OR, XOR, PASS |
+| SRAM | 128 B |
+| Boot ROM | 64 B |
+| Bus | 8-bit Memory-Mapped |
+| UART | TX/RX |
+| Frequency | 10 MHz |
+| Die Size | ≤0.40×0.40 mm |
 
+---
 
-## Overall Architecture
+# Overall Architecture
 
 ```mermaid
 flowchart LR
-
-SPEC["Application / Firmware"]
-
-CPU["FazyRV RV32I"]
-
-CGRA["2×2 CGRA"]
-
-SRAM["1 KB SRAM"]
-
-UART["UART"]
-
-SPEC --> CPU
-
-CPU --> CGRA
-CPU --> SRAM
-CPU --> UART
+APP[Firmware]-->CPU[FazyRV Host]
+CPU-->CGRA[2×2 NanoCGRA]
+CPU-->SRAM[128 B SRAM]
+CPU-->ROM[64 B Boot ROM]
+CPU-->UART[UART TX/RX]
 ```
-
-**Key Takeaway**
-
-A minimal SoC that demonstrates software-controlled CGRA acceleration while prioritizing low area, low power, and implementation simplicity.
-
----
-
-# System Architecture
-
-## Top-Level Architecture
-
-```mermaid
-flowchart TB
-
-CPU["FazyRV RV32I CPU"]
-
-BUS["Memory-Mapped Interconnect"]
-
-SRAM["1 KB SRAM"]
-
-CGRA["2×2 CGRA Accelerator"]
-
-UART["UART"]
-
-CPU --> BUS
-
-BUS --> SRAM
-BUS --> CGRA
-BUS --> UART
-```
-
-### CPU
-
-- Executes firmware
-- Configures CGRA
-- Reads computation results
-
-### Memory-Mapped Interconnect
-
-- Simple address decoder
-- Minimal routing overhead
-- Easy integration
-
-### Peripherals
-
-- SRAM stores firmware and data
-- UART provides programming and debugging
-
----
-
-# CGRA Architecture
-
-## 2×2 CGRA Accelerator
-
-```mermaid
-flowchart TB
-
-subgraph CGRA["2×2 CGRA"]
-
-PE0["PE0"]
-
-PE1["PE1"]
-
-PE2["PE2"]
-
-PE3["PE3"]
-
-PE0 --- PE1
-PE2 --- PE3
-
-PE0 --- PE2
-PE1 --- PE3
-
-end
-```
-
-### Processing Element
-
-Each PE supports only five operations:
-
-- ADD
-- SUB
-- AND
-- OR
-- PASS
-
-### Configuration Registers
-
-```text
-Operation
-Source A
-Source B
-Destination
-Enable
-```
-
-**Design Philosophy**
-
-- Small datapath
-- Simple routing
-- Minimal configuration bits
-- Easy verification
-
----
 
 # Software-Controlled Execution
 
-## Execution Flow
-
 ```mermaid
 flowchart LR
-
-CPU["CPU Firmware"]
-
-CFG["Write Configuration"]
-
-DATA["Write Input Data"]
-
-EXEC["CGRA Execute"]
-
-RESULT["Read Result"]
-
-CPU --> CFG
-CFG --> DATA
-DATA --> EXEC
-EXEC --> RESULT
-RESULT --> CPU
+Reset-->ROM-->CPU-->LoadSRAM[Load SRAM]
+LoadSRAM-->CFG[Configure CGRA]
+CFG-->EXEC[Execute]
+EXEC-->RES[Read Result]
+RES-->UART
 ```
-
 
 # SoC Architecture
 
-## SoC Block Diagram
 ```mermaid
-flowchart TD
-    CPU[FazyRV CPU <br/> RV32I 8-bit chunk]
-    Bus[SMPB Bus <br/> Memory-mapped interconnect]
-    SRAM[SRAM <br/> 1 KB]
-    CGRA[CGRA 2x2 <br/> Accelerator]
-    UART[UART]
-    GPIO[GPIO <br/> Future]
-    Timer[Timer <br/> Future]
-    
-    CPU <-->|Single Master| Bus
-    Bus <-->|Slave: 0x0000_0000| SRAM
-    Bus <-->|Slave: 0x0001_0000| CGRA
-    Bus <-->|Slave: 0x0002_0000| UART
-    Bus <-->|Slave: 0x0003_0000| GPIO
-    Bus <-->|Slave: 0x0004_0000| Timer
+flowchart TB
+CPU[FazyRV]
+BUS[8-bit MMIO Bus]
+SRAM[128 B SRAM]
+ROM[64 B Boot ROM]
+CGRA[2×2 NanoCGRA]
+UART[UART]
+CPU-->BUS
+BUS-->SRAM
+BUS-->ROM
+BUS-->CGRA
+BUS-->UART
 ```
 
-## Memory Map
-| Address Range | Peripheral | Size / Note |
-| --- | --- | --- |
-| `0x0000_0000` | SRAM | 1 KB |
-| `0x0001_0000` | CGRA Config Registers | - |
-| `0x0002_0000` | UART | - |
-| `0x0003_0000` | GPIO | Future |
-| `0x0004_0000` | Timer | Future |
+# Memory Map
+
+| Address | Peripheral | Note |
+|---|---|---|
+|0x00-0x7F|128 B SRAM|Firmware/Data|
+|0x80-0x83|UART|TX/RX|
+|0x90-0x97|CGRA Registers|Configuration|
+|0xC0-0xFF|64 B Boot ROM|Boot|
+
 
 ## CGRA Microarchitecture
 
@@ -269,7 +137,7 @@ flowchart TD
 # Design Tradeoffs & Summary
 
 ## Design Philosophy
-- **Area-first:** Strict 0.25×0.25 mm die constraint requires minimal configurations and lightweight interconnect.
+- **Area-first:** Strict 0.4×0.4 mm die constraint requires minimal configurations and lightweight interconnect.
 - **Simplicity:** Reduced instruction sets and operations for deterministic execution.
 - **First-silicon:** Predictable signoff loops leveraging automated DRC/LVS/STA checks minimize tape-out risk.
 
@@ -277,19 +145,35 @@ flowchart TD
 
 ```mermaid
 mindmap
-  root((Nano CGRA))
-    Minimal CPU
-      FazyRV RV32I
-    Small CGRA
-      2×2
-      8-bit PE
-    Simple Memory
-      1 KB SRAM
-    Simple Bus
-      Memory Mapped
+  root((NanoCGRA v1))
+    CGRA First
+      2x2 PE Array
+      8-bit Datapath
+      Neighbor Routing
+
+    Minimal Controller
+      FazyRV
+      8-bit Chunksize
+      Firmware Control
+
+    Tiny Memory
+      128 B SRAM
+      64 B Boot ROM
+
+    Simple Interconnect
+      MMIO Bus
+      Address Decoder
+
     Simple IO
-      UART
+      UART TX
+      UART RX
+
+    Tapeout Friendly
+      Low Routing
+      Low Power
+      Easy Verification
 ```
+
 
 
 # ChipOrchestra Design Flow
@@ -338,21 +222,6 @@ flowchart TB
 | Full RTL → GDSII | 3–5 weeks | 3–7 days | ~5–7× faster |
 
 > **Note:** These values are estimated for a small research-scale SoC (e.g., Nano CGRA) and assume an AI-assisted design flow using ChipOrchestra with open-source EDA tools (Verilator, Slang, SymbiYosys, Yosys, OpenROAD, Magic, and OpenLane). Actual results depend on design complexity, compute resources, and the number of verification iterations.
-
-## Expected Design Target
-
-| **Parameter** | **Target** |
-|---------------|------------|
-| Technology | GF180MCU (180 nm) |
-| CPU | FAZYRV RV32I (8-bit chunksize) |
-| Accelerator | 2×2 CGRA (4 × 8-bit PEs) |
-| SRAM | 1 KB |
-| UART | Memory-mapped |
-| Maximum Die Size | **0.5 mm × 0.5 mm (0.25 mm²)** |
-| Target Frequency | **5–10 MHz** |
-| Target Power | **< 0.10 mW (100 µW)** |
-| Core Utilization | 60–70% |
-| Timing Goal | Positive setup/hold slack at TT corner |
 
 ---
 
