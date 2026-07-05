@@ -1,0 +1,2 @@
+v2 — generate
+Read-only snapshot. The live design is ../../rtl and ../../tb; diffs are in the Artifacts ▸ Versions panel.

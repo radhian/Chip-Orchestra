@@ -1,0 +1,87 @@
+//
+// NanoCGRA v1 - SRAM Interface (128 bytes)
+// Memory-mapped interface for data storage
+//
+
+`timescale 1ns / 1ps
+
+module sram (
+    input  wire                    clk,
+    input  wire                    rst_n,
+    
+    // Address bus
+    input  wire [7:0]              addr,
+    
+    // Data bus
+    input  wire [7:0]              data_in,
+    output reg  [7:0]              data_out,
+    
+    // Control signals
+    input  wire                    write_en,
+    input  wire                    read_en,
+    output reg                    rdy      // Ready signal
+);
+
+    // SRAM array (128 bytes)
+    reg [7:0]                    mem [0:127];
+    
+    // Initialize SRAM to zero
+    always @(rst_n) begin
+        if (!rst_n) begin
+            for (integer i = 0; i < 128; i = i + 1) begin
+                mem[i] <= 8'd0;
+            end
+        end
+    end
+
+    // Internal state
+    reg [7:0]                    addr_reg;
+    reg                         write_valid;
+    reg                         read_valid;
+    
+    localparam STATE_IDLE      = 3'b000;
+    localparam STATE_WRITE     = 3'b001;
+    localparam STATE_READ      = 3'b010;
+
+    // FSM for memory operations
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            state <= STATE_IDLE;
+            addr_reg <= 8'd0;
+            data_out <= 8'd0;
+            rdy <= 1'b1;
+        end else begin
+            case (state)
+                STATE_IDLE: begin
+                    if (write_en) begin
+                        state <= STATE_WRITE;
+                        addr_reg <= addr;
+                        data_out <= data_in;
+                        write_valid <= 1'b1;
+                        rdy <= 1'b0;
+                    end else if (read_en) begin
+                        state <= STATE_READ;
+                        addr_reg <= addr;
+                        read_valid <= 1'b1;
+                        rdy <= 1'b0;
+                    end
+                end
+                
+                STATE_WRITE: begin
+                    mem[addr_reg] <= data_out;
+                    write_valid <= 1'b0;
+                    state <= STATE_IDLE;
+                    rdy <= 1'b1;
+                end
+                
+                STATE_READ: begin
+                    data_out <= mem[addr_reg];
+                    read_valid <= 1'b0;
+                    state <= STATE_IDLE;
+                    rdy <= 1'b1;
+                end
+            endcase
+        end
+    end
+
+endmodule
