@@ -8,8 +8,16 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Progress } from '@/components/ui/progress'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import type { CreateTaskInput } from '@/types/orchestra'
+
+const pdkOptions = [
+  { value: 'sky130', pdkId: 'sky130', stdcellLibId: 'sky130_fd_sc_hd', label: 'sky130 / sky130_fd_sc_hd' },
+  { value: 'gf180mcu', pdkId: 'gf180mcu', stdcellLibId: 'gf180mcu_fd_sc_mcu7t5v0', label: 'gf180mcu / gf180mcu_fd_sc_mcu7t5v0' },
+] as const
+
+const defaultPdkOption = pdkOptions[0]
 
 const initialForm = {
   taskName: '',
@@ -20,9 +28,9 @@ const initialForm = {
   repoMode: 'EXISTING' as const,
   repoBranch: 'main',
   templateId: '',
-  pdkId: 'sky130',
-  stdcellLibId: 'sky130_fd_sc_hd',
-  pdkLabel: 'sky130 / sky130_fd_sc_hd',
+  pdkId: defaultPdkOption.pdkId as string,
+  stdcellLibId: defaultPdkOption.stdcellLibId as string,
+  pdkLabel: defaultPdkOption.label as string,
   reviewGates: ['BEFORE_SIGNOFF'] as const,
   reviewGateLabel: 'Human approval required before signoff package',
   agentPolicy: {
@@ -80,6 +88,11 @@ export function CreateTaskPage() {
     } finally {
       setSubmitting(false)
     }
+  }
+
+  function handlePdkChange(value: string) {
+    const selected = pdkOptions.find((o) => o.value === value) ?? defaultPdkOption
+    setForm((current) => ({ ...current, pdkId: selected.pdkId, stdcellLibId: selected.stdcellLibId, pdkLabel: selected.label }))
   }
 
   const sourceSummary = form.repoSource.trim() || 'Repository will be attached after you enter one.'
@@ -167,7 +180,18 @@ export function CreateTaskPage() {
 
             <div className='grid gap-5 md:grid-cols-2'>
               <Field label='PDK / library' hint='Defaults are passed through to the Orchestrator Service'>
-                <div className='flex h-12 items-center rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-700'>{form.pdkLabel}</div>
+                <Select value={form.pdkId} onValueChange={handlePdkChange}>
+                  <SelectTrigger className='h-12 rounded-2xl border-slate-200 bg-white px-4 text-sm text-slate-700 shadow-none'>
+                    <SelectValue placeholder='Select PDK and library' />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {pdkOptions.map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </Field>
               <Field label='Review gate' hint='This task keeps a human approval checkpoint before signoff'>
                 <div className='flex h-12 items-center rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-700'>{form.reviewGateLabel}</div>
