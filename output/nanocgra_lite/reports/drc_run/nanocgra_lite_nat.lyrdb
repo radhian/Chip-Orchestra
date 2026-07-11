@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<report-database>
+ <description>DRC Run Report at</description>
+ <original-file/>
+ <generator>drc: script='@1*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/nat.drc*0;179*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/layers_def.drc*-178;815*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/nat.drc*-635;'</generator>
+ <top-cell>NanoCGRA_Lite</top-cell>
+ <tags>
+ </tags>
+ <categories>
+  <category>
+   <name>NAT.1</name>
+   <description>NAT.1 : Min. NAT Overlap of COMP of Native Vt NMOS. : 2µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NAT.2</name>
+   <description>NAT.2 : Space to unrelated COMP (outside NAT). : 0.3µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NAT.3</name>
+   <description>NAT.3 : Space to NWell edge. : 0.5µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NAT.4</name>
+   <description>NAT.4 : Minimum channel length for 3.3V Native Vt NMOS
+                    (For smaller L Ioff will be higher than Spec). : 1.8µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NAT.5</name>
+   <description>NAT.5 : Minimum channel length for 6.0V Native Vt NMOS
+                    (For smaller L Ioff will be higher than Spec). : 1.8µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NAT.6</name>
+   <description>NAT.6 : Two or more COMPs if connected to different potential
+                          are not allowed under same NAT layer.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NAT.7</name>
+   <description>NAT.7 : Minimum NAT to NAT spacing. : 0.74µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NAT.8</name>
+   <description>NAT.8 : Min. Dualgate overlap of NAT (for 5V/6V) native VT NMOS only: 0um</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NAT.9</name>
+   <description>NAT.9 : Poly interconnect under NAT layer is not allowed,
+                    minimum spacing of un-related poly from the NAT layer: 0.3um</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NAT.10</name>
+   <description>NAT.10 : Nwell inside NAT layer are not allowed.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NAT.11</name>
+   <description>NAT.11 : NCOMP not intersecting to Poly2, is not allowed inside NAT layer.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NAT.12</name>
+   <description>NAT.12 : Poly2 not intersecting with COMP is not allowed inside NAT
+                     (Poly2 resistor is not allowed inside NAT).</description>
+   <categories>
+   </categories>
+  </category>
+ </categories>
+ <cells>
+  <cell>
+   <name>NanoCGRA_Lite</name>
+   <variant/>
+   <references>
+   </references>
+  </cell>
+ </cells>
+ <items>
+ </items>
+</report-database>

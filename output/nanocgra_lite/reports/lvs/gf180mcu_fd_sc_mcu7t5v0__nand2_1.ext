@@ -1,0 +1,59 @@
+timestamp 1749760379
+version 8.3
+tech gf180mcuD
+style ngspice()
+scale 1000 1 0.5
+resistclasses 1000000 3250000 6300 7000 6300 7000 7300 1000000 60000 185000 60000 185000 6300 7000 6300 7000 6800 7300 350000 310000 1000000 90 90 90 90 60
+parameters nfet_10v0_asym l=l w=w a1=as p1=ps a2=ad p2=pd
+parameters nfet_06v0_dss l=l w=w a1=as p1=ps a2=ad p2=pd l1=s_sab l2=d_sab
+parameters nfet_05v0 l=l w=w a1=as p1=ps a2=ad p2=pd
+parameters nfet_06v0 l=l w=w a1=as p1=ps a2=ad p2=pd
+parameters pfet_10v0_asym l=l w=w a1=as p1=ps a2=ad p2=pd
+parameters pfet_06v0_dss l=l w=w a1=as p1=ps a2=ad p2=pd l1=s_sab l2=d_sab
+parameters pfet_05v0 l=l w=w a1=as p1=ps a2=ad p2=pd
+parameters pfet_06v0 l=l w=w a1=as p1=ps a2=ad p2=pd
+port "VSS" 7 0 -60 560 60 m1
+port "VSS" 7 50 60 96 161 m1
+port "ZN" 3 458 106 536 414 m1
+port "ZN" 3 254 414 536 460 m1
+port "ZN" 3 254 460 300 676 m1
+port "VDD" 4 50 506 96 724 m1
+port "VDD" 4 458 506 504 724 m1
+port "VDD" 4 0 724 560 844 m1
+port "A1" 1 248 111 321 288 m1
+port "A1" 1 248 288 411 364 m1
+port "A2" 2 127 212 200 438 m1
+port "VNW" 5 10 734 110 834 nw
+port "VPW" 6 10 -50 110 50 pw
+node "a_245_68#" 16 0 245 68 mvndif 0 0 0 0 0 0 0 0 10496 456 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+node "VSS" 12 0 50 60 m1 0 0 0 0 0 0 0 0 14432 504 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 71846 1562 0 0 0 0 0 0 0 0
+node "ZN" 28 0 254 460 m1 0 0 0 0 0 0 0 0 14432 504 23504 660 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 46932 1704 0 0 0 0 0 0 0 0
+node "VDD" 56 0 0 724 m1 0 0 0 0 0 0 0 0 0 0 39776 1256 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 87256 2232 0 0 0 0 0 0 0 0
+node "A1" 51 0 248 288 m1 0 0 0 0 0 0 0 0 0 0 0 0 77080 1676 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 25309 832 0 0 0 0 0 0 0 0
+node "A2" 51 0 127 212 m1 0 0 0 0 0 0 0 0 0 0 0 0 77080 1676 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 16498 598 0 0 0 0 0 0 0 0
+node "VNW" 1413 0 10 734 nw 379176 2500 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+substrate "VPW" 0 0 10 -50 pw 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+cap "VDD" "VSS" 17.7059
+cap "A1" "ZN" 351.362
+cap "VNW" "VSS" 6.1741
+cap "a_245_68#" "VSS" 2.29507
+cap "VNW" "VDD" 84.2629
+cap "A2" "A1" 226.398
+cap "a_245_68#" "VDD" 0.044449
+cap "ZN" "VSS" 98.3276
+cap "VDD" "ZN" 240.333
+cap "A2" "VSS" 51.0871
+cap "VNW" "ZN" 26.5302
+cap "A2" "VDD" 39.6979
+cap "a_245_68#" "ZN" 0.115137
+cap "VNW" "A2" 125.396
+cap "a_245_68#" "A2" 0.0313695
+cap "A1" "VSS" 131.667
+cap "A2" "ZN" 38.6583
+cap "A1" "VDD" 27.4853
+cap "VNW" "A1" 119.756
+cap "a_245_68#" "A1" 8.83079
+device msubckt nfet_05v0 309 68 310 69 l=120 w=164 "VPW" "A1" 240 0 "a_245_68#" 164 5248,228 "ZN" 164 14432,504
+device msubckt nfet_05v0 125 68 126 69 l=120 w=164 "VPW" "A2" 240 0 "VSS" 164 14432,504 "a_245_68#" 164 5248,228
+device msubckt pfet_05v0 329 472 330 473 l=100 w=226 "VNW" "A1" 200 0 "ZN" 226 11752,330 "VDD" 226 19888,628
+device msubckt pfet_05v0 125 472 126 473 l=100 w=226 "VNW" "A2" 200 0 "VDD" 226 19888,628 "ZN" 226 11752,330

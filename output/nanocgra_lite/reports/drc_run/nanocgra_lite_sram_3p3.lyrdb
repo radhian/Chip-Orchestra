@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<report-database>
+ <description>DRC Run Report at</description>
+ <original-file/>
+ <generator>drc: script='@1*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/sram_3p3.drc*0;179*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/layers_def.drc*-178;815*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/sram_3p3.drc*-635;'</generator>
+ <top-cell>NanoCGRA_Lite</top-cell>
+ <tags>
+ </tags>
+ <categories>
+  <category>
+   <name>S.DF.4c_LV</name>
+   <description>S.DF.4c_LV : Min. (Nwell overlap of PCOMP) outside DNWELL: 0.4µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>S.DF.16_LV</name>
+   <description>S.DF.16_LV : Min. space from (Nwell outside DNWELL) to
+                     (NCOMP outside Nwell and DNWELL): 0.4µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>S.CO.3_LV</name>
+   <description>S.CO.3_LV : Poly2 overlap of contact: 0.04µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>S.CO.4_LV</name>
+   <description>S.CO.4_LV : COMP overlap of contact: 0.03µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>S.CO.6_ii_LV</name>
+   <description>S.CO.6_ii_LV : (ii) If Metal1 overlaps contact
+                  by &lt; 0.04um on one side, adjacent metal1 edges overlap: 0.02.um</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>S.M1.1_LV</name>
+   <description>S.M1.1_LV : min. metal1 width : 0.22µm</description>
+   <categories>
+   </categories>
+  </category>
+ </categories>
+ <cells>
+  <cell>
+   <name>NanoCGRA_Lite</name>
+   <variant/>
+   <references>
+   </references>
+  </cell>
+ </cells>
+ <items>
+ </items>
+</report-database>

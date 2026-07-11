@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<report-database>
+ <description>DRC Run Report at</description>
+ <original-file/>
+ <generator>drc: script='@1*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/lres.drc*0;179*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/layers_def.drc*-178;815*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/lres.drc*-635;'</generator>
+ <top-cell>NanoCGRA_Lite</top-cell>
+ <tags>
+ </tags>
+ <categories>
+  <category>
+   <name>LRES.1</name>
+   <description>LRES.1 : Minimum width of Poly2 resistor: 0.8µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>LRES.2</name>
+   <description>LRES.2 : Minimum space between Poly2 resistors: 0.4µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>LRES.3</name>
+   <description>LRES.3 : Minimum space from Poly2 resistor to COMP: 0.6.um</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>LRES.4</name>
+   <description>LRES.4 : Minimum space from Poly2 resistor to unrelated Poly2: 0.6µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>LRES.5</name>
+   <description>LRES.5 : Minimum Nplus implant overlap of Poly2 resistor: 0.3µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>LRES.6</name>
+   <description>LRES.6 : Minimum salicide block overlap of Poly2 resistor in width direction: 0.28µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>LRES.7</name>
+   <description>LRES.7 : Minimum space from salicide block to contact on Poly2 resistor: 0.22.um</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>LRES.9a</name>
+   <description>LRES.9a : Nplus Poly2 resistor shall be covered by RES_MK marking.
+                    RES_MK length shall be coincide with resistor length (Defined by SAB length)
+                    and width covering the width of Poly2. </description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>LRES.9b</name>
+   <description>LRES.9b : If the size of single RES_MK mark layer is greater than 15000um2
+                    and both side (X and Y) are greater than 80um.
+                    then the minimum spacing to adjacent RES_MK layer: 20µm</description>
+   <categories>
+   </categories>
+  </category>
+ </categories>
+ <cells>
+  <cell>
+   <name>NanoCGRA_Lite</name>
+   <variant/>
+   <references>
+   </references>
+  </cell>
+ </cells>
+ <items>
+ </items>
+</report-database>

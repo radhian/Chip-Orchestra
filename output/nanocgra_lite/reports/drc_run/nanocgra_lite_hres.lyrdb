@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<report-database>
+ <description>DRC Run Report at</description>
+ <original-file/>
+ <generator>drc: script='@1*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/hres.drc*0;179*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/layers_def.drc*-178;815*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/hres.drc*-635;'</generator>
+ <top-cell>NanoCGRA_Lite</top-cell>
+ <tags>
+ </tags>
+ <categories>
+  <category>
+   <name>HRES.1</name>
+   <description>HRES.1 : Minimum space: 0.4µm. Note: Merge if the spacing is less than 0.4 um.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>HRES.2</name>
+   <description>HRES.2 : Minimum width of Poly2 resistor: 1µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>HRES.3</name>
+   <description>HRES.3 : Minimum space between Poly2 resistors: 0.4µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>HRES.4</name>
+   <description>HRES.4 : Minimum RESISTOR overlap of Poly2 resistor: 0.4µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>HRES.5</name>
+   <description>HRES.5 : Minimum RESISTOR space to unrelated Poly2: 0.3µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>HRES.6</name>
+   <description>HRES.6 : Minimum RESISTOR space to COMP: 0.3um</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>HRES.7</name>
+   <description>HRES.7 : Minimum Pplus overlap of contact on Poly2 resistor: 0.2µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>HRES.8</name>
+   <description>HRES.8 : Minimum space from salicide block to contact on Poly2 resistor: 0.22.um</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>HRES.9</name>
+   <description>HRES.9 : Minimum salicide block overlap of Poly2 resistor in width direction: 0.28.um</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>HRES.10</name>
+   <description>HRES.10 : Minimum &amp; maximum Pplus overlap of SAB: 0.1.um</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>HRES.12a</name>
+   <description>HRES.12a : P type Poly2 resistor (high sheet rho) shall be covered by RES_MK marking.
+                     RES_MK length shall be coincide with resistor length (Defined by Pplus space)
+                     and width covering the width of Poly2. </description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>HRES.12b</name>
+   <description>HRES.12b : If the size of single RES_MK mark layer is greater than 15000 um2
+                     and both side (X and Y) are greater than 80 um.
+                     Then the minimum spacing to adjacent RES_MK layer: 20µm</description>
+   <categories>
+   </categories>
+  </category>
+ </categories>
+ <cells>
+  <cell>
+   <name>NanoCGRA_Lite</name>
+   <variant/>
+   <references>
+   </references>
+  </cell>
+ </cells>
+ <items>
+ </items>
+</report-database>

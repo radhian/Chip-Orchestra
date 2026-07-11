@@ -1,0 +1,3 @@
+PASS  rx_valid asserted  expected=1  actual=1
+PASS  RXDATA  expected=165  actual=165
+Result: PASSED

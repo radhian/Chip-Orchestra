@@ -11,7 +11,7 @@ from sqlalchemy import DateTime, Integer, String, Text, create_engine, select
 from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column, sessionmaker
 
 from runner import CommandRunner, default_runner
-from toolchain import run_harden, run_lint, run_mock_toolchain, run_simulation
+from toolchain import run_gl_sim, run_harden, run_lint, run_mock_toolchain, run_render, run_simulation, run_sta
 from toolchain.reports import BaseReport, SignoffReport
 from workspace import resolve_workspace
 
@@ -84,6 +84,12 @@ def run_stage(
         return run_lint(workspace, _gather_sources(workspace, include_tb=False), top, stage_opts, runner)
     if stage in ("SYNTH", "PNR", "DRC_LVS"):
         return run_harden(workspace, top, clock_port, clock_period, stage_opts, runner, stage=stage)
+    if stage in ("STA", "POWER"):
+        return run_sta(workspace, top, clock_period, stage_opts, runner, stage=stage)
+    if stage == "GL_SIM":
+        return run_gl_sim(workspace, top, stage_opts, runner, stage=stage)
+    if stage == "RENDER":
+        return run_render(workspace, top, stage_opts, runner, stage=stage)
     if stage == "SIGNOFF":
         return _signoff_report(task_id, stage)
     # Fallback for any other stage: reuse the mock toolchain shape.

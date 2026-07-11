@@ -79,6 +79,34 @@ class SignoffReport(BaseReport):
     tapeout_ready: bool = False
 
 
+@dataclass
+class StaReport(BaseReport):
+    stage: str = "STA"
+    top: str = ""
+    wns_ns: float = 0.0
+    tns_ns: float = 0.0
+    power_mw: float = 0.0
+    timing_met: bool = False
+    power_breakdown: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class GlSimReport(BaseReport):
+    stage: str = "GL_SIM"
+    top: str = ""
+    compiled: bool = False
+    passed: bool = False
+    waveform: bool = False
+    netlist: str = ""
+
+
+@dataclass
+class RenderReport(BaseReport):
+    stage: str = "RENDER"
+    top: str = ""
+    images: List[str] = field(default_factory=list)
+
+
 # Physical (hardening) stages share the same underlying LibreLane run shape.
 HARDEN_REPORT_TYPES = {
     "SYNTH": SynthReport,

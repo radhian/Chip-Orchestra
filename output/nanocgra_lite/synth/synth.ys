@@ -1,0 +1,30 @@
+# Yosys synthesis script for NanoCGRA_Lite -> gf180mcu_fd_sc_mcu7t5v0
+
+# ---- Read RTL (params.vh via -I) ----
+read_verilog -I output/nanocgra_lite/rtl output/nanocgra_lite/rtl/sram.v
+read_verilog -I output/nanocgra_lite/rtl output/nanocgra_lite/rtl/pe.v
+read_verilog -I output/nanocgra_lite/rtl output/nanocgra_lite/rtl/cgra.v
+read_verilog -I output/nanocgra_lite/rtl output/nanocgra_lite/rtl/uart.v
+read_verilog -I output/nanocgra_lite/rtl output/nanocgra_lite/rtl/bus_decoder.v
+read_verilog -I output/nanocgra_lite/rtl output/nanocgra_lite/rtl/nano_controller.v
+read_verilog -I output/nanocgra_lite/rtl output/nanocgra_lite/rtl/nanocgra_lite.v
+
+# ---- Elaborate ----
+hierarchy -top NanoCGRA_Lite
+synth -top NanoCGRA_Lite -flatten
+
+# ---- Technology mapping ----
+dfflibmap -liberty /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/lib/gf180mcu_fd_sc_mcu7t5v0__tt_025C_5v00.lib
+abc -liberty /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/lib/gf180mcu_fd_sc_mcu7t5v0__tt_025C_5v00.lib -D 100000
+
+# ---- Cleanup ----
+setundef -zero
+hilomap -hicell gf180mcu_fd_sc_mcu7t5v0__tieh Z -locell gf180mcu_fd_sc_mcu7t5v0__tiel ZN
+splitnets
+opt_clean
+
+# ---- Write netlist ----
+write_verilog -noattr output/nanocgra_lite/synth/nanocgra_lite.synth.v
+
+# ---- Reports ----
+tee -o output/nanocgra_lite/reports/synth_stat.txt stat -liberty /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/lib/gf180mcu_fd_sc_mcu7t5v0__tt_025C_5v00.lib

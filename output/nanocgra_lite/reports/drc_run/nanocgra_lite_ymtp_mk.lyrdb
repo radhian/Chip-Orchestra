@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<report-database>
+ <description>DRC Run Report at</description>
+ <original-file/>
+ <generator>drc: script='@1*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/ymtp_mk.drc*0;179*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/layers_def.drc*-178;815*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/ymtp_mk.drc*-635;'</generator>
+ <top-cell>NanoCGRA_Lite</top-cell>
+ <tags>
+ </tags>
+ <categories>
+  <category>
+   <name>Y.NW.2b_LV</name>
+   <description>Y.NW.2b_LV : Min. Nwell Space
+                    (Outside DNWELL, Inside YMTP_MK) [Different potential]. : 1µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>Y.NW.2b_MV</name>
+   <description>Y.NW.2b_MV : Min. Nwell Space
+                     (Outside DNWELL, Inside YMTP_MK) [Different potential]. : 1µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>Y.DF.6_MV</name>
+   <description>Y.DF.6_MV : Min. COMP extend beyond gate
+                    (it also means source/drain overhang) inside YMTP_MK. : 0.15µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>Y.DF.16_LV</name>
+   <description>Y.DF.16_LV : Min. space from (Nwell outside DNWELL) to
+                    (unrelated NCOMP outside Nwell and DNWELL) (inside YMTP_MK). : 0.27µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>Y.DF.16_MV</name>
+   <description>Y.DF.16_MV : Min. space from (Nwell outside DNWELL) to
+                     (unrelated NCOMP outside Nwell and DNWELL) (inside YMTP_MK). : 0.23µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>Y.PL.1_LV</name>
+   <description>Y.PL.1_LV : Interconnect Width (inside YMTP_MK). : 0.13µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>Y.PL.1_MV</name>
+   <description>Y.PL.1_MV : Interconnect Width (inside YMTP_MK).
+                    This rule is currently not applicable for 5V.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>Y.PL.2_LV</name>
+   <description>Y.PL.2_LV : Gate Width (Channel Length) (inside YMTP_MK): 0.13µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>Y.PL.2_MV</name>
+   <description>Y.PL.2_MV : Gate Width (Channel Length) (inside YMTP_MK): 0.47µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>Y.PL.4_MV</name>
+   <description>Y.PL.4_MV : Poly2 extension beyond COMP to form Poly2 end cap (inside YMTP_MK): 0.16µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>Y.PL.5a_LV</name>
+   <description>Y.PL.5a_LV : Space from field Poly2 to unrelated COMP (inside YMTP_MK).
+                     Space from field Poly2 to Guard-ring (inside YMTP_MK). : 0.04µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>Y.PL.5a_MV</name>
+   <description>Y.PL.5a_MV : Space from field Poly2 to unrelated COMP (inside YMTP_MK).
+                     Space from field Poly2 to Guard-ring (inside YMTP_MK). : 0.2µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>Y.PL.5b_LV</name>
+   <description>Y.PL.5b_LV : Space from field Poly2 to related COMP (inside YMTP_MK). : 0.04µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>Y.PL.5b_MV</name>
+   <description>Y.PL.5b_MV : Space from field Poly2 to related COMP (inside YMTP_MK). : 0.2µm</description>
+   <categories>
+   </categories>
+  </category>
+ </categories>
+ <cells>
+  <cell>
+   <name>NanoCGRA_Lite</name>
+   <variant/>
+   <references>
+   </references>
+  </cell>
+ </cells>
+ <items>
+ </items>
+</report-database>

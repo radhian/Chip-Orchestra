@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<report-database>
+ <description>DRC Run Report at</description>
+ <original-file/>
+ <generator>drc: script='@1*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/dualgate.drc*0;179*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/layers_def.drc*-178;815*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/dualgate.drc*-635;'</generator>
+ <top-cell>NanoCGRA_Lite</top-cell>
+ <tags>
+ </tags>
+ <categories>
+  <category>
+   <name>DV.1</name>
+   <description>DV.1 : Min. Dualgate enclose DNWELL. : 0.5µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DV.2</name>
+   <description>DV.2 : Min. Dualgate Space. Merge if Space is less than this design rule. : 0.44µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DV.3</name>
+   <description>DV.3 : Min. Dualgate to COMP space [unrelated]. : 0.24µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DV.5</name>
+   <description>DV.5 : Min. Dualgate width. : 0.7µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DV.6</name>
+   <description>DV.6 : Min. Dualgate enclose COMP (except substrate tap). : 0.24µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DV.7</name>
+   <description>DV.7 : COMP (except substrate tap) can not be partially overlapped by Dualgate.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DV.8</name>
+   <description>DV.8 : Min Dualgate enclose Poly2. : 0.4µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DV.9</name>
+   <description>DV.9 : 3.3V and 5V/6V PMOS cannot be sitting inside same NWELL.</description>
+   <categories>
+   </categories>
+  </category>
+ </categories>
+ <cells>
+  <cell>
+   <name>NanoCGRA_Lite</name>
+   <variant/>
+   <references>
+   </references>
+  </cell>
+ </cells>
+ <items>
+ </items>
+</report-database>

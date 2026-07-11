@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<report-database>
+ <description>DRC Run Report at</description>
+ <original-file/>
+ <generator>drc: script='@1*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/dnwell.drc*0;179*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/layers_def.drc*-178;815*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/dnwell.drc*-635;'</generator>
+ <top-cell>NanoCGRA_Lite</top-cell>
+ <tags>
+ </tags>
+ <categories>
+  <category>
+   <name>DN.1</name>
+   <description>DN.1 : Min. DNWELL Width : 1.7µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DN.2a</name>
+   <description>DN.2a : Min. DNWELL Space (Equi-potential), Merge if the space is less than : 2.5µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DN.2b</name>
+   <description>DN.2b : Min. DNWELL Space (Different potential) : 5.42µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DN.3</name>
+   <description>DN.3 : Each DNWELL shall be directly surrounded by PCOMP guard ring
+                tied to the P-substrate potential.</description>
+   <categories>
+   </categories>
+  </category>
+ </categories>
+ <cells>
+  <cell>
+   <name>NanoCGRA_Lite</name>
+   <variant/>
+   <references>
+   </references>
+  </cell>
+ </cells>
+ <items>
+ </items>
+</report-database>

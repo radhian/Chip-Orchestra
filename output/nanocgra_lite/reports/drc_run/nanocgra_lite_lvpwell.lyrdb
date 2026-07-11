@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<report-database>
+ <description>DRC Run Report at</description>
+ <original-file/>
+ <generator>drc: script='@1*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/lvpwell.drc*0;179*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/layers_def.drc*-178;815*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/lvpwell.drc*-635;'</generator>
+ <top-cell>NanoCGRA_Lite</top-cell>
+ <tags>
+ </tags>
+ <categories>
+  <category>
+   <name>LPW.1_LV</name>
+   <description>LPW.1_LV : Min. LVPWELL Width. : 0.6µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>LPW.1_MV</name>
+   <description>LPW.1_MV : Min. LVPWELL Width. : 0.74µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>LPW.2a_LV</name>
+   <description>LPW.2a_LV : Min. LVPWELL to LVWELL Space (Inside DNWELL) [Different potential]. : 1.4µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>LPW.2a_MV</name>
+   <description>LPW.2a_MV : Min. LVPWELL to LVPWELL Space (Inside DNWELL) [Different potential]. : 1.7µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>LPW.2b_LV</name>
+   <description>LPW.2b_LV : Min. LVPWELL to LVPWELL Space [Equi potential]. : 0.86µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>LPW.2b_MV</name>
+   <description>LPW.2b_MV : Min. LVPWELL to LVPWELL Space [Equi potential]. : 0.86µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>LPW.3</name>
+   <description>LPW.3 : Min. DNWELL enclose LVPWELL. : 2.5µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>LPW.5</name>
+   <description>LPW.5 : LVPWELL resistors must be enclosed by DNWELL.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>LPW.11</name>
+   <description>LPW.11 : Min. (LVPWELL outside DNWELL) space to DNWELL. : 1.5µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>LPW.12</name>
+   <description>LPW.12 : LVPWELL cannot overlap with Nwell.</description>
+   <categories>
+   </categories>
+  </category>
+ </categories>
+ <cells>
+  <cell>
+   <name>NanoCGRA_Lite</name>
+   <variant/>
+   <references>
+   </references>
+  </cell>
+ </cells>
+ <items>
+ </items>
+</report-database>

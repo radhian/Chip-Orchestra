@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<report-database>
+ <description>DRC Run Report at</description>
+ <original-file/>
+ <generator>drc: script='@1*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/dummy_exclude.drc*0;179*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/layers_def.drc*-178;815*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/dummy_exclude.drc*-635;'</generator>
+ <top-cell>NanoCGRA_Lite</top-cell>
+ <tags>
+ </tags>
+ <categories>
+  <category>
+   <name>DE.2</name>
+   <description>DE.2 : Minimum NDMY or PMNDMY size (x or y dimension in um) : 0.8µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DE.3</name>
+   <description>DE.3 : Maximum NDMY size (um2): 15000 um2.
+              If size greater than 15000 um2 then two sides should not be greater than (80 um).</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>DE.4</name>
+   <description>DE.4 : Minimum NDMY to NDMY space (Merge if space is less) : 20µm</description>
+   <categories>
+   </categories>
+  </category>
+ </categories>
+ <cells>
+  <cell>
+   <name>NanoCGRA_Lite</name>
+   <variant/>
+   <references>
+   </references>
+  </cell>
+ </cells>
+ <items>
+ </items>
+</report-database>
