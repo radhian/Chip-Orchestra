@@ -1,0 +1,24 @@
+==============================================================================
+  GF180MCU DRC Sign-off Report  --  NanoCGRA_Lite
+==============================================================================
+Tool        : KLayout 0.30.9 (python module) + GF180MCU DRC deck
+DRC deck    : $PDK_ROOT/gf180mcuD/libs.tech/klayout/drc/run_drc.py
+Input GDS   : output/nanocgra_lite/gds/nanocgra_lite.gds
+Top cell    : NanoCGRA_Lite
+Variant     : D  (metal_top=11K, mim_option=B, metal_level=5LM  -- 5 metal layers)
+Run mode    : deep   (multi-core)
+Checks run  : FEOL + BEOL + connectivity + offgrid (default deck)
+              (density and antenna optional checks not included)
+Polygons    : 442909
+
+------------------------------------------------------------------------------
+RESULT      : CLEAN -- 0 DRC violations
+------------------------------------------------------------------------------
+Rule-table result databases inspected : 41 (*.lyrdb)
+Total violation <item> entries across all databases : 0
+
+Runner message:
+11-Jul-2026 19:37:19 | INFO    | Klayout DRC run is clean. GDS has no DRC violations.
+
+Result databases are stored under: output/nanocgra_lite/reports/drc_run/
+==============================================================================

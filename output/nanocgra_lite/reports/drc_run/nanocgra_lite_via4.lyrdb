@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<report-database>
+ <description>DRC Run Report at</description>
+ <original-file/>
+ <generator>drc: script='@1*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/via4.drc*0;179*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/layers_def.drc*-178;815*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/via4.drc*-635;'</generator>
+ <top-cell>NanoCGRA_Lite</top-cell>
+ <tags>
+ </tags>
+ <categories>
+  <category>
+   <name>V4.1</name>
+   <description>V4.1 : Min/max Via4 size . : 0.26µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>V4.2a</name>
+   <description>V4.2a : min. via4 spacing : 0.26µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>V4.2b</name>
+   <description>V4.2b : via4 Space in 4x4 or larger via4 array : 0.36µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>V4.3b</name>
+   <description>V4.3b : metal4 overlap of via4 &gt;= 0.01</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>V4.3c</name>
+   <description>V4.3c : metal4 (&lt; 0.34um) end-of-line overlap. (Applies to all &lt; 0.34µm wide Metal lines,
+                    excluding Metal branches shorter than 0.28µm.) : 0.06µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>V4.3d</name>
+   <description>V4.3d : If metal4 overlap via4 by &lt; 0.04um on one side, adjacent metal4 edges overlap. : 0.06µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>V4.4a</name>
+   <description>V4.4a : metal5 overlap of via4 &gt;= 0.01 um</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>V4.4b</name>
+   <description>V4.4p : metal5 (&lt; 0.34um) end-of-line overlap. (Applies to all &lt; 0.34µm wide Metal lines,
+                    excluding Metal branches shorter than 0.28µm.) : 0.06µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>V4.4c</name>
+   <description>V4.4c : If metal5 overlap via4 by &lt; 0.04um on one side, adjacent metal5 edges overlap. : 0.06µm</description>
+   <categories>
+   </categories>
+  </category>
+ </categories>
+ <cells>
+  <cell>
+   <name>NanoCGRA_Lite</name>
+   <variant/>
+   <references>
+   </references>
+  </cell>
+ </cells>
+ <items>
+ </items>
+</report-database>

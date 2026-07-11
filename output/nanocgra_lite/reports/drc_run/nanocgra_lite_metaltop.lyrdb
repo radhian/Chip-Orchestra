@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<report-database>
+ <description>DRC Run Report at</description>
+ <original-file/>
+ <generator>drc: script='@1*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/metaltop.drc*0;179*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/layers_def.drc*-178;815*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/metaltop.drc*-635;'</generator>
+ <top-cell>NanoCGRA_Lite</top-cell>
+ <tags>
+ </tags>
+ <categories>
+  <category>
+   <name>MT.1</name>
+   <description>MT.1 : min. metaltop width : 0.44µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MT.2a</name>
+   <description>MT.2a : min. metaltop spacing : 0.46µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MT.2b</name>
+   <description>MT.2b : Space to wide Metal2 (length &amp; width &gt; 10um) : 0.6µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MT.4</name>
+   <description>MT.4 : Minimum MetalTop area : 0.5625µm²</description>
+   <categories>
+   </categories>
+  </category>
+ </categories>
+ <cells>
+  <cell>
+   <name>NanoCGRA_Lite</name>
+   <variant/>
+   <references>
+   </references>
+  </cell>
+ </cells>
+ <items>
+ </items>
+</report-database>

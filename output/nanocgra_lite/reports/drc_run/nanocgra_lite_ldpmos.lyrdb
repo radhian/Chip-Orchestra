@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<report-database>
+ <description>DRC Run Report at</description>
+ <original-file/>
+ <generator>drc: script='@1*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/ldpmos.drc*0;179*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/layers_def.drc*-178;815*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/ldpmos.drc*-635;'</generator>
+ <top-cell>NanoCGRA_Lite</top-cell>
+ <tags>
+ </tags>
+ <categories>
+  <category>
+   <name>MDP.1</name>
+   <description>MDP.1 : Minimum transistor channel length. : 0.6µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDP.1a</name>
+   <description>MDP.1a : Max transistor channel length.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDP.2</name>
+   <description>MDP.2 : Minimum transistor channel width. : 4µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDP.3</name>
+   <description>MDP.3 : Each LDPMOS shall be surrounded by non-broken Nplus guard ring inside DNWELL</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDP.3ai</name>
+   <description>MDP.3ai : Min NCOMP (Nplus AND COMP) space to MVPSD
+                   (source and body tap non-butted). NCOMP (Nplus AND COMP)
+                   intercept with MVPSD is not allowed.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDP.3aii</name>
+   <description>MDP.3aii : Min NCOMP (Nplus AND COMP) space to MVPSD (source and body tap butted).
+                     NCOMP (Nplus AND COMP) intercept with MVPSD is not allowed.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDP.3b</name>
+   <description>MDP.3b : Min NCOMP (Nplus AND COMP) space to PCOMP in DNWELL
+                  (Pplus AND COMP AND DNWELL). Use butted source and DNWELL contacts
+                   otherwise and that is best for Latch-up immunity as well. : 0.4µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDP.3c</name>
+   <description>MDP.3c : Maximum distance of the nearest edge of the DNWELL tab
+                  (NCOMP inside DNWELL) from PCOMP edge (PCOMP inside DNWELL). : 15µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDP.3d</name>
+   <description>MDP.3d : The metal connection for the Nplus guard ring recommended to be continuous.
+                  The maximum gap between this metal if broken. Note: To put maximum number of contact under
+                  metal for better manufacturability and reliability. : 10µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDP.4</name>
+   <description>MDP.4 : DNWELL covering LDPMOS shall be surrounded by non broken Pplus guard.
+                  The metal connection for the Pplus guard ring recommended to be continuous,
+                  The maximum gap between this metal if broken. Note: To put maximum number of contact
+                  under metal for better manufacturability and reliability.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDP.4a</name>
+   <description>MDP.4a : Min PCOMP (Pplus AND COMP) space to DNWELL. : 2.5µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDP.4b</name>
+   <description>MDP.4b : Maximum distance of the nearest edge of the DNWELL
+                from the PCOMP Guard ring outside DNWELL. : 15µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDP.5</name>
+   <description>MDP.5 : Each LDPMOS shall be covered by Dualgate layer.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDP.5a</name>
+   <description>MDP.5a : Minimum Dualgate enclose Plus guarding ring PCOMP (Pplus AND COMP). : 0.5µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDP.6</name>
+   <description>MDP.6 : Each LDPMOS shall be covered by LDMOS_XTOR (GDS#226) layer.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDP.6a</name>
+   <description>MDP.6a : Minimum LDMOS_XTOR enclose Dualgate.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDP.7</name>
+   <description>MDP.7 : Minimum LDMOS_XTOR layer space to Nwell outside LDMOS_XTOR. : 2µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDP.8</name>
+   <description>MDP.8 : Minimum LDMOS_XTOR layer space to NCOMP outside LDMOS_XTOR. : 1.5µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDP.9a</name>
+   <description>MDP.9a : Min LDPMOS POLY2 width. : 1.2µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDP.9b</name>
+   <description>MDP.9b : Min POLY2 extension beyond COMP in the width
+                   direction of the transistor (other than the LDMOS drain direction). : 0.4µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDP.9c</name>
+   <description>MDP.9c : Min/Max POLY2 extension beyond COMP on the field towards
+                     LDPMOS drain (MVPSD AND COMP AND Pplus NOT POLY2) direction.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDP.9d</name>
+   <description>MDP.9d : Min/Max POLY2 on field to LDPMOS drain COMP
+                  (MVPSD AND COMP AND Pplus NOT POLY2) space.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDP.9ei</name>
+   <description>MDP.9ei : Min LDMPOS gate Poly2 space to Nplus guardring
+                 (source and body tap non-butted).</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDP.9eii</name>
+   <description>MDP.9eii : Min LDMPOS gate Poly2 space to Nplus guardring
+                      (source and body tap butted): 0.32um</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDP.9f</name>
+   <description>MDP.9f : Poly2 interconnect is not allowed in LDPMOS region
+                  (LDMOS_XTOR marked region).</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDP.10</name>
+   <description>MDP.10 : Min/Max MVPSD overlap onto the channel
+                  (LDMOS_XTOR AND COMP AND POLY2 AND Pplus): 0.4 um</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDP.10a</name>
+   <description>MDP.10a : Min MVPSD space within LDMOS_XTOR marking [diff potential]. : 2µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDP.10b</name>
+   <description>MDP.10b : Min MVPSD space [same potential]. Merge if space less than 1um. : 1µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDP.11</name>
+   <description>MDP.11 : Min MVPSD enclosing PCOMP in the drain
+                    (MVPSD AND COMP NOT POLY2) direction and in the direction along the transistor width.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDP.12</name>
+   <description>MDP.12 : Min DNWELL enclose Nplus guard ring (NCOMP). : 0.66µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDP.13a</name>
+   <description>MDP.13a : Max single finger width. : 50µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDP.13b</name>
+   <description>MDP.13b : Layout shall have alternative source &amp; drain.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDP.13c</name>
+   <description>MDP.13c : Both sides of the transistor shall be terminated by source.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDP.15</name>
+   <description>MDP.15 : Min DNWELL enclosing MVPSD to any DNWELL spacing. : 6µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDP.16a</name>
+   <description>MDP.16a : Min LDPMOS drain COMP width. : 0.22µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDP.16b</name>
+   <description>MDP.16b : Min LDPMOS drain COMP enclose contact. : 0µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDP.17a</name>
+   <description>MDP.17a : For better latch up immunity, it is necessary to put DNWELL
+                      guard ring between MVPSD Inside DNWELL covered by LDMOS_XTOR and NCOMP
+                      (outside DNWELL and outside Nwell) when spacing between them is less than 40um.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDP.17c</name>
+   <description>MDP.17c : DNWELL guard ring shall have NCOMP tab to be connected to highest potential</description>
+   <categories>
+   </categories>
+  </category>
+ </categories>
+ <cells>
+  <cell>
+   <name>NanoCGRA_Lite</name>
+   <variant/>
+   <references>
+   </references>
+  </cell>
+ </cells>
+ <items>
+ </items>
+</report-database>

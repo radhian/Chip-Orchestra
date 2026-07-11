@@ -1,0 +1,125 @@
+11-Jul-2026 19:35:09 | INFO    | Your Klayout version is: KLayout 0.28.5
+11-Jul-2026 19:35:09 | INFO    | ## Generating template with for the following rule tables: ['metal3.drc']
+11-Jul-2026 19:35:09 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run
+11-Jul-2026 19:35:09 | INFO    | ## Generating template with for the following rule tables: ['dummy_exclude.drc']
+11-Jul-2026 19:35:09 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run
+11-Jul-2026 19:35:09 | INFO    | ## Generating template with for the following rule tables: ['metal2.drc']
+11-Jul-2026 19:35:09 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run
+11-Jul-2026 19:35:09 | INFO    | ## Generating template with for the following rule tables: ['via2.drc']
+11-Jul-2026 19:35:09 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run
+11-Jul-2026 19:35:09 | INFO    | ## Generating template with for the following rule tables: ['lres.drc']
+11-Jul-2026 19:35:09 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run
+11-Jul-2026 19:35:09 | INFO    | ## Generating template with for the following rule tables: ['mcell.drc']
+11-Jul-2026 19:35:09 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run
+11-Jul-2026 19:35:09 | INFO    | ## Generating template with for the following rule tables: ['ymtp_mk.drc']
+11-Jul-2026 19:35:09 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run
+11-Jul-2026 19:35:09 | INFO    | ## Generating template with for the following rule tables: ['lvs_bjt.drc']
+11-Jul-2026 19:35:09 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run
+11-Jul-2026 19:35:09 | INFO    | ## Generating template with for the following rule tables: ['metal4.drc']
+11-Jul-2026 19:35:09 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run
+11-Jul-2026 19:35:09 | INFO    | ## Generating template with for the following rule tables: ['mim_b.drc']
+11-Jul-2026 19:35:09 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run
+11-Jul-2026 19:35:09 | INFO    | ## Generating template with for the following rule tables: ['nwell.drc']
+11-Jul-2026 19:35:09 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run
+11-Jul-2026 19:35:09 | INFO    | ## Generating template with for the following rule tables: ['hres.drc']
+11-Jul-2026 19:35:09 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run
+11-Jul-2026 19:35:09 | INFO    | ## Generating template with for the following rule tables: ['ldpmos.drc']
+11-Jul-2026 19:35:09 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run
+11-Jul-2026 19:35:09 | INFO    | ## Generating template with for the following rule tables: ['pplus.drc']
+11-Jul-2026 19:35:09 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run
+11-Jul-2026 19:35:09 | INFO    | ## Generating template with for the following rule tables: ['sab.drc']
+11-Jul-2026 19:35:09 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run
+11-Jul-2026 19:35:09 | INFO    | ## Generating template with for the following rule tables: ['dualgate.drc']
+11-Jul-2026 19:35:09 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run
+11-Jul-2026 19:35:09 | INFO    | ## Generating template with for the following rule tables: ['drc_bjt.drc']
+11-Jul-2026 19:35:09 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run
+11-Jul-2026 19:35:09 | INFO    | ## Generating template with for the following rule tables: ['efuse.drc']
+11-Jul-2026 19:35:09 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run
+11-Jul-2026 19:35:09 | INFO    | ## Generating template with for the following rule tables: ['mim_a.drc']
+11-Jul-2026 19:35:09 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run
+11-Jul-2026 19:35:09 | INFO    | ## Generating template with for the following rule tables: ['ldnmos.drc']
+11-Jul-2026 19:35:09 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run
+11-Jul-2026 19:35:09 | INFO    | ## Generating template with for the following rule tables: ['via5.drc']
+11-Jul-2026 19:35:09 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run
+11-Jul-2026 19:35:09 | INFO    | ## Generating template with for the following rule tables: ['lvpwell.drc']
+11-Jul-2026 19:35:09 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run
+11-Jul-2026 19:35:09 | INFO    | ## Generating template with for the following rule tables: ['via4.drc']
+11-Jul-2026 19:35:09 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run
+11-Jul-2026 19:35:09 | INFO    | ## Generating template with for the following rule tables: ['poly2.drc']
+11-Jul-2026 19:35:09 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run
+11-Jul-2026 19:35:09 | INFO    | ## Generating template with for the following rule tables: ['nplus.drc']
+11-Jul-2026 19:35:09 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run
+11-Jul-2026 19:35:09 | INFO    | ## Generating template with for the following rule tables: ['contact.drc']
+11-Jul-2026 19:35:09 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run
+11-Jul-2026 19:35:09 | INFO    | ## Generating template with for the following rule tables: ['dnwell.drc']
+11-Jul-2026 19:35:09 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run
+11-Jul-2026 19:35:09 | INFO    | ## Generating template with for the following rule tables: ['sram_5p0.drc']
+11-Jul-2026 19:35:09 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run
+11-Jul-2026 19:35:09 | INFO    | ## Generating template with for the following rule tables: ['pres.drc']
+11-Jul-2026 19:35:09 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run
+11-Jul-2026 19:35:09 | INFO    | ## Generating template with for the following rule tables: ['via1.drc']
+11-Jul-2026 19:35:09 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run
+11-Jul-2026 19:35:09 | INFO    | ## Generating template with for the following rule tables: ['nat.drc']
+11-Jul-2026 19:35:09 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run
+11-Jul-2026 19:35:09 | INFO    | ## Generating template with for the following rule tables: ['via3.drc']
+11-Jul-2026 19:35:09 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run
+11-Jul-2026 19:35:09 | INFO    | ## Generating template with for the following rule tables: ['metal5.drc']
+11-Jul-2026 19:35:09 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run
+11-Jul-2026 19:35:09 | INFO    | ## Generating template with for the following rule tables: ['sram_3p3.drc']
+11-Jul-2026 19:35:09 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run
+11-Jul-2026 19:35:09 | INFO    | ## Generating template with for the following rule tables: ['metaltop_30k.drc']
+11-Jul-2026 19:35:09 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run
+11-Jul-2026 19:35:09 | INFO    | ## Generating template with for the following rule tables: ['metal1.drc']
+11-Jul-2026 19:35:09 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run
+11-Jul-2026 19:35:09 | INFO    | ## Generating template with for the following rule tables: ['otp_mk.drc']
+11-Jul-2026 19:35:09 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run
+11-Jul-2026 19:35:09 | INFO    | ## Generating template with for the following rule tables: ['metaltop.drc']
+11-Jul-2026 19:35:09 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run
+11-Jul-2026 19:35:09 | INFO    | ## Generating template with for the following rule tables: ['comp.drc']
+11-Jul-2026 19:35:09 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run
+11-Jul-2026 19:35:09 | INFO    | ## Generating template with for the following rule tables: ['esd.drc']
+11-Jul-2026 19:35:09 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run
+11-Jul-2026 19:35:09 | INFO    | ## Generating template with for the following rule tables: ['geom.drc']
+11-Jul-2026 19:35:09 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run
+11-Jul-2026 19:35:09 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/gds/nanocgra_lite.gds checks on design metal3 on cell NanoCGRA_Lite:
+11-Jul-2026 19:35:09 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/gds/nanocgra_lite.gds checks on design dummy_exclude on cell NanoCGRA_Lite:
+11-Jul-2026 19:35:09 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/gds/nanocgra_lite.gds checks on design metal2 on cell NanoCGRA_Lite:
+11-Jul-2026 19:35:09 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/gds/nanocgra_lite.gds checks on design via2 on cell NanoCGRA_Lite:
+11-Jul-2026 19:35:16 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/gds/nanocgra_lite.gds checks on design lres on cell NanoCGRA_Lite:
+11-Jul-2026 19:35:17 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/gds/nanocgra_lite.gds checks on design mcell on cell NanoCGRA_Lite:
+11-Jul-2026 19:35:18 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/gds/nanocgra_lite.gds checks on design ymtp_mk on cell NanoCGRA_Lite:
+11-Jul-2026 19:35:23 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/gds/nanocgra_lite.gds checks on design lvs_bjt on cell NanoCGRA_Lite:
+11-Jul-2026 19:35:24 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/gds/nanocgra_lite.gds checks on design metal4 on cell NanoCGRA_Lite:
+11-Jul-2026 19:35:24 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/gds/nanocgra_lite.gds checks on design mim_b on cell NanoCGRA_Lite:
+11-Jul-2026 19:35:26 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/gds/nanocgra_lite.gds checks on design nwell on cell NanoCGRA_Lite:
+11-Jul-2026 19:35:30 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/gds/nanocgra_lite.gds checks on design hres on cell NanoCGRA_Lite:
+11-Jul-2026 19:35:31 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/gds/nanocgra_lite.gds checks on design ldpmos on cell NanoCGRA_Lite:
+11-Jul-2026 19:35:31 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/gds/nanocgra_lite.gds checks on design pplus on cell NanoCGRA_Lite:
+11-Jul-2026 19:35:38 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/gds/nanocgra_lite.gds checks on design sab on cell NanoCGRA_Lite:
+11-Jul-2026 19:35:47 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/gds/nanocgra_lite.gds checks on design dualgate on cell NanoCGRA_Lite:
+11-Jul-2026 19:35:47 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/gds/nanocgra_lite.gds checks on design drc_bjt on cell NanoCGRA_Lite:
+11-Jul-2026 19:35:47 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/gds/nanocgra_lite.gds checks on design efuse on cell NanoCGRA_Lite:
+11-Jul-2026 19:35:54 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/gds/nanocgra_lite.gds checks on design mim_a on cell NanoCGRA_Lite:
+11-Jul-2026 19:35:56 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/gds/nanocgra_lite.gds checks on design ldnmos on cell NanoCGRA_Lite:
+11-Jul-2026 19:35:56 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/gds/nanocgra_lite.gds checks on design via5 on cell NanoCGRA_Lite:
+11-Jul-2026 19:35:57 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/gds/nanocgra_lite.gds checks on design lvpwell on cell NanoCGRA_Lite:
+11-Jul-2026 19:36:01 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/gds/nanocgra_lite.gds checks on design via4 on cell NanoCGRA_Lite:
+11-Jul-2026 19:36:03 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/gds/nanocgra_lite.gds checks on design poly2 on cell NanoCGRA_Lite:
+11-Jul-2026 19:36:10 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/gds/nanocgra_lite.gds checks on design nplus on cell NanoCGRA_Lite:
+11-Jul-2026 19:36:11 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/gds/nanocgra_lite.gds checks on design contact on cell NanoCGRA_Lite:
+11-Jul-2026 19:36:14 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/gds/nanocgra_lite.gds checks on design dnwell on cell NanoCGRA_Lite:
+11-Jul-2026 19:36:24 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/gds/nanocgra_lite.gds checks on design sram_5p0 on cell NanoCGRA_Lite:
+11-Jul-2026 19:36:27 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/gds/nanocgra_lite.gds checks on design pres on cell NanoCGRA_Lite:
+11-Jul-2026 19:36:28 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/gds/nanocgra_lite.gds checks on design via1 on cell NanoCGRA_Lite:
+11-Jul-2026 19:36:32 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/gds/nanocgra_lite.gds checks on design nat on cell NanoCGRA_Lite:
+11-Jul-2026 19:36:34 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/gds/nanocgra_lite.gds checks on design via3 on cell NanoCGRA_Lite:
+11-Jul-2026 19:36:41 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/gds/nanocgra_lite.gds checks on design metal5 on cell NanoCGRA_Lite:
+11-Jul-2026 19:36:44 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/gds/nanocgra_lite.gds checks on design sram_3p3 on cell NanoCGRA_Lite:
+11-Jul-2026 19:36:44 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/gds/nanocgra_lite.gds checks on design metaltop_30k on cell NanoCGRA_Lite:
+11-Jul-2026 19:36:47 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/gds/nanocgra_lite.gds checks on design metal1 on cell NanoCGRA_Lite:
+11-Jul-2026 19:36:51 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/gds/nanocgra_lite.gds checks on design otp_mk on cell NanoCGRA_Lite:
+11-Jul-2026 19:36:51 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/gds/nanocgra_lite.gds checks on design metaltop on cell NanoCGRA_Lite:
+11-Jul-2026 19:36:59 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/gds/nanocgra_lite.gds checks on design comp on cell NanoCGRA_Lite:
+11-Jul-2026 19:36:59 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/gds/nanocgra_lite.gds checks on design esd on cell NanoCGRA_Lite:
+11-Jul-2026 19:37:00 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/gds/nanocgra_lite.gds checks on design geom on cell NanoCGRA_Lite:
+11-Jul-2026 19:37:19 | INFO    | Klayout DRC run is clean. GDS has no DRC violations.

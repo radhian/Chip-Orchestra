@@ -76,8 +76,12 @@ services:
       LLM_PROVIDER: ${LLM_PROVIDER:-ollama}
       OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
       OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen3.5:9b}
+      OPENAI_BASE_URL: ${OPENAI_BASE_URL:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-glm-4.6}
       GOOGLE_API_KEY: ${GOOGLE_API_KEY:-}
       GOOGLE_MODEL: ${GOOGLE_MODEL:-gemini-2.5-pro}
+      MAX_REPAIR_ITERS: ${MAX_REPAIR_ITERS:-3}
     extra_hosts:
       - "host.docker.internal:host-gateway"
     depends_on:
@@ -110,10 +114,17 @@ services:
       VVP_PATH: ${VVP_PATH:-}
       LIBRELANE_BIN: ${LIBRELANE_BIN:-librelane}
       LIBRELANE_PATH: ${LIBRELANE_PATH:-}
-      PDK: ${PDK:-sky130A}
+      YOSYS_BIN: ${YOSYS_BIN:-yosys}
+      STA_BIN: ${STA_BIN:-sta}
+      STA_PATH: ${STA_PATH:-}
+      KLAYOUT_BIN: ${KLAYOUT_BIN:-klayout}
+      DOT_PATH: ${DOT_PATH:-dot}
+      PDK: ${PDK:-gf180mcuD}
       PDK_ROOT: ${PDK_ROOT:-/opt/pdk}
       EDA_JOB_TIMEOUT_SIM: ${EDA_JOB_TIMEOUT_SIM:-600}
       EDA_JOB_TIMEOUT_HARDEN: ${EDA_JOB_TIMEOUT_HARDEN:-3600}
+      EDA_JOB_TIMEOUT_STA: ${EDA_JOB_TIMEOUT_STA:-900}
+      EDA_JOB_TIMEOUT_GL_SIM: ${EDA_JOB_TIMEOUT_GL_SIM:-900}
     depends_on:
       mysql:
         condition: service_healthy

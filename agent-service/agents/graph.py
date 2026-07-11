@@ -16,6 +16,7 @@ STAGE_AGENTS = {
     "SPEC_INGEST": "SpecInterpreter",
     "PLAN": "FlowAssistant",
     "RTL_GEN": "RTLAuthor",
+    "RTL_REPAIR": "RTLAuthor",
     "TB_GEN": "Verifier",
     "SIM": "Verifier",
     "LINT": "Diagnoser",

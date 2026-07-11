@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<report-database>
+ <description>DRC Run Report at</description>
+ <original-file/>
+ <generator>drc: script='@1*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/lvs_bjt.drc*0;179*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/layers_def.drc*-178;815*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/lvs_bjt.drc*-635;'</generator>
+ <top-cell>NanoCGRA_Lite</top-cell>
+ <tags>
+ </tags>
+ <categories>
+  <category>
+   <name>LVS_BJT.1</name>
+   <description>LVS_BJT.1 : Minimum LVS_BJT enclosure of NPN or PNP Emitter COMP layers: 0um</description>
+   <categories>
+   </categories>
+  </category>
+ </categories>
+ <cells>
+  <cell>
+   <name>NanoCGRA_Lite</name>
+   <variant/>
+   <references>
+   </references>
+  </cell>
+ </cells>
+ <items>
+ </items>
+</report-database>

@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<report-database>
+ <description>DRC Run Report at</description>
+ <original-file/>
+ <generator>drc: script='@1*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/ldnmos.drc*0;179*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/layers_def.drc*-178;815*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/ldnmos.drc*-635;'</generator>
+ <top-cell>NanoCGRA_Lite</top-cell>
+ <tags>
+ </tags>
+ <categories>
+  <category>
+   <name>MDN.1</name>
+   <description>MDN.1 : Min MVSD width (for litho purpose). : 1µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDN.2a</name>
+   <description>MDN.2a : Min MVSD space [Same Potential]. : 1µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDN.2b</name>
+   <description>MDN.2b : Min MVSD space [Diff Potential]. : 2µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDN.3a</name>
+   <description>MDN.3a : Min transistor channel length. : 0.6µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDN.3b</name>
+   <description>MDN.3b : Max transistor channel length: 20um</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDN.4a</name>
+   <description>MDN.4a : Min transistor channel width. : 4µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDN.4b</name>
+   <description>MDN.4b : Max transistor channel width : 50 um </description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDN.5ai</name>
+   <description>MDN.5ai : Min PCOMP (Pplus AND COMP) space to LDNMOS Drain MVSD
+                    (source and body tap non-butted): 1um. PCOMP (Pplus AND COMP)
+                    intercept with LDNMOS Drain MVSD is not allowed.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDN.5aii</name>
+   <description>MDN.5aii : Min PCOMP (Pplus AND COMP) space to LDNMOS Drain MVSD
+                     (source and body tap butted): 0.92um. PCOMP (Pplus AND COMP)
+                     intercept with LDNMOS Drain MVSD is not allowed. : 0.92µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDN.5b</name>
+   <description>MDN.5b : Min PCOMP (Pplus AND COMP) space to LDNMOS Source
+                 (Nplus AND COMP): 0.4um. Use butted source and p-substrate tab
+                 otherwise and that is good for Latch-up immunity as well.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDN.5c</name>
+   <description>MDN.5c : Maximum distance of the nearest edge of the substrate tab from NCOMP edge: 15µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDN.6</name>
+   <description>MDN.6 : ALL LDNMOS shall be covered by Dualgate layer.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDN.6a</name>
+   <description>MDN.6a : Min Dualgate enclose NCOMP.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDN.7</name>
+   <description>MDN.7 : Each LDNMOS shall be covered by LDMOS_XTOR (GDS#226) mark layer.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDN.7a</name>
+   <description>MDN.7a : Min LDMOS_XTOR enclose Dualgate.: 0 um</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDN.8a</name>
+   <description>MDN.8a : Min LDNMOS drain MVSD space to any other equal potential Nwell space.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDN.8b</name>
+   <description>MDN.8b : Min LDNMOS drain MVSD space to any other different potential Nwell space.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDN.9</name>
+   <description>MDN.9 : Min LDNMOS drain MVSD space to NCOMP (Nplus AND COMP) outside LDNMOS drain MVSD. : 4µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDN.10a</name>
+   <description>MDN.10a : Min LDNMOS POLY2 width. : 1.2µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDN.10b</name>
+   <description>MDN.10b : Min POLY2 extension beyond COMP in the width direction of the transistor
+                  (other than the LDNMOS drain direction). : 0.4µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDN.10c</name>
+   <description>MDN.10c : Min/Max POLY2 extension beyond COMP on the field
+                   towards LDNMOS drain COMP direction.: 0.2 um</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDN.10d</name>
+   <description>MDN.10d : Min/Max POLY2 on field space to LDNMOS drain COMP.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDN.10ei</name>
+   <description>MDN.10ei : Min POLY2 space to Psub tap (source and body tap non-butted).</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDN.10eii</name>
+   <description>MDN.10eii : Min POLY2 space to Psub tap (source and body tap butted). : 0.32µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDN.10f</name>
+   <description>MDN.10f : Poly2 interconnect in HV region (LDMOS_XTOR marked region) not allowed.
+                     Also, any Poly2 interconnect with poly2 to substrate potential greater than 6V is not allowed.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDN.11</name>
+   <description>MDN.11 : Min/Max MVSD overlap channel COMP
+                  ((((LDMOS_XTOR AND MVSD) AND COMP) AND POLY2) AND NPlus).</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDN.12</name>
+   <description>MDN.12 : Min MVSD enclose NCOMP in the LDNMOS drain
+                   and in the direction along the transistor width.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDN.13a</name>
+   <description>MDN.13a : Max single finger width. : 50µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDN.13b</name>
+   <description>MDN.13b : Layout shall have alternative source &amp; drain.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDN.13c</name>
+   <description>MDN.13c : Both sides of the transistor shall be terminated by source.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDN.13d</name>
+   <description>MDN.13d : Every two poly fingers shall be surrounded by a P-sub guard ring.
+                    (Exclude the case when each LDNMOS transistor have full width butting to well tap).</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDN.14</name>
+   <description>MDN.14 : Min MVSD space to any DNWELL.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDN.15a</name>
+   <description>MDN.15a : Min LDNMOS drain COMP width. : 0.22µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDN.15b</name>
+   <description>MDN.15b : Min LDNMOS drain COMP enclose contact. : 0µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MDN.17</name>
+   <description>MDN.17 : It is recommended to surround the LDNMOS transistor with
+                   non-broken Psub guard ring to improve the latch up immunity.
+                   Guideline to improve the latch up immunity.</description>
+   <categories>
+   </categories>
+  </category>
+ </categories>
+ <cells>
+  <cell>
+   <name>NanoCGRA_Lite</name>
+   <variant/>
+   <references>
+   </references>
+  </cell>
+ </cells>
+ <items>
+ </items>
+</report-database>

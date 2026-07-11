@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<report-database>
+ <description>DRC Run Report at</description>
+ <original-file/>
+ <generator>drc: script='@1*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/mim_b.drc*0;179*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/layers_def.drc*-178;815*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/mim_b.drc*-635;'</generator>
+ <top-cell>NanoCGRA_Lite</top-cell>
+ <tags>
+ </tags>
+ <categories>
+  <category>
+   <name>MIMTM.1</name>
+   <description>MIMTM.1 : Minimum MiM bottom plate spacing to the bottom plate metal
+                      (whether adjacent MiM or routing metal). : 1.2µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MIMTM.2</name>
+   <description>MIMTM.2 : Minimum MiM bottom plate overlap of Vian-1 layer.
+                    [This is applicable for Vian-1 within 1.06um oversize of FuseTop layer
+                    (referenced to virtual bottom plate)]. : 0.4µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MIMTM.3</name>
+   <description>MIMTM.3 : Minimum MiM bottom plate overlap of Top plate.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MIMTM.4</name>
+   <description>MIMTM.4 : Minimum MiM top plate (FuseTop) overlap of Vian-1: 0.4µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MIMTM.5</name>
+   <description>MIMTM.5 : Minimum spacing between top plate and the Vian-1 connecting to the bottom plate. : 0.4µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MIMTM.6</name>
+   <description>MIMTM.6 : Minimum spacing between unrelated top plates: 0.6µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MIMTM.7</name>
+   <description>MIMTM.7 : Min FuseTop enclosure by CAP_MK: 0um.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MIMTM.8a</name>
+   <description>MIMTM.8a : Minimum MIM cap area (defined by FuseTop area): 25µm²</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MIMTM.8b</name>
+   <description>MIMTM.8b : Maximum single MIM Cap area (Use multiple MIM caps in
+                       parallel connection if bigger capacitors are required) (um2). : 10000µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MIMTM.9</name>
+   <description>MIMTM.9 : Min. Via (Vian-1) spacing for sea of Via on MIM top plate. : 0.5µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MIMTM.10</name>
+   <description>MIMTM.10 : (a) There cannot be any Vian-2 touching MIM bottom plate Metaln-1.
+                      (b) MIM bottom plate Metaln-1 can only be connected through the higher Via (Vian-1).</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>MIMTM.11</name>
+   <description>MIMTM.11 : Bottom plate of multiple MIM caps can be shared (for common nodes)
+                     as long as total MIM area with that single common plate does not exceed MIMTM.8b rule. : -µm</description>
+   <categories>
+   </categories>
+  </category>
+ </categories>
+ <cells>
+  <cell>
+   <name>NanoCGRA_Lite</name>
+   <variant/>
+   <references>
+   </references>
+  </cell>
+ </cells>
+ <items>
+ </items>
+</report-database>

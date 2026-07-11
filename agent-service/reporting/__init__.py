@@ -8,6 +8,7 @@ from .markdown_report import (
     render_final_report,
     render_runbook,
 )
+from .pdf_report import PDF_PATH, generate_pdf
 
 __all__ = [
     "ReportContext",
@@ -16,7 +17,9 @@ __all__ = [
     "render_architecture",
     "render_final_report",
     "render_runbook",
+    "generate_pdf",
     "ARCHITECTURE_PATH",
     "FINAL_REPORT_PATH",
     "RUNBOOK_PATH",
+    "PDF_PATH",
 ]

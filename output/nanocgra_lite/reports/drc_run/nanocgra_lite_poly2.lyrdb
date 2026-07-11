@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<report-database>
+ <description>DRC Run Report at</description>
+ <original-file/>
+ <generator>drc: script='@1*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/poly2.drc*0;179*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/layers_def.drc*-178;815*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/poly2.drc*-635;'</generator>
+ <top-cell>NanoCGRA_Lite</top-cell>
+ <tags>
+ </tags>
+ <categories>
+  <category>
+   <name>PL.1_LV</name>
+   <description>PL.1_LV : Interconnect Width (outside PLFUSE). : 0.18µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PL.1_MV</name>
+   <description>PL.1_MV : Interconnect Width (outside PLFUSE). : 0.2µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PL.1a_LV</name>
+   <description>PL.1a_LV : Interconnect Width (inside PLFUSE). : 0.18µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PL.1a_MV</name>
+   <description>PL.1a_MV : Interconnect Width (inside PLFUSE). : 0.18µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PL.2_LV</name>
+   <description>PL.2_LV : Gate Width (Channel Length). : 0.28µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PL.2_MV</name>
+   <description>PL.2_MV : Gate Width (Channel Length).</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PL.3a</name>
+   <description>PL.3a : Space on COMP/Field: 0.24µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PL.4_LV</name>
+   <description>PL.4_LV : Extension beyond COMP to form Poly2 end cap. : 0.22µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PL.4_MV</name>
+   <description>PL.4_MV : Extension beyond COMP to form Poly2 end cap. : 0.22µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PL.5a_LV</name>
+   <description>PL.5a_LV : Space from field Poly2 to unrelated COMP Spacer from field Poly2 to Guard-ring. : 0.1µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PL.5a_MV</name>
+   <description>PL.5a_MV : Space from field Poly2 to unrelated COMP Spacer from field Poly2 to Guard-ring. : 0.3µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PL.5b_LV</name>
+   <description>PL.5b_LV : Space from field Poly2 to related COMP. : 0.1µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PL.5b_MV</name>
+   <description>PL.5b_MV : Space from field Poly2 to related COMP. : 0.3µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PL.6</name>
+   <description>PL.6 : 90 degree bends on the COMP are not allowed.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PL.7_LV</name>
+   <description>PL.7_LV : 45 degree bent gate width : 0.3µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PL.7_MV</name>
+   <description>PL.7_MV : 45 degree bent gate width: 0.7µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PL.9</name>
+   <description>PL.9 : Poly2 inter connect connecting 3.3V and 5V areas (area inside and outside Dualgate)
+                 are not allowed. They shall be done though metal lines only.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PL.11</name>
+   <description>PL.11 : V5_Xtor must enclose 5V device.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>PL.12</name>
+   <description>PL.12 : V5_Xtor enclose 5V Comp.</description>
+   <categories>
+   </categories>
+  </category>
+ </categories>
+ <cells>
+  <cell>
+   <name>NanoCGRA_Lite</name>
+   <variant/>
+   <references>
+   </references>
+  </cell>
+ </cells>
+ <items>
+ </items>
+</report-database>

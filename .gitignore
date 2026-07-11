@@ -59,4 +59,5 @@ coverage/
 .eslintcache
 
 #python
+*.pycHNH9
 *.pyc

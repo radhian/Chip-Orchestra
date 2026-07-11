@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<report-database>
+ <description>DRC Run Report at</description>
+ <original-file/>
+ <generator>drc: script='@1*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/sab.drc*0;179*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/layers_def.drc*-178;815*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/sab.drc*-635;'</generator>
+ <top-cell>NanoCGRA_Lite</top-cell>
+ <tags>
+ </tags>
+ <categories>
+  <category>
+   <name>SB.1</name>
+   <description>SB.1 : min. sab width : 0.42µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SB.2</name>
+   <description>SB.2 : min. sab spacing : 0.42µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SB.3</name>
+   <description>SB.3 : Space from salicide block to unrelated COMP. : 0.22µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SB.4</name>
+   <description>SB.4 : Space from salicide block to contact: 0.15 um</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SB.5a</name>
+   <description>SB.5a : Space from salicide block to unrelated Poly2 on field. : 0.3µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SB.5b</name>
+   <description>SB.5b : Space from salicide block to unrelated Poly2 on COMP. : 0.28µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SB.6</name>
+   <description>SB.6 : Salicide block extension beyond related COMP. : 0.22µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SB.7</name>
+   <description>SB.7 : COMP extension beyond related salicide block. : 0.22µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SB.8</name>
+   <description>SB.8 : Non-salicided contacts are forbidden.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SB.9</name>
+   <description>SB.9 : Salicide block extension beyond unsalicided Poly2. : 0.22µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SB.10</name>
+   <description>SB.10 : Poly2 extension beyond related salicide block. : 0.22µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SB.11</name>
+   <description>SB.11 : Overlap with COMP. : 0.22µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SB.12</name>
+   <description>SB.12 : Overlap with Poly2 outside ESD_MK : 0.22µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SB.13</name>
+   <description>SB.13 : Min. area (um2) : 2µm²</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SB.14a</name>
+   <description>SB.14a : Space from unsalicided Nplus Poly2 to unsalicided Pplus Poly2.
+                    (Unsalicided Nplus Poly2 must not fall within a square of 0.56um x 0.56um
+                    at unsalicided Pplus Poly2 corners). : 0.56µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SB.14b</name>
+   <description>SB.14b : Space from unsalicided Nplus Poly2 to P-channel gate.
+                    (Unsalicided Nplus Poly2 must not fall within a square of 0.56um x 0.56um
+                    at P-channel gate corners). : 0.56µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SB.15a</name>
+   <description>SB.15a : Space from unsalicided Poly2 to unrelated Nplus/Pplus. : 0.18µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SB.15b</name>
+   <description>SB.15b : Space from unsalicided Poly2 to unrelated Nplus/Pplus. : 0.32µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>SB.16</name>
+   <description>SB.16 : SAB layer cannot exist on 3.3V and 5V/6V CMOS transistors'
+                    Poly and COMP area of the core circuit (Excluding the transistors used for ESD purpose).
+                    It can only exist on CMOS transistors marked by LVS_IO, OTP_MK, ESD_MK layers.</description>
+   <categories>
+   </categories>
+  </category>
+ </categories>
+ <cells>
+  <cell>
+   <name>NanoCGRA_Lite</name>
+   <variant/>
+   <references>
+   </references>
+  </cell>
+ </cells>
+ <items>
+ </items>
+</report-database>

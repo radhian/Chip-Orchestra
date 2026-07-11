@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<report-database>
+ <description>DRC Run Report at</description>
+ <original-file/>
+ <generator>drc: script='@1*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/nwell.drc*0;179*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/layers_def.drc*-178;815*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/nwell.drc*-635;'</generator>
+ <top-cell>NanoCGRA_Lite</top-cell>
+ <tags>
+ </tags>
+ <categories>
+  <category>
+   <name>NW.1a_LV</name>
+   <description>NW.1a_LV : Min. Nwell Width (This is only for litho purpose on the generated area): 0.86µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NW.1a_MV</name>
+   <description>NW.1a_MV : Min. Nwell Width (This is only for litho purpose on the generated area): 0.86µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NW.1b_LV</name>
+   <description>NW.1b_LV : Min. Nwell Width as a resistor (Outside DNWELL only): 2µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NW.1b_MV</name>
+   <description>NW.1b_MV : Min. Nwell Width as a resistor (Outside DNWELL only): 2µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NW.2a_LV</name>
+   <description>NW.2a_LV : Min. Nwell Space (Outside DNWELL) [Equi-potential],
+                      Merge if the space is less than. : 0.6µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NW.2a_MV</name>
+   <description>NW.2a_MV : Min. Nwell Space (Outside DNWELL) [Equi-potential],
+                      Merge if the space is less than. : 0.74µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NW.2b_LV</name>
+   <description>NW.2b_LV : Min. Nwell Space (Outside DNWELL) [Different potential]: 1.4µm.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NW.2b_MV</name>
+   <description>NW.2b_MV : Min. Nwell Space (Outside DNWELL) [Different potential]: 1.7µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NW.3</name>
+   <description>NW.3 : Min. Nwell to DNWELL space: 3.1µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NW.4</name>
+   <description>NW.4 : Min. Nwell to LVPWELL space: 0um</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NW.5_LV</name>
+   <description>NW.5_LV : Min. DNWELL enclose Nwell: 0.5µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NW.5_MV</name>
+   <description>NW.5_MV : Min. DNWELL enclose Nwell: 0.5µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>NW.6</name>
+   <description>NW.6 : Nwell resistors can only exist outside DNWELL.</description>
+   <categories>
+   </categories>
+  </category>
+ </categories>
+ <cells>
+  <cell>
+   <name>NanoCGRA_Lite</name>
+   <variant/>
+   <references>
+   </references>
+  </cell>
+ </cells>
+ <items>
+ </items>
+</report-database>

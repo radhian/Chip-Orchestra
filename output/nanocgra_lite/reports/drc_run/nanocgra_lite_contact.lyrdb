@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<report-database>
+ <description>DRC Run Report at</description>
+ <original-file/>
+ <generator>drc: script='@1*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/contact.drc*0;179*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/layers_def.drc*-178;815*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/contact.drc*-635;'</generator>
+ <top-cell>NanoCGRA_Lite</top-cell>
+ <tags>
+ </tags>
+ <categories>
+  <category>
+   <name>CO.1</name>
+   <description>CO.1 : Min/max contact size. : 0.22µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>CO.2a</name>
+   <description>CO.2a : min. contact spacing : 0.25µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>CO.2b</name>
+   <description>CO.2b : Space in 4x4 or larger contact array. : 0.28µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>CO.3</name>
+   <description>CO.3 : Poly2 overlap of contact. : 0.07µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>CO.4</name>
+   <description>CO.4 : COMP overlap of contact. : 0.07µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>CO.5a</name>
+   <description>CO.5a : Nplus overlap of contact on COMP
+                    (Only for contacts to butted Nplus and Pplus COMP areas). : 0.1µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>CO.5b</name>
+   <description>CO.5b : Pplus overlap of contact on COMP
+                    (Only for contacts to butted Nplus and Pplus COMP areas). : 0.1µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>CO.6</name>
+   <description>CO.6 : Metal1 overlap of contact &gt;= 0.005 um</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>CO.6a</name>
+   <description>CO.6a : (i) Metal1 (&lt; 0.34um) end-of-line overlap contact
+                      (Applies to all &lt; 0.34µm wide metal lines,
+                      excluding metal branches shorter than 0.24µm) : 0.06µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>CO.6b</name>
+   <description>CO.6b : (ii) If Metal1 overlaps contact by &lt; 0.04um on one side,
+                        adjacent metal1 edges overlap : 0.06µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>CO.7</name>
+   <description>CO.7 : Space from COMP contact to Poly2 on COMP. : 0.15µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>CO.8</name>
+   <description>CO.8 : Space from Poly2 contact to COMP. : 0.17µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>CO.9</name>
+   <description>CO.9 : Contact on NCOMP to PCOMP butting edge is forbidden (contact must not straddle butting edge).</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>CO.10</name>
+   <description>CO.10 : Contact on Poly2 gate over COMP is forbidden.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>CO.11</name>
+   <description>CO.11 : Contact on field oxide is forbidden.</description>
+   <categories>
+   </categories>
+  </category>
+ </categories>
+ <cells>
+  <cell>
+   <name>NanoCGRA_Lite</name>
+   <variant/>
+   <references>
+   </references>
+  </cell>
+ </cells>
+ <items>
+ </items>
+</report-database>

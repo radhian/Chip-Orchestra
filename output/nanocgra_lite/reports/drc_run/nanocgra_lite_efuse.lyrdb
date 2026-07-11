@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<report-database>
+ <description>DRC Run Report at</description>
+ <original-file/>
+ <generator>drc: script='@1*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/efuse.drc*0;179*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/layers_def.drc*-178;815*/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/output/nanocgra_lite/reports/drc_run/efuse.drc*-635;'</generator>
+ <top-cell>NanoCGRA_Lite</top-cell>
+ <tags>
+ </tags>
+ <categories>
+  <category>
+   <name>EF.01</name>
+   <description>EF.01 : Min. (Poly2 butt PLFUSE) within EFUSE_MK and Pplus: 0um</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>EF.02</name>
+   <description>EF.02 : Min./Max. PLFUSE width: 0.18µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>EF.03</name>
+   <description>EF.03 : Min. Max. PLFUSE length: 1.26µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>EF.04a</name>
+   <description>EF.04a : Min. Max. PLFUSE overlap Poly2
+                (coinciding permitted) and touch cathode and anode.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>EF.04b</name>
+   <description>EF.04b : PLFUSE must be rectangular.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>EF.04c</name>
+   <description>EF.04c : Cathode Poly2 must be rectangular.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>EF.04d</name>
+   <description>EF.04d : Anode Poly2 must be rectangular.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>EF.05</name>
+   <description>EF.05 : Min./Max. LVS_Source overlap Poly2 (at Anode): 0um</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>EF.06</name>
+   <description>EF.06 : Min./Max. Cathode Poly2 width: 2.26µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>EF.07</name>
+   <description>EF.07 : Min./Max. Cathode Poly2 length: 1.84µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>EF.08</name>
+   <description>EF.08 : Min./Max. Anode Poly2 width: 1.06µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>EF.09</name>
+   <description>EF.09 : Min./Max. Anode Poly2 length: 2.43µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>EF.10</name>
+   <description>EF.10 : Min. Cathode Poly2 to Poly2 space: 0.26µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>EF.11</name>
+   <description>EF.11 : Min. Anode Poly2 to Poly2 space: 0.26µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>EF.12</name>
+   <description>EF.12 : Min. Space of Cathode Contact to PLFUSE end.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>EF.13</name>
+   <description>EF.13 : Min. Space of Anode Contact to PLFUSE end.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>EF.14</name>
+   <description>EF.14 : Min. EFUSE_MK enclose LVS_Source.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>EF.15</name>
+   <description>EF.15 : NO Contact is allowed to touch PLFUSE.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>EF.16a</name>
+   <description>EF.16a : Cathode must contain exact number of Contacts at each ends: 4µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>EF.16b</name>
+   <description>EF.16b : Anode must contain exact number of Contacts at each ends: 4µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>EF.17</name>
+   <description>EF.17 : Min. Space of EFUSE_MK to EFUSE_MK: 0.26µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>EF.18</name>
+   <description>EF.18 : PLFUSE must sit on field oxide (NOT COMP), no cross with any
+                COMP, Nplus, Pplus, ESD, SAB, Resistor, Metal1, Metal2.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>EF.19</name>
+   <description>EF.19 : Min. PLFUSE space to Metal1, Metal2.</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>EF.20</name>
+   <description>EF.20 : Min. PLFUSE space to COMP, Nplus, Pplus, Resistor, ESD, SAB: 2.73µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>EF.21</name>
+   <description>EF.21 : Min./Max. eFUSE Poly2 length: 5.53µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>EF.22a</name>
+   <description>EF.22a : Min./Max. Cathode Poly2 overlap with PLFUSE in width direction: 1.04µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>EF.22b</name>
+   <description>EF.22b : Min./Max. Anode Poly2 overlap with PLFUSE in width direction: 0.44µm</description>
+   <categories>
+   </categories>
+  </category>
+ </categories>
+ <cells>
+  <cell>
+   <name>NanoCGRA_Lite</name>
+   <variant/>
+   <references>
+   </references>
+  </cell>
+ </cells>
+ <items>
+ </items>
+</report-database>
