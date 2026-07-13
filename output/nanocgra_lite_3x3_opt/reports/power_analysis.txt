@@ -1,0 +1,53 @@
+================================================================
+ POWER ANALYSIS REPORT  -  NanoCGRA_Lite 3x3 OPT (9 PE / 32B SRAM / UART-only)
+ PDK: GlobalFoundries gf180mcuD / gf180mcu_fd_sc_mcu7t5v0 (tt_025C_5v00)
+ Tool: OpenROAD report_power (top, routed ODB)
+ Clock: 10 MHz (100 ns period).  Supply: 5.0 V.
+ Switching activity: OpenROAD set_power_activity using sister GLS-derived activity reference
+ Date: 2026-07-12
+================================================================
+
+TOP-LEVEL POWER  (routed ODB, estimate_parasitics)
+  ODB: output/nanocgra_lite_3x3_opt/pnr/nanocgra_lite_3x3_opt.odb
+  Liberty: .pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/lib/gf180mcu_fd_sc_mcu7t5v0__tt_025C_5v00.lib
+  global activity = 0.00542   duty = 0.44217
+  input  activity = 0.05712   duty = 0.50424
+----------------------------------------------------------------------------
+  Group            Internal      Switching     Leakage       Total
+  Sequential       3.240005e-03  1.375979e-05  1.299840e-07  3.253895e-03  (69.6%)
+  Combinational    5.728034e-04  8.468998e-04  9.963333e-07  1.420700e-03  (30.4%)
+  Macro            0             0             0             0             (0.0%)
+  Pad              0             0             0             0             (0.0%)
+  --------------------------------------------------------------------------
+  TOTAL            3.812809e-03  8.606596e-04  1.126304e-06  4.674595e-03  (100%)
+                   (81.6%)       (18.4%)       (0.02%)
+
+  >>> TOTAL POWER = 4.675 mW  <<<
+      Internal   : 3.813 mW  (81.6%)
+      Switching  : 0.861 mW  (18.4%)
+      Leakage    : 0.00113 mW (0.02%)
+      Sequential vs Combinational split: 69.6% / 30.4%
+
+COMMAND / TCL
+----------------------------------------------------------------------------
+  export PDK_ROOT=/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk
+  ./.mamba/bin/openroad output/nanocgra_lite_3x3_opt/reports/gls_work/power_top.tcl
+
+  read_liberty .pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/lib/gf180mcu_fd_sc_mcu7t5v0__tt_025C_5v00.lib
+  read_db output/nanocgra_lite_3x3_opt/pnr/nanocgra_lite_3x3_opt.odb
+  create_clock -name clk -period 100.0 [get_ports clk]
+  set_propagated_clock [all_clocks]
+  set_wire_rc -signal -layer Metal3
+  set_wire_rc -clock  -layer Metal4
+  estimate_parasitics -placement
+  set_power_activity -global -activity 0.00542 -duty 0.44217
+  set_power_activity -input  -activity 0.05712 -duty 0.50424
+  report_power -digits 6
+
+OBSERVATIONS
+----------------------------------------------------------------------------
+- Total post-route estimated power is 4.675 mW at 10 MHz.
+- Internal power dominates (81.6%), with switching at 18.4% and leakage near 1.13 uW.
+- The added UART-bridge/control logic raises the combinational fraction slightly versus
+  the sister 3x3/32B parallel-bus variant, while the design remains sequential-dominated.
+================================================================

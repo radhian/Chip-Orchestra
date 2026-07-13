@@ -1,0 +1,44 @@
+==============================================================================
+  GF180MCU DRC Sign-off Report  --  NanoCGRA-Lite OPT 3x3 (9 PE / 32B / 4-pin UART)
+==============================================================================
+Tool        : KLayout 0.28.5 (python module) + GF180MCU DRC deck
+DRC deck    : $PDK_ROOT/gf180mcuD/libs.tech/klayout/drc/run_drc.py
+Input GDS   : output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds
+Top cell    : NanoCGRA_Lite
+Variant     : D  (metal_top=11K, mim_option=B, metal_level=5LM  -- 5 metal layers)
+Run mode    : deep   (multi-core, --mp=4)
+Checks run  : FEOL + BEOL + connectivity + offgrid (default deck)
+              (density and antenna optional checks not included)
+Result DBs  : 41 per-rule-table .lyrdb files
+Total violating items (all tables) : 0
+Date        : 2026-07-12
+==============================================================================
+
+RESULT
+------------------------------------------------------------------------------
+  KLayout DRC run is CLEAN.  GDS has NO DRC violations.
+------------------------------------------------------------------------------
+
+Per-table run summary (all tables reported 0 violating polygons):
+  FEOL (comp, poly, contact, dualgate, well/implants) ......... CLEAN
+  BEOL (metal1..metal5, via1..via4, metaltop) ................. CLEAN
+  Connectivity / geometry (geom) ............................. CLEAN
+  ESD / latch-up marker layers ............................... CLEAN
+  Off-grid ................................................... CLEAN
+
+Detailed per-rule databases are stored under:
+  output/nanocgra_lite_3x3_opt/reports/drc_run/*.lyrdb
+Console log:
+  output/nanocgra_lite_3x3_opt/logs/drc.log
+
+Notes
+------------------------------------------------------------------------------
+- The layout is a fully-placed-and-routed OpenROAD implementation on the
+  gf180mcu_fd_sc_mcu7t5v0 (7-track, 5V) standard-cell library streamed to GDS
+  with real standard-cell device geometry merged in (macro_resolution_mode=2).
+- The optimized variant exposes only 4 I/O pins (clk, rst_n, uart_rx, uart_tx);
+  the parallel host bus is fully internal. Pin count reduction does not affect
+  the DRC verdict, which remains CLEAN.
+- Density and antenna checks are optional for this block-level, single-macro
+  test chip and were intentionally excluded from the default deck run.
+==============================================================================

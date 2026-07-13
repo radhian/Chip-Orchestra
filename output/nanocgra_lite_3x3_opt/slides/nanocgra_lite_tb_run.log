@@ -1,0 +1,5 @@
+PASS  SRAM_uart  expected=123  actual=123
+PASS  CGRA_ADD  expected=8  actual=8
+PASS  CGRA_MUL  expected=144  actual=144
+PASS  CGRA_XOR  expected=85  actual=85
+Result: PASSED

@@ -1,0 +1,5 @@
+After DEF read: 115 cells
+   top: NanoCGRA_Lite
+After cell GDS merge: 345 cells
+After prune: 345 cells
+WROTE output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds

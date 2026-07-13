@@ -1,0 +1,14 @@
+PASS  OP_ADD  expected=8  actual=8
+PASS  OP_SUB  expected=6  actual=6
+PASS  OP_AND  expected=48  actual=48
+PASS  OP_OR  expected=255  actual=255
+PASS  OP_XOR  expected=85  actual=85
+PASS  OP_MUL  expected=144  actual=144
+PASS  OP_PASS  expected=77  actual=77
+PASS  ROUTE_N  expected=27  actual=27
+PASS  ROUTE_S  expected=28  actual=28
+PASS  ROUTE_E  expected=29  actual=29
+PASS  ROUTE_W  expected=26  actual=26
+PASS  CFG_REWRITE  expected=255  actual=255
+PASS  OP_MAC  expected=48  actual=48
+Result: PASSED

@@ -1,0 +1,386 @@
+
+Magic 8.3 revision 465 - Compiled on Tue Mar 19 23:17:55 UTC 2024.
+Starting magic under Tcl interpreter
+Using the terminal as the console.
+Using NULL graphics device.
+Processing system .magicrc file
+Sourcing design .magicrc for technology gf180mcuD ...
+10 Magic internal units = 1 Lambda
+Input style import: scaleFactor=10, multiplier=2
+The following types are not handled by extraction and will be treated as non-electrical types:
+    obsactive mvobsactive filldiff fillpoly m1hole obsm1 fillm1 obsv1 m2hole obsm2 fillm2 obsv2 m3hole obsm3 fillm3 m4hole obsm4 fillm4 m5hole obsm5 fillm5 glass fillblock lvstext obscomment 
+Scaled tech values by 10 / 1 to match internal grid scaling
+Loading gf180mcuD Device Generator Menu ...
+Loading "extract_def.tcl" from command line.
+Reading LEF data from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/techlef/gf180mcu_fd_sc_mcu7t5v0__nom.tlef.
+This action cannot be undone.
+LEF read, Line 88 (Message): Unknown keyword "MINWIDTH" in LEF file; ignoring.
+LEF read, Line 95 (Message): Unknown keyword "ANTENNAMODEL" in LEF file; ignoring.
+LEF read, Line 105 (Message): Unknown keyword "DENSITYCHECKWINDOW" in LEF file; ignoring.
+LEF read, Line 106 (Message): Unknown keyword "DENSITYCHECKSTEP" in LEF file; ignoring.
+LEF read, Line 120 (Message): Unknown keyword "ARRAYSPACING" in LEF file; ignoring.
+LEF read, Line 125 (Message): Unknown keyword "ANTENNAMODEL" in LEF file; ignoring.
+LEF read, Line 137 (Message): Unknown keyword "MINWIDTH" in LEF file; ignoring.
+LEF read, Line 144 (Message): Unknown keyword "ANTENNAMODEL" in LEF file; ignoring.
+LEF read, Line 145 (Message): Unknown keyword "ANTENNADIFFSIDEAREARATIO" in LEF file; ignoring.
+LEF read, Line 146 (Message): Unknown keyword "ANTENNAGATEPLUSDIFF" in LEF file; ignoring.
+LEF read, Line 155 (Message): Unknown keyword "DENSITYCHECKWINDOW" in LEF file; ignoring.
+LEF read, Line 156 (Message): Unknown keyword "DENSITYCHECKSTEP" in LEF file; ignoring.
+LEF read, Line 172 (Message): Unknown keyword "ARRAYSPACING" in LEF file; ignoring.
+LEF read, Line 177 (Message): Unknown keyword "ANTENNAMODEL" in LEF file; ignoring.
+LEF read, Line 189 (Message): Unknown keyword "MINWIDTH" in LEF file; ignoring.
+LEF read, Line 196 (Message): Unknown keyword "ANTENNAMODEL" in LEF file; ignoring.
+LEF read, Line 197 (Message): Unknown keyword "ANTENNADIFFSIDEAREARATIO" in LEF file; ignoring.
+LEF read, Line 198 (Message): Unknown keyword "ANTENNAGATEPLUSDIFF" in LEF file; ignoring.
+LEF read, Line 207 (Message): Unknown keyword "DENSITYCHECKWINDOW" in LEF file; ignoring.
+LEF read, Line 208 (Message): Unknown keyword "DENSITYCHECKSTEP" in LEF file; ignoring.
+LEF read, Line 224 (Message): Unknown keyword "ARRAYSPACING" in LEF file; ignoring.
+LEF read, Line 229 (Message): Unknown keyword "ANTENNAMODEL" in LEF file; ignoring.
+LEF read, Line 241 (Message): Unknown keyword "MINWIDTH" in LEF file; ignoring.
+LEF read, Line 248 (Message): Unknown keyword "ANTENNAMODEL" in LEF file; ignoring.
+LEF read, Line 249 (Message): Unknown keyword "ANTENNADIFFSIDEAREARATIO" in LEF file; ignoring.
+LEF read, Line 250 (Message): Unknown keyword "ANTENNAGATEPLUSDIFF" in LEF file; ignoring.
+LEF read, Line 259 (Message): Unknown keyword "DENSITYCHECKWINDOW" in LEF file; ignoring.
+LEF read, Line 260 (Message): Unknown keyword "DENSITYCHECKSTEP" in LEF file; ignoring.
+LEF read, Line 276 (Message): Unknown keyword "ARRAYSPACING" in LEF file; ignoring.
+LEF read, Line 281 (Message): Unknown keyword "ANTENNAMODEL" in LEF file; ignoring.
+LEF read, Line 295 (Message): Unknown keyword "MINWIDTH" in LEF file; ignoring.
+LEF read, Line 307 (Message): Unknown keyword "ANTENNAMODEL" in LEF file; ignoring.
+LEF read, Line 308 (Message): Unknown keyword "ANTENNADIFFSIDEAREARATIO" in LEF file; ignoring.
+LEF read, Line 309 (Message): Unknown keyword "ANTENNAGATEPLUSDIFF" in LEF file; ignoring.
+LEF read, Line 314 (Message): Unknown keyword "DENSITYCHECKWINDOW" in LEF file; ignoring.
+LEF read, Line 315 (Message): Unknown keyword "DENSITYCHECKSTEP" in LEF file; ignoring.
+LEF read: Processed 1319 lines.
+Reading DEF data from file ../../pnr/nanocgra_lite_3x3_opt.def.
+This action cannot be undone.
+  Processed 4 vias total.
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__fill_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__fill_4.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__fill_4 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Scaled magic input cell gf180mcu_fd_sc_mcu7t5v0__fill_4 geometry by factor of 2
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__fill_32> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__fill_32.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__fill_32 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Scaled magic input cell gf180mcu_fd_sc_mcu7t5v0__fill_32 geometry by factor of 2
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__fill_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__fill_2.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__fill_2 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Scaled magic input cell gf180mcu_fd_sc_mcu7t5v0__fill_2 geometry by factor of 2
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__fill_8> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__fill_8.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__fill_8 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Scaled magic input cell gf180mcu_fd_sc_mcu7t5v0__fill_8 geometry by factor of 2
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__fill_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__fill_1.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__fill_1 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Scaled magic input cell gf180mcu_fd_sc_mcu7t5v0__fill_1 geometry by factor of 2
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__fill_16> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__fill_16.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__fill_16 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Scaled magic input cell gf180mcu_fd_sc_mcu7t5v0__fill_16 geometry by factor of 2
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__fill_64> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__fill_64.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__fill_64 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Scaled magic input cell gf180mcu_fd_sc_mcu7t5v0__fill_64 geometry by factor of 2
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__endcap> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__endcap.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__endcap read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__filltie> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__filltie.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__filltie read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__clkinv_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__clkinv_2.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__clkinv_2 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__inv_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__inv_2.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__inv_2 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__clkinv_3> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__clkinv_3.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__clkinv_3 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__inv_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__inv_1.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__inv_1 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__clkinv_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__clkinv_1.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__clkinv_1 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__inv_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__inv_4.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__inv_4 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__clkinv_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__clkinv_4.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__clkinv_4 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__inv_3> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__inv_3.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__inv_3 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__clkinv_8> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__clkinv_8.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__clkinv_8 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__inv_8> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__inv_8.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__inv_8 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__clkinv_12> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__clkinv_12.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__clkinv_12 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__clkinv_20> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__clkinv_20.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__clkinv_20 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__nor2_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__nor2_1.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__nor2_1 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__nor3_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__nor3_2.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__nor3_2 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__nor2_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__nor2_4.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__nor2_4 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__and3_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__and3_4.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__and3_4 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__and2_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__and2_2.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__and2_2 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__aoi222_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__aoi222_2.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__aoi222_2 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__nor3_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__nor3_4.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__nor3_4 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__nand4_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__nand4_4.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__nand4_4 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__aoi221_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__aoi221_4.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__aoi221_4 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__nand2_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__nand2_1.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__nand2_1 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__nand3_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__nand3_1.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__nand3_1 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__nor4_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__nor4_2.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__nor4_2 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__nand4_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__nand4_1.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__nand4_1 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__oai211_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__oai211_1.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__oai211_1 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__nor4_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__nor4_1.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__nor4_1 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__nand4_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__nand4_2.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__nand4_2 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__nor4_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__nor4_4.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__nor4_4 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__nand2_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__nand2_4.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__nand2_4 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__and3_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__and3_1.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__and3_1 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__and2_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__and2_1.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__and2_1 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__aoi22_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__aoi22_1.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__aoi22_1 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__or3_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__or3_1.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__or3_1 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__aoi21_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__aoi21_1.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__aoi21_1 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__oai22_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__oai22_1.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__oai22_1 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__or3_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__or3_4.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__or3_4 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__oai21_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__oai21_1.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__oai21_1 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__nor3_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__nor3_1.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__nor3_1 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__nand2_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__nand2_2.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__nand2_2 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__nand3_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__nand3_4.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__nand3_4 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__and3_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__and3_2.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__and3_2 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__aoi211_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__aoi211_1.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__aoi211_1 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__nor2_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__nor2_2.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__nor2_2 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__mux2_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__mux2_2.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__mux2_2 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__aoi21_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__aoi21_4.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__aoi21_4 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__mux2_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__mux2_4.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__mux2_4 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__and2_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__and2_4.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__and2_4 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__aoi22_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__aoi22_2.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__aoi22_2 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__aoi22_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__aoi22_4.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__aoi22_4 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__or2_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__or2_2.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__or2_2 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__aoi221_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__aoi221_1.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__aoi221_1 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__or3_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__or3_2.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__or3_2 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__or2_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__or2_1.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__or2_1 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__or4_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__or4_2.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__or4_2 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__or2_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__or2_4.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__or2_4 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__aoi221_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__aoi221_2.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__aoi221_2 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__nand3_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__nand3_2.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__nand3_2 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__xnor2_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__xnor2_1.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__xnor2_1 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__xor2_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__xor2_1.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__xor2_1 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__oai31_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__oai31_1.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__oai31_1 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__oai31_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__oai31_2.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__oai31_2 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__aoi21_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__aoi21_2.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__aoi21_2 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__oai21_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__oai21_4.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__oai21_4 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__xor3_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__xor3_1.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__xor3_1 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__oai221_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__oai221_1.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__oai221_1 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__oai22_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__oai22_2.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__oai22_2 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__xnor3_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__xnor3_1.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__xnor3_1 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__or4_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__or4_1.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__or4_1 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__oai32_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__oai32_1.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__oai32_1 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__mux2_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__mux2_1.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__mux2_1 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__oai22_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__oai22_4.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__oai22_4 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__oai21_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__oai21_2.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__oai21_2 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__oai221_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__oai221_2.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__oai221_2 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__oai32_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__oai32_2.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__oai32_2 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__and4_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__and4_1.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__and4_1 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__aoi211_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__aoi211_2.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__aoi211_2 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__oai222_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__oai222_2.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__oai222_2 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__oai31_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__oai31_4.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__oai31_4 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__oai211_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__oai211_4.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__oai211_4 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__mux4_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__mux4_4.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__mux4_4 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__oai211_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__oai211_2.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__oai211_2 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__aoi222_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__aoi222_4.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__aoi222_4 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__oai32_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__oai32_4.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__oai32_4 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__aoi222_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__aoi222_1.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__aoi222_1 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__xnor2_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__xnor2_2.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__xnor2_2 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__xor3_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__xor3_2.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__xor3_2 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__aoi211_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__aoi211_4.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__aoi211_4 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__oai33_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__oai33_2.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__oai33_2 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__dffq_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__dffq_1.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__dffq_1 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__dffq_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__dffq_2.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__dffq_2 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__dffq_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__dffq_4.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__dffq_4 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__clkbuf_16> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__clkbuf_16.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__clkbuf_16 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__buf_16> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__buf_16.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__buf_16 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__buf_8> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__buf_8.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__buf_8 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__buf_12> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__buf_12.mag is not writeable
+Cell gf180mcu_fd_sc_mcu7t5v0__buf_12 read from path /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag
+  Processed 12035 subcell instances total.
+  Processed 4 pins total.
+  Processed 2 special nets total.
+  Processed 5339 nets total.
+DEF read: Processed 109487 lines.
+Extracting gf180mcu_fd_sc_mcu7t5v0__endcap into gf180mcu_fd_sc_mcu7t5v0__endcap.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__fill_1 into gf180mcu_fd_sc_mcu7t5v0__fill_1.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__fill_8 into gf180mcu_fd_sc_mcu7t5v0__fill_8.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__fill_2 into gf180mcu_fd_sc_mcu7t5v0__fill_2.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__filltie into gf180mcu_fd_sc_mcu7t5v0__filltie.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__nor2_1 into gf180mcu_fd_sc_mcu7t5v0__nor2_1.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__and2_1 into gf180mcu_fd_sc_mcu7t5v0__and2_1.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__nor3_1 into gf180mcu_fd_sc_mcu7t5v0__nor3_1.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__dffq_1 into gf180mcu_fd_sc_mcu7t5v0__dffq_1.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__fill_32 into gf180mcu_fd_sc_mcu7t5v0__fill_32.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__fill_4 into gf180mcu_fd_sc_mcu7t5v0__fill_4.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__or2_1 into gf180mcu_fd_sc_mcu7t5v0__or2_1.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__dffq_2 into gf180mcu_fd_sc_mcu7t5v0__dffq_2.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__nand2_1 into gf180mcu_fd_sc_mcu7t5v0__nand2_1.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__oai21_1 into gf180mcu_fd_sc_mcu7t5v0__oai21_1.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__fill_16 into gf180mcu_fd_sc_mcu7t5v0__fill_16.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__or3_1 into gf180mcu_fd_sc_mcu7t5v0__or3_1.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__and4_1 into gf180mcu_fd_sc_mcu7t5v0__and4_1.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__xnor3_1 into gf180mcu_fd_sc_mcu7t5v0__xnor3_1.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__nand3_1 into gf180mcu_fd_sc_mcu7t5v0__nand3_1.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__xor3_1 into gf180mcu_fd_sc_mcu7t5v0__xor3_1.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__aoi21_1 into gf180mcu_fd_sc_mcu7t5v0__aoi21_1.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__clkinv_1 into gf180mcu_fd_sc_mcu7t5v0__clkinv_1.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__fill_64 into gf180mcu_fd_sc_mcu7t5v0__fill_64.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__clkinv_20 into gf180mcu_fd_sc_mcu7t5v0__clkinv_20.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__nand4_2 into gf180mcu_fd_sc_mcu7t5v0__nand4_2.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__aoi22_1 into gf180mcu_fd_sc_mcu7t5v0__aoi22_1.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__inv_3 into gf180mcu_fd_sc_mcu7t5v0__inv_3.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__nor3_2 into gf180mcu_fd_sc_mcu7t5v0__nor3_2.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__xnor2_1 into gf180mcu_fd_sc_mcu7t5v0__xnor2_1.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__nand4_1 into gf180mcu_fd_sc_mcu7t5v0__nand4_1.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__oai22_1 into gf180mcu_fd_sc_mcu7t5v0__oai22_1.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__xor2_1 into gf180mcu_fd_sc_mcu7t5v0__xor2_1.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__aoi221_1 into gf180mcu_fd_sc_mcu7t5v0__aoi221_1.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__nand3_2 into gf180mcu_fd_sc_mcu7t5v0__nand3_2.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__nor4_1 into gf180mcu_fd_sc_mcu7t5v0__nor4_1.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__dffq_4 into gf180mcu_fd_sc_mcu7t5v0__dffq_4.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__and3_1 into gf180mcu_fd_sc_mcu7t5v0__and3_1.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__nand2_4 into gf180mcu_fd_sc_mcu7t5v0__nand2_4.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__oai31_2 into gf180mcu_fd_sc_mcu7t5v0__oai31_2.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__aoi211_1 into gf180mcu_fd_sc_mcu7t5v0__aoi211_1.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__nor4_4 into gf180mcu_fd_sc_mcu7t5v0__nor4_4.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__buf_8 into gf180mcu_fd_sc_mcu7t5v0__buf_8.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__clkinv_2 into gf180mcu_fd_sc_mcu7t5v0__clkinv_2.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__inv_2 into gf180mcu_fd_sc_mcu7t5v0__inv_2.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__nand3_4 into gf180mcu_fd_sc_mcu7t5v0__nand3_4.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__nand2_2 into gf180mcu_fd_sc_mcu7t5v0__nand2_2.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__oai22_2 into gf180mcu_fd_sc_mcu7t5v0__oai22_2.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__oai31_1 into gf180mcu_fd_sc_mcu7t5v0__oai31_1.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__nor2_2 into gf180mcu_fd_sc_mcu7t5v0__nor2_2.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__oai32_1 into gf180mcu_fd_sc_mcu7t5v0__oai32_1.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__clkbuf_16 into gf180mcu_fd_sc_mcu7t5v0__clkbuf_16.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__clkinv_8 into gf180mcu_fd_sc_mcu7t5v0__clkinv_8.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__nor2_4 into gf180mcu_fd_sc_mcu7t5v0__nor2_4.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__oai221_2 into gf180mcu_fd_sc_mcu7t5v0__oai221_2.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__nand4_4 into gf180mcu_fd_sc_mcu7t5v0__nand4_4.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__clkinv_12 into gf180mcu_fd_sc_mcu7t5v0__clkinv_12.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__oai32_2 into gf180mcu_fd_sc_mcu7t5v0__oai32_2.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__xor3_2 into gf180mcu_fd_sc_mcu7t5v0__xor3_2.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__aoi21_2 into gf180mcu_fd_sc_mcu7t5v0__aoi21_2.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__xnor2_2 into gf180mcu_fd_sc_mcu7t5v0__xnor2_2.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__oai33_2 into gf180mcu_fd_sc_mcu7t5v0__oai33_2.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__and3_2 into gf180mcu_fd_sc_mcu7t5v0__and3_2.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__aoi221_2 into gf180mcu_fd_sc_mcu7t5v0__aoi221_2.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__inv_1 into gf180mcu_fd_sc_mcu7t5v0__inv_1.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__nor4_2 into gf180mcu_fd_sc_mcu7t5v0__nor4_2.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__oai211_1 into gf180mcu_fd_sc_mcu7t5v0__oai211_1.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__mux2_1 into gf180mcu_fd_sc_mcu7t5v0__mux2_1.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__aoi22_2 into gf180mcu_fd_sc_mcu7t5v0__aoi22_2.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__oai211_2 into gf180mcu_fd_sc_mcu7t5v0__oai211_2.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__and2_4 into gf180mcu_fd_sc_mcu7t5v0__and2_4.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__aoi222_2 into gf180mcu_fd_sc_mcu7t5v0__aoi222_2.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__oai221_1 into gf180mcu_fd_sc_mcu7t5v0__oai221_1.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__oai21_2 into gf180mcu_fd_sc_mcu7t5v0__oai21_2.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__oai211_4 into gf180mcu_fd_sc_mcu7t5v0__oai211_4.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__clkinv_3 into gf180mcu_fd_sc_mcu7t5v0__clkinv_3.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__clkinv_4 into gf180mcu_fd_sc_mcu7t5v0__clkinv_4.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__aoi211_2 into gf180mcu_fd_sc_mcu7t5v0__aoi211_2.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__or2_2 into gf180mcu_fd_sc_mcu7t5v0__or2_2.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__or3_2 into gf180mcu_fd_sc_mcu7t5v0__or3_2.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__aoi211_4 into gf180mcu_fd_sc_mcu7t5v0__aoi211_4.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__aoi21_4 into gf180mcu_fd_sc_mcu7t5v0__aoi21_4.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__aoi22_4 into gf180mcu_fd_sc_mcu7t5v0__aoi22_4.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__nor3_4 into gf180mcu_fd_sc_mcu7t5v0__nor3_4.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__inv_4 into gf180mcu_fd_sc_mcu7t5v0__inv_4.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__oai22_4 into gf180mcu_fd_sc_mcu7t5v0__oai22_4.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__mux4_4 into gf180mcu_fd_sc_mcu7t5v0__mux4_4.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__aoi221_4 into gf180mcu_fd_sc_mcu7t5v0__aoi221_4.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__and3_4 into gf180mcu_fd_sc_mcu7t5v0__and3_4.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__oai32_4 into gf180mcu_fd_sc_mcu7t5v0__oai32_4.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__oai31_4 into gf180mcu_fd_sc_mcu7t5v0__oai31_4.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__aoi222_4 into gf180mcu_fd_sc_mcu7t5v0__aoi222_4.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__and2_2 into gf180mcu_fd_sc_mcu7t5v0__and2_2.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__oai21_4 into gf180mcu_fd_sc_mcu7t5v0__oai21_4.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__or4_2 into gf180mcu_fd_sc_mcu7t5v0__or4_2.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__or2_4 into gf180mcu_fd_sc_mcu7t5v0__or2_4.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__mux2_4 into gf180mcu_fd_sc_mcu7t5v0__mux2_4.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__or3_4 into gf180mcu_fd_sc_mcu7t5v0__or3_4.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__mux2_2 into gf180mcu_fd_sc_mcu7t5v0__mux2_2.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__buf_16 into gf180mcu_fd_sc_mcu7t5v0__buf_16.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__aoi222_1 into gf180mcu_fd_sc_mcu7t5v0__aoi222_1.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__buf_12 into gf180mcu_fd_sc_mcu7t5v0__buf_12.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__oai222_2 into gf180mcu_fd_sc_mcu7t5v0__oai222_2.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__inv_8 into gf180mcu_fd_sc_mcu7t5v0__inv_8.ext:
+Extracting gf180mcu_fd_sc_mcu7t5v0__or4_1 into gf180mcu_fd_sc_mcu7t5v0__or4_1.ext:
+Extracting NanoCGRA_Lite into NanoCGRA_Lite.ext:
+exttospice finished.
+MAGIC_DEF_EXTRACT_DONE

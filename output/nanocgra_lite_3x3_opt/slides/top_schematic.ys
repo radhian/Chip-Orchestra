@@ -1,0 +1,14 @@
+# Coarse hierarchical top-level schematic (submodules as boxes) for synth_schematic.png
+# NanoCGRA-Lite 3x3 OPT (4-pin UART-only). Includes the new uart_bridge master.
+read_verilog -I output/nanocgra_lite_3x3_opt/rtl output/nanocgra_lite_3x3_opt/rtl/sram.v
+read_verilog -I output/nanocgra_lite_3x3_opt/rtl output/nanocgra_lite_3x3_opt/rtl/pe.v
+read_verilog -I output/nanocgra_lite_3x3_opt/rtl output/nanocgra_lite_3x3_opt/rtl/cgra.v
+read_verilog -I output/nanocgra_lite_3x3_opt/rtl output/nanocgra_lite_3x3_opt/rtl/uart.v
+read_verilog -I output/nanocgra_lite_3x3_opt/rtl output/nanocgra_lite_3x3_opt/rtl/bus_decoder.v
+read_verilog -I output/nanocgra_lite_3x3_opt/rtl output/nanocgra_lite_3x3_opt/rtl/nano_controller.v
+read_verilog -I output/nanocgra_lite_3x3_opt/rtl output/nanocgra_lite_3x3_opt/rtl/uart_bridge.v
+read_verilog -I output/nanocgra_lite_3x3_opt/rtl output/nanocgra_lite_3x3_opt/rtl/nanocgra_lite.v
+hierarchy -top NanoCGRA_Lite
+proc
+opt_clean
+show -format dot -prefix output/nanocgra_lite_3x3_opt/slides/synth_schematic -notitle NanoCGRA_Lite
