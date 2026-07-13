@@ -8,10 +8,9 @@ NanoCGRA-Lite is a minimal coarse-grained reconfigurable array (CGRA) soft-IP bu
 graph TD
     CLK[clk] --> TOP[NanoCGRA_Lite top]
     RST[rst_n] --> TOP
-    RX[uart_rx] --> UART
-    UART --> TX[uart_tx]
 
     subgraph TOP_BOX[NanoCGRA_Lite top]
+        CTRL[NanoController<br/>FSM]
         UART[uart_bridge.v<br/>UART FSM]
         SRAM[SRAM<br/>32×8]
 
@@ -28,8 +27,11 @@ graph TD
         end
     end
 
-    UART <-->|cfg_addr / cfg_we / cfg_wdata / cfg_rdata| CGRA
-    UART <-->|bus_addr / bus_we / bus_wdata / bus_rdata| SRAM
+    UART <-->|decoded command / response| CTRL
+    CTRL <-->|cfg_addr / cfg_we / cfg_wdata / cfg_rdata| CGRA
+    CTRL <-->|bus_addr / bus_we / bus_wdata / bus_rdata| SRAM
+    RX[uart_rx] --> UART
+    UART --> TX[uart_tx]
 
     PE00 <-->|E/W| PE01
     PE01 <-->|E/W| PE02
@@ -126,7 +128,25 @@ graph LR
     PE12 <-->|N/S| PE22
 ```
 
-## 4. UART Packet Protocol
+## 4. NanoController FSM
+
+```mermaid
+stateDiagram-v2
+    [*] --> IDLE
+    IDLE --> DECODE: UART byte received
+    DECODE --> WRITE: 0x01 = WRITE
+    DECODE --> READ: 0x02 = READ
+    DECODE --> RUN: 0x03 = RUN
+
+    WRITE --> WAIT: bus_addr / bus_we / bus_wdata
+    READ --> WAIT: bus_addr / bus_rdata
+    RUN --> DONE: cfg_addr / cfg_we / cfg_wdata
+
+    WAIT --> DONE: cfg_rdata / bus_rdata valid
+    DONE --> IDLE: response sent / clear busy
+```
+
+## 5. UART Packet Protocol
 
 ```mermaid
 sequenceDiagram
@@ -148,7 +168,7 @@ sequenceDiagram
     UART_TX-->>Host: readback / ack response
 ```
 
-## 5. Synthesis Area Breakdown
+## 6. Synthesis Area Breakdown
 
 ```mermaid
 pie title Synthesis Area Breakdown
@@ -158,7 +178,7 @@ pie title Synthesis Area Breakdown
     "Controller/misc" : 8.0
 ```
 
-## 6. Design Metrics Summary
+## 7. Design Metrics Summary
 
 The chart compares the three verified NanoCGRA-Lite variants. Power is plotted as mW×1000 so the values can share a chart with cell area.
 
