@@ -1,0 +1,431 @@
+
+Magic 8.3 revision 105 - Compiled on Mon, 06 Dec 2021 22:32:27 +0200.
+Starting magic under Tcl interpreter
+Using the terminal as the console.
+Using NULL graphics device.
+Processing system .magicrc file
+Loading "extract_def.tcl" from command line.
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 20: section version:
+	Error:  Magic version 8.3.411 is required by this techfile, but this version of magic is 8.3.105.
+Input style import: scaleFactor=10, multiplier=2
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 2614: section drc:
+	Rule type "surround" usage: surround layers1 layers2 distance presence why
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 2635: section drc:
+	Rule type "surround" usage: surround layers1 layers2 distance presence why
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 2689: section drc:
+	Rule type "surround" usage: surround layers1 layers2 distance presence why
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 2693: section drc:
+	Rule type "surround" usage: surround layers1 layers2 distance presence why
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 2717: section drc:
+	Rule type "surround" usage: surround layers1 layers2 distance presence why
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 2726: section drc:
+	Rule type "surround" usage: surround layers1 layers2 distance presence why
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 2745: section drc:
+	Rule type "surround" usage: surround layers1 layers2 distance presence why
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 2754: section drc:
+	Rule type "surround" usage: surround layers1 layers2 distance presence why
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 2780: section drc:
+	Rule type "surround" usage: surround layers1 layers2 distance presence why
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 2782: section drc:
+	Rule type "surround" usage: surround layers1 layers2 distance presence why
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 2810: section drc:
+	Rule type "width" usage: width layers width why
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 2811: section drc:
+	Rule type "width" usage: width layers width why
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 2815: section drc:
+	Rule type "width" usage: width layers width why
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 2816: section drc:
+	Rule type "width" usage: width layers width why
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 2963: section extract:
+	Illegal keyword.  Legal keywords are:
+	 areacap contact cscale defaultareacap defaultoverlap defaultperimeter defaultsideoverlap defaultsidewall device fet fetresist height antenna model tiedown lambda overlap perimc planeorder noplaneordering resist rscale sidehalo sideoverlap sidewall step style substrate units variants
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3216: section extract:
+	Malformed line for keyword defaultsidewall.  Correct usage:
+	defaultsidewall types plane capacitance
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3223: section extract:
+	Malformed line for keyword defaultsidewall.  Correct usage:
+	defaultsidewall types plane capacitance
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3240: section extract:
+	Malformed line for keyword defaultsidewall.  Correct usage:
+	defaultsidewall types plane capacitance
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3262: section extract:
+	Malformed line for keyword defaultsidewall.  Correct usage:
+	defaultsidewall types plane capacitance
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3290: section extract:
+	Malformed line for keyword defaultsidewall.  Correct usage:
+	defaultsidewall types plane capacitance
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3323: section extract:
+	Malformed line for keyword defaultsidewall.  Correct usage:
+	defaultsidewall types plane capacitance
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3390: section extract:
+	Malformed line for keyword defaultsidewall.  Correct usage:
+	defaultsidewall types plane capacitance
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3397: section extract:
+	Malformed line for keyword defaultsidewall.  Correct usage:
+	defaultsidewall types plane capacitance
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3414: section extract:
+	Malformed line for keyword defaultsidewall.  Correct usage:
+	defaultsidewall types plane capacitance
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3436: section extract:
+	Malformed line for keyword defaultsidewall.  Correct usage:
+	defaultsidewall types plane capacitance
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3464: section extract:
+	Malformed line for keyword defaultsidewall.  Correct usage:
+	defaultsidewall types plane capacitance
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3497: section extract:
+	Malformed line for keyword defaultsidewall.  Correct usage:
+	defaultsidewall types plane capacitance
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3563: section extract:
+	Malformed line for keyword defaultsidewall.  Correct usage:
+	defaultsidewall types plane capacitance
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3570: section extract:
+	Malformed line for keyword defaultsidewall.  Correct usage:
+	defaultsidewall types plane capacitance
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3588: section extract:
+	Malformed line for keyword defaultsidewall.  Correct usage:
+	defaultsidewall types plane capacitance
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3609: section extract:
+	Malformed line for keyword defaultsidewall.  Correct usage:
+	defaultsidewall types plane capacitance
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3637: section extract:
+	Malformed line for keyword defaultsidewall.  Correct usage:
+	defaultsidewall types plane capacitance
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3670: section extract:
+	Malformed line for keyword defaultsidewall.  Correct usage:
+	defaultsidewall types plane capacitance
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3796: section extract:
+	Ambiguous layer (type) name "error"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3800: section extract:
+	Ambiguous layer (type) name "error"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3821: section extract:
+	Unrecognized layer (type) name "a1>99.0"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3821: section extract:
+	Ambiguous layer (type) name "error"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3822: section extract:
+	Unrecognized layer (type) name "a1>24.0"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3822: section extract:
+	Ambiguous layer (type) name "error"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3823: section extract:
+	Unrecognized layer (type) name "a1>8.5"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3823: section extract:
+	Ambiguous layer (type) name "error"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3824: section extract:
+	Unrecognized layer (type) name "a1>4.2"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3824: section extract:
+	Ambiguous layer (type) name "error"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3825: section extract:
+	Unrecognized layer (type) name "a1>2.0"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3825: section extract:
+	Ambiguous layer (type) name "error"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3826: section extract:
+	Unrecognized layer (type) name "a1>1.0"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3826: section extract:
+	Ambiguous layer (type) name "error"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3828: section extract:
+	Unrecognized layer (type) name "a1>4.1"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3828: section extract:
+	Ambiguous layer (type) name "error"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3829: section extract:
+	Unrecognized layer (type) name "a1>2.0"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3829: section extract:
+	Ambiguous layer (type) name "error"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3830: section extract:
+	Unrecognized layer (type) name "a1>99.0"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3830: section extract:
+	Ambiguous layer (type) name "error"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3831: section extract:
+	Unrecognized layer (type) name "a1>24.0"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3831: section extract:
+	Ambiguous layer (type) name "error"
+The following sections of /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech contained errors:
+    version
+Reading LEF data from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/techlef/gf180mcu_fd_sc_mcu7t5v0__nom.tlef.
+This action cannot be undone.
+LEF read, Line 59 (Message): Unknown keyword "OBS" in LEF file; ignoring.
+LEF read, Line 88 (Message): Unknown keyword "MINWIDTH" in LEF file; ignoring.
+LEF read, Line 95 (Message): Unknown keyword "ANTENNAMODEL" in LEF file; ignoring.
+LEF read, Line 105 (Message): Unknown keyword "DENSITYCHECKWINDOW" in LEF file; ignoring.
+LEF read, Line 106 (Message): Unknown keyword "DENSITYCHECKSTEP" in LEF file; ignoring.
+LEF read, Line 120 (Message): Unknown keyword "ARRAYSPACING" in LEF file; ignoring.
+LEF read, Line 125 (Message): Unknown keyword "ANTENNAMODEL" in LEF file; ignoring.
+LEF read, Line 137 (Message): Unknown keyword "MINWIDTH" in LEF file; ignoring.
+LEF read, Line 144 (Message): Unknown keyword "ANTENNAMODEL" in LEF file; ignoring.
+LEF read, Line 145 (Message): Unknown keyword "ANTENNADIFFSIDEAREARATIO" in LEF file; ignoring.
+LEF read, Line 146 (Message): Unknown keyword "ANTENNAGATEPLUSDIFF" in LEF file; ignoring.
+LEF read, Line 155 (Message): Unknown keyword "DENSITYCHECKWINDOW" in LEF file; ignoring.
+LEF read, Line 156 (Message): Unknown keyword "DENSITYCHECKSTEP" in LEF file; ignoring.
+LEF read, Line 172 (Message): Unknown keyword "ARRAYSPACING" in LEF file; ignoring.
+LEF read, Line 177 (Message): Unknown keyword "ANTENNAMODEL" in LEF file; ignoring.
+LEF read, Line 189 (Message): Unknown keyword "MINWIDTH" in LEF file; ignoring.
+LEF read, Line 196 (Message): Unknown keyword "ANTENNAMODEL" in LEF file; ignoring.
+LEF read, Line 197 (Message): Unknown keyword "ANTENNADIFFSIDEAREARATIO" in LEF file; ignoring.
+LEF read, Line 198 (Message): Unknown keyword "ANTENNAGATEPLUSDIFF" in LEF file; ignoring.
+LEF read, Line 207 (Message): Unknown keyword "DENSITYCHECKWINDOW" in LEF file; ignoring.
+LEF read, Line 208 (Message): Unknown keyword "DENSITYCHECKSTEP" in LEF file; ignoring.
+LEF read, Line 224 (Message): Unknown keyword "ARRAYSPACING" in LEF file; ignoring.
+LEF read, Line 229 (Message): Unknown keyword "ANTENNAMODEL" in LEF file; ignoring.
+LEF read, Line 241 (Message): Unknown keyword "MINWIDTH" in LEF file; ignoring.
+LEF read, Line 248 (Message): Unknown keyword "ANTENNAMODEL" in LEF file; ignoring.
+LEF read, Line 249 (Message): Unknown keyword "ANTENNADIFFSIDEAREARATIO" in LEF file; ignoring.
+LEF read, Line 250 (Message): Unknown keyword "ANTENNAGATEPLUSDIFF" in LEF file; ignoring.
+LEF read, Line 259 (Message): Unknown keyword "DENSITYCHECKWINDOW" in LEF file; ignoring.
+LEF read, Line 260 (Message): Unknown keyword "DENSITYCHECKSTEP" in LEF file; ignoring.
+LEF read, Line 276 (Message): Unknown keyword "ARRAYSPACING" in LEF file; ignoring.
+LEF read, Line 281 (Message): Unknown keyword "ANTENNAMODEL" in LEF file; ignoring.
+LEF read, Line 295 (Message): Unknown keyword "MINWIDTH" in LEF file; ignoring.
+LEF read, Line 307 (Message): Unknown keyword "ANTENNAMODEL" in LEF file; ignoring.
+LEF read, Line 308 (Message): Unknown keyword "ANTENNADIFFSIDEAREARATIO" in LEF file; ignoring.
+LEF read, Line 309 (Message): Unknown keyword "ANTENNAGATEPLUSDIFF" in LEF file; ignoring.
+LEF read, Line 314 (Message): Unknown keyword "DENSITYCHECKWINDOW" in LEF file; ignoring.
+LEF read, Line 315 (Message): Unknown keyword "DENSITYCHECKSTEP" in LEF file; ignoring.
+LEF read, Line 335 (Warning): Cut size for magic type "(null)" (11 x 11) does not match LEF/DEF
+LEF read, Line 335 (Warning): Via cut size (10 x 10).  Magic layer cut size will be used!
+LEF read, Line 345 (Warning): Cut size for magic type "(null)" (11 x 11) does not match LEF/DEF
+LEF read, Line 345 (Warning): Via cut size (10 x 10).  Magic layer cut size will be used!
+LEF read, Line 355 (Warning): Cut size for magic type "(null)" (11 x 11) does not match LEF/DEF
+LEF read, Line 355 (Warning): Via cut size (10 x 10).  Magic layer cut size will be used!
+LEF read, Line 365 (Warning): Cut size for magic type "(null)" (11 x 11) does not match LEF/DEF
+LEF read, Line 365 (Warning): Via cut size (10 x 10).  Magic layer cut size will be used!
+LEF read, Line 375 (Warning): Cut size for magic type "(null)" (11 x 11) does not match LEF/DEF
+LEF read, Line 375 (Warning): Via cut size (11 x 10).  Magic layer cut size will be used!
+LEF read, Line 376 (Warning): Cut size for magic type "via1" (11 x 11) does not match LEF/DEF
+LEF read, Line 376 (Warning): Via cut size (11 x 10).  Magic layer cut size will be used!
+LEF read, Line 385 (Warning): Cut size for magic type "(null)" (11 x 11) does not match LEF/DEF
+LEF read, Line 385 (Warning): Via cut size (10 x 11).  Magic layer cut size will be used!
+LEF read, Line 386 (Warning): Cut size for magic type "via1" (11 x 11) does not match LEF/DEF
+LEF read, Line 386 (Warning): Via cut size (10 x 11).  Magic layer cut size will be used!
+LEF read, Line 447 (Warning): Cut size for magic type "(null)" (11 x 11) does not match LEF/DEF
+LEF read, Line 447 (Warning): Via cut size (10 x 10).  Magic layer cut size will be used!
+LEF read, Line 457 (Warning): Cut size for magic type "(null)" (11 x 11) does not match LEF/DEF
+LEF read, Line 457 (Warning): Via cut size (10 x 10).  Magic layer cut size will be used!
+LEF read, Line 467 (Warning): Cut size for magic type "(null)" (11 x 11) does not match LEF/DEF
+LEF read, Line 467 (Warning): Via cut size (10 x 10).  Magic layer cut size will be used!
+LEF read, Line 477 (Warning): Cut size for magic type "(null)" (11 x 11) does not match LEF/DEF
+LEF read, Line 477 (Warning): Via cut size (10 x 10).  Magic layer cut size will be used!
+LEF read, Line 483 (Warning): Cut size for magic type "(null)" (11 x 11) does not match LEF/DEF
+LEF read, Line 483 (Warning): Via cut size (10 x 10).  Magic layer cut size will be used!
+LEF read, Line 484 (Warning): Cut size for magic type "via1" (11 x 11) does not match LEF/DEF
+LEF read, Line 484 (Warning): Via cut size (11 x 10).  Magic layer cut size will be used!
+LEF read, Line 485 (Warning): Cut size for magic type "via1" (11 x 11) does not match LEF/DEF
+LEF read, Line 485 (Warning): Via cut size (11 x 10).  Magic layer cut size will be used!
+LEF read, Line 486 (Warning): Cut size for magic type "via1" (11 x 11) does not match LEF/DEF
+LEF read, Line 486 (Warning): Via cut size (10 x 10).  Magic layer cut size will be used!
+LEF read, Line 487 (Warning): Cut size for magic type "via1" (11 x 11) does not match LEF/DEF
+LEF read, Line 487 (Warning): Via cut size (10 x 11).  Magic layer cut size will be used!
+LEF read, Line 490 (Warning): Cut size for magic type "via1" (11 x 11) does not match LEF/DEF
+LEF read, Line 490 (Warning): Via cut size (10 x 11).  Magic layer cut size will be used!
+LEF read, Line 491 (Warning): Cut size for magic type "via1" (11 x 11) does not match LEF/DEF
+LEF read, Line 491 (Warning): Via cut size (10 x 11).  Magic layer cut size will be used!
+LEF read, Line 494 (Warning): Cut size for magic type "via1" (11 x 11) does not match LEF/DEF
+LEF read, Line 494 (Warning): Via cut size (10 x 11).  Magic layer cut size will be used!
+LEF read, Line 495 (Warning): Cut size for magic type "via1" (11 x 11) does not match LEF/DEF
+LEF read, Line 495 (Warning): Via cut size (10 x 10).  Magic layer cut size will be used!
+LEF read, Line 496 (Warning): Cut size for magic type "via1" (11 x 11) does not match LEF/DEF
+LEF read, Line 496 (Warning): Via cut size (11 x 10).  Magic layer cut size will be used!
+LEF read, Line 497 (Warning): Cut size for magic type "via1" (11 x 11) does not match LEF/DEF
+LEF read, Line 497 (Warning): Via cut size (11 x 10).  Magic layer cut size will be used!
+LEF read, Line 498 (Warning): Cut size for magic type "via1" (11 x 11) does not match LEF/DEF
+LEF read, Line 498 (Warning): Via cut size (10 x 10).  Magic layer cut size will be used!
+LEF read, Line 507 (Warning): Cut size for magic type "(null)" (11 x 11) does not match LEF/DEF
+LEF read, Line 507 (Warning): Via cut size (10 x 10).  Magic layer cut size will be used!
+LEF read, Line 508 (Warning): Cut size for magic type "via1" (11 x 11) does not match LEF/DEF
+LEF read, Line 508 (Warning): Via cut size (11 x 10).  Magic layer cut size will be used!
+LEF read, Line 509 (Warning): Cut size for magic type "via1" (11 x 11) does not match LEF/DEF
+LEF read, Line 509 (Warning): Via cut size (11 x 10).  Magic layer cut size will be used!
+LEF read, Line 510 (Warning): Cut size for magic type "via1" (11 x 11) does not match LEF/DEF
+LEF read, Line 510 (Warning): Via cut size (10 x 10).  Magic layer cut size will be used!
+LEF read, Line 511 (Warning): Cut size for magic type "via1" (11 x 11) does not match LEF/DEF
+LEF read, Line 511 (Warning): Via cut size (10 x 11).  Magic layer cut size will be used!
+LEF read, Line 514 (Warning): Cut size for magic type "via1" (11 x 11) does not match LEF/DEF
+LEF read, Line 514 (Warning): Via cut size (10 x 11).  Magic layer cut size will be used!
+LEF read, Line 515 (Warning): Cut size for magic type "via1" (11 x 11) does not match LEF/DEF
+LEF read, Line 515 (Warning): Via cut size (10 x 11).  Magic layer cut size will be used!
+LEF read, Line 518 (Warning): Cut size for magic type "via1" (11 x 11) does not match LEF/DEF
+LEF read, Line 518 (Warning): Via cut size (10 x 11).  Magic layer cut size will be used!
+LEF read, Line 519 (Warning): Cut size for magic type "via1" (11 x 11) does not match LEF/DEF
+LEF read, Line 519 (Warning): Via cut size (10 x 10).  Magic layer cut size will be used!
+LEF read, Line 520 (Warning): Cut size for magic type "via1" (11 x 11) does not match LEF/DEF
+LEF read, Line 520 (Warning): Via cut size (11 x 10).  Magic layer cut size will be used!
+LEF read, Line 521 (Warning): Cut size for magic type "via1" (11 x 11) does not match LEF/DEF
+LEF read, Line 521 (Warning): Via cut size (11 x 10).  Magic layer cut size will be used!
+LEF read, Line 522 (Warning): Cut size for magic type "via1" (11 x 11) does not match LEF/DEF
+LEF read, Line 522 (Warning): Via cut size (10 x 10).  Magic layer cut size will be used!
+LEF read, Line 531 (Warning): Cut size for magic type "(null)" (11 x 11) does not match LEF/DEF
+LEF read, Line 531 (Warning): Via cut size (10 x 10).  Magic layer cut size will be used!
+LEF read, Line 532 (Warning): Cut size for magic type "via1" (11 x 11) does not match LEF/DEF
+LEF read, Line 532 (Warning): Via cut size (11 x 10).  Magic layer cut size will be used!
+LEF read, Line 533 (Warning): Cut size for magic type "via1" (11 x 11) does not match LEF/DEF
+LEF read, Line 533 (Warning): Via cut size (11 x 10).  Magic layer cut size will be used!
+LEF read, Line 534 (Warning): Cut size for magic type "via1" (11 x 11) does not match LEF/DEF
+LEF read, Line 534 (Warning): Via cut size (10 x 10).  Magic layer cut size will be used!
+LEF read, Line 535 (Warning): Cut size for magic type "via1" (11 x 11) does not match LEF/DEF
+LEF read, Line 535 (Warning): Via cut size (10 x 11).  Magic layer cut size will be used!
+LEF read, Line 538 (Warning): Cut size for magic type "via1" (11 x 11) does not match LEF/DEF
+LEF read, Line 538 (Warning): Via cut size (10 x 11).  Magic layer cut size will be used!
+LEF read, Line 539 (Warning): Cut size for magic type "via1" (11 x 11) does not match LEF/DEF
+LEF read, Line 539 (Warning): Via cut size (10 x 11).  Magic layer cut size will be used!
+LEF read, Line 542 (Warning): Cut size for magic type "via1" (11 x 11) does not match LEF/DEF
+LEF read, Line 542 (Warning): Via cut size (10 x 11).  Magic layer cut size will be used!
+LEF read, Line 543 (Warning): Cut size for magic type "via1" (11 x 11) does not match LEF/DEF
+LEF read, Line 543 (Warning): Via cut size (10 x 10).  Magic layer cut size will be used!
+LEF read, Line 544 (Warning): Cut size for magic type "via1" (11 x 11) does not match LEF/DEF
+LEF read, Line 544 (Warning): Via cut size (11 x 10).  Magic layer cut size will be used!
+LEF read, Line 545 (Warning): Cut size for magic type "via1" (11 x 11) does not match LEF/DEF
+LEF read, Line 545 (Warning): Via cut size (11 x 10).  Magic layer cut size will be used!
+LEF read, Line 546 (Warning): Cut size for magic type "via1" (11 x 11) does not match LEF/DEF
+LEF read, Line 546 (Warning): Via cut size (10 x 10).  Magic layer cut size will be used!
+LEF read, Line 555 (Warning): Cut size for magic type "(null)" (11 x 11) does not match LEF/DEF
+LEF read, Line 555 (Warning): Via cut size (10 x 10).  Magic layer cut size will be used!
+LEF read, Line 556 (Warning): Cut size for magic type "via1" (11 x 11) does not match LEF/DEF
+LEF read, Line 556 (Warning): Via cut size (11 x 10).  Magic layer cut size will be used!
+LEF read:  Further warnings will not be reported.
+LEF read: Processed 1319 lines.
+LEF Read: encountered 480 warnings total.
+Reading DEF data from file ../../pnr/nanocgra_lite_3x3_opt.def.
+This action cannot be undone.
+LEF read, Line 135 (Warning): Cut size for magic type "metal2" (11 x 11) does not match LEF/DEF
+LEF read, Line 135 (Warning): Via cut size (10 x 10).  Magic layer cut size will be used!
+LEF read, Line 135 (Warning): Cut size for magic type "metal2" (11 x 11) does not match LEF/DEF
+LEF read, Line 135 (Warning): Via cut size (10 x 10).  Magic layer cut size will be used!
+LEF read, Line 135 (Warning): Cut size for magic type "metal2" (11 x 11) does not match LEF/DEF
+LEF read, Line 135 (Warning): Via cut size (10 x 10).  Magic layer cut size will be used!
+LEF read, Line 136 (Warning): Cut size for magic type "metal3" (11 x 11) does not match LEF/DEF
+LEF read, Line 136 (Warning): Via cut size (10 x 10).  Magic layer cut size will be used!
+LEF read, Line 136 (Warning): Cut size for magic type "metal3" (11 x 11) does not match LEF/DEF
+LEF read, Line 136 (Warning): Via cut size (10 x 10).  Magic layer cut size will be used!
+LEF read, Line 136 (Warning): Cut size for magic type "metal3" (11 x 11) does not match LEF/DEF
+LEF read, Line 136 (Warning): Via cut size (10 x 10).  Magic layer cut size will be used!
+LEF read, Line 137 (Warning): Cut size for magic type "metal4" (11 x 11) does not match LEF/DEF
+LEF read, Line 137 (Warning): Via cut size (10 x 10).  Magic layer cut size will be used!
+LEF read, Line 137 (Warning): Cut size for magic type "metal4" (11 x 11) does not match LEF/DEF
+LEF read, Line 137 (Warning): Via cut size (10 x 10).  Magic layer cut size will be used!
+LEF read, Line 137 (Warning): Cut size for magic type "metal4" (11 x 11) does not match LEF/DEF
+LEF read, Line 137 (Warning): Via cut size (10 x 10).  Magic layer cut size will be used!
+LEF read, Line 138 (Warning): Cut size for magic type "metal5" (11 x 11) does not match LEF/DEF
+LEF read, Line 138 (Warning): Via cut size (10 x 10).  Magic layer cut size will be used!
+LEF read, Line 138 (Warning): Cut size for magic type "metal5" (11 x 11) does not match LEF/DEF
+LEF read, Line 138 (Warning): Via cut size (10 x 10).  Magic layer cut size will be used!
+LEF read, Line 138 (Warning): Cut size for magic type "metal5" (11 x 11) does not match LEF/DEF
+LEF read, Line 138 (Warning): Via cut size (10 x 10).  Magic layer cut size will be used!
+LEF read, Line 138 (Warning): Cut size for magic type "metal5" (11 x 11) does not match LEF/DEF
+LEF read, Line 138 (Warning): Via cut size (10 x 10).  Magic layer cut size will be used!
+LEF read, Line 138 (Warning): Cut size for magic type "metal5" (11 x 11) does not match LEF/DEF
+LEF read, Line 138 (Warning): Via cut size (10 x 10).  Magic layer cut size will be used!
+LEF read, Line 138 (Warning): Cut size for magic type "metal5" (11 x 11) does not match LEF/DEF
+LEF read, Line 138 (Warning): Via cut size (10 x 10).  Magic layer cut size will be used!
+LEF read, Line 138 (Warning): Cut size for magic type "metal5" (11 x 11) does not match LEF/DEF
+LEF read, Line 138 (Warning): Via cut size (10 x 10).  Magic layer cut size will be used!
+LEF read, Line 138 (Warning): Cut size for magic type "metal5" (11 x 11) does not match LEF/DEF
+LEF read, Line 138 (Warning): Via cut size (10 x 10).  Magic layer cut size will be used!
+LEF read, Line 138 (Warning): Cut size for magic type "metal5" (11 x 11) does not match LEF/DEF
+LEF read, Line 138 (Warning): Via cut size (10 x 10).  Magic layer cut size will be used!
+  Processed 4 vias total.
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__fill_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__fill_4.mag is not writeable
+Input cell gf180mcu_fd_sc_mcu7t5v0__fill_4 scales magic internal geometry by factor of 5
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__fill_32> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__fill_32.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__fill_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__fill_2.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__fill_8> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__fill_8.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__fill_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__fill_1.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__fill_16> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__fill_16.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__fill_64> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__fill_64.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__endcap> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__endcap.mag is not writeable
+Input cell gf180mcu_fd_sc_mcu7t5v0__endcap scales magic internal geometry by factor of 2
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__filltie> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__filltie.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__clkinv_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__clkinv_2.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__inv_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__inv_2.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__clkinv_3> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__clkinv_3.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__inv_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__inv_1.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__clkinv_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__clkinv_1.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__inv_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__inv_4.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__clkinv_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__clkinv_4.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__inv_3> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__inv_3.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__clkinv_8> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__clkinv_8.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__inv_8> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__inv_8.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__clkinv_12> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__clkinv_12.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__clkinv_20> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__clkinv_20.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__nor2_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__nor2_1.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__nor3_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__nor3_2.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__nor2_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__nor2_4.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__and3_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__and3_4.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__and2_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__and2_2.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__aoi222_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__aoi222_2.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__nor3_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__nor3_4.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__nand4_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__nand4_4.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__aoi221_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__aoi221_4.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__nand2_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__nand2_1.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__nand3_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__nand3_1.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__nor4_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__nor4_2.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__nand4_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__nand4_1.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__oai211_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__oai211_1.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__nor4_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__nor4_1.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__nand4_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__nand4_2.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__nor4_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__nor4_4.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__nand2_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__nand2_4.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__and3_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__and3_1.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__and2_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__and2_1.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__aoi22_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__aoi22_1.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__or3_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__or3_1.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__aoi21_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__aoi21_1.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__oai22_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__oai22_1.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__or3_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__or3_4.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__oai21_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__oai21_1.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__nor3_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__nor3_1.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__nand2_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__nand2_2.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__nand3_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__nand3_4.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__and3_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__and3_2.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__aoi211_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__aoi211_1.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__nor2_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__nor2_2.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__mux2_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__mux2_2.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__aoi21_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__aoi21_4.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__mux2_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__mux2_4.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__and2_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__and2_4.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__aoi22_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__aoi22_2.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__aoi22_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__aoi22_4.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__or2_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__or2_2.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__aoi221_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__aoi221_1.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__or3_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__or3_2.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__or2_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__or2_1.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__or4_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__or4_2.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__or2_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__or2_4.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__aoi221_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__aoi221_2.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__nand3_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__nand3_2.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__xnor2_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__xnor2_1.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__xor2_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__xor2_1.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__oai31_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__oai31_1.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__oai31_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__oai31_2.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__aoi21_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__aoi21_2.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__oai21_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__oai21_4.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__xor3_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__xor3_1.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__oai221_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__oai221_1.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__oai22_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__oai22_2.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__xnor3_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__xnor3_1.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__or4_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__or4_1.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__oai32_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__oai32_1.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__mux2_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__mux2_1.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__oai22_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__oai22_4.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__oai21_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__oai21_2.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__oai221_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__oai221_2.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__oai32_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__oai32_2.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__and4_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__and4_1.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__aoi211_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__aoi211_2.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__oai222_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__oai222_2.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__oai31_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__oai31_4.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__oai211_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__oai211_4.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__mux4_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__mux4_4.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__oai211_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__oai211_2.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__aoi222_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__aoi222_4.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__oai32_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__oai32_4.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__aoi222_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__aoi222_1.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__xnor2_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__xnor2_2.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__xor3_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__xor3_2.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__aoi211_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__aoi211_4.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__oai33_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__oai33_2.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__dffq_1> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__dffq_1.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__dffq_2> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__dffq_2.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__dffq_4> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__dffq_4.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__clkbuf_16> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__clkbuf_16.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__buf_16> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__buf_16.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__buf_8> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__buf_8.mag is not writeable
+Warning: cell <gf180mcu_fd_sc_mcu7t5v0__buf_12> from file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/mag/gf180mcu_fd_sc_mcu7t5v0__buf_12.mag is not writeable
+  Processed 12035 subcell instances total.
+timeout: the monitored command dumped core

@@ -1,0 +1,56 @@
+================================================================
+ GATE-LEVEL SIMULATION (GLS) REPORT  -  NanoCGRA_Lite 3x3 OPT (9 PE / 32B SRAM / UART-only)
+ PDK: GlobalFoundries gf180mcuD / gf180mcu_fd_sc_mcu7t5v0 (7-track, 5V)
+ Simulator: Icarus Verilog (iverilog -g2012 -DFUNCTIONAL -DUNIT_DELAY)
+ Cell models: .pdk/.../gf180mcu_fd_sc_mcu7t5v0/verilog/{primitives.v,gf180mcu_fd_sc_mcu7t5v0.v}
+ Date: 2026-07-12
+================================================================
+
+METHODOLOGY
+  * The UART-only top integration testbench was compiled against the
+    synthesized GF180MCU gate-level netlist:
+      output/nanocgra_lite_3x3_opt/synth/nanocgra_lite_3x3_opt.synth.v
+  * Top-level interface is the new 4-pin UART-only interface:
+      clk, rst_n, uart_rx, uart_tx
+  * GF180MCU functional standard-cell Verilog models were included with
+    -DFUNCTIONAL and -DUNIT_DELAY, matching the sister variant GLS flow.
+  * A GLS work copy of the testbench was used only to match the synthesized
+    netlist UART baud setting (the synthesized netlist has no remaining
+    Verilog parameters to override). Intermediate artifacts are in:
+      output/nanocgra_lite_3x3_opt/reports/gls_work/
+
+COMMAND
+  export PDK_ROOT=/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk
+  iverilog -g2012 -DFUNCTIONAL -DUNIT_DELAY \
+    -I output/nanocgra_lite_3x3_opt/rtl \
+    -o output/nanocgra_lite_3x3_opt/reports/gls_work/nanocgra_lite_3x3_opt_gls.vvp \
+    output/nanocgra_lite_3x3_opt/reports/gls_work/nanocgra_lite_tb_gls.v \
+    output/nanocgra_lite_3x3_opt/synth/nanocgra_lite_3x3_opt.synth.v \
+    .pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/verilog/primitives.v \
+    .pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/verilog/gf180mcu_fd_sc_mcu7t5v0.v
+  vvp output/nanocgra_lite_3x3_opt/reports/gls_work/nanocgra_lite_3x3_opt_gls.vvp
+
+================================================================
+ RESULTS
+================================================================
+########################################################################
+# TESTBENCH: nanocgra_lite   (gate-level, synthesized signoff netlist)
+#   tb      : tb/nanocgra_lite_tb.v (UART-only protocol; GLS work copy used)
+#   netlist : synth/nanocgra_lite_3x3_opt.synth.v
+########################################################################
+PASS  SRAM_uart  expected=123  actual=123
+PASS  CGRA_ADD   expected=8    actual=8
+PASS  CGRA_MUL   expected=144  actual=144
+PASS  CGRA_XOR   expected=85   actual=85
+Result: PASSED
+
+================================================================
+ SUMMARY
+================================================================
+  nanocgra_lite_3x3_opt (top, UART-only, synthesized netlist) .... PASSED
+  ---------------------------------------------------------------
+  GATE-LEVEL INTEGRATION TEST PASSED  (0 mismatches)
+
+  Functional equivalence of the synthesized GF180MCU gate netlist to the RTL
+  is confirmed for the full 3x3 / 32B UART-only OPT configuration.
+================================================================

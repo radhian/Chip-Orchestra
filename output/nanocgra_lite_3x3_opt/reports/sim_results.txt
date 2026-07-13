@@ -1,0 +1,82 @@
+================================================================
+ RTL SIMULATION RESULTS  -  NanoCGRA_Lite OPT (3x3 CGRA / 32B SRAM)
+ Interface : 4-pin UART-only (clk, rst_n, uart_rx, uart_tx)
+ Simulator : Icarus Verilog (iverilog -g2012)
+ Date      : 2026-07-12
+ Config    : 3x3 CGRA = 9 PEs ; SRAM = 32 x 8-bit (5-bit address)
+================================================================
+
+########################################################################
+# TESTBENCH: sram
+########################################################################
+PASS  addr=0  expected=42  actual=42
+PASS  addr=1  expected=100  actual=100
+PASS  addr=31  expected=255  actual=255
+PASS  addr=16  expected=7  actual=7
+PASS  addr=0  expected=200  actual=200
+Result: PASSED
+
+########################################################################
+# TESTBENCH: pe
+########################################################################
+PASS  OP_ADD  expected=8  actual=8
+PASS  OP_SUB  expected=6  actual=6
+PASS  OP_AND  expected=48  actual=48
+PASS  OP_OR  expected=255  actual=255
+PASS  OP_XOR  expected=85  actual=85
+PASS  OP_MUL  expected=144  actual=144
+PASS  OP_PASS  expected=77  actual=77
+PASS  ROUTE_N  expected=27  actual=27
+PASS  ROUTE_S  expected=28  actual=28
+PASS  ROUTE_E  expected=29  actual=29
+PASS  ROUTE_W  expected=26  actual=26
+PASS  CFG_REWRITE  expected=255  actual=255
+PASS  OP_MAC  expected=48  actual=48
+Result: PASSED
+
+########################################################################
+# TESTBENCH: uart
+########################################################################
+PASS  rx_valid asserted  expected=1  actual=1
+PASS  RXDATA  expected=165  actual=165
+Result: PASSED
+
+########################################################################
+# TESTBENCH: nano_controller
+########################################################################
+PASS  STATE_IDLE_before_start  expected=0  actual=0
+PASS  busy_idle  expected=0  actual=0
+PASS  STATE_RD_A  expected=1  actual=1
+PASS  STATE_RD_B  expected=2  actual=2
+PASS  STATE_LOAD  expected=3  actual=3
+PASS  busy_during_run  expected=1  actual=1
+PASS  cgra_load_cfg_in_LOAD  expected=1  actual=1
+PASS  cgra_load_data_in_LOAD  expected=1  actual=1
+PASS  STATE_EXEC  expected=4  actual=4
+PASS  cgra_en_in_EXEC  expected=1  actual=1
+PASS  STATE_STORE  expected=5  actual=5
+PASS  m_sram_we_in_STORE  expected=1  actual=1
+PASS  res_addr_driven  expected=16  actual=16
+PASS  STATE_DONE  expected=6  actual=6
+PASS  done_flag  expected=1  actual=1
+PASS  STATE_IDLE_after  expected=0  actual=0
+PASS  SRAM_read_operand_A  expected=5  actual=5
+PASS  SRAM_read_operand_B  expected=3  actual=3
+PASS  SRAM_write_result  expected=8  actual=8
+Result: PASSED
+
+########################################################################
+# TESTBENCH: nanocgra_lite
+########################################################################
+PASS  SRAM_uart  expected=123  actual=123
+PASS  CGRA_ADD  expected=8  actual=8
+PASS  CGRA_MUL  expected=144  actual=144
+PASS  CGRA_XOR  expected=85  actual=85
+Result: PASSED
+
+================================================================
+ SUMMARY
+================================================================
+ Testbenches PASSED : 5
+ Testbenches FAILED : 0
+================================================================

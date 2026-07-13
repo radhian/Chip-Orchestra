@@ -1,0 +1,46 @@
+================================================================================
+ FREQUENCY SWEEP / MAX FMAX  --  NanoCGRA-Lite OPT (3x3 CGRA / 32B SRAM)
+ Interface : 4-pin UART-only   |   Interconnect : GF180MCU, mcu7t5v0, tt_025C_5v00
+ Engine    : OpenROAD / OpenSTA (post-route ODB, propagated clock, estimated RC)
+ IO model  : set_input_delay = set_output_delay = 20% of clock period
+ Date      : 2026-07-12
+================================================================================
+
+Method: the routed netlist is re-timed at each target clock period. The worst
+setup slack is reported per period; Fmax is the highest frequency (shortest
+period) that still meets setup (slack >= 0). Hold slack is period-independent
+(single clock domain) except at very short periods where clock uncertainty bites.
+
+------------------------------------------------------------------------------
+  Period (ns)   Frequency (MHz)   Setup slack (ns)   Hold slack (ns)   Verdict
+------------------------------------------------------------------------------
+  MANDATED SWEEP (100 -> 50 -> 20 -> 10 -> 5 -> 2 ns)
+------------------------------------------------------------------------------
+     100.0            10.0            +76.721            +0.819         MET
+      50.0            20.0            +36.721            +0.819         MET
+      20.0            50.0             +8.720            +0.819         MET   <-- last MET in mandated sweep
+      10.0           100.0             -1.280            +0.819         VIOLATED
+       5.0           200.0             -6.280            +0.180         VIOLATED
+       2.0           500.0             -9.280            -0.420         VIOLATED (setup + hold)
+------------------------------------------------------------------------------
+  REFINED CROSSOVER PROBE (to pinpoint true Fmax)
+------------------------------------------------------------------------------
+      15.0            66.7             +3.720            +0.819         MET
+      12.0            83.3             +0.720            +0.819         MET   <== TRUE FMAX (last MET)
+      11.0            90.9             -0.280            +0.819         VIOLATED
+       9.0           111.1             -2.280            +0.819         VIOLATED
+------------------------------------------------------------------------------
+
+RESULTS
+  * Mandated-sweep Fmax (coarse grid) : 50.0 MHz  (20.0 ns, +8.720 ns setup)
+  * Refined true Fmax                 : 83.3 MHz  (12.0 ns, +0.720 ns setup)
+  * Setup crossover (slack = 0)       : ~11.28 ns period  (~88.6 MHz)
+  * Critical-path data delay          : ~11.3 ns (period - setup slack - IO margin)
+  * Hold                              : MET across 100..12 ns (min slack +0.819 ns)
+
+HEADROOM vs 10 MHz SIGN-OFF
+  The design is signed off / power-characterized at 10 MHz (100 ns), where it
+  carries +76.7 ns of setup slack. It can be clocked up to 83.3 MHz (12 ns)
+  before the first setup path fails -- an 8.3x frequency headroom over the
+  nominal operating point, at iso-voltage (5.0 V) and iso-corner (tt_025C).
+================================================================================
