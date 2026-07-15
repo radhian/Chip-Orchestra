@@ -24,11 +24,21 @@ if [ -d "$PDK_ROOT/$PDK" ] || [ -d "$PDK_ROOT/$FAMILY" ]; then
   exit 0
 fi
 
-if ! command -v volare >/dev/null 2>&1; then
-  echo "[setup_pdk] volare not installed; skipping auto-setup (set PDK_ROOT to a prepared PDK)."
+# The PDK build must match LibreLane's PINNED open_pdks revision — "latest"
+# is not a valid volare version and the old call always failed, leaving
+# PDK_ROOT empty and every hardening run without a GDS.
+HASH="$(python3 -c "from librelane.common import get_pdk_hash; print(get_pdk_hash('$FAMILY'))" 2>/dev/null || true)"
+if [ -z "$HASH" ]; then
+  echo "[setup_pdk] could not resolve LibreLane's pinned PDK hash; skipping auto-setup."
   exit 0
 fi
 
-echo "[setup_pdk] Installing PDK family '$FAMILY' into $PDK_ROOT via Volare ..."
-volare enable --pdk "$FAMILY" --pdk-root "$PDK_ROOT" latest \
-  || echo "[setup_pdk] volare enable failed; continuing without a prebuilt PDK."
+echo "[setup_pdk] Installing PDK family '$FAMILY' @ $HASH into $PDK_ROOT ..."
+if command -v ciel >/dev/null 2>&1; then
+  ciel enable --pdk-family "$FAMILY" --pdk-root "$PDK_ROOT" "$HASH" \
+    && exit 0 || echo "[setup_pdk] ciel enable failed; trying volare."
+fi
+if command -v volare >/dev/null 2>&1; then
+  volare enable --pdk "$FAMILY" --pdk-root "$PDK_ROOT" "$HASH" \
+    || echo "[setup_pdk] volare enable failed; continuing without a prebuilt PDK."
+fi

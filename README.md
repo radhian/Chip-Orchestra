@@ -303,7 +303,7 @@ Critical engineering decisions—including RTL modifications, implementation, an
 | EDA | Python, FastAPI |
 | Database | MySQL |
 | Cache & Messaging | Redis |
-| AI Models | Ollama (Qwen, GLM, Mistral, etc.) |
+| AI Models | Ollama (default: `glm-5.2:cloud`; also Qwen, Mistral, etc.), ZhipuAI GLM API, Google Gemini |
 | EDA Toolchain | Icarus Verilog, OpenLane, LibreLane, OpenROAD |
 
 ---
@@ -334,6 +334,37 @@ Responsible for:
 - Self-repair
 - Reasoning trace generation
 
+Every LLM stage (PLAN / RTL_GEN / RTL_REPAIR / TB_GEN) runs a **RLM deep agent**
+(GarudaChip architecture): the agent treats large inputs as an environment on
+disk — it peeks at file slices, greps across the design, delegates focused
+sub-tasks to fresh `llm_query` calls, computes data in a Python sandbox, and
+writes RTL with a **compile-check-on-write** feedback loop. Each agent can also:
+
+- **find information online** — `search_web` (design-topic knowledge digests and
+  error-fix hints via SearXNG/DuckDuckGo/GitHub), `fetch_reference` (pull real
+  HDL or paper text on demand), plus a PLAN-stage reference hunt that anchors
+  the build on the closest open-source design (`context/anchor/`);
+- **see attached images** — uploads (block diagrams, schematics, datasheet
+  figures, PDFs) are read by a local vision model into a structural spec
+  (`context/uploads_digest.md`) that drives generation;
+- **remember fixes** — every broken→clean compile transition is stored as an
+  error→fix lesson and recalled in later runs (`recall_memory`);
+- **install what they need** — `pip_install` targets a persistent directory on
+  the shared workspace volume (`.pydeps/`), so packages survive container
+  restarts and are shared across tasks (`AGENT_PYDEPS_DIR` to relocate).
+
+**Verification is the contract.** Testbenches must check every output against a
+Python golden model (never "output changed"); chip-input images are sampled
+deterministically once and pinned as `context/chip_input_grid.json`; the
+testbench dumps the RTL's computed result to `waves/chip_output.mem` (rendered
+to an image for the Simulation tab). The orchestrator enforces honesty gates:
+a SIM run with no printed verdict or no chip-output dump FAILS (and triggers a
+bounded auto-repair loop — deep agent debugs against the golden model, SIM
+re-runs, max 2 rounds per manual retry); PNR/DRC_LVS fail unless a real GDS
+exists (the PDK is auto-installed at LibreLane's pinned version on first boot).
+
+Set `AGENT_DEEP_AGENTS=0` to fall back to one-shot templated generation.
+
 ### EDA Service (Python)
 
 Responsible for:
@@ -351,46 +382,75 @@ Responsible for:
 
 ## Quick Start
 
-### 1. Start the full stack with Docker Compose
+Everything installs and starts with **one script** — it checks/installs Docker and Ollama, pulls the LLM, writes `.env`, builds the 6 containers, and waits until every service is healthy:
 
 ```bash
-unzip chip_orchestra_feat_eda.zip
-cd chip_orchestra_feat_eda
-cp .env.example .env
-docker compose up --build
+git clone https://github.com/radhian/Chip-Orchestra.git
+cd Chip-Orchestra
+./scripts/install.sh
 ```
 
-Frontend:
+Then open the frontend and sign in:
 
 ```text
 http://localhost:4173
-```
-
-> The Dockerized frontend runs with `VITE_USE_MOCKS=true` by default. This is useful for UI walkthroughs, but it is not the recommended mode for validating the live backend flow.
-
-### 2. Test against the real backend
-
-```bash
-cd frontend
-cp .env.example .env
-npm install
-npm run dev
-```
-
-Frontend:
-
-```text
-http://localhost:5173
-```
-
-Use this mode when you want to exercise the real Orchestrator, Agent, and EDA services instead of the default mock-mode frontend container.
-
-### 3. Sign in
-
-```text
 Username: admin
 Password: chip-orchestra
 ```
+
+Day-to-day (run.sh only starts/stops the already-installed stack — it never
+reinstalls, never asks for sudo, and never touches your `.env`):
+
+```bash
+./scripts/run.sh          # start the stack and print the web link
+./scripts/run.sh stop     # stop the stack
+./scripts/run.sh --build  # start + rebuild images after a code change
+```
+
+### Prerequisites
+
+- Linux or macOS with `curl` and `git`
+- ~10 GB free disk (Docker images + PDK)
+- Internet access on first run (Docker Hub, Ollama)
+
+Docker and Ollama are installed automatically on Linux if missing (you may be asked for `sudo`). On macOS install [Docker Desktop](https://docs.docker.com/get-docker/) first.
+
+### Choosing the LLM
+
+The default model is **`glm-5.2:cloud`** — an [Ollama cloud model](https://ollama.com/cloud):
+inference runs on Ollama's servers, so no GPU is needed, but you must sign in once:
+
+```bash
+ollama signin
+./scripts/install.sh                          # uses glm-5.2:cloud
+```
+
+To run fully local instead (needs a capable GPU), pick any model from the
+[Ollama library](https://ollama.com/library):
+
+```bash
+./scripts/install.sh --model qwen3.5:9b
+```
+
+Image uploads work with either choice: glm-5.2:cloud cannot read images itself,
+so the vision digest automatically routes to the first installed **local**
+vision model (e.g. `qwen3.5:9b`) — keep one pulled for image support, or set
+`GARUDA_VISION_MODEL` explicitly.
+
+Re-running `install.sh` never overwrites the model already chosen in `.env`
+unless you pass `--model` explicitly.
+
+The model can be changed later by editing `OLLAMA_MODEL` in `.env` and running `docker compose up -d agent-service`. Other providers (ZhipuAI GLM API, Google Gemini, or a deterministic `mock` for CI) are configured via `LLM_PROVIDER` in `.env` — see the comments in [.env.example](.env.example).
+
+### Frontend hot-reload mode (optional, for development)
+
+```bash
+./scripts/install.sh --dev
+cd frontend
+npm run dev        # http://localhost:5173, proxies to the real backend on :8080
+```
+
+> Note: the frontend installs with plain `npm` from the public registry. If `npm install` ever fails with a 404 on `@rdservices/aime-code-inspector` or EACCES permission errors, make sure you are on the current master (the internal-registry dependency was removed) and that `frontend/node_modules` isn't owned by root from an earlier sudo install (`sudo rm -rf frontend/node_modules`, then re-run `./scripts/install.sh --dev` without sudo).
 
 ---
 
@@ -440,12 +500,11 @@ The download endpoint streams workspace files as attachments, which powers the b
 
 | Document | Description |
 |----------|-------------|
-| `docs/architecture.md` | Overall platform architecture |
+| `docs/ARCHITECTURE.md` | Overall platform architecture |
+| `docs/architecture_v2.md` | Microservice architecture (current) |
 | `docs/development.md` | Local development workflow |
-| `docs/roadmap.md` | Product roadmap |
-| `docs/vision.md` | Product vision and design principles |
 | `docs/test-plan.md` | Testing strategy |
-| `docs/api/orchestrator-service.md` | Orchestrator API |
+| `docs/api/operator-service.md` | Orchestrator API |
 | `docs/api/agent-service.md` | Agent API |
 | `docs/api/eda-service.md` | EDA API |
 

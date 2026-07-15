@@ -17,6 +17,20 @@ import type {
 
 const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8080').replace(/\/$/, '')
 
+/** Browser-native URL for a raw workspace file (images, GDS, PDFs). Auth rides
+ *  in the `?token=` query because <img src> cannot set an Authorization header. */
+export function workspaceRawUrl(taskId: string, path: string, download = false): string {
+  const params = new URLSearchParams({ path })
+  const token = getStoredToken()
+  if (token) {
+    params.set('token', token)
+  }
+  if (download) {
+    params.set('download', '1')
+  }
+  return `${API_BASE_URL}/api/v1/tasks/${taskId}/workspace/raw?${params.toString()}`
+}
+
 async function parseError(response: Response): Promise<string> {
   try {
     const payload = (await response.json()) as { error?: string; message?: string }
@@ -110,6 +124,20 @@ export async function listTasks(params: ListTasksParams = {}): Promise<{ items: 
     items,
     total: items.length,
   }
+}
+
+export interface LLMModelsResponse {
+  provider: string
+  default: string
+  models: string[]
+}
+
+export async function fetchLLMModels(): Promise<LLMModelsResponse> {
+  return requestJson<LLMModelsResponse>('/api/v1/llm/models')
+}
+
+export async function deleteTask(id: string): Promise<void> {
+  await requestJson<{ status?: string }>(`/api/v1/tasks/${id}`, { method: 'DELETE' })
 }
 
 export async function createTask(input: CreateTaskInput): Promise<TaskDetail> {

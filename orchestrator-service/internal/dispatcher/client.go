@@ -6,6 +6,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
+	"strconv"
 	"time"
 )
 
@@ -42,10 +44,40 @@ type InvokeResponse struct {
 }
 
 func NewClient(baseURL string) *Client {
+	// /agent/invoke is synchronous and runs LLM generation + repair loops, so
+	// the request can legitimately take many minutes on large design briefs.
+	timeout := 1800 * time.Second
+	if v := os.Getenv("AGENT_INVOKE_TIMEOUT_SECONDS"); v != "" {
+		if secs, err := strconv.Atoi(v); err == nil && secs > 0 {
+			timeout = time.Duration(secs) * time.Second
+		}
+	}
 	return &Client{
 		baseURL:    baseURL,
-		httpClient: &http.Client{Timeout: 60 * time.Second},
+		httpClient: &http.Client{Timeout: timeout},
 	}
+}
+
+// Models proxies the agent service's model listing (e.g. installed Ollama
+// models) so the frontend can offer a per-task LLM picker.
+func (c *Client) Models(ctx context.Context) (map[string]any, error) {
+	httpReq, err := http.NewRequestWithContext(ctx, http.MethodGet, fmt.Sprintf("%s/agent/models", c.baseURL), nil)
+	if err != nil {
+		return nil, err
+	}
+	resp, err := c.httpClient.Do(httpReq)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode >= http.StatusBadRequest {
+		return nil, fmt.Errorf("agent service returned status %d", resp.StatusCode)
+	}
+	var out map[string]any
+	if err := json.NewDecoder(resp.Body).Decode(&out); err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *Client) Invoke(ctx context.Context, req InvokeRequest) (*InvokeResponse, error) {

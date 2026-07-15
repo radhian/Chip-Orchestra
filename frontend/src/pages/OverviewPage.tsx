@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
-import { AlertCircle, ChevronLeft, ChevronRight, Filter, LayoutGrid, Search } from 'lucide-react'
+import { AlertCircle, ChevronLeft, ChevronRight, Filter, LayoutGrid, Search, Trash2 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
-import { listTasks } from '@/api/tasks'
+import { deleteTask, listTasks } from '@/api/tasks'
 import { useAuth } from '@/auth/AuthProvider'
 import { EmptyState, ErrorState, LoadingState } from '@/components/app/shared'
 import { Badge } from '@/components/ui/badge'
@@ -49,6 +49,22 @@ export function OverviewPage() {
   const [error, setError] = useState<string | null>(null)
   const [page, setPage] = useState(1)
   const [search, setSearch] = useState('')
+  const [deletingId, setDeletingId] = useState<string | null>(null)
+
+  async function handleDelete(task: TaskSummary) {
+    if (!window.confirm(`Delete task "${task.name}"? This cannot be undone.`)) {
+      return
+    }
+    setDeletingId(task.id)
+    try {
+      await deleteTask(task.id)
+      setTasks((current) => current.filter((item) => item.id !== task.id))
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete task')
+    } finally {
+      setDeletingId(null)
+    }
+  }
 
   useEffect(() => {
     let mounted = true
@@ -198,32 +214,55 @@ export function OverviewPage() {
           ) : (
             <>
               <div className='overflow-hidden rounded-3xl border border-slate-200'>
-                <div className='grid grid-cols-5 gap-3 border-b border-slate-200 bg-slate-50 px-6 py-4 text-xs font-semibold uppercase tracking-widest text-slate-400'>
+                <div className='grid grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1.4fr)_minmax(0,1fr)_2.5rem] gap-3 border-b border-slate-200 bg-slate-50 px-6 py-4 text-xs font-semibold uppercase tracking-widest text-slate-400'>
                   <span>Task</span>
                   <span>Owner</span>
                   <span>Current stage</span>
                   <span>Repository</span>
                   <span>Status</span>
+                  <span className='sr-only'>Actions</span>
                 </div>
 
                 <div className='divide-y divide-slate-200'>
                   {pagedTasks.map((task) => (
-                    <button
+                    <div
                       key={task.id}
+                      role='button'
+                      tabIndex={0}
                       onClick={() => navigate(`/tasks/${task.id}`)}
-                      className='grid w-full grid-cols-5 gap-3 px-6 py-5 text-left transition hover:bg-slate-50'
+                      onKeyDown={(event) => {
+                        if (event.key === 'Enter' || event.key === ' ') {
+                          navigate(`/tasks/${task.id}`)
+                        }
+                      }}
+                      className='grid w-full cursor-pointer grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1.4fr)_minmax(0,1fr)_2.5rem] gap-3 px-6 py-5 text-left transition hover:bg-slate-50'
                     >
-                      <div>
-                        <p className='font-semibold text-slate-900'>{task.name}</p>
-                        <p className='mt-1 text-sm text-slate-500'>{task.description}</p>
+                      <div className='min-w-0'>
+                        <p className='break-words font-semibold text-slate-900'>{task.name}</p>
+                        <p className='mt-1 break-words text-sm text-slate-500'>{task.description}</p>
                       </div>
-                      <div className='text-sm text-slate-600'>{task.ownerName}</div>
-                      <div className='text-sm text-slate-600'>{task.currentStage}</div>
-                      <div className='text-sm text-slate-600'>{task.repoName}</div>
-                      <div>
+                      <div className='min-w-0 break-words text-sm text-slate-600'>{task.ownerName}</div>
+                      <div className='min-w-0 break-words text-sm text-slate-600'>{task.currentStage}</div>
+                      <div className='min-w-0 break-all text-sm text-slate-600'>{task.repoName}</div>
+                      <div className='min-w-0'>
                         <Badge className={`rounded-full border px-3 py-1 font-medium ${stageToneClass[task.tone]}`}>{task.statusLabel}</Badge>
                       </div>
-                    </button>
+                      <div className='flex items-start justify-end'>
+                        <Button
+                          variant='ghost'
+                          size='icon'
+                          aria-label={`Delete ${task.name}`}
+                          disabled={deletingId === task.id}
+                          className='h-9 w-9 rounded-xl text-slate-400 hover:bg-rose-50 hover:text-rose-600'
+                          onClick={(event) => {
+                            event.stopPropagation()
+                            void handleDelete(task)
+                          }}
+                        >
+                          <Trash2 className='h-4 w-4' />
+                        </Button>
+                      </div>
+                    </div>
                   ))}
                 </div>
               </div>

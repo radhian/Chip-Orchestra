@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { NavLink, useParams } from 'react-router-dom'
+import { NavLink, useParams, useSearchParams } from 'react-router-dom'
 import {
   AlertCircle,
   Bot,
@@ -28,6 +28,7 @@ import {
   proposeWorkspacePatch,
   retryTaskStage,
   submitStageApproval,
+  workspaceRawUrl,
 } from '@/api/tasks'
 import { EmptyState, ErrorState, LoadingState, MetricCard, SummaryRow } from '@/components/app/shared'
 import { Badge } from '@/components/ui/badge'
@@ -35,6 +36,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
+import { Textarea } from '@/components/ui/textarea'
 import type { ArtifactItem, DiagnosisItem, RunbookEvent, SignoffStatus, TaskDetail, TaskStage, WorkspaceFileSummary } from '@/types/orchestra'
 
 const stageToneClass = {
@@ -50,11 +52,36 @@ const eventToneClass = {
   warning: 'bg-amber-100 text-amber-700',
 } as const
 
-type DetailTab = 'runbook' | 'rtl' | 'signoff'
+type DetailTab = 'runbook' | 'rtl' | 'sim' | 'signoff'
+
+const IMAGE_EXT = /\.(png|jpe?g|webp|bmp|gif|svg)$/i
+const BINARY_EXT = /\.(gds|gds2|oas|pdf|vcd|fst|zip|gz|tar|bin|lef|def|spef|db|lib)$/i
+
+function isImagePath(path: string): boolean {
+  return IMAGE_EXT.test(path)
+}
+
+function isBinaryPath(path: string): boolean {
+  return BINARY_EXT.test(path)
+}
+
+/** Event time in the USER'S timezone (the server's bare "15:04" string is
+ *  container-local UTC and read wrong on the wall clock). */
+function eventTime(event: RunbookEvent): string {
+  if (event.timestamp) {
+    const parsed = new Date(event.timestamp)
+    if (!Number.isNaN(parsed.getTime())) {
+      return parsed.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    }
+  }
+  return event.time
+}
 
 export function TaskDetailPage({ tab }: { tab: DetailTab }) {
   const { id } = useParams<{ id: string }>()
   const taskId = id ?? ''
+  const [searchParams] = useSearchParams()
+  const requestedFile = searchParams.get('file') ?? ''
   const [detail, setDetail] = useState<TaskDetail | null>(null)
   const [events, setEvents] = useState<RunbookEvent[]>([])
   const [artifacts, setArtifacts] = useState<ArtifactItem[]>([])
@@ -63,6 +90,12 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
   const [selectedFile, setSelectedFile] = useState('')
   const [selectedFileContent, setSelectedFileContent] = useState('')
   const [signoff, setSignoff] = useState<SignoffStatus | null>(null)
+  const [showChangeBox, setShowChangeBox] = useState(false)
+  const [changeRequest, setChangeRequest] = useState('')
+  const [agentTranscript, setAgentTranscript] = useState('')
+  const [agentTranscriptPath, setAgentTranscriptPath] = useState('')
+  const [simLog, setSimLog] = useState('')
+  const [simReport, setSimReport] = useState<Record<string, unknown> | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [actionMessage, setActionMessage] = useState('')
@@ -72,15 +105,20 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
   const [refreshKey, setRefreshKey] = useState(0)
   const [retryingStage, setRetryingStage] = useState<string | null>(null)
 
-  const loadTask = useCallback(async () => {
+  // Background refreshes (live WebSocket events) must NOT swap the page to a
+  // spinner, clear action feedback, or reset the file selection — doing so on
+  // every event is what made the whole page flicker during an active run.
+  const loadTask = useCallback(async (background = false) => {
     if (!taskId) {
       return
     }
 
-    setLoading(true)
-    setError(null)
-    setActionMessage('')
-    setActionError(null)
+    if (!background) {
+      setLoading(true)
+      setError(null)
+      setActionMessage('')
+      setActionError(null)
+    }
 
     try {
       const [task, stageList, taskEvents, taskArtifacts, taskDiagnosis, workspaceFiles, signoffStatus] = await Promise.all([
@@ -101,26 +139,86 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
       setFiles(workspaceFiles)
       setSignoff(signoffStatus)
 
-      const firstPath = workspaceFiles[0]?.path ?? ''
-      setSelectedFile(firstPath)
-
-      if (firstPath) {
-        setFileLoading(true)
+      // Live agent activity: the deep-agent transcript for the CURRENT stage
+      // (thinking, tool calls, written files) streams into logs/*_deep_agent.md
+      // in the workspace — surface its tail in the runbook.
+      const stageLog = `logs/${(mergedTask.currentStage || '').toLowerCase()}_deep_agent.md`
+      const transcriptCandidates = workspaceFiles
+        .map((file) => file.path)
+        .filter((path) => path.startsWith('logs/') && path.includes('_deep_agent'))
+      const transcriptPath = transcriptCandidates.includes(stageLog)
+        ? stageLog
+        : transcriptCandidates[transcriptCandidates.length - 1] ?? ''
+      setAgentTranscriptPath(transcriptPath)
+      if (transcriptPath) {
         try {
-          const content = await getWorkspaceFile(taskId, firstPath)
-          setSelectedFileContent(content.content)
+          const transcript = await getWorkspaceFile(taskId, transcriptPath)
+          const tail = transcript.content.slice(-6000)
+          setAgentTranscript((current) => (current === tail ? current : tail))
+        } catch {
+          // transcript is best-effort
+        }
+      } else {
+        setAgentTranscript('')
+      }
+
+      // Simulation evidence: the testbench console (logs/sim.log) and the sim
+      // report (reports/sim_report.json) feed the Simulation tab.
+      const paths = new Set(workspaceFiles.map((file) => file.path))
+      if (paths.has('logs/sim.log')) {
+        try {
+          const logFile = await getWorkspaceFile(taskId, 'logs/sim.log')
+          const tail = logFile.content.slice(-8000)
+          setSimLog((current) => (current === tail ? current : tail))
+        } catch {
+          // best-effort
+        }
+      }
+      if (paths.has('reports/sim_report.json')) {
+        try {
+          const reportFile = await getWorkspaceFile(taskId, 'reports/sim_report.json')
+          setSimReport(JSON.parse(reportFile.content) as Record<string, unknown>)
+        } catch {
+          // best-effort
+        }
+      }
+
+      // Keep the user's current file selection across background refreshes;
+      // only (re)pick a file on first load or when the selection disappeared.
+      const preferredPath = workspaceFiles.some((file) => file.path === requestedFile) ? requestedFile : ''
+      let nextPath = ''
+      setSelectedFile((current) => {
+        const stillExists = current && workspaceFiles.some((file) => file.path === current)
+        nextPath = (!background && preferredPath) || (stillExists ? current : '') || preferredPath || (workspaceFiles[0]?.path ?? '')
+        return nextPath
+      })
+
+      if (nextPath && !isImagePath(nextPath) && !isBinaryPath(nextPath)) {
+        if (!background) {
+          setFileLoading(true)
+        }
+        try {
+          const content = await getWorkspaceFile(taskId, nextPath)
+          // Avoid re-render churn: only update when the content actually changed.
+          setSelectedFileContent((current) => (current === content.content ? current : content.content))
         } finally {
-          setFileLoading(false)
+          if (!background) {
+            setFileLoading(false)
+          }
         }
       } else {
         setSelectedFileContent('')
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load task detail')
+      if (!background) {
+        setError(err instanceof Error ? err.message : 'Failed to load task detail')
+      }
     } finally {
-      setLoading(false)
+      if (!background) {
+        setLoading(false)
+      }
     }
-  }, [taskId])
+  }, [taskId, requestedFile])
 
   useEffect(() => {
     void loadTask()
@@ -129,6 +227,22 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
   useEffect(() => {
     if (!taskId) {
       return
+    }
+
+    // Coalesce bursts of live events into ONE background refresh every ~2.5 s —
+    // refreshing on every single event hammered the API and flickered the page.
+    let refreshTimer: ReturnType<typeof setTimeout> | null = null
+    let lastRefresh = 0
+    const scheduleRefresh = () => {
+      if (refreshTimer) {
+        return
+      }
+      const wait = Math.max(0, 2500 - (Date.now() - lastRefresh))
+      refreshTimer = setTimeout(() => {
+        refreshTimer = null
+        lastRefresh = Date.now()
+        void loadTask(true)
+      }, wait)
     }
 
     const socket = connectTaskEvents(taskId, {
@@ -140,7 +254,7 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
           }
           return [...current, event]
         })
-        void loadTask()
+        scheduleRefresh()
       },
       onError() {
         setLiveConnected(false)
@@ -151,11 +265,132 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
     socket.onclose = () => setLiveConnected(false)
 
     return () => {
+      if (refreshTimer) {
+        clearTimeout(refreshTimer)
+      }
       socket.close()
     }
   }, [loadTask, taskId])
 
-  const currentRecommendation = useMemo(() => diagnoses[0]?.detail ?? 'No recommendation is available yet.', [diagnoses])
+  // The next-action panel adapts to the run's ACTUAL situation instead of a
+  // fixed "Approve next action": retry a failed stage, release a review gate,
+  // wait while agents work, or — when everything is done — ask the user
+  // whether they're happy or want changes.
+  const situation = useMemo(() => {
+    const stages = detail?.stages ?? []
+    const failed = stages.find((stage) => stage.status === 'failed')
+    if (failed) return { kind: 'failed' as const, stage: failed }
+    const gate = stages.find((stage) => stage.pendingApproval)
+    if (gate) return { kind: 'gate' as const, stage: gate }
+    const active = stages.find((stage) => stage.status === 'active')
+    if (active) return { kind: 'running' as const, stage: active }
+    if (stages.length && stages.every((stage) => stage.status === 'done')) {
+      return { kind: 'completed' as const, stage: undefined }
+    }
+    return { kind: 'idle' as const, stage: undefined }
+  }, [detail?.stages])
+
+  async function handleRequestChanges() {
+    if (!taskId || !changeRequest.trim()) {
+      return
+    }
+    setActionError(null)
+    try {
+      await proposeWorkspacePatch(taskId, { instruction: changeRequest.trim() })
+      setActionMessage('Change request sent to the agents — watch the execution log.')
+      setChangeRequest('')
+      setShowChangeBox(false)
+      setRefreshKey((value) => value + 1)
+    } catch (err) {
+      setActionError(err instanceof Error ? err.message : 'Unable to send the change request')
+    }
+  }
+
+  async function handleApproveGate(stageKey: string) {
+    if (!taskId) {
+      return
+    }
+    setActionError(null)
+    try {
+      await submitStageApproval(taskId, stageKey, {
+        decision: 'approve',
+        comment: 'Approved from the Chip Orchestra workspace.',
+      })
+      setActionMessage('Gate approved — the flow continues.')
+      setRefreshKey((value) => value + 1)
+    } catch (err) {
+      setActionError(err instanceof Error ? err.message : 'Unable to approve the gate')
+    }
+  }
+
+  // Diagnoses accumulate per stage — the LATEST one describes the current
+  // state of the run (showing [0] left a stale SPEC_INGEST note on screen).
+  const latestDiagnosis = useMemo(() => (diagnoses.length ? diagnoses[diagnoses.length - 1] : undefined), [diagnoses])
+  const currentRecommendation = useMemo(
+    () => latestDiagnosis?.detail ?? 'No recommendation is available yet.',
+    [latestDiagnosis],
+  )
+
+  // Group workspace files by their top-level folder (rtl/, tb/, context/, …)
+  // so the browser reads like a project tree instead of one flat chip cloud.
+  const groupedFiles = useMemo(() => {
+    const groups = new Map<string, WorkspaceFileSummary[]>()
+    for (const file of files) {
+      const slash = file.path.indexOf('/')
+      const folder = slash === -1 ? '(root)' : file.path.slice(0, slash)
+      const list = groups.get(folder) ?? []
+      list.push(file)
+      groups.set(folder, list)
+    }
+    const order = ['rtl', 'tb', 'waves', 'gds', 'reports', 'spec', 'plans', 'context', 'sw', 'logs', 'exports', '(root)']
+    return [...groups.entries()].sort(([a], [b]) => {
+      const ia = order.indexOf(a) === -1 ? order.length : order.indexOf(a)
+      const ib = order.indexOf(b) === -1 ? order.length : order.indexOf(b)
+      return ia - ib || a.localeCompare(b)
+    })
+  }, [files])
+
+  // Simulation-tab evidence derived from the workspace file list.
+  // Chip INPUT = the Python-generated stimulus visualization (waves/chip_input*,
+  // rtl/*input*); chip OUTPUT = what the RTL computed, rendered from the
+  // testbench's $writememh dump (waves/*output*, waves/*.mem → .png).
+  const simAssets = useMemo(() => {
+    const paths = files.map((file) => file.path)
+    const images = paths.filter((path) => IMAGE_EXT.test(path))
+    const isWaveform = (path: string) => /waveform/i.test(path)
+    const inputImages = images.filter(
+      (path) => /input/i.test(path) && !path.startsWith('context/uploads/') && !isWaveform(path),
+    )
+    const outputImages = images.filter(
+      (path) =>
+        !isWaveform(path) &&
+        !inputImages.includes(path) &&
+        (/output|result/i.test(path) || (path.startsWith('waves/') && !/input/i.test(path))),
+    )
+    const generatedImages = images.filter(
+      (path) =>
+        !isWaveform(path) &&
+        !inputImages.includes(path) &&
+        !outputImages.includes(path) &&
+        !path.startsWith('context/uploads/') &&
+        !path.startsWith('gds/'),
+    )
+    return {
+      waveImages: images.filter((path) => path.startsWith('waves/') && isWaveform(path)),
+      inputImages,
+      outputImages,
+      generatedImages,
+      uploadImages: images.filter((path) => path.startsWith('context/uploads/')),
+      vcds: paths.filter((path) => path.startsWith('waves/') && path.endsWith('.vcd')),
+      memFiles: paths.filter((path) => path.endsWith('.mem')),
+    }
+  }, [files])
+
+  const simPassed = useMemo(() => {
+    if (/TEST\s+PASSED/i.test(simLog)) return true
+    if (/(FAILED|\$fatal|mismatch)/i.test(simLog)) return false
+    return null
+  }, [simLog])
 
   const verificationSummary = useMemo(() => {
     const stageList = detail?.stages ?? []
@@ -176,9 +411,14 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
     }
 
     setSelectedFile(path)
-    setFileLoading(true)
     setActionError(null)
 
+    if (isImagePath(path) || isBinaryPath(path)) {
+      setSelectedFileContent('')
+      return
+    }
+
+    setFileLoading(true)
     try {
       const file = await getWorkspaceFile(taskId, path)
       setSelectedFileContent(file.content)
@@ -338,23 +578,101 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
             <CardDescription>Live diagnosis returned by the Orchestrator Service.</CardDescription>
           </CardHeader>
           <CardContent className='space-y-4'>
-            {diagnoses[0] ? (
+            {latestDiagnosis ? (
               <>
                 <div className='rounded-2xl border border-amber-200 bg-amber-50 p-4'>
                   <div className='flex items-center gap-2 text-amber-700'>
                     <AlertCircle className='h-4 w-4' />
-                    <p className='font-semibold'>{diagnoses[0].title}</p>
+                    <p className='font-semibold'>{latestDiagnosis.title}</p>
                   </div>
-                  <p className='mt-3 text-sm leading-6 text-amber-800/80'>{diagnoses[0].detail}</p>
+                  <p className='mt-3 text-sm leading-6 text-amber-800/80'>{latestDiagnosis.detail}</p>
                 </div>
                 <div className='space-y-3 rounded-2xl border border-slate-200 p-4'>
-                  <SummaryRow icon={Bot} title='Suggested by' value={diagnoses[0].suggestedBy} />
-                  <SummaryRow icon={FileCode2} title='Primary file' value={diagnoses[0].primaryFile} />
-                  <SummaryRow icon={ListChecks} title='Confidence' value={diagnoses[0].confidence} />
+                  <SummaryRow icon={Bot} title='Suggested by' value={latestDiagnosis.suggestedBy} />
+                  <SummaryRow icon={FileCode2} title='Primary file' value={latestDiagnosis.primaryFile} />
+                  <SummaryRow icon={ListChecks} title='Confidence' value={latestDiagnosis.confidence} />
                 </div>
-                <Button onClick={() => void handleApproveNextAction()} className='h-12 w-full rounded-2xl bg-slate-900 hover:bg-slate-800'>
-                  Approve next action
-                </Button>
+                {situation.kind === 'failed' && situation.stage ? (
+                  <div className='space-y-3'>
+                    <p className='text-sm leading-6 text-slate-500'>
+                      <span className='font-semibold text-rose-600'>{situation.stage.label} failed.</span>{' '}
+                      Check the execution log for the reason, then retry — dependent stages reset automatically.
+                    </p>
+                    <Button
+                      onClick={() => void handleRetryStage(situation.stage as TaskStage)}
+                      className='h-12 w-full rounded-2xl bg-rose-600 hover:bg-rose-700'
+                    >
+                      <RefreshCw className='mr-2 h-4 w-4' />
+                      Retry {situation.stage.label}
+                    </Button>
+                  </div>
+                ) : situation.kind === 'gate' && situation.stage ? (
+                  <div className='space-y-3'>
+                    <p className='text-sm leading-6 text-slate-500'>
+                      <span className='font-semibold text-amber-600'>{situation.stage.label} is waiting for your review.</span>{' '}
+                      Inspect the artifacts and reports, then release the gate.
+                    </p>
+                    <Button
+                      onClick={() => void handleApproveGate((situation.stage as TaskStage).key)}
+                      className='h-12 w-full rounded-2xl bg-slate-900 hover:bg-slate-800'
+                    >
+                      <ShieldCheck className='mr-2 h-4 w-4' />
+                      Approve {situation.stage.label} gate
+                    </Button>
+                  </div>
+                ) : situation.kind === 'running' && situation.stage ? (
+                  <div className='flex items-center gap-3 rounded-2xl border border-indigo-100 bg-indigo-50 p-4 text-sm leading-6 text-indigo-700'>
+                    <Bot className='h-5 w-5 shrink-0 animate-pulse' />
+                    <span>
+                      Agents are working on <span className='font-semibold'>{situation.stage.label}</span> — follow the
+                      execution log and the live agent transcript below. No action needed.
+                    </span>
+                  </div>
+                ) : situation.kind === 'completed' ? (
+                  <div className='space-y-3'>
+                    <p className='text-sm leading-6 text-slate-500'>
+                      The flow finished. Are you happy with the result, or should the agents change something?
+                    </p>
+                    {showChangeBox ? (
+                      <div className='space-y-2'>
+                        <Textarea
+                          value={changeRequest}
+                          onChange={(event) => setChangeRequest(event.target.value)}
+                          placeholder='Describe what to change — e.g. "shrink the SRAM to 256B", "redo the testbench with more vectors", "regenerate the report"…'
+                          className='min-h-24 rounded-2xl border-slate-200'
+                        />
+                        <div className='flex gap-2'>
+                          <Button onClick={() => void handleRequestChanges()} disabled={!changeRequest.trim()} className='h-11 flex-1 rounded-2xl bg-blue-600 hover:bg-blue-700'>
+                            Send to agents
+                          </Button>
+                          <Button variant='outline' onClick={() => setShowChangeBox(false)} className='h-11 rounded-2xl border-slate-200'>
+                            Cancel
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className='flex gap-2'>
+                        <Button
+                          onClick={() => {
+                            setActionMessage('Result accepted — download the deliverables from Signoff & Delivery.')
+                          }}
+                          className='h-12 flex-1 rounded-2xl bg-emerald-600 hover:bg-emerald-700'
+                        >
+                          <CheckCircle2 className='mr-2 h-4 w-4' />
+                          Looks good
+                        </Button>
+                        <Button variant='outline' onClick={() => setShowChangeBox(true)} className='h-12 flex-1 rounded-2xl border-slate-200'>
+                          <Wrench className='mr-2 h-4 w-4' />
+                          Request changes
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <Button onClick={() => void handleApproveNextAction()} className='h-12 w-full rounded-2xl bg-slate-900 hover:bg-slate-800'>
+                    Approve next action
+                  </Button>
+                )}
               </>
             ) : (
               <EmptyState title='No diagnosis available' detail='This task has no AI diagnosis yet.' />
@@ -365,36 +683,48 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
         </Card>
       </div>
 
-      <div className='grid h-auto w-full grid-cols-3 rounded-2xl bg-slate-100 p-1'>
+      <div className='grid h-auto w-full grid-cols-4 rounded-2xl bg-slate-100 p-1'>
         <TabLink to={`/tasks/${taskId}`} label='Runbook' active={tab === 'runbook'} />
         <TabLink to={`/tasks/${taskId}/rtl`} label='RTL Workspace' active={tab === 'rtl'} />
+        <TabLink to={`/tasks/${taskId}/sim`} label='Simulation' active={tab === 'sim'} />
         <TabLink to={`/tasks/${taskId}/signoff`} label='Signoff & Delivery' active={tab === 'signoff'} />
       </div>
 
       {tab === 'runbook' ? (
-        <div className='grid gap-5 xl:grid-cols-2'>
+        <div className='space-y-5'>
           <Card className='rounded-3xl border-slate-200 shadow-none'>
             <CardHeader>
               <CardTitle className='text-xl'>Execution log</CardTitle>
-              <CardDescription>Chronological events from GET /api/v1/tasks/:id/attempts/latest/events and the live WebSocket stream.</CardDescription>
+              <CardDescription>What every stage is doing, live — events, images, and stage outcomes.</CardDescription>
             </CardHeader>
             <CardContent>
               {events.length ? (
-                <ScrollArea className='h-80 pr-4'>
+                <ScrollArea className='h-[30rem] pr-4'>
                   <div className='space-y-4'>
-                    {events.map((event) => (
+                    {events
+                      .filter((event) => Boolean(event.title))
+                      .map((event) => (
                       <div key={event.id} className='flex gap-4 rounded-2xl border border-slate-200 p-4'>
                         <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl ${eventToneClass[event.tone] ?? eventToneClass.info}`}>
                           <Clock3 className='h-4 w-4' />
                         </div>
-                        <div>
+                        <div className='min-w-0'>
                           <div className='flex items-center gap-2 text-sm text-slate-400'>
-                            <span>{event.time}</span>
+                            <span>{eventTime(event)}</span>
                             <span>•</span>
                             <span>Orchestrator Service</span>
                           </div>
                           <p className='mt-1 font-semibold text-slate-900'>{event.title}</p>
                           <p className='mt-2 text-sm leading-6 text-slate-500'>{event.detail}</p>
+                          {event.image ? (
+                            <a href={workspaceRawUrl(taskId, event.image)} target='_blank' rel='noreferrer'>
+                              <img
+                                src={workspaceRawUrl(taskId, event.image)}
+                                alt={event.title}
+                                className='mt-3 max-h-56 rounded-xl border border-slate-200 bg-white'
+                              />
+                            </a>
+                          ) : null}
                         </div>
                       </div>
                     ))}
@@ -406,38 +736,27 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
             </CardContent>
           </Card>
 
-          <div className='space-y-5'>
-            <Card className='rounded-3xl border-slate-200 shadow-none'>
-              <CardHeader>
-                <CardTitle className='text-xl'>Artifacts</CardTitle>
-                <CardDescription>Outputs attached to the current task object.</CardDescription>
-              </CardHeader>
-              <CardContent className='space-y-3'>
-                {artifacts.length ? (
-                  artifacts.map((artifact) => (
-                    <div key={artifact.id} className='flex items-center justify-between rounded-2xl border border-slate-200 p-4'>
-                      <div>
-                        <p className='font-semibold text-slate-900'>{artifact.name}</p>
-                        <p className='mt-1 text-sm text-slate-500'>{artifact.type} · owned by {artifact.owner}</p>
-                      </div>
-                      <Button variant='outline' className='rounded-full border-slate-200' disabled={!artifact.url && !artifact.path}>
-                        {artifact.url || artifact.path ? 'Open' : 'Unavailable'}
-                      </Button>
-                    </div>
-                  ))
-                ) : (
-                  <EmptyState title='No artifacts yet' detail='Artifacts will appear here once the current attempt produces them.' />
-                )}
-              </CardContent>
-            </Card>
-
-            <Card className='rounded-3xl border-slate-200 shadow-none'>
-              <CardHeader>
-                <CardTitle className='text-xl'>Current recommendation</CardTitle>
-              </CardHeader>
-              <CardContent className='rounded-b-3xl bg-slate-50 text-sm leading-6 text-slate-600'>{currentRecommendation}</CardContent>
-            </Card>
-          </div>
+          <Card className='rounded-3xl border-slate-200 shadow-none'>
+            <CardHeader>
+              <CardTitle className='text-xl'>Live agent activity</CardTitle>
+              <CardDescription>
+                {agentTranscriptPath
+                  ? `Deep-agent transcript (${agentTranscriptPath}) — thinking, tool calls, and written files, refreshed live.`
+                  : 'The deep-agent transcript will appear here once an LLM stage starts.'}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {agentTranscript ? (
+                <div className='overflow-hidden rounded-3xl border border-slate-200 bg-slate-950'>
+                  <ScrollArea className='h-80'>
+                    <pre className='whitespace-pre-wrap p-4 text-xs leading-6 text-slate-300'>{agentTranscript}</pre>
+                  </ScrollArea>
+                </div>
+              ) : (
+                <EmptyState title='No agent transcript yet' detail='PLAN / RTL_GEN / RTL_REPAIR / TB_GEN write their transcripts to logs/*_deep_agent.md.' />
+              )}
+            </CardContent>
+          </Card>
         </div>
       ) : null}
 
@@ -449,27 +768,53 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
               <CardDescription>Workspace files are loaded from the Orchestrator Service on demand.</CardDescription>
             </CardHeader>
             <CardContent className='space-y-4'>
-              <div className='flex flex-wrap gap-2'>
-                {files.map((file, index) => (
-                  <button
-                    key={file.path}
-                    onClick={() => void handleFileSelect(file.path)}
-                    className={`rounded-full px-3 py-1 text-sm ${
-                      selectedFile === file.path || (!selectedFile && index === 0) ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-600'
-                    }`}
-                  >
-                    {file.name}
-                  </button>
-                ))}
-              </div>
+              <ScrollArea className='max-h-72 overflow-y-auto'>
+                <div className='space-y-3 pr-3'>
+                  {groupedFiles.map(([folder, groupFiles]) => (
+                    <div key={folder}>
+                      <p className='mb-1.5 text-xs font-semibold uppercase tracking-wide text-slate-400'>{folder}</p>
+                      <div className='flex flex-wrap gap-2'>
+                        {groupFiles.map((file) => (
+                          <button
+                            key={file.path}
+                            onClick={() => void handleFileSelect(file.path)}
+                            className={`rounded-full px-3 py-1 text-sm ${
+                              selectedFile === file.path ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-600'
+                            }`}
+                          >
+                            {file.name}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </ScrollArea>
               <div className='overflow-hidden rounded-3xl border border-slate-200 bg-slate-950 text-slate-200'>
                 <div className='flex items-center gap-2 border-b border-slate-800 px-4 py-3 text-sm text-slate-400'>
                   <FileCode2 className='h-4 w-4' />
-                  {selectedFile || 'No file selected'}
+                  <span className='min-w-0 break-all'>{selectedFile || 'No file selected'}</span>
                 </div>
-                <pre className='overflow-x-auto p-4 text-sm leading-7 text-slate-300'>
-                  {fileLoading ? '// Loading file…' : selectedFileContent || '// No file content available'}
-                </pre>
+                {isImagePath(selectedFile) ? (
+                  <div className='bg-white p-4'>
+                    <img
+                      src={workspaceRawUrl(taskId, selectedFile)}
+                      alt={selectedFile}
+                      className='mx-auto max-h-[32rem] rounded-xl border border-slate-200'
+                    />
+                  </div>
+                ) : isBinaryPath(selectedFile) ? (
+                  <div className='p-6 text-sm text-slate-300'>
+                    Binary file — not rendered as text.{' '}
+                    <a className='text-sky-400 underline' href={workspaceRawUrl(taskId, selectedFile, true)}>
+                      Download {selectedFile.split('/').pop()}
+                    </a>
+                  </div>
+                ) : (
+                  <pre className='overflow-x-auto p-4 text-sm leading-7 text-slate-300'>
+                    {fileLoading ? '// Loading file…' : selectedFileContent || '// No file content available'}
+                  </pre>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -492,23 +837,39 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
 
             <Card className='rounded-3xl border-slate-200 shadow-none'>
               <CardHeader>
-                <CardTitle className='text-xl'>Open files</CardTitle>
+                <CardTitle className='text-xl'>Artifacts</CardTitle>
+                <CardDescription>Outputs attached to the current task object — Open loads the file in the editor.</CardDescription>
               </CardHeader>
               <CardContent className='space-y-3'>
-                {files.length ? (
-                  files.map((file) => (
-                    <div key={file.path} className='rounded-2xl bg-slate-50 p-4'>
-                      <div className='flex items-center justify-between'>
-                        <p className='font-semibold text-slate-900'>{file.name}</p>
-                        <Badge variant='secondary' className='rounded-full bg-white text-slate-500'>
-                          {file.status}
-                        </Badge>
-                      </div>
-                      <p className='mt-2 text-sm leading-6 text-slate-500'>{file.note}</p>
+                {artifacts.length ? (
+                  <ScrollArea className='max-h-96 overflow-y-auto'>
+                    <div className='space-y-3 pr-3'>
+                      {artifacts.map((artifact) => (
+                        <div key={artifact.id} className='flex items-center justify-between gap-3 rounded-2xl border border-slate-200 p-4'>
+                          <div className='min-w-0'>
+                            <p className='truncate font-semibold text-slate-900'>{artifact.name}</p>
+                            <p className='mt-1 text-sm text-slate-500'>{artifact.type} · owned by {artifact.owner}</p>
+                          </div>
+                          <Button
+                            variant='outline'
+                            className='shrink-0 rounded-full border-slate-200'
+                            disabled={!artifact.url && !artifact.path}
+                            onClick={() => {
+                              if (artifact.path) {
+                                void handleFileSelect(artifact.path)
+                              } else if (artifact.url) {
+                                window.open(artifact.url, '_blank', 'noopener')
+                              }
+                            }}
+                          >
+                            {artifact.url || artifact.path ? 'Open' : 'Unavailable'}
+                          </Button>
+                        </div>
+                      ))}
                     </div>
-                  ))
+                  </ScrollArea>
                 ) : (
-                  <EmptyState title='No workspace files' detail='The backend has not exposed any workspace files for this task yet.' />
+                  <EmptyState title='No artifacts yet' detail='Artifacts will appear here once the current attempt produces them.' />
                 )}
               </CardContent>
             </Card>
@@ -516,9 +877,221 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
         </div>
       ) : null}
 
+      {tab === 'sim' ? (
+        <div className='space-y-5'>
+          <div className='grid gap-5 xl:grid-cols-[1.6fr_1fr]'>
+            <Card className='rounded-3xl border-slate-200 shadow-none'>
+              <CardHeader>
+                <CardTitle className='text-xl'>Waveform</CardTitle>
+                <CardDescription>Signals from the testbench run (waves/design.vcd, rendered by the EDA service).</CardDescription>
+              </CardHeader>
+              <CardContent className='space-y-3'>
+                {simAssets.waveImages.length ? (
+                  simAssets.waveImages.map((path) => (
+                    <a key={path} href={workspaceRawUrl(taskId, path)} target='_blank' rel='noreferrer'>
+                      <img src={workspaceRawUrl(taskId, path)} alt={path} className='w-full rounded-2xl border border-slate-200 bg-white' />
+                    </a>
+                  ))
+                ) : (
+                  <EmptyState title='No waveform image yet' detail='The SIM stage renders waves/waveform.png once the testbench produces design.vcd.' />
+                )}
+                {simAssets.vcds.length ? (
+                  <div className='flex flex-wrap gap-2'>
+                    {simAssets.vcds.map((path) => (
+                      <a key={path} href={workspaceRawUrl(taskId, path, true)} className='rounded-full border border-slate-200 px-3 py-1 text-sm text-slate-600 hover:bg-slate-50'>
+                        ⬇ {path.split('/').pop()} (open in GTKWave)
+                      </a>
+                    ))}
+                  </div>
+                ) : null}
+              </CardContent>
+            </Card>
+
+            <Card className='rounded-3xl border-slate-200 shadow-none'>
+              <CardHeader>
+                <CardTitle className='text-xl'>Verdict</CardTitle>
+                <CardDescription>Result of the self-checking testbench.</CardDescription>
+              </CardHeader>
+              <CardContent className='space-y-4'>
+                <div className={`flex items-center gap-3 rounded-2xl border p-4 ${
+                  simPassed === true ? 'border-emerald-100 bg-emerald-50 text-emerald-700'
+                  : simPassed === false ? 'border-rose-100 bg-rose-50 text-rose-700'
+                  : 'border-slate-200 bg-slate-50 text-slate-500'
+                }`}>
+                  {simPassed === true ? <CheckCircle2 className='h-6 w-6' /> : simPassed === false ? <XCircle className='h-6 w-6' /> : <Clock3 className='h-6 w-6' />}
+                  <div>
+                    <p className='font-semibold'>
+                      {simPassed === true ? 'TEST PASSED' : simPassed === false ? 'TEST FAILED' : 'No simulation result yet'}
+                    </p>
+                    <p className='text-sm opacity-80'>{String((simReport as { summary?: string } | null)?.summary ?? 'The SIM stage has not completed for this task.')}</p>
+                  </div>
+                </div>
+                {simReport && typeof simReport.metrics === 'object' && simReport.metrics ? (
+                  <div className='overflow-x-auto rounded-2xl border border-slate-200'>
+                    <table className='w-full text-left text-sm'>
+                      <tbody>
+                        {Object.entries(simReport.metrics as Record<string, unknown>).map(([key, value]) => (
+                          <tr key={key} className='border-b border-slate-100 last:border-0'>
+                            <td className='px-4 py-2.5 font-medium text-slate-700'>{key}</td>
+                            <td className='px-4 py-2.5 text-slate-600'>{String(value)}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : null}
+                {simAssets.memFiles.length ? (
+                  <div>
+                    <p className='text-xs uppercase tracking-widest text-slate-400'>Chip input data (.mem)</p>
+                    <div className='mt-2 flex flex-wrap gap-2'>
+                      {simAssets.memFiles.map((path) => (
+                        <button key={path} onClick={() => void handleFileSelect(path)} className='rounded-full bg-slate-100 px-3 py-1 text-sm text-slate-600'>
+                          {path.split('/').pop()}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
+              </CardContent>
+            </Card>
+          </div>
+
+          <Card className='rounded-3xl border-slate-200 shadow-none'>
+            <CardHeader>
+              <CardTitle className='text-xl'>Testbench console</CardTitle>
+              <CardDescription>What the testbench printed while driving the chip (logs/sim.log).</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {simLog ? (
+                <div className='overflow-hidden rounded-3xl border border-slate-200 bg-slate-950'>
+                  <ScrollArea className='h-72'>
+                    <pre className='whitespace-pre-wrap p-4 text-xs leading-6 text-slate-300'>{simLog}</pre>
+                  </ScrollArea>
+                </div>
+              ) : (
+                <EmptyState title='No simulation log yet' detail='logs/sim.log appears after the SIM stage runs the testbench.' />
+              )}
+            </CardContent>
+          </Card>
+
+          {simAssets.inputImages.length || simAssets.outputImages.length ? (
+            <div className='grid gap-5 xl:grid-cols-2'>
+              <Card className='rounded-3xl border-slate-200 shadow-none'>
+                <CardHeader>
+                  <CardTitle className='text-xl'>Chip input</CardTitle>
+                  <CardDescription>Images the user attached — what goes INTO the chip / drives the spec.</CardDescription>
+                </CardHeader>
+                <CardContent className='space-y-3'>
+                  {simAssets.inputImages.length ? (
+                    simAssets.inputImages.map((path) => (
+                      <a key={path} href={workspaceRawUrl(taskId, path)} target='_blank' rel='noreferrer'>
+                        <img src={workspaceRawUrl(taskId, path)} alt={path} className='w-full rounded-2xl border border-slate-200 bg-white' />
+                      </a>
+                    ))
+                  ) : (
+                    <EmptyState title='No input images' detail='Attach an image when creating the task to see it here.' />
+                  )}
+                </CardContent>
+              </Card>
+              <Card className='rounded-3xl border-slate-200 shadow-none'>
+                <CardHeader>
+                  <CardTitle className='text-xl'>Chip output / generated images</CardTitle>
+                  <CardDescription>Plots and images the agents or the simulation produced.</CardDescription>
+                </CardHeader>
+                <CardContent className='space-y-3'>
+                  {simAssets.outputImages.length ? (
+                    simAssets.outputImages.map((path) => (
+                      <a key={path} href={workspaceRawUrl(taskId, path)} target='_blank' rel='noreferrer'>
+                        <div className='rounded-2xl border border-slate-200 bg-white p-3'>
+                          <img src={workspaceRawUrl(taskId, path)} alt={path} className='mx-auto max-h-64 rounded-xl' />
+                          <p className='mt-2 text-center text-xs text-slate-400'>{path}</p>
+                        </div>
+                      </a>
+                    ))
+                  ) : (
+                    <EmptyState title='No output images yet' detail='Images the deep agents or simulation write into the workspace show up here.' />
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          ) : null}
+        </div>
+      ) : null}
+
       {tab === 'signoff' ? (
         signoff ? (
-          <div className='grid gap-5 xl:grid-cols-2'>
+          <div className='space-y-5'>
+            {signoff.gdsImage || (signoff.metrics && Object.keys(signoff.metrics).length) ? (
+              <div className='grid gap-5 xl:grid-cols-2'>
+                <Card className='rounded-3xl border-slate-200 shadow-none'>
+                  <CardHeader>
+                    <CardTitle className='text-xl'>GDS render</CardTitle>
+                    <CardDescription>Final hardened layout produced by the RENDER stage.</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    {signoff.gdsImage ? (
+                      <a href={workspaceRawUrl(taskId, signoff.gdsImage)} target='_blank' rel='noreferrer'>
+                        <img
+                          src={workspaceRawUrl(taskId, signoff.gdsImage)}
+                          alt='GDS layout render'
+                          className='w-full rounded-2xl border border-slate-200 bg-white'
+                        />
+                      </a>
+                    ) : (
+                      <EmptyState title='No GDS render yet' detail='The RENDER stage has not produced a layout image for this task.' />
+                    )}
+                    {signoff.gdsFiles?.length ? (
+                      <div className='mt-4 flex flex-wrap gap-2'>
+                        {signoff.gdsFiles.map((file) => (
+                          <a
+                            key={file}
+                            href={workspaceRawUrl(taskId, file, true)}
+                            className='rounded-full border border-slate-200 px-3 py-1 text-sm text-slate-600 hover:bg-slate-50'
+                          >
+                            ⬇ {file.split('/').pop()}
+                          </a>
+                        ))}
+                      </div>
+                    ) : null}
+                  </CardContent>
+                </Card>
+
+                <Card className='rounded-3xl border-slate-200 shadow-none'>
+                  <CardHeader>
+                    <CardTitle className='text-xl'>Implementation parameters</CardTitle>
+                    <CardDescription>Merged metrics from every EDA report (timing, area, power, checks).</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    {signoff.metrics && Object.keys(signoff.metrics).length ? (
+                      <div className='overflow-x-auto rounded-2xl border border-slate-200'>
+                        <table className='w-full text-left text-sm'>
+                          <thead>
+                            <tr className='border-b border-slate-200 bg-slate-50 text-xs uppercase tracking-wide text-slate-400'>
+                              <th className='px-4 py-3'>Parameter</th>
+                              <th className='px-4 py-3'>Value</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {Object.entries(signoff.metrics)
+                              .sort(([a], [b]) => a.localeCompare(b))
+                              .map(([key, value]) => (
+                                <tr key={key} className='border-b border-slate-100 last:border-0'>
+                                  <td className='px-4 py-2.5 font-medium text-slate-700'>{key}</td>
+                                  <td className='px-4 py-2.5 text-slate-600'>{value === null ? '—' : String(value)}</td>
+                                </tr>
+                              ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    ) : (
+                      <EmptyState title='No metrics yet' detail='EDA reports have not published metrics for this task yet.' />
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
+            ) : null}
+
+            <div className='grid gap-5 xl:grid-cols-2'>
             <Card className='rounded-3xl border-slate-200 shadow-none'>
               <CardHeader>
                 <CardTitle className='text-xl'>Tapeout checklist</CardTitle>
@@ -570,6 +1143,7 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
                 </Button>
               </CardContent>
             </Card>
+            </div>
           </div>
         ) : (
           <EmptyState title='No signoff status available' detail='The backend has not returned signoff data for this task yet.' />

@@ -381,9 +381,16 @@ def _slim_metrics(m: dict) -> dict:
 
     return {k: v for k, v in {
         "die_area_um2": g("design__die__area", "design__die__area__um2"),
+        "die_bbox_um": g("design__die__bbox"),
         "core_area_um2": g("design__core__area"),
         "cell_count": g("design__instance__count", "design__instance__count__stdcell"),
         "util_pct": g("design__instance__utilization", "design__instance__utilization__stdcell"),
+        "io_pins": g("design__io", "design__io__count"),
         "wns_ns": g("timing__setup__ws", "clock__skew__worst"),
+        "tns_ns": g("timing__setup__tns"),
+        "hold_wns_ns": g("timing__hold__ws"),
         "power_mw": g("power__total"),
+        "antenna_violations": g("route__antenna_violation__count"),
+        "drc_errors": g("magic__drc_error__count", "route__drc_errors"),
+        "lvs_errors": g("lvs__total__errors"),
     }.items() if v is not None}

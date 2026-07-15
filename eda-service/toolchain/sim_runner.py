@@ -10,7 +10,9 @@ run without iverilog/vvp installed.
 """
 from __future__ import annotations
 
+import json
 import os
+import re
 from pathlib import Path
 from typing import Dict, List, Optional
 
@@ -49,8 +51,13 @@ def run_simulation(
     """Compile + run the given ``sources`` and return a :class:`SimReport`.
 
     ``workspace`` is the standardized task workspace. Compilation writes
-    ``exports/sim.vvp``; simulation runs with ``waves/`` as CWD so a testbench
-    ``$dumpfile("design.vcd")`` lands at ``waves/design.vcd``.
+    ``exports/sim.vvp``; simulation runs with the WORKSPACE ROOT as CWD so the
+    design-root-relative paths the RTL uses actually resolve —
+    ``$readmemh("rtl/weights.mem")`` and testbench dumps like
+    ``$writememh("waves/chip_output.mem")``. (Running from ``waves/`` broke
+    every ``rtl/*.mem`` load: the weights read as X and the self-check failed
+    on garbage outputs.) A bare ``$dumpfile("design.vcd")`` lands at the root
+    and is moved into ``waves/`` afterwards.
     """
     opts = opts or {}
     workspace = Path(workspace)
@@ -70,21 +77,50 @@ def run_simulation(
         report.errors.append("no synthesizable/testbench sources present in workspace")
         return report
 
+    # ONE testbench per simulation: the flow also writes per-IP UNIT testbenches
+    # (tb/<module>_tb.v) for generation-time verify — compiling them all together
+    # runs every tb simultaneously and any unit tb's $fatal kills the MAIN run.
+    # Keep only the TOP testbench: <top>_tb.* when present, else the tb that
+    # instantiates the top module, else the largest tb.
+    tbs = [p for p in vfiles if "tb" in p.parts or p.stem.endswith("_tb")]
+    if len(tbs) > 1:
+        chosen = next((p for p in tbs if top and p.stem == f"{top}_tb"), None)
+        if chosen is None and top:
+            for p in tbs:
+                try:
+                    if re.search(rf"\b{re.escape(top)}\s+(#\s*\(|\w+\s*\()", p.read_text(errors="replace")):
+                        chosen = p
+                        break
+                except OSError:
+                    continue
+        if chosen is None:
+            chosen = max(tbs, key=lambda p: p.stat().st_size if p.exists() else 0)
+        dropped = [p.name for p in tbs if p != chosen]
+        vfiles = [p for p in vfiles if p not in tbs or p == chosen]
+        report.warnings.append(
+            f"multiple testbenches found; simulating {chosen.name} (unit tbs excluded: {', '.join(dropped)})")
+
     vvp_path = exports_dir / "sim.vvp"
     vcd_path = waves_dir / "design.vcd"
-    for stale in (vvp_path, vcd_path):
+    for stale in (vvp_path, vcd_path, workspace / "design.vcd"):
         if stale.exists():
             stale.unlink()
+
+    # The elaboration ROOT must be the TESTBENCH, never the DUT: `-s <dut>`
+    # elaborated the bare design with dangling inputs, vvp ran NOTHING, printed
+    # nothing, and the silent run slipped through as a pass.
+    tb_files = [p for p in vfiles if "tb" in p.parts or p.stem.endswith("_tb")]
+    sim_root = tb_files[0].stem if tb_files else top
 
     log: List[str] = []
     inc = f"-I{rtl_dir}"
     compile_cmd = [_iverilog_bin(), "-g2012", "-o", str(vvp_path), inc]
-    if top:
-        compile_cmd += ["-s", top]
+    if sim_root:
+        compile_cmd += ["-s", sim_root]
     compile_cmd += [str(p) for p in vfiles]
     log.append("$ " + " ".join(
         ["iverilog", "-g2012", "-o", "exports/sim.vvp", "-I rtl"]
-        + (["-s", top] if top else [])
+        + (["-s", sim_root] if sim_root else [])
         + [p.name for p in vfiles]
     ))
 
@@ -114,27 +150,77 @@ def run_simulation(
 
     report.compiled = True
     log.append("$ vvp exports/sim.vvp")
-    run_res = runner.run([_vvp_bin(), str(vvp_path)], cwd=waves_dir, timeout=timeout)
+    run_res = runner.run([_vvp_bin(), str(vvp_path)], cwd=workspace, timeout=timeout)
+    # A tb that dumps a bare "design.vcd" writes it at the workspace root now —
+    # move it to the standard waves/ location.
+    root_vcd = workspace / "design.vcd"
+    if root_vcd.is_file() and not vcd_path.is_file():
+        root_vcd.replace(vcd_path)
+    passed = None
     if run_res.not_found:
         log.append("vvp is not installed / not on PATH.")
         report.warnings.append("vvp not available; compiled but not executed")
     elif run_res.timed_out:
         log.append("(simulation timed out — check for a missing $finish)")
         report.warnings.append("simulation timeout")
+        passed = False
     else:
         if run_res.stdout.strip():
             log.append(run_res.stdout.strip())
         if run_res.stderr.strip():
             log.append("[stderr] " + run_res.stderr.strip())
+        # The self-checking testbench's VERDICT — this is what makes the SIM
+        # stage honest instead of "it ran, therefore success".
+        out_text = run_res.stdout + "\n" + run_res.stderr
+        import re as _re
+        if _re.search(r"FAILED|\$fatal|ERROR:|mismatch|assert(ion)?\s+fail", out_text, _re.I):
+            passed = False
+        elif _re.search(r"TEST\s+PASSED|ALL\s+TESTS?\s+PASSED", out_text, _re.I):
+            passed = True
+        elif tb_files:
+            # A testbench that ran but printed NO verdict proves nothing —
+            # silence is not success (a silent run is how the fake pass
+            # happened). Treated as a failure so the repair loop engages.
+            passed = False
+            log.append("(testbench printed no TEST PASSED/FAILED verdict — treated as FAILED; "
+                       "a self-checking tb must $display its verdict)")
 
     if vcd_path.is_file():
         report.waveform = True
         try:
-            report.waveform_summary = vcd.to_wave_json(vcd_path.read_text(errors="replace"))
+            wave_json = vcd.to_wave_json(vcd_path.read_text(errors="replace"))
+            # The full trace data is BIG (blew the 64KB report_json DB column) —
+            # persist it as a workspace file and keep only a compact summary in
+            # the report itself.
+            wave_json_path = waves_dir / "waveform.json"
+            wave_json_path.write_text(json.dumps(wave_json))
+            register_artifact(artifacts, path="waves/waveform.json", kind="waveform", stage="SIM", base=workspace)
+            report.waveform_summary = {
+                "tmax": wave_json.get("tmax", 0),
+                "signals": [{"name": s.get("name"), "width": s.get("width")}
+                            for s in wave_json.get("signals", [])][:32],
+                "trace_path": "waves/waveform.json",
+            }
         except Exception as exc:  # noqa: BLE001 - waveform parse must never fail the stage
             log.append(f"(waveform parse failed: {exc})")
             report.warnings.append(f"waveform parse failed: {exc}")
         register_artifact(artifacts, path="waves/design.vcd", kind="waveform", stage="SIM", base=workspace)
+        # Render the waveform to a PNG so the UI can SHOW the signals toggling
+        # (GarudaChip show_waveform); best-effort, never fails the stage.
+        if vcd.render_png(vcd_path, waves_dir / "waveform.png"):
+            log.append("rendered waves/waveform.png")
+            register_artifact(artifacts, path="waves/waveform.png", kind="image", stage="SIM", base=workspace)
+
+    # CHIP OUTPUT rendering (GarudaChip inference display): a testbench that
+    # $writememh-dumps the chip's RESULT into waves/*.mem gets that data
+    # rendered to a PNG so the UI shows what the RTL actually computed.
+    from .memimg import render_mem_image
+    for mem_file in sorted(waves_dir.glob("*.mem")):
+        out_png = mem_file.with_suffix(".png")
+        if render_mem_image(mem_file, out_png, workspace=workspace):
+            rel = f"waves/{out_png.name}"
+            log.append(f"rendered chip data {rel} from {mem_file.name}")
+            register_artifact(artifacts, path=rel, kind="image", stage="SIM", base=workspace)
     else:
         log.append(
             'no design.vcd produced - add `$dumpfile("design.vcd"); '
@@ -142,12 +228,18 @@ def run_simulation(
         )
         report.warnings.append("no waveform (design.vcd) produced")
 
+    verdict = ("— testbench PASSED" if passed is True
+               else "— testbench FAILED (see the log)" if passed is False
+               else "(no explicit TEST PASSED/FAILED verdict printed)")
     report.summary = (
-        "Simulation completed" if report.compiled else "Simulation failed"
+        f"Simulation completed {verdict}" if report.compiled else "Simulation failed"
     ) + (" with waveform." if report.waveform else ".")
+    if passed is False:
+        report.errors.append("self-checking testbench FAILED")
     report.metrics = {
         "compiled": report.compiled,
         "waveform": report.waveform,
+        "passed": passed,
         "signal_count": len(report.waveform_summary.get("signals", [])) if report.waveform else 0,
     }
     _finalize_log(report, logs_dir, log, artifacts)

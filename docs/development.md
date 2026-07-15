@@ -8,9 +8,9 @@
 
 ## First-time setup
 ```bash
-cp .env.example .env
-bash scripts/setup.sh
+./scripts/install.sh          # installs Docker/Ollama if needed, pulls the LLM, builds + starts the stack
 ```
+For a setup that only prepares `.env` without starting anything: `./scripts/install.sh --no-start`.
 
 ## Local service development
 ### Orchestrator Service
@@ -47,9 +47,10 @@ npm run dev
 ```
 
 ## Container workflows
-- `bash scripts/start.sh` — start the full stack
-- `bash scripts/stop.sh` — stop the full stack
+- `./scripts/run.sh` — start the full stack (self-heals after a reboot)
+- `./scripts/run.sh stop` — stop the full stack
 - `bash scripts/migrate.sh` — run MySQL schema migration through the Orchestrator Service
+- `./scripts/e2e_vit_accelerator.sh` — end-to-end pipeline test (ViT object-classification accelerator)
 
 ## Notes
 - The frontend automatically logs in with the seeded local credentials from `.env`.

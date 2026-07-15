@@ -76,9 +76,14 @@ export interface TaskDetail {
 export interface RunbookEvent {
   id: string
   time: string
+  /** Full RFC3339 timestamp — preferred over `time` (which is server-local). */
+  timestamp?: string
   title: string
   detail: string
   tone: EventTone
+  /** Optional workspace-relative image to render under the event
+   *  (uploaded diagram, GDS layout render). */
+  image?: string
 }
 
 export interface ArtifactItem {
@@ -123,6 +128,9 @@ export interface SignoffStatus {
   message: string
   packageContents: string[]
   checklist: SignoffChecklistItem[]
+  gdsImage?: string
+  gdsFiles?: string[]
+  metrics?: Record<string, string | number | boolean | null>
 }
 
 export interface AgentPolicy {
@@ -142,10 +150,17 @@ export interface CreateTaskPayload {
   template_id?: string
   pdk_id: string
   stdcell_lib_id: string
+  llm_model?: string
   review_gates: ReviewGate[]
   agent_policy: AgentPolicy
   owner_id?: string
   owner_name?: string
+  attachments?: TaskAttachment[]
+}
+
+export interface TaskAttachment {
+  name: string
+  content_base64: string
 }
 
 export interface CreateTaskInput {

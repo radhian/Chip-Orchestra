@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"regexp"
 	"sort"
 	"strings"
 	"sync"
@@ -57,9 +58,15 @@ func NewService(db *gorm.DB, redisClient *redis.Client, agent *dispatcher.Client
 			{Name: "SPEC_INGEST", Kind: "agent"},
 			{Name: "PLAN", DependsOn: []string{"SPEC_INGEST"}, Kind: "agent"},
 			{Name: "RTL_GEN", DependsOn: []string{"PLAN"}, Kind: "agent"},
-			{Name: "TB_GEN", DependsOn: []string{"PLAN"}, Kind: "agent"},
+			// TB_GEN waits for RTL_GEN so the testbench is written against the
+			// actual generated module interface instead of only the plan;
+			// independently generated RTL+TB tend to drift and fail SIM.
+			{Name: "TB_GEN", DependsOn: []string{"RTL_GEN"}, Kind: "agent"},
 			{Name: "SIM", DependsOn: []string{"RTL_GEN", "TB_GEN"}, Kind: "eda"},
-			{Name: "LINT", DependsOn: []string{"RTL_GEN"}, Kind: "eda"},
+			// LINT runs only AFTER the simulation passes — a design that doesn't
+			// even simulate correctly has no business being style-checked yet
+			// (GarudaChip order: generate → tb → simulate → lint → harden).
+			{Name: "LINT", DependsOn: []string{"SIM"}, Kind: "eda"},
 			{Name: "RTL_REPAIR", DependsOn: []string{"SIM", "LINT"}, Kind: "agent"},
 			{Name: "SYNTH", DependsOn: []string{"RTL_REPAIR"}, Kind: "eda", Gated: true},
 			{Name: "PNR", DependsOn: []string{"SYNTH"}, Kind: "eda"},
@@ -281,9 +288,33 @@ func (s *Service) dispatchStage(ctx context.Context, taskID, stageID string) {
 		_ = s.db.WithContext(ctx).Save(&stage).Error
 		_ = s.publishEvent(ctx, taskID, map[string]any{"type": "stage.updated", "task_id": taskID, "stage": stage.Name, "status": stage.Status, "progress": stage.Progress, "timestamp": time.Now().UTC().Format(time.RFC3339)})
 
-		resp, err := s.agent.Invoke(ctx, s.buildInvokeRequest(taskID, task, stage.Name, prompt))
+		req := s.buildInvokeRequest(taskID, task, stage.Name, prompt)
+		resp, err := s.agent.Invoke(ctx, req)
+		// TRANSIENT failures (agent-service restarting during a redeploy →
+		// "EOF" / connection refused) must not burn the stage: wait for the
+		// service to come back and re-dispatch instead of failing.
+		for tries := 0; err != nil && isTransientErr(err) && tries < 3; tries++ {
+			_ = s.publishEvent(ctx, taskID, map[string]any{
+				"type": "stage.updated", "task_id": taskID, "stage": stage.Name, "status": string(models.StageStatusRunning),
+				"title":  fmt.Sprintf("%s connection lost — re-dispatching (%d/3)", stage.Name, tries+1),
+				"detail": "The agent service connection dropped (likely a restart). Waiting for it to come back, then re-running this stage.",
+				"tone":   "warning", "timestamp": time.Now().UTC().Format(time.RFC3339),
+			})
+			time.Sleep(20 * time.Second)
+			resp, err = s.agent.Invoke(ctx, req)
+		}
 		if err != nil {
 			s.failStage(ctx, &stage, &attempt, err.Error())
+			return
+		}
+		// A stage only counts as done when the files it claims to have produced
+		// actually exist in the shared workspace. Without this gate a stage (and
+		// eventually the whole task) was marked Completed while its artifacts
+		// showed up as Unavailable in the UI.
+		if missing := s.missingArtifacts(taskID, resp.ArtifactRefs); len(missing) > 0 {
+			s.failStage(ctx, &stage, &attempt, fmt.Sprintf(
+				"stage reported success but %d declared artifact(s) are missing from the workspace: %s",
+				len(missing), strings.Join(missing, ", ")))
 			return
 		}
 		resultBytes, _ := json.Marshal(resp)
@@ -361,6 +392,42 @@ func (s *Service) pollEDARun(ctx context.Context, taskID, stageID, jobID string)
 
 		switch status.Status {
 		case "COMPLETED":
+			// HONESTY GATES — "the job ran" is not "the stage succeeded".
+			// A SIM whose self-checking testbench FAILED triggers the
+			// agent repair loop (bounded) instead of a green checkmark, and
+			// hardening stages must actually produce a GDS.
+			if stage.Name == "SIM" && simTestbenchFailed(status.Report) {
+				// Auto-repair budget lives in Redis (2 rounds per manual retry) —
+				// keying it on the cumulative RetryCount meant manual retries
+				// exhausted the budget and the design never got repaired.
+				repairKey := fmt.Sprintf("task:%s:sim_auto_repairs", taskID)
+				rounds, _ := s.redis.Incr(ctx, repairKey).Result()
+				if rounds <= 2 {
+					s.repairAndRetrySim(ctx, taskID, &stage, &attempt, status.Report, int(rounds))
+					return
+				}
+				s.failStage(ctx, &stage, &attempt,
+					"self-checking testbench STILL FAILING after auto-repair rounds — see logs/sim.log and logs/rtl_repair_deep_agent.md; a manual Retry re-arms the auto-repair loop")
+				return
+			}
+			if stage.Name == "SIM" {
+				_ = s.redis.Del(ctx, fmt.Sprintf("task:%s:sim_auto_repairs", taskID)).Err()
+				// VERIFIABLE-OUTPUT gate: with chip-input data staged, a passing
+				// testbench must also DUMP the chip's computed result — a green
+				// SIM with no output evidence is not a verified chip.
+				if s.hasChipInput(taskID) && !s.hasChipOutput(taskID) {
+					s.failStage(ctx, &stage, &attempt,
+						"testbench passed but never dumped the chip's output (waves/chip_output.mem) — retry TB_GEN to regenerate the testbench with the output-dump contract")
+					return
+				}
+			}
+			if stage.Name == "PNR" || stage.Name == "DRC_LVS" {
+				if !s.hasGDS(taskID) {
+					s.failStage(ctx, &stage, &attempt,
+						stage.Name+" completed without producing a GDS — LibreLane likely failed or is unavailable; check reports/"+strings.ToLower(stage.Name)+"_report.json and the hardening logs")
+					return
+				}
+			}
 			now := time.Now().UTC()
 			stage.Status = models.StageStatusSucceeded
 			stage.Progress = 100
@@ -382,6 +449,14 @@ func (s *Service) pollEDARun(ctx context.Context, taskID, stageID, jobID string)
 
 		time.Sleep(2 * time.Second)
 	}
+}
+
+// ResetSimRepairBudget re-arms the SIM auto-repair loop. Called from the
+// MANUAL retry API only — RetryStage itself is also invoked by the auto-repair
+// loop, and resetting there erased the counter the loop had just incremented
+// (the "auto-repair round 9" infinite loop).
+func (s *Service) ResetSimRepairBudget(ctx context.Context, taskID string) {
+	_ = s.redis.Del(ctx, fmt.Sprintf("task:%s:sim_auto_repairs", taskID)).Err()
 }
 
 func (s *Service) RetryStage(ctx context.Context, taskID, stageName string) error {
@@ -424,6 +499,38 @@ func (s *Service) taskWorkspace(taskID string) string {
 	return filepath.Join(s.workspaceRoot, taskID)
 }
 
+// TaskWorkspace exposes the task's shared-workspace directory to the API layer
+// (attachment uploads, disk-backed workspace file reads).
+func (s *Service) TaskWorkspace(taskID string) string {
+	return s.taskWorkspace(taskID)
+}
+
+// missingArtifacts returns the declared workspace-relative artifact paths that
+// do NOT exist on disk. Used to gate agent-stage success so a stage can never
+// be marked done while its outputs are unavailable. When the workspace
+// directory itself is absent (e.g. volume not mounted in a dev setup) the
+// check is skipped rather than failing every stage.
+func (s *Service) missingArtifacts(taskID string, refs []string) []string {
+	if len(refs) == 0 {
+		return nil
+	}
+	workspace := s.taskWorkspace(taskID)
+	if _, err := os.Stat(workspace); err != nil {
+		return nil
+	}
+	missing := make([]string, 0)
+	for _, ref := range refs {
+		ref = strings.TrimSpace(ref)
+		if ref == "" || strings.Contains(ref, "..") || filepath.IsAbs(ref) {
+			continue
+		}
+		if _, err := os.Stat(filepath.Join(workspace, filepath.FromSlash(ref))); err != nil {
+			missing = append(missing, ref)
+		}
+	}
+	return missing
+}
+
 // edaReportPaths returns the relative report file names produced by the EDA
 // stages, used to give downstream agent stages (SIGNOFF/EXPORT) evidence to
 // consume from the shared workspace.
@@ -453,6 +560,7 @@ func (s *Service) buildInvokeRequest(taskID string, task models.Task, stageName,
 			"current_stage":  task.CurrentStage,
 			"pdk_id":         task.PDKID,
 			"stdcell_lib_id": task.StdcellLibID,
+			"llm_model":      task.LLMModel,
 			"design_brief":   task.DesignBrief,
 			"workspace_root": workspace,
 		},
@@ -498,6 +606,87 @@ func (s *Service) dependsTransitively(stageName, upstream string) bool {
 	return visit(stageName)
 }
 
+// isTransientErr matches connection-level failures worth re-dispatching
+// (service restarting), as opposed to real stage errors.
+func isTransientErr(err error) bool {
+	msg := err.Error()
+	for _, needle := range []string{"EOF", "connection refused", "connection reset", "no such host", "broken pipe"} {
+		if strings.Contains(msg, needle) {
+			return true
+		}
+	}
+	return false
+}
+
+// simTestbenchFailed reads the SIM report's verdict: the self-checking
+// testbench printed FAILED / $fatal / a mismatch (metrics.passed == false).
+func simTestbenchFailed(report map[string]any) bool {
+	metrics, _ := report["metrics"].(map[string]any)
+	if metrics == nil {
+		return false
+	}
+	passed, ok := metrics["passed"].(bool)
+	return ok && !passed
+}
+
+// hasGDS reports whether hardening actually produced a layout stream.
+func (s *Service) hasGDS(taskID string) bool {
+	matches, _ := filepath.Glob(filepath.Join(s.taskWorkspace(taskID), "gds", "*.gds*"))
+	return len(matches) > 0
+}
+
+// hasChipInput: a data stimulus was staged for the chip (inference flow).
+func (s *Service) hasChipInput(taskID string) bool {
+	ws := s.taskWorkspace(taskID)
+	for _, rel := range []string{"context/chip_input_grid.json", "waves/chip_input.png"} {
+		if _, err := os.Stat(filepath.Join(ws, filepath.FromSlash(rel))); err == nil {
+			return true
+		}
+	}
+	return false
+}
+
+// hasChipOutput: the testbench dumped what the RTL computed.
+func (s *Service) hasChipOutput(taskID string) bool {
+	matches, _ := filepath.Glob(filepath.Join(s.taskWorkspace(taskID), "waves", "*output*"))
+	return len(matches) > 0
+}
+
+// repairAndRetrySim is the bounded self-heal loop (GarudaChip's corrector):
+// the testbench failed → dispatch the RTL_REPAIR deep agent with the failure
+// evidence, then reset SIM (and its dependents) so it re-runs on the fix.
+func (s *Service) repairAndRetrySim(ctx context.Context, taskID string, stage *models.Stage, attempt *models.StageAttempt, report map[string]any, round int) {
+	now := time.Now().UTC()
+	attempt.Status = models.StageStatusFailed
+	attempt.ErrorMessage = "self-checking testbench FAILED — dispatching auto-repair"
+	attempt.CompletedAt = &now
+	payload, _ := json.Marshal(report)
+	attempt.Result = string(payload)
+	_ = s.db.WithContext(ctx).Save(attempt).Error
+	_ = s.publishEvent(ctx, taskID, map[string]any{
+		"type": "stage.updated", "task_id": taskID, "stage": stage.Name, "status": string(models.StageStatusRunning),
+		"title":  fmt.Sprintf("SIM failed — auto-repair round %d/2", round),
+		"detail": "The self-checking testbench FAILED. The RTLAuthor deep agent is debugging the design against a golden model (logs/rtl_repair_deep_agent.md), then SIM re-runs automatically.",
+		"tone":   "warning", "timestamp": now.Format(time.RFC3339),
+	})
+
+	var task models.Task
+	if err := s.db.WithContext(ctx).First(&task, "id = ?", taskID).Error; err == nil {
+		prompt := fmt.Sprintf(
+			"SIMULATION FAILURE for task %s: the self-checking testbench FAILED. Debug the chip's behaviour against a golden model and fix the faulty RTL (see logs/sim.log). Design brief: %s",
+			task.Name, task.DesignBrief)
+		if _, err := s.agent.Invoke(ctx, s.buildInvokeRequest(taskID, task, "RTL_REPAIR", prompt)); err != nil {
+			s.failStage(ctx, stage, attempt, "auto-repair dispatch failed: "+err.Error())
+			return
+		}
+	}
+	// Reset SIM + dependents and re-queue; RetryStage bumps stage.RetryCount,
+	// which bounds this loop.
+	if err := s.RetryStage(ctx, taskID, stage.Name); err != nil {
+		s.failStage(ctx, stage, attempt, "could not requeue SIM after repair: "+err.Error())
+	}
+}
+
 func (s *Service) failStage(ctx context.Context, stage *models.Stage, attempt *models.StageAttempt, msg string) {
 	now := time.Now().UTC()
 	stage.Status = models.StageStatusFailed
@@ -513,8 +702,49 @@ func (s *Service) failStage(ctx context.Context, stage *models.Stage, attempt *m
 	_ = s.evaluateTask(ctx, stage.TaskID)
 }
 
+// stageImage finds the picture worth SHOWING in the execution log for a
+// completed stage: the user's uploaded diagram after SPEC_INGEST, the GDS
+// layout render after RENDER/SIGNOFF/EXPORT. Returns a workspace-relative
+// path or "".
+func (s *Service) stageImage(taskID, stageName string) string {
+	imageRE := regexp.MustCompile(`(?i)\.(png|jpe?g|webp|bmp|gif|svg)$`)
+	scan := func(dir string) string {
+		entries, err := os.ReadDir(filepath.Join(s.taskWorkspace(taskID), dir))
+		if err != nil {
+			return ""
+		}
+		for _, entry := range entries {
+			if !entry.IsDir() && imageRE.MatchString(entry.Name()) && !strings.HasPrefix(entry.Name(), ".") {
+				return dir + "/" + entry.Name()
+			}
+		}
+		return ""
+	}
+	switch stageName {
+	case "SPEC_INGEST", "PLAN":
+		return scan("context/uploads")
+	case "SIM", "GL_SIM":
+		return scan("waves")
+	case "RENDER", "DRC_LVS", "SIGNOFF", "EXPORT":
+		if img := scan("gds"); img != "" {
+			return img
+		}
+		// RENDER writes its layout image to reports/gds.png
+		for _, candidate := range []string{"reports/gds.png", "reports/schematic.png"} {
+			if _, err := os.Stat(filepath.Join(s.taskWorkspace(taskID), filepath.FromSlash(candidate))); err == nil {
+				return candidate
+			}
+		}
+	}
+	return ""
+}
+
 func (s *Service) recordAgentOutputs(ctx context.Context, taskID, stageName string, resp *dispatcher.InvokeResponse) {
-	_ = s.pushListJSON(ctx, fmt.Sprintf("task:%s:events", taskID), map[string]any{"id": uuid.NewString(), "time": time.Now().Format("15:04"), "title": fmt.Sprintf("%s completed", stageName), "detail": resp.Summary, "tone": "success"})
+	event := map[string]any{"id": uuid.NewString(), "time": time.Now().Format("15:04"), "timestamp": time.Now().UTC().Format(time.RFC3339), "title": fmt.Sprintf("%s completed", stageName), "detail": resp.Summary, "tone": "success"}
+	if img := s.stageImage(taskID, stageName); img != "" {
+		event["image"] = img
+	}
+	_ = s.pushListJSON(ctx, fmt.Sprintf("task:%s:events", taskID), event)
 	for _, item := range resp.Diagnostics {
 		_ = s.pushListJSON(ctx, fmt.Sprintf("task:%s:diagnosis", taskID), item)
 	}
@@ -529,13 +759,109 @@ func (s *Service) recordAgentOutputs(ctx context.Context, taskID, stageName stri
 
 func (s *Service) recordEDAOutputs(ctx context.Context, taskID, stageName string, report map[string]any) {
 	reportName := strings.ToLower(stageName) + "_report.json"
-	_ = s.pushListJSON(ctx, fmt.Sprintf("task:%s:events", taskID), map[string]any{"id": uuid.NewString(), "time": time.Now().Format("15:04"), "title": fmt.Sprintf("%s report ready", stageName), "detail": "Mock EDA execution completed and produced a report.", "tone": "success"})
-	_ = s.pushListJSON(ctx, fmt.Sprintf("task:%s:artifacts", taskID), map[string]any{"id": uuid.NewString(), "name": reportName, "type": "REPORT", "owner": "EDA Service"})
+	// Say WHAT happened, not just "a report exists": the stage's own summary
+	// plus its headline metrics.
+	detail, _ := report["summary"].(string)
+	if detail == "" {
+		detail = "EDA execution completed and produced a report."
+	}
+	if metrics, ok := report["metrics"].(map[string]any); ok && len(metrics) > 0 {
+		keys := make([]string, 0, len(metrics))
+		for k := range metrics {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		parts := make([]string, 0, 6)
+		for _, k := range keys {
+			if len(parts) >= 6 {
+				break
+			}
+			parts = append(parts, fmt.Sprintf("%s=%v", k, metrics[k]))
+		}
+		detail += " [" + strings.Join(parts, " · ") + "]"
+	}
+	event := map[string]any{"id": uuid.NewString(), "time": time.Now().Format("15:04"), "timestamp": time.Now().UTC().Format(time.RFC3339), "title": fmt.Sprintf("%s report ready", stageName), "detail": detail, "tone": "success"}
+	if img := s.stageImage(taskID, stageName); img != "" {
+		event["image"] = img
+	}
+	_ = s.pushListJSON(ctx, fmt.Sprintf("task:%s:events", taskID), event)
+	_ = s.pushListJSON(ctx, fmt.Sprintf("task:%s:artifacts", taskID), map[string]any{"id": uuid.NewString(), "name": reportName, "type": "REPORT", "owner": "EDA Service", "path": "reports/" + reportName})
 	payload, _ := json.Marshal(report)
 	_ = s.redis.Set(ctx, fmt.Sprintf("task:%s:artifact:%s", taskID, reportName), string(payload), 0).Err()
 }
 
+// stageActivity says WHAT is being done in a stage, so the execution log
+// narrates the run instead of showing bare status flips.
+var stageActivity = map[string]string{
+	"SPEC_INGEST": "SpecInterpreter is decomposing the design brief and digesting attached images/PDFs (vision).",
+	"PLAN":        "FlowAssistant deep agent is researching references online and writing the execution plan + build contract.",
+	"RTL_GEN":     "RTLAuthor deep agent is generating the RTL modules (compile-checked on every write) — live transcript: logs/rtl_gen_deep_agent.md.",
+	"RTL_REPAIR":  "RTLAuthor deep agent is repairing compile errors (web fix search + remembered lessons) — live transcript: logs/rtl_repair_deep_agent.md.",
+	"TB_GEN":      "Verifier deep agent is writing self-checking testbenches — live transcript: logs/tb_gen_deep_agent.md.",
+	"SIM":         "EDA service is compiling and simulating the design with the generated testbench (iverilog/vvp).",
+	"LINT":        "EDA service is linting the RTL.",
+	"SYNTH":       "EDA service is synthesizing the design (yosys via LibreLane).",
+	"PNR":         "EDA service is running place & route.",
+	"STA":         "EDA service is running static timing analysis.",
+	"GL_SIM":      "EDA service is running gate-level simulation.",
+	"RENDER":      "EDA service is rendering the GDS layout image.",
+	"DRC_LVS":     "EDA service is running DRC/LVS checks.",
+	"SIGNOFF":     "FlowAssistant is assembling the signoff summary from the EDA evidence.",
+	"EXPORT":      "FlowAssistant is assembling the final report, runbook and PDF.",
+}
+
+// publishEvent enriches every event with the display fields the runbook needs
+// (id/time/title/detail/tone) — bare status payloads rendered as EMPTY rows in
+// the execution log.
 func (s *Service) publishEvent(ctx context.Context, taskID string, payload map[string]any) error {
+	if _, ok := payload["id"]; !ok {
+		payload["id"] = uuid.NewString()
+	}
+	if _, ok := payload["time"]; !ok {
+		payload["time"] = time.Now().Format("15:04")
+	}
+	// Full timestamp so the frontend can render the time in the USER'S
+	// timezone — the bare "15:04" string is container-local (UTC) and showed
+	// wrong wall-clock times.
+	if _, ok := payload["timestamp"]; !ok {
+		payload["timestamp"] = time.Now().UTC().Format(time.RFC3339)
+	}
+	stageName, _ := payload["stage"].(string)
+	status, _ := payload["status"].(string)
+	if _, ok := payload["title"]; !ok && stageName != "" {
+		title := stageName
+		switch models.StageStatus(status) {
+		case models.StageStatusRunning, models.StageStatusDispatching:
+			title = fmt.Sprintf("%s running", stageName)
+			if progress, okP := payload["progress"].(int); okP && progress > 0 {
+				title = fmt.Sprintf("%s running (%d%%)", stageName, progress)
+			}
+		case models.StageStatusSucceeded:
+			title = fmt.Sprintf("%s completed", stageName)
+		case models.StageStatusFailed:
+			title = fmt.Sprintf("%s failed", stageName)
+		default:
+			title = fmt.Sprintf("%s %s", stageName, strings.ToLower(status))
+		}
+		payload["title"] = title
+	}
+	if _, ok := payload["detail"]; !ok {
+		if msg, okE := payload["error"].(string); okE && msg != "" {
+			payload["detail"] = msg
+		} else if activity, okA := stageActivity[stageName]; okA {
+			payload["detail"] = activity
+		}
+	}
+	if _, ok := payload["tone"]; !ok {
+		switch models.StageStatus(status) {
+		case models.StageStatusFailed:
+			payload["tone"] = "warning"
+		case models.StageStatusSucceeded:
+			payload["tone"] = "success"
+		default:
+			payload["tone"] = "info"
+		}
+	}
 	encoded, err := json.Marshal(payload)
 	if err != nil {
 		return err

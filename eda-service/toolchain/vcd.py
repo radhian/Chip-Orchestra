@@ -65,3 +65,43 @@ def to_wave_json(text: str, max_signals: int = 32, max_points: int = 2000) -> Di
             pts = pts[::step]
         out.append({"name": names[vid], "width": widths[vid], "wave": [[t, v] for t, v in pts]})
     return {"tmax": tmax, "signals": out}
+
+
+def render_png(vcd_path, out_png, signals: str = "", max_traces: int = 12) -> "str | None":
+    """Render the VCD to a step-plot PNG (GarudaChip's `_wave_to_png`) so the
+    UI can SHOW the waveform, not just list design.vcd. Best-effort: returns the
+    written path, or None when matplotlib is unavailable / nothing to plot."""
+    from pathlib import Path
+
+    try:
+        import matplotlib
+
+        matplotlib.use("Agg")
+        import matplotlib.pyplot as plt
+
+        names, widths, series = parse_vcd(Path(vcd_path).read_text(errors="replace"))
+        want = [s.strip() for s in re.split(r"[,\s]+", signals) if s.strip()]
+        ids = [vid for vid in names if series[vid]
+               and (not want or any(w.lower() in names[vid].lower() for w in want))][:max_traces]
+        if not ids:
+            return None
+        tmax = max((series[vid][-1][0] for vid in ids), default=0) or 1
+        fig, axes = plt.subplots(len(ids), 1, figsize=(10, 0.7 * len(ids) + 1),
+                                 sharex=True, squeeze=False)
+        for ax, vid in zip(axes[:, 0], ids):
+            ts = [t for t, _ in series[vid]] + [tmax]
+            vs = [v if v is not None else 0 for _, v in series[vid]]
+            vs = vs + [vs[-1] if vs else 0]
+            ax.step(ts, vs, where="post", linewidth=1.2)
+            label = f"{names[vid]}[{widths[vid] - 1}:0]" if widths[vid] > 1 else names[vid]
+            ax.set_ylabel(label, rotation=0, ha="right", va="center", fontsize=8)
+            ax.margins(y=0.3)
+            ax.grid(True, alpha=0.3)
+            ax.set_yticks([])
+        axes[-1, 0].set_xlabel("time")
+        fig.tight_layout()
+        fig.savefig(out_png, dpi=110)
+        plt.close(fig)
+        return str(out_png)
+    except Exception:  # noqa: BLE001 - waveform render must never fail the stage
+        return None

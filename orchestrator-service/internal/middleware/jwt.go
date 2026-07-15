@@ -44,19 +44,26 @@ func IssueToken(user models.User, secret string, ttl time.Duration) (string, err
 
 func JWTAuth(secret string) gin.HandlerFunc {
 	return func(c *gin.Context) {
+		// Browser-native flows (<img src>, direct download links) cannot set an
+		// Authorization header, so a `?token=<jwt>` query parameter is accepted
+		// as a fallback.
+		raw := ""
 		authHeader := c.GetHeader("Authorization")
-		if authHeader == "" {
+		if authHeader != "" {
+			parts := strings.SplitN(authHeader, " ", 2)
+			if len(parts) != 2 || !strings.EqualFold(parts[0], "Bearer") {
+				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "invalid authorization header"})
+				return
+			}
+			raw = parts[1]
+		} else if q := c.Query("token"); q != "" {
+			raw = q
+		} else {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "missing authorization header"})
 			return
 		}
 
-		parts := strings.SplitN(authHeader, " ", 2)
-		if len(parts) != 2 || !strings.EqualFold(parts[0], "Bearer") {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "invalid authorization header"})
-			return
-		}
-
-		token, err := jwt.ParseWithClaims(parts[1], &JWTClaims{}, func(token *jwt.Token) (interface{}, error) {
+		token, err := jwt.ParseWithClaims(raw, &JWTClaims{}, func(token *jwt.Token) (interface{}, error) {
 			return []byte(secret), nil
 		})
 		if err != nil || !token.Valid {

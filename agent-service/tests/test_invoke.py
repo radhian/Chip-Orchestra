@@ -73,5 +73,6 @@ def test_invoke_endpoint_returns_graph_response() -> None:
             "artifact_inventory": [],
             "eda_reports": [],
             "reference_files": [],
+            "attachments": [],
         }
     )

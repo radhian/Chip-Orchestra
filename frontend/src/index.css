@@ -25,3 +25,55 @@
   }
 }
 
+
+/* ------------------------------------------------------------------------- *
+ * Dark mode. The app styles with explicit light utilities (bg-white,
+ * text-slate-900, border-slate-200, …), so dark mode remaps those utilities
+ * under the `.dark` root class instead of touching every component. Toggled
+ * from the sidebar (persisted in localStorage as `co-theme`).
+ * ------------------------------------------------------------------------- */
+.dark body { color-scheme: dark; }
+
+.dark .bg-slate-100 { background-color: #0b1220 !important; }
+.dark .bg-white { background-color: #101a2c !important; }
+.dark .bg-slate-50 { background-color: #16213a !important; }
+.dark .bg-slate-200 { background-color: #1e293b !important; }
+.dark .bg-blue-50 { background-color: #172554 !important; }
+.dark .bg-emerald-50 { background-color: #052e2b !important; }
+.dark .bg-rose-50 { background-color: #3f1d2b !important; }
+.dark .bg-amber-100 { background-color: #3a2e12 !important; }
+.dark .bg-emerald-100 { background-color: #0c3d33 !important; }
+.dark .bg-indigo-100 { background-color: #232a55 !important; }
+.dark .bg-violet-100 { background-color: #2d2350 !important; }
+.dark .bg-sky-100 { background-color: #12314a !important; }
+.dark .bg-blue-100 { background-color: #1e2f57 !important; }
+.dark .bg-rose-100 { background-color: #4a2233 !important; }
+.dark .bg-white\/80 { background-color: rgba(30, 41, 59, 0.8) !important; }
+
+.dark .text-slate-900 { color: #e2e8f0 !important; }
+.dark .text-slate-800 { color: #dbe3ee !important; }
+.dark .text-slate-700 { color: #cbd5e1 !important; }
+.dark .text-slate-600 { color: #a9b7c9 !important; }
+.dark .text-slate-500 { color: #8b9bb0 !important; }
+.dark .text-slate-400 { color: #708098 !important; }
+.dark .text-blue-800 { color: #93b4f8 !important; }
+.dark .text-blue-700 { color: #9dbcf9 !important; }
+.dark .text-emerald-700 { color: #6ee7b7 !important; }
+.dark .text-rose-700 { color: #fda4af !important; }
+.dark .text-amber-700 { color: #fcd34d !important; }
+.dark .text-indigo-700 { color: #a5b4fc !important; }
+.dark .text-violet-700 { color: #c4b5fd !important; }
+.dark .text-sky-700 { color: #7dd3fc !important; }
+.dark .text-emerald-600 { color: #34d399 !important; }
+.dark .text-rose-600 { color: #fb7185 !important; }
+.dark .text-sky-600 { color: #38bdf8 !important; }
+
+.dark .border-slate-200 { border-color: #24324a !important; }
+.dark .border-slate-100 { border-color: #1d2a40 !important; }
+.dark .border-blue-100 { border-color: #27407a !important; }
+.dark .border-emerald-100 { border-color: #14532d !important; }
+.dark .ring-slate-200 { --tw-ring-color: #24324a !important; }
+
+.dark .shadow-xl, .dark .shadow-lg, .dark .shadow-sm { --tw-shadow-color: rgba(0,0,0,0.6); }
+
+/* keep the code viewer / brand gradients as-is — they are already dark */

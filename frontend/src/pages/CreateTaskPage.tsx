@@ -1,8 +1,8 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ArrowRight, Bot, CircuitBoard, Cpu, FolderGit2, Layers3, Link2, PackageCheck, PlayCircle, ShieldCheck, Sparkles } from 'lucide-react'
+import { ArrowRight, Bot, CircuitBoard, Cpu, FileImage, FolderGit2, Layers3, Link2, PackageCheck, Paperclip, PlayCircle, ShieldCheck, Sparkles, X } from 'lucide-react'
 
-import { createTask } from '@/api/tasks'
+import { createTask, fetchLLMModels } from '@/api/tasks'
 import { Field, SummaryRow } from '@/components/app/shared'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input'
 import { Progress } from '@/components/ui/progress'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import type { CreateTaskInput } from '@/types/orchestra'
+import type { CreateTaskInput, TaskAttachment } from '@/types/orchestra'
 
 const pdkOptions = [
   { value: 'sky130', pdkId: 'sky130', stdcellLibId: 'sky130_fd_sc_hd', label: 'sky130 / sky130_fd_sc_hd' },
@@ -52,12 +52,72 @@ export function CreateTaskPage() {
   const [form, setForm] = useState(initialForm)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [llmModel, setLlmModel] = useState('')
+  const [llmModels, setLlmModels] = useState<string[]>([])
+  const [attachments, setAttachments] = useState<TaskAttachment[]>([])
+  const [attachmentError, setAttachmentError] = useState<string | null>(null)
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
+
+  useEffect(() => {
+    let cancelled = false
+    fetchLLMModels()
+      .then((response) => {
+        if (cancelled) return
+        setLlmModels(response.models)
+        setLlmModel((current) => current || response.default || response.models[0] || '')
+      })
+      .catch(() => {
+        // Model list is a convenience; task creation still works with the server default.
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   const readiness = useMemo(() => {
     const required = [form.taskName, form.repoSource, form.designBrief]
     const completed = required.filter((value) => value.trim().length > 0).length
     return Math.round((completed / required.length) * 100)
   }, [form.designBrief, form.repoSource, form.taskName])
+
+  const MAX_ATTACHMENT_BYTES = 32 * 1024 * 1024
+
+  async function handleAttachmentSelect(fileList: FileList | null) {
+    if (!fileList?.length) {
+      return
+    }
+    setAttachmentError(null)
+    const additions: TaskAttachment[] = []
+    for (const file of Array.from(fileList)) {
+      if (file.size > MAX_ATTACHMENT_BYTES) {
+        setAttachmentError(`${file.name} exceeds the 32 MB attachment limit.`)
+        continue
+      }
+      const content = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onload = () => {
+          const result = String(reader.result ?? '')
+          resolve(result.includes(',') ? result.slice(result.indexOf(',') + 1) : result)
+        }
+        reader.onerror = () => reject(reader.error)
+        reader.readAsDataURL(file)
+      }).catch(() => '')
+      if (content) {
+        additions.push({ name: file.name, content_base64: content })
+      }
+    }
+    setAttachments((current) => {
+      const names = new Set(current.map((a) => a.name))
+      return [...current, ...additions.filter((a) => !names.has(a.name))]
+    })
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
+  }
+
+  function removeAttachment(name: string) {
+    setAttachments((current) => current.filter((a) => a.name !== name))
+  }
 
   async function handleSubmit() {
     const payload: CreateTaskInput = {
@@ -72,8 +132,10 @@ export function CreateTaskPage() {
         template_id: form.templateId.trim() || undefined,
         pdk_id: form.pdkId,
         stdcell_lib_id: form.stdcellLibId,
+        llm_model: llmModel || undefined,
         review_gates: [...form.reviewGates],
         agent_policy: { ...form.agentPolicy },
+        attachments: attachments.length ? attachments : undefined,
       },
     }
 
@@ -198,6 +260,23 @@ export function CreateTaskPage() {
               </Field>
             </div>
 
+            <div className='grid gap-5 md:grid-cols-2'>
+              <Field label='LLM model' hint='Models detected on the connected Ollama server'>
+                <Select value={llmModel} onValueChange={setLlmModel}>
+                  <SelectTrigger className='h-12 rounded-2xl border-slate-200 bg-white px-4 text-sm text-slate-700 shadow-none'>
+                    <SelectValue placeholder={llmModels.length ? 'Select LLM model' : 'Using server default model'} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {llmModels.map((model) => (
+                      <SelectItem key={model} value={model}>
+                        {model}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </Field>
+            </div>
+
             <Field label='Design brief' hint='Describe the functional goal, constraints, and preferred verification behavior'>
               <Textarea
                 className='min-h-40 rounded-3xl border-slate-200'
@@ -205,6 +284,52 @@ export function CreateTaskPage() {
                 onChange={(event) => setForm((current) => ({ ...current, designBrief: event.target.value }))}
                 placeholder='Describe the intended design, verification scope, and expected outputs.'
               />
+            </Field>
+
+            <Field
+              label='Attachments (optional)'
+              hint='Block diagrams, schematics, datasheet figures, or spec PDFs — images are read by the vision model and drive the generated architecture'
+            >
+              <div className='space-y-3'>
+                <input
+                  ref={fileInputRef}
+                  type='file'
+                  multiple
+                  accept='.png,.jpg,.jpeg,.webp,.bmp,.gif,.pdf,.md,.txt,.v,.sv'
+                  className='hidden'
+                  onChange={(event) => void handleAttachmentSelect(event.target.files)}
+                />
+                <Button
+                  type='button'
+                  variant='outline'
+                  className='h-12 rounded-2xl border-slate-200'
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  <Paperclip className='mr-2 h-4 w-4' />
+                  Attach image / PDF / spec
+                </Button>
+                {attachments.length ? (
+                  <div className='space-y-2'>
+                    {attachments.map((attachment) => (
+                      <div key={attachment.name} className='flex items-center justify-between rounded-2xl border border-slate-200 px-4 py-2'>
+                        <div className='flex items-center gap-2 text-sm text-slate-700'>
+                          <FileImage className='h-4 w-4 text-slate-400' />
+                          <span className='truncate'>{attachment.name}</span>
+                        </div>
+                        <button
+                          type='button'
+                          className='rounded-full p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700'
+                          onClick={() => removeAttachment(attachment.name)}
+                          aria-label={`Remove ${attachment.name}`}
+                        >
+                          <X className='h-4 w-4' />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                ) : null}
+                {attachmentError ? <p className='text-sm text-rose-600'>{attachmentError}</p> : null}
+              </div>
             </Field>
 
             {error ? <p className='rounded-2xl bg-rose-50 px-4 py-3 text-sm text-rose-700'>{error}</p> : null}
