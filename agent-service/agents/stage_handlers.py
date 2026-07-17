@@ -426,9 +426,27 @@ def run_rtl_gen(sc: StageContext) -> AgentResult:
                      "it; write EVERY file it lists"
                      + (": " + ", ".join(f"rtl/{f}" for f in planned) if planned else "")
                      + ".\n")
+        func_note = ""
+        if (sc.workspace / "context" / "chip_input_grid.json").is_file():
+            func_note = (
+                "\nFUNCTIONAL REQUIREMENT (non-negotiable): the chip implements EXACTLY the "
+                "algorithm the design brief specifies and must COMPUTE AND OUTPUT the solved "
+                "result for the canonical input (context/chip_input_grid.json) — for a "
+                "maze/navigation brief, the route from start to goal, observable at the "
+                "chip's outputs. If the algorithm uses NN weights (e.g. DDPG actor/critic), "
+                "TRAIN/DERIVE them in Python (run_python, numpy) so the policy ACTUALLY "
+                "solves the canonical input, QUANTIZE with the RTL's fixed-point format, and "
+                "bake them into rtl/*.mem — the weights are part of the chip. Do not "
+                "substitute a different algorithm to make the task easier.\n")
         goal = (
             f"Design complete, synthesizable Verilog-2001 for this hardware: {sc.design_brief}\n"
+            "PORT RULE: module ports must be plain Verilog-2001 packed vectors ONLY. NEVER "
+            "use unpacked array ports (`output reg [7:0] q [0:3]`) — iverilog accepts them "
+            "but the hardening flow's yosys Verilog-2005 frontend REJECTS them and PNR dies; "
+            "flatten to a packed vector (`output reg [4*8-1:0] q_flat`) instead. Unpacked "
+            "arrays INSIDE modules (memories) are fine.\n"
             + _digest_note(sc)
+            + func_note
             + notes
             + _anchor_note(sc)
             + "DECOMPOSE the design into MULTIPLE files — ONE module per file "
@@ -637,8 +655,18 @@ def run_rtl_repair(sc: StageContext) -> AgentResult:
                 "capture_output=True, text=True).stdout[-3000:])` and CHECK it prints TEST "
                 "PASSED. Iterate until it does or you are certain of the remaining blocker.\n"
                 "Do NOT weaken the testbench to make it pass — the golden model and the "
-                "canonical input are the truth. Reply 'done' only after your own re-run "
-                "passes (or state exactly what still fails and why).\n" + PITFALLS
+                "canonical input are the truth. Do NOT redefine the DESIRED OUTPUT to "
+                "dodge the failure (e.g. 'the agent never reaches the goal, so the output "
+                "is the unchanged grid') — the desired output IS the solved route (path "
+                "cells marked 4) produced by THE ALGORITHM THE BRIEF SPECIFIES. If the RTL "
+                "cannot reach the goal, fix the RTL's implementation of that algorithm, or "
+                "TRAIN/DERIVE better weights in Python and update the rtl/*.mem files (the "
+                "golden model must use the same weights and fixed-point math) — never swap "
+                "in a different algorithm. NEVER remove the testbench's required "
+                "deliverables: $dumpfile(\"design.vcd\")+$dumpvars AND the chip-output dump "
+                "($writememh(\"waves/chip_output.mem\", …) of the DUT's result) must stay in "
+                "(or be ADDED to) the tb — SIM fails without them. Reply 'done' only after "
+                "your own re-run passes (or state exactly what still fails and why).\n" + PITFALLS
             )
             _run_deep(sc, goal, "rtl_repair_deep_agent", recursion_limit=90)
             status = _rtl_status(sc.workspace)
@@ -663,6 +691,50 @@ def run_rtl_repair(sc: StageContext) -> AgentResult:
                 recommended_next="Re-run SIM to confirm the fix.",
                 structured_conclusion={"top_module": top, "compiled": not status["broken"],
                                        "repaired": True, "mode": "simulation"},
+                artifact_refs=list(files.keys()),
+            )
+
+        # HARDENING / EXPLICIT repair: the orchestrator (or an operator) sent a
+        # substantive repair instruction that is NOT a sim failure — e.g.
+        # "LibreLane produced no GDS: flatten the unpacked array port". The old
+        # code fell through to "already compile-clean" and silently did NOTHING,
+        # which is why PNR auto-repair rounds never fixed anything.
+        explicit = (sc.prompt or "").strip()
+        harden_failed = any(k in explicit.lower() for k in
+                            ("hardening", "librelane", "no gds", "synthesiz", "yosys"))
+        if not status["broken"] and (harden_failed or len(explicit) >= 180):
+            goal = (
+                f"REPAIR INSTRUCTION for design `{top}` ({sc.design_brief}):\n{explicit}\n\n"
+                "The RTL already compiles with iverilog and the testbench PASSES — keep it "
+                "that way. Apply EXACTLY the fix described above (write_file_disk enforces "
+                "the hardening/golden contracts and will reject wrong shapes). VERIFY "
+                "YOURSELF before finishing: run_python "
+                "`import subprocess; print(subprocess.run(['sh','-c','iverilog -g2012 -o work/re.vvp "
+                "-Irtl -s " + f"{top}_tb" + " rtl/*.v tb/" + f"{top}_tb" + ".* && vvp work/re.vvp'], "
+                "capture_output=True, text=True).stdout[-3000:])` and CHECK it prints TEST "
+                "PASSED. Reply 'done' only after your own re-run passes.\n" + PITFALLS)
+            _run_deep(sc, goal, "rtl_repair_deep_agent", recursion_limit=90)
+            status = _rtl_status(sc.workspace)
+            files = _files_from_disk(sc.workspace, ["rtl", "tb"])
+            note = (f"# RTL Repair (hardening/explicit) — {top}\n\n"
+                    f"- Applied targeted repair; files now: {', '.join(status['files'])}\n"
+                    f"- Compile clean: {'yes' if not status['broken'] else 'no'}\n")
+            files["reports/rtl_repair.md"] = note
+            sc.persist({"reports/rtl_repair.md": note})
+            _log_state(sc, "repair:hardening",
+                       f"targeted repair applied; broken={list(status['broken']) or 'none'}")
+            return AgentResult(
+                agent_name=agent,
+                summary=f"{agent} applied a targeted (hardening) repair for {top} (deep agent).",
+                diagnostics=[_diag(sc.stage, agent, "Hardening repair",
+                                   "Deep agent applied the targeted synthesizability/contract fix.",
+                                   confidence="Deep agent")],
+                artifacts=[_artifact("artifact-rtl-repair", "rtl_repair.md", "REPORT", agent,
+                                     "reports/rtl_repair.md")],
+                workspace_files=files,
+                recommended_next="Re-run SIM, then SYNTH/PNR.",
+                structured_conclusion={"top_module": top, "compiled": not status["broken"],
+                                       "repaired": True, "mode": "hardening"},
                 artifact_refs=list(files.keys()),
             )
 
@@ -844,12 +916,28 @@ def run_tb_gen(sc: StageContext) -> AgentResult:
                    "input. ")
                 + "Write the stimulus as `rtl/<name>.mem` for $readmemh, save a faithful "
                 "visualization to `waves/chip_input.png` (it must match the uploaded image's "
-                "layout), and write the side length to `context/input_size.txt`. "
-                "Make the MAIN testbench DUMP the chip's computed RESULT with $writememh "
-                "into `waves/chip_output.mem` (rendered to waves/chip_output.png "
-                "automatically) and $display the key output values. The OUTPUT must come "
-                "from the DUT's ports — never from the golden model. Architecture/reference "
-                "images are NOT chip input — do not feed them to the DUT.\n")
+                "layout), and write the side length to `context/input_size.txt`.\n"
+                "PYTHON FIRST, THEN RTL — the verification order is:\n"
+                "1. Write the GOLDEN MODEL in run_python, feed it the canonical input, and "
+                "verify ITS output makes sense (print the input grid AND the computed "
+                "desired output grid side by side). Save the desired output to "
+                "`waves/golden_output.mem` — SAME format as the input mem (N*N hex values, "
+                "row-major, same legend, PLUS the computed RESULT marked with distinct "
+                "values: for a pathfinding/navigation design the SOLVED PATH cells from "
+                "start to goal MUST be marked with value 4, so the rendered image "
+                "(0=white,1=black,2=red start,3=green goal,4=blue path) actually SHOWS the "
+                "route). It is rendered to waves/golden_output.png automatically.\n"
+                "2. Make the MAIN testbench DUMP the chip's computed RESULT with $writememh "
+                "into `waves/chip_output.mem` — EXACTLY the same format/order as "
+                "golden_output.mem. Grid cells hold values 0..4, so every grid register "
+                "must be AT LEAST 3 bits wide (`reg [2:0]` — a `reg [1:0]` silently "
+                "truncates the path value 4 to 0 and fakes a pass). The OUTPUT must come "
+                "from the DUT's ports/memory — never copied from the golden model.\n"
+                "3. The SIM stage COMPARES chip_output.mem against golden_output.mem value "
+                "by value and FAILS on any mismatch — the chip is only correct when "
+                "input → RTL output equals input → Python output.\n"
+                "Architecture/reference images are NOT chip input — do not feed them to "
+                "the DUT.\n")
         elif any(f.endswith(".mem") for f in status["files"]):
             infer_note = (
                 "\nCHIP INPUT/OUTPUT: the design loads .mem data. Make the MAIN testbench "
@@ -879,7 +967,58 @@ def run_tb_gen(sc: StageContext) -> AgentResult:
               "reply 'done'."
         )
         _run_deep(sc, goal, "tb_gen_deep_agent", recursion_limit=70)
+        # DETERMINISTIC deliverable check — the tb must dump waves ($dumpfile)
+        # and, for data designs, the chip's output mem ($writememh). Asking is
+        # not enough: a missing dump previously slipped through and the SIM
+        # verifiable-output gate failed the whole stage later.
         tb_path = sc.workspace / tb_rel
+        needs_output = bool(data_images) or any(f.endswith(".mem") for f in status["files"])
+        for _fix in range(2):
+            if not tb_path.is_file():
+                break
+            tb_text = tb_path.read_text(errors="replace")
+            missing = []
+            if "$dumpfile" not in tb_text:
+                missing.append('waveform dump: $dumpfile("design.vcd"); $dumpvars(0, ' + f"{top}_tb);")
+            if needs_output and "$writememh" not in tb_text:
+                missing.append('chip-output dump: $writememh("waves/chip_output.mem", <result array>);')
+            if re.search(r"\$writememh\s*\(\s*\"[^\"]*golden", tb_text):
+                missing.append('REMOVE the testbench\'s $writememh of waves/golden_output.mem — the '
+                               'desired output must be produced by the Python golden model '
+                               '(run_python), never fabricated by the testbench')
+            golden_path = sc.workspace / "waves" / "golden_output.mem"
+            if needs_output and not golden_path.is_file():
+                missing.append('golden desired output: run_python the golden model on the canonical '
+                               'input and write waves/golden_output.mem (same N*N row-major hex '
+                               'format as the input mem) — SIM compares the chip output against it')
+            elif needs_output and (sc.workspace / "context" / "chip_input_grid.json").is_file():
+                # The FUNCTIONAL REQUIREMENT is non-negotiable: the desired
+                # output must contain the SOLVED route (cells marked 4). A
+                # repair round once redefined the golden as "agent wanders,
+                # no path" and the comparison passed trivially.
+                tokens = set(re.sub(r"//[^\n]*", " ", golden_path.read_text(errors="replace")).split())
+                if not ({"4", "04"} & tokens):
+                    missing.append(
+                        "the golden output has NO route cells — the desired output must show the "
+                        "algorithm SOLVING the task. Implement the ALGORITHM THE DESIGN BRIEF "
+                        f"SPECIFIES ('{sc.design_brief[:160]}') in Python with the SAME fixed-point "
+                        "arithmetic and the SAME rtl/*.mem weights as the RTL. If the current "
+                        "weights do not reach the goal, TRAIN/DERIVE weights in Python that DO "
+                        "(GarudaChip data-driven design: the NN weights are baked into the chip — "
+                        "compute good ones), update the rtl/*.mem weight files, and write the "
+                        "policy's goal-reaching trajectory (cells marked 4) to "
+                        "waves/golden_output.mem. Do NOT redefine the desired output as 'agent "
+                        "did not reach the goal', and do NOT swap the algorithm for a planner "
+                        "the brief did not ask for")
+            if not missing:
+                break
+            _run_deep(sc,
+                      f"The testbench `{tb_rel}` is missing REQUIRED deliverables:\n- "
+                      + "\n- ".join(missing)
+                      + "\nread_file_disk it, ADD the missing statements (before $finish; the "
+                        "output dump must write the DUT's COMPUTED result array), and write it "
+                        "back compile-clean. Change nothing else. Reply 'done'.",
+                      f"tb_gen_deep_agent_deliverables{_fix + 1}", recursion_limit=30)
         if tb_path.is_file():
             clean = True
             try:

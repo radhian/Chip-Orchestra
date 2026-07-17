@@ -40,10 +40,12 @@ The platform combines AI planning, verification, EDA execution, artifact managem
 - AI-assisted RTL-to-GDSII design flow
 - Full 11-stage orchestration pipeline from spec ingest to export
 - Multi-agent orchestration
-- Automated verification and repair
-- Browser-native task management
+- **Golden-first verification**: the Python golden model defines the desired output; the RTL must match it value-for-value before the flow proceeds
+- Automated verification and repair (budgeted SIM and hardening auto-repair loops)
+- **Complete bundled EDA toolchain** — iverilog, Verilator, yosys+pyosys, OpenROAD, KLayout, Magic, netgen — with the GF180MCU PDK auto-installed via Volare
+- Browser-native task management with live per-stage activity (agent transcripts + raw EDA tool logs)
 - Runbook artifact downloads for generated `.sv`, `.json`, and `.md` outputs
-- RTL Workspace per-file downloads
+- RTL Workspace per-file downloads, in-browser PDF report viewing, and one-click **Export .zip** of the whole workspace
 - Human-in-the-loop review
 - Self-hosted LLM support
 - Modular microservice architecture
@@ -229,6 +231,41 @@ Every stage is fully observable with:
 - Human approval checkpoints
 
 ---
+
+## Golden-First Verification & Self-Repair
+
+The chip is only considered correct when **input → RTL output equals input → Python output**, checked by code, not by an LLM:
+
+1. **Canonical input** — an uploaded image (e.g. a maze) is decoded into `context/chip_input_grid.json` + `rtl/*.mem` stimulus and rendered to `waves/chip_input.png`.
+2. **Desired output (Python first)** — the golden model implements *the algorithm the design brief specifies* (same weights, same fixed-point math as the RTL), runs on the canonical input, and writes `waves/golden_output.mem`. For data-driven designs (e.g. a DDPG RL accelerator) the NN weights are trained/derived in Python and baked into `rtl/*.mem` — the weights are part of the chip.
+3. **Chip output** — the testbench dumps the DUT's computed result (`$writememh`) to `waves/chip_output.mem` in the identical format. The testbench may **never** write the golden file (enforced at write time and again in SIM).
+4. **Deterministic comparison** — the SIM stage compares the two files value-by-value; any mismatch fails the stage with the exact differing cells, and both grids are rendered side-by-side in the UI (white free / black wall / red start / green goal / blue path).
+
+When a stage fails, the orchestrator dispatches the repair deep-agent with the evidence and re-runs automatically:
+
+| Loop | Trigger | Budget (env) |
+|---|---|---|
+| SIM auto-repair | testbench fails / golden mismatch | `SIM_AUTO_REPAIR_ROUNDS` (default 10) |
+| Hardening auto-repair | LibreLane produces no GDS | `HARDEN_AUTO_REPAIR_ROUNDS` (default 3) |
+
+A manual stage Retry re-arms the budgets. The repair agent may fix RTL, testbench, weights, or the golden model — but contracts forbid weakening the testbench, redefining the desired output, or swapping the algorithm.
+
+## Bundled EDA Toolchain
+
+The `eda-service` image is self-contained — no host tools needed:
+
+| Tool | Source | Used for |
+|---|---|---|
+| Icarus Verilog, Verilator | Debian packages | simulation, lint |
+| yosys + pyosys wheel | Debian + PyPI (`yosys -y` shim) | synthesis, LibreLane pyosys steps |
+| OpenROAD (LibreLane build) | bundled from `hpretl/iic-osic-tools` | floorplan, place, CTS, route, STA |
+| Magic, netgen | bundled from `hpretl/iic-osic-tools` | GDS stream-out, DRC, LVS |
+| KLayout | Debian package | GDS render/checks |
+| GF180MCU PDK (gf180mcuD) | auto-installed by Volare on first boot (`PDK`, `PDK_ROOT`) | all hardening stages |
+
+Timing closes on the **3.3V corner set** by default (`GF180_VOLTAGE=3v3` → tt_025C_3v30 / ss_125C_3v00 / ff_n40C_3v60); set `GF180_VOLTAGE=5v0` for LibreLane's stock 5V corners.
+
+The Ubuntu-built tools run through a bundled dynamic loader with their own shared libraries, Tcl runtime, and Python stdlib, so they work inside the Debian-based image regardless of host distro.
 
 ## Browser Experience
 

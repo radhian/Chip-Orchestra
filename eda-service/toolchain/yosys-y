@@ -1,0 +1,14 @@
+#!/bin/sh
+# LibreLane pyosys shim: the distro yosys binary lacks the `-y` (pyosys
+# scripting) mode LibreLane 3.x uses, but the `pyosys` pip wheel provides the
+# same bindings importable from python3 — so `yosys -y script.py -- args…`
+# becomes `python3 script.py args…`. Everything else passes through to the
+# real yosys. Wired via _LLN_OVERRIDE_YOSYS.
+if [ "$1" = "-y" ]; then
+  shift
+  script="$1"
+  shift
+  [ "$1" = "--" ] && shift
+  exec python3 "$script" "$@"
+fi
+exec /usr/bin/yosys "$@"

@@ -121,6 +121,7 @@ export interface SignoffChecklistItem {
   label: string
   detail: string
   done: boolean
+  status?: 'done' | 'pending' | 'failed'
 }
 
 export interface SignoffStatus {

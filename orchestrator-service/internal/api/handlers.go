@@ -1,10 +1,12 @@
 package api
 
 import (
+	"archive/zip"
 	"context"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -141,6 +143,8 @@ func (a *App) RegisterRoutes(router *gin.Engine) {
 		api.GET("/tasks/:id/workspace/files", a.getWorkspaceFiles)
 		api.GET("/tasks/:id/workspace/file", a.getWorkspaceFile)
 		api.GET("/tasks/:id/workspace/raw", a.getWorkspaceRaw)
+		api.GET("/tasks/:id/workspace/export", a.exportWorkspaceZip)
+		api.POST("/tasks/:id/workspace/upload", a.uploadWorkspaceFile)
 		api.POST("/tasks/:id/workspace/propose-patch", a.proposePatch)
 		api.GET("/tasks/:id/signoff/status", a.getSignoffStatus)
 		api.POST("/tasks/:id/approvals/:stage", a.approveStage)
@@ -426,7 +430,7 @@ func (a *App) getTask(c *gin.Context) {
 		StatusLabel:          strings.Title(strings.ToLower(string(task.Status))),
 		Tone:                 statusTone(task.Status),
 		RepoName:             defaultString(task.RepoSource, task.TemplateID),
-		PDKLabel:             fmt.Sprintf("%s / %s", task.PDKID, task.StdcellLibID),
+		PDKLabel:             pdkLabel(task.PDKID, task.StdcellLibID),
 		ReviewGateLabel:      reviewGateLabel(task.ReviewGates),
 		RuntimeLabel:         "Orchestrator Service + Agent Service + EDA Service",
 		ArtifactLineageCount: len(a.readTaskArtifacts(c.Request.Context(), task.ID)),
@@ -584,8 +588,10 @@ func (a *App) getWorkspaceFiles(c *gin.Context) {
 				return nil
 			}
 			rel = filepath.ToSlash(rel)
-			// hidden files and the python sandbox scratch dir are noise
-			if strings.HasPrefix(filepath.Base(rel), ".") || strings.HasPrefix(rel, "work/") {
+			// hidden files, the python sandbox scratch dir, and LibreLane's
+			// internal run tree (hundreds of COMMANDS/state_in.json files) are noise
+			if strings.HasPrefix(filepath.Base(rel), ".") || strings.HasPrefix(rel, "work/") ||
+				strings.Contains(rel, "harden/chip/runs/") {
 				return nil
 			}
 			seen[rel] = "workspace file"
@@ -659,11 +665,102 @@ func (a *App) getWorkspaceRaw(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{"error": "file not found"})
 		return
 	}
+	// Workspace files are OVERWRITTEN across runs under the same path — a
+	// cached chip_output.png from the previous run masqueraded as the current
+	// result in the UI.
+	c.Header("Cache-Control", "no-store")
 	if c.Query("download") != "" {
 		c.FileAttachment(full, filepath.Base(full))
 		return
 	}
 	c.File(full)
+}
+
+// pdkLabel renders the task's PDK/library including the operating voltage the
+// hardening flow actually uses for GF180MCU (GF180_VOLTAGE, default 3.3V).
+func pdkLabel(pdkID, scl string) string {
+	label := fmt.Sprintf("%s / %s", pdkID, scl)
+	if strings.HasPrefix(pdkID, "gf180mcu") {
+		if os.Getenv("GF180_VOLTAGE") == "5v0" {
+			label += " @ 5.0V"
+		} else {
+			label += " @ 3.3V"
+		}
+	}
+	return label
+}
+
+var unsafeFilenameChars = regexp.MustCompile(`[^A-Za-z0-9._-]+`)
+
+// uploadWorkspaceFile receives a user attachment (image/PDF/anything) for an
+// EXISTING task — e.g. alongside a change request — and stores it in the
+// workspace under context/uploads/ where the agents already look for
+// reference material.
+func (a *App) uploadWorkspaceFile(c *gin.Context) {
+	file, err := c.FormFile("file")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "multipart 'file' field required"})
+		return
+	}
+	name := unsafeFilenameChars.ReplaceAllString(filepath.Base(file.Filename), "_")
+	if name == "" || name == "." {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid filename"})
+		return
+	}
+	dir := filepath.Join(a.Orch.TaskWorkspace(c.Param("id")), "context", "uploads")
+	if err := os.MkdirAll(dir, 0o755); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	if err := c.SaveUploadedFile(file, filepath.Join(dir, name)); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	rel := "context/uploads/" + name
+	_ = a.Redis.HSet(c.Request.Context(), fmt.Sprintf("task:%s:workspace:index", c.Param("id")), rel, "user upload").Err()
+	c.JSON(http.StatusOK, gin.H{"path": rel})
+}
+
+// exportWorkspaceZip streams the whole curated workspace (RTL, TB, waves,
+// reports, GDS, exports incl. the final PDF — same filtering as the file
+// listing) as one downloadable zip.
+func (a *App) exportWorkspaceZip(c *gin.Context) {
+	taskID := c.Param("id")
+	root := a.Orch.TaskWorkspace(taskID)
+	if _, err := os.Stat(root); err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "workspace not found"})
+		return
+	}
+	c.Header("Content-Type", "application/zip")
+	c.Header("Content-Disposition", fmt.Sprintf("attachment; filename=%q", "chip-orchestra-"+taskID+".zip"))
+	c.Header("Cache-Control", "no-store")
+	zw := zip.NewWriter(c.Writer)
+	defer zw.Close()
+	_ = filepath.Walk(root, func(p string, info os.FileInfo, err error) error {
+		if err != nil || info.IsDir() || !info.Mode().IsRegular() {
+			return nil
+		}
+		rel, rerr := filepath.Rel(root, p)
+		if rerr != nil {
+			return nil
+		}
+		rel = filepath.ToSlash(rel)
+		if strings.HasPrefix(filepath.Base(rel), ".") || strings.HasPrefix(rel, "work/") ||
+			strings.Contains(rel, "harden/chip/runs/") || strings.HasSuffix(rel, ".vvp") {
+			return nil
+		}
+		w, werr := zw.Create(rel)
+		if werr != nil {
+			return werr
+		}
+		f, ferr := os.Open(p)
+		if ferr != nil {
+			return nil
+		}
+		defer f.Close()
+		_, _ = io.Copy(w, f)
+		return nil
+	})
 }
 
 func (a *App) proposePatch(c *gin.Context) {
@@ -692,10 +789,30 @@ func (a *App) getSignoffStatus(c *gin.Context) {
 	var stages []models.Stage
 	_ = a.DB.WithContext(c.Request.Context()).Where("task_id = ?", taskID).Find(&stages).Error
 	signoffDone := false
+	stageStatus := map[string]models.StageStatus{}
 	for _, stage := range stages {
+		stageStatus[stage.Name] = stage.Status
 		if stage.Name == "SIGNOFF" && (stage.Status == models.StageStatusReleased || stage.Status == models.StageStatusSucceeded) {
 			signoffDone = true
 		}
+	}
+	// done | failed | pending — a stage that simply hasn't run yet must NOT
+	// render as a failure in the tapeout checklist.
+	itemStatus := func(names ...string) string {
+		allDone := true
+		for _, n := range names {
+			switch stageStatus[n] {
+			case models.StageStatusSucceeded, models.StageStatusReleased:
+			case models.StageStatusFailed:
+				return "failed"
+			default:
+				allDone = false
+			}
+		}
+		if allDone {
+			return "done"
+		}
+		return "pending"
 	}
 
 	// Real hardening evidence from the shared workspace: the GDS render (the
@@ -734,6 +851,11 @@ func (a *App) getSignoffStatus(c *gin.Context) {
 	metrics := map[string]any{}
 	if reports, err := filepath.Glob(filepath.Join(workspace, "reports", "*_report.json")); err == nil {
 		sort.Strings(reports)
+		// pnr_report carries the REAL physical numbers (die area, WNS, Fmax);
+		// merge it last so a stub sta/sim report can't shadow them with zeros.
+		sort.SliceStable(reports, func(i, j int) bool {
+			return !strings.HasSuffix(reports[i], "pnr_report.json") && strings.HasSuffix(reports[j], "pnr_report.json")
+		})
 		for _, report := range reports {
 			data, readErr := os.ReadFile(report)
 			if readErr != nil {
@@ -758,7 +880,11 @@ func (a *App) getSignoffStatus(c *gin.Context) {
 		"stateLabel":      ternary(signoffDone, "Approved", "Awaiting final approval"),
 		"message":         ternary(signoffDone, "Signoff is approved and the export bundle can be delivered.", "The task remains blocked on final signoff approval."),
 		"packageContents": []string{"Final RTL snapshot and verification bundle", "EDA timing and implementation reports", "Approval trail with orchestrator review metadata"},
-		"checklist":       []gin.H{{"id": "signoff-1", "label": "DRC/LVS package ready", "detail": "Mock signoff package prepared by the EDA Service.", "done": signoffDone}, {"id": "signoff-2", "label": "Power and timing guardrail accepted", "detail": "Review the latest synthesized report before release.", "done": signoffDone}, {"id": "signoff-3", "label": "Tapeout handoff approved", "detail": "Orchestrator approval is required to release EXPORT.", "done": signoffDone}},
+		"checklist": []gin.H{
+			{"id": "signoff-1", "label": "DRC/LVS package ready", "detail": "DRC, LVS and antenna results from the LibreLane signoff run.", "done": itemStatus("DRC_LVS") == "done", "status": itemStatus("DRC_LVS")},
+			{"id": "signoff-2", "label": "Power and timing guardrail accepted", "detail": "Static timing (STA) and gate-level simulation must pass.", "done": itemStatus("STA", "GL_SIM") == "done", "status": itemStatus("STA", "GL_SIM")},
+			{"id": "signoff-3", "label": "Tapeout handoff approved", "detail": "Orchestrator approval is required to release EXPORT.", "done": signoffDone, "status": ternary(signoffDone, "done", itemStatus("SIGNOFF"))},
+		},
 		"gdsImage":        gdsImage,
 		"gdsFiles":        gdsFiles,
 		"metrics":         metrics,

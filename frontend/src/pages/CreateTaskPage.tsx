@@ -13,8 +13,9 @@ import { Textarea } from '@/components/ui/textarea'
 import type { CreateTaskInput, TaskAttachment } from '@/types/orchestra'
 
 const pdkOptions = [
+  { value: 'gf180mcuD-3v3', pdkId: 'gf180mcuD', stdcellLibId: 'gf180mcu_fd_sc_mcu7t5v0', label: 'gf180mcuD / mcu7t5v0 @ 3.3V (default)' },
+  { value: 'gf180mcuD-5v0', pdkId: 'gf180mcuD', stdcellLibId: 'gf180mcu_fd_sc_mcu7t5v0', label: 'gf180mcuD / mcu7t5v0 @ 5.0V' },
   { value: 'sky130', pdkId: 'sky130', stdcellLibId: 'sky130_fd_sc_hd', label: 'sky130 / sky130_fd_sc_hd' },
-  { value: 'gf180mcu', pdkId: 'gf180mcu', stdcellLibId: 'gf180mcu_fd_sc_mcu7t5v0', label: 'gf180mcu / gf180mcu_fd_sc_mcu7t5v0' },
 ] as const
 
 const defaultPdkOption = pdkOptions[0]
@@ -28,6 +29,7 @@ const initialForm = {
   repoMode: 'EXISTING' as const,
   repoBranch: 'main',
   templateId: '',
+  pdkChoice: defaultPdkOption.value as string,
   pdkId: defaultPdkOption.pdkId as string,
   stdcellLibId: defaultPdkOption.stdcellLibId as string,
   pdkLabel: defaultPdkOption.label as string,
@@ -154,7 +156,7 @@ export function CreateTaskPage() {
 
   function handlePdkChange(value: string) {
     const selected = pdkOptions.find((o) => o.value === value) ?? defaultPdkOption
-    setForm((current) => ({ ...current, pdkId: selected.pdkId, stdcellLibId: selected.stdcellLibId, pdkLabel: selected.label }))
+    setForm((current) => ({ ...current, pdkChoice: selected.value, pdkId: selected.pdkId, stdcellLibId: selected.stdcellLibId, pdkLabel: selected.label }))
   }
 
   const sourceSummary = form.repoSource.trim() || 'Repository will be attached after you enter one.'
@@ -242,7 +244,7 @@ export function CreateTaskPage() {
 
             <div className='grid gap-5 md:grid-cols-2'>
               <Field label='PDK / library' hint='Defaults are passed through to the Orchestrator Service'>
-                <Select value={form.pdkId} onValueChange={handlePdkChange}>
+                <Select value={form.pdkChoice} onValueChange={handlePdkChange}>
                   <SelectTrigger className='h-12 rounded-2xl border-slate-200 bg-white px-4 text-sm text-slate-700 shadow-none'>
                     <SelectValue placeholder='Select PDK and library' />
                   </SelectTrigger>

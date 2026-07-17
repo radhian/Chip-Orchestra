@@ -102,7 +102,12 @@ def run_simulation(
 
     vvp_path = exports_dir / "sim.vvp"
     vcd_path = waves_dir / "design.vcd"
-    for stale in (vvp_path, vcd_path, workspace / "design.vcd"):
+    # Stale outputs must never masquerade as this run's results: the chip
+    # output dump (and its render) belongs to THE RUN THAT PRODUCED IT — an old
+    # chip_output.mem once showed up (and compared) as if the new tb had
+    # written it. golden_output.* stays: TB_GEN produces it, not the sim.
+    for stale in (vvp_path, vcd_path, workspace / "design.vcd",
+                  waves_dir / "chip_output.mem", waves_dir / "chip_output.png"):
         if stale.exists():
             stale.unlink()
 
@@ -214,13 +219,56 @@ def run_simulation(
     # CHIP OUTPUT rendering (GarudaChip inference display): a testbench that
     # $writememh-dumps the chip's RESULT into waves/*.mem gets that data
     # rendered to a PNG so the UI shows what the RTL actually computed.
-    from .memimg import render_mem_image
+    from .memimg import render_mem_image, _read_values
     for mem_file in sorted(waves_dir.glob("*.mem")):
         out_png = mem_file.with_suffix(".png")
         if render_mem_image(mem_file, out_png, workspace=workspace):
             rel = f"waves/{out_png.name}"
             log.append(f"rendered chip data {rel} from {mem_file.name}")
             register_artifact(artifacts, path=rel, kind="image", stage="SIM", base=workspace)
+
+    # GOLDEN COMPARISON (python-first verification): the chip is only correct
+    # when input → RTL output equals input → golden-model output. Deterministic
+    # value-by-value check; any mismatch fails the stage with the diff.
+    golden_mem = waves_dir / "golden_output.mem"
+    chip_mem = waves_dir / "chip_output.mem"
+    golden_match = None
+    # GOLDEN INDEPENDENCE gate: a testbench that $writememh-writes the golden
+    # file is comparing the chip against its own fabrication — reject it.
+    tb_dir = workspace / "tb"
+    if tb_dir.is_dir():
+        for tb_file in sorted(tb_dir.glob("*.*v")):
+            try:
+                tb_txt = tb_file.read_text(errors="replace")
+            except Exception:  # noqa: BLE001
+                continue
+            if re.search(r"\$writememh\s*\(\s*\"[^\"]*golden", tb_txt):
+                passed = False
+                log.append(f"CONTRACT VIOLATION: {tb_file.name} writes waves/golden_output.mem — "
+                           "the desired output must come from the Python golden model, never the "
+                           "testbench; remove that dump and regenerate the golden with run_python")
+                report.errors.append("testbench fabricates golden_output.mem")
+                break
+    if golden_mem.is_file() and chip_mem.is_file():
+        golden_vals = _read_values(golden_mem)
+        chip_vals = _read_values(chip_mem)
+        diffs = []
+        if len(golden_vals) != len(chip_vals):
+            diffs.append(f"length mismatch: golden={len(golden_vals)} chip={len(chip_vals)}")
+        for i, (gv, cv) in enumerate(zip(golden_vals, chip_vals)):
+            if gv != cv:
+                diffs.append(f"index {i}: golden=0x{gv:x} chip=0x{cv:x}")
+            if len(diffs) >= 12:
+                diffs.append("… (more mismatches truncated)")
+                break
+        if diffs:
+            passed = False
+            log.append("GOLDEN MISMATCH — chip output differs from the golden model:")
+            log.extend("  " + d for d in diffs)
+            report.errors.append(f"chip output != golden output ({len(diffs)} diff(s) shown)")
+        else:
+            log.append(f"✓ chip output MATCHES the golden model ({len(golden_vals)} values)")
+        golden_match = not diffs
     else:
         log.append(
             'no design.vcd produced - add `$dumpfile("design.vcd"); '
@@ -240,6 +288,7 @@ def run_simulation(
         "compiled": report.compiled,
         "waveform": report.waveform,
         "passed": passed,
+        "golden_match": golden_match,
         "signal_count": len(report.waveform_summary.get("signals", [])) if report.waveform else 0,
     }
     _finalize_log(report, logs_dir, log, artifacts)

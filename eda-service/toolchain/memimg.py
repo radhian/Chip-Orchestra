@@ -70,6 +70,26 @@ def render_mem_image(mem_path: Path, out_png: Path, size: int = 0,
             a = np.array(vals[:size * size], dtype="uint32").reshape(size, size)
             arr = np.stack([(a >> 16) & 255, (a >> 8) & 255, a & 255],
                            axis=-1).astype("uint8")
+        elif mx <= 9:
+            # CATEGORICAL grid (maze/game/label data): a fixed palette matching
+            # the chip-input legend, so input / golden / chip renders are
+            # directly comparable — grayscale autoscale made the values (and
+            # the computed PATH) illegible.
+            palette = np.array([
+                [255, 255, 255],  # 0 free — white
+                [0, 0, 0],        # 1 wall — black
+                [220, 40, 40],    # 2 start — red
+                [40, 190, 80],    # 3 goal — green
+                [60, 110, 245],   # 4 path — blue
+                [250, 160, 30],   # 5 — orange
+                [160, 70, 220],   # 6 — purple
+                [40, 200, 220],   # 7 — cyan
+                [240, 220, 60],   # 8 — yellow
+                [230, 80, 200],   # 9 — magenta
+            ], dtype="uint8")
+            k = size * size
+            a = np.array((vals + [0] * k)[:k], dtype="uint8").reshape(size, size)
+            arr = palette[np.clip(a, 0, 9)]
         else:
             k = size * size
             a = np.array((vals + [0] * k)[:k], dtype="uint16").reshape(size, size)

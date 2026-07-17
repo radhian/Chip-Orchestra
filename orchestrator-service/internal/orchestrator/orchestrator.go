@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"sort"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -402,30 +403,60 @@ func (s *Service) pollEDARun(ctx context.Context, taskID, stageID, jobID string)
 				// exhausted the budget and the design never got repaired.
 				repairKey := fmt.Sprintf("task:%s:sim_auto_repairs", taskID)
 				rounds, _ := s.redis.Incr(ctx, repairKey).Result()
-				if rounds <= 2 {
+				if int(rounds) <= simRepairRounds() {
 					s.repairAndRetrySim(ctx, taskID, &stage, &attempt, status.Report, int(rounds))
 					return
 				}
-				s.failStage(ctx, &stage, &attempt,
-					"self-checking testbench STILL FAILING after auto-repair rounds — see logs/sim.log and logs/rtl_repair_deep_agent.md; a manual Retry re-arms the auto-repair loop")
+				s.failStage(ctx, &stage, &attempt, fmt.Sprintf(
+					"self-checking testbench STILL FAILING after %d auto-repair rounds — see logs/sim.log and logs/rtl_repair_deep_agent.md; a manual Retry re-arms the loop (SIM_AUTO_REPAIR_ROUNDS to raise the budget)", simRepairRounds()))
 				return
 			}
 			if stage.Name == "SIM" {
 				_ = s.redis.Del(ctx, fmt.Sprintf("task:%s:sim_auto_repairs", taskID)).Err()
 				// VERIFIABLE-OUTPUT gate: with chip-input data staged, a passing
-				// testbench must also DUMP the chip's computed result — a green
-				// SIM with no output evidence is not a verified chip.
+				// testbench must also DUMP the chip's computed result AND the
+				// Python golden model's desired output must exist for the
+				// comparison — a green SIM without both is not a verified chip.
 				if s.hasChipInput(taskID) && !s.hasChipOutput(taskID) {
 					s.failStage(ctx, &stage, &attempt,
 						"testbench passed but never dumped the chip's output (waves/chip_output.mem) — retry TB_GEN to regenerate the testbench with the output-dump contract")
 					return
 				}
+				if s.hasChipInput(taskID) {
+					if _, err := os.Stat(filepath.Join(s.taskWorkspace(taskID), "waves", "golden_output.mem")); err != nil {
+						s.failStage(ctx, &stage, &attempt,
+							"no golden_output.mem — the Python golden model's desired output is required to verify the chip; retry TB_GEN")
+						return
+					}
+				}
 			}
 			if stage.Name == "PNR" || stage.Name == "DRC_LVS" {
 				if !s.hasGDS(taskID) {
-					s.failStage(ctx, &stage, &attempt,
-						stage.Name+" completed without producing a GDS — LibreLane likely failed or is unavailable; check reports/"+strings.ToLower(stage.Name)+"_report.json and the hardening logs")
+					// HARDEN auto-repair loop (mirror of SIM's): most no-GDS
+					// failures are synthesizability defects in the RTL (e.g.
+					// SystemVerilog-only ports yosys rejects) — let the repair
+					// agent fix the RTL from the LibreLane log, then re-harden.
+					repairKey := fmt.Sprintf("task:%s:harden_auto_repairs", taskID)
+					rounds, _ := s.redis.Incr(ctx, repairKey).Result()
+					if int(rounds) <= hardenRepairRounds() {
+						s.repairAndRetryHarden(ctx, taskID, &stage, &attempt, int(rounds))
+						return
+					}
+					s.failStage(ctx, &stage, &attempt, fmt.Sprintf(
+						"%s still produces no GDS after %d auto-repair rounds — see logs/librelane.log; a manual Retry re-arms the loop (HARDEN_AUTO_REPAIR_ROUNDS to raise the budget)",
+						stage.Name, hardenRepairRounds()))
 					return
+				}
+				_ = s.redis.Del(ctx, fmt.Sprintf("task:%s:harden_auto_repairs", taskID)).Err()
+				// FUNCTIONAL-CHIP gate: a layout that misses setup timing is
+				// not a working chip. The EDA side already relaxes the clock
+				// to close timing; if WNS is still negative here, stop honestly.
+				if stage.Name == "PNR" {
+					if wns, ok := s.pnrWNS(taskID); ok && wns < -0.001 {
+						s.failStage(ctx, &stage, &attempt, fmt.Sprintf(
+							"setup timing NOT met (WNS %.3f ns) even after automatic clock relaxation — the chip would not function at the reported clock; see logs/librelane.log", wns))
+						return
+					}
 				}
 			}
 			now := time.Now().UTC()
@@ -457,6 +488,7 @@ func (s *Service) pollEDARun(ctx context.Context, taskID, stageID, jobID string)
 // (the "auto-repair round 9" infinite loop).
 func (s *Service) ResetSimRepairBudget(ctx context.Context, taskID string) {
 	_ = s.redis.Del(ctx, fmt.Sprintf("task:%s:sim_auto_repairs", taskID)).Err()
+	_ = s.redis.Del(ctx, fmt.Sprintf("task:%s:harden_auto_repairs", taskID)).Err()
 }
 
 func (s *Service) RetryStage(ctx context.Context, taskID, stageName string) error {
@@ -606,6 +638,18 @@ func (s *Service) dependsTransitively(stageName, upstream string) bool {
 	return visit(stageName)
 }
 
+// simRepairRounds: how many automatic repair→re-sim rounds SIM gets before an
+// honest stop. Behavioral convergence often needs several passes — the old
+// hard cap of 2 stranded runs that were still making progress.
+func simRepairRounds() int {
+	if v := strings.TrimSpace(os.Getenv("SIM_AUTO_REPAIR_ROUNDS")); v != "" {
+		if n, err := strconv.Atoi(v); err == nil && n > 0 {
+			return n
+		}
+	}
+	return 10
+}
+
 // isTransientErr matches connection-level failures worth re-dispatching
 // (service restarting), as opposed to real stage errors.
 func isTransientErr(err error) bool {
@@ -665,7 +709,7 @@ func (s *Service) repairAndRetrySim(ctx context.Context, taskID string, stage *m
 	_ = s.db.WithContext(ctx).Save(attempt).Error
 	_ = s.publishEvent(ctx, taskID, map[string]any{
 		"type": "stage.updated", "task_id": taskID, "stage": stage.Name, "status": string(models.StageStatusRunning),
-		"title":  fmt.Sprintf("SIM failed — auto-repair round %d/2", round),
+		"title":  fmt.Sprintf("SIM failed — auto-repair round %d/%d", round, simRepairRounds()),
 		"detail": "The self-checking testbench FAILED. The RTLAuthor deep agent is debugging the design against a golden model (logs/rtl_repair_deep_agent.md), then SIM re-runs automatically.",
 		"tone":   "warning", "timestamp": now.Format(time.RFC3339),
 	})
@@ -684,6 +728,78 @@ func (s *Service) repairAndRetrySim(ctx context.Context, taskID string, stage *m
 	// which bounds this loop.
 	if err := s.RetryStage(ctx, taskID, stage.Name); err != nil {
 		s.failStage(ctx, stage, attempt, "could not requeue SIM after repair: "+err.Error())
+	}
+}
+
+// pnrWNS reads the setup WNS from reports/pnr_report.json metrics.
+func (s *Service) pnrWNS(taskID string) (float64, bool) {
+	data, err := os.ReadFile(filepath.Join(s.taskWorkspace(taskID), "reports", "pnr_report.json"))
+	if err != nil {
+		return 0, false
+	}
+	var parsed struct {
+		Metrics map[string]any `json:"metrics"`
+	}
+	if json.Unmarshal(data, &parsed) != nil {
+		return 0, false
+	}
+	if v, ok := parsed.Metrics["wns_ns"].(float64); ok {
+		return v, true
+	}
+	return 0, false
+}
+
+func hardenRepairRounds() int {
+	if v := strings.TrimSpace(os.Getenv("HARDEN_AUTO_REPAIR_ROUNDS")); v != "" {
+		if n, err := strconv.Atoi(v); err == nil && n > 0 {
+			return n
+		}
+	}
+	return 3
+}
+
+// repairAndRetryHarden dispatches the repair agent on a hardening (no-GDS)
+// failure with the LibreLane log, then re-queues the failed stage. Behavior
+// must stay identical — the agent is told SIM already passes and must keep
+// passing.
+func (s *Service) repairAndRetryHarden(ctx context.Context, taskID string, stage *models.Stage, attempt *models.StageAttempt, round int) {
+	now := time.Now().UTC()
+	attempt.Status = models.StageStatusFailed
+	attempt.ErrorMessage = "hardening produced no GDS — dispatching auto-repair"
+	attempt.CompletedAt = &now
+	_ = s.db.WithContext(ctx).Save(attempt).Error
+	_ = s.publishEvent(ctx, taskID, map[string]any{
+		"type": "stage.updated", "task_id": taskID, "stage": stage.Name, "status": string(models.StageStatusRunning),
+		"title":  fmt.Sprintf("%s failed — hardening auto-repair round %d/%d", stage.Name, round, hardenRepairRounds()),
+		"detail": "LibreLane produced no GDS. The RTLAuthor deep agent is fixing the synthesizability defect from logs/librelane.log (behavior must stay identical — SIM must still pass), then hardening re-runs automatically.",
+		"tone":   "warning", "timestamp": now.Format(time.RFC3339),
+	})
+
+	logTail := ""
+	if data, err := os.ReadFile(filepath.Join(s.taskWorkspace(taskID), "logs", "librelane.log")); err == nil {
+		text := string(data)
+		if len(text) > 4000 {
+			text = text[len(text)-4000:]
+		}
+		logTail = text
+	}
+	var task models.Task
+	if err := s.db.WithContext(ctx).First(&task, "id = ?", taskID).Error; err == nil {
+		prompt := fmt.Sprintf(
+			"HARDENING FAILURE for task %s: LibreLane produced no GDS at stage %s. The simulation ALREADY PASSES "+
+				"(chip output matches the desired output) — do NOT change behavior; fix ONLY the synthesizability "+
+				"defect the log shows (common: SystemVerilog-only constructs like unpacked array PORTS that yosys' "+
+				"Verilog-2005 frontend rejects — flatten them to packed vectors and update every instantiation). "+
+				"After the fix, re-run iverilog+vvp yourself and confirm the testbench still reports TEST PASSED "+
+				"and the chip output still matches waves/golden_output.mem. LibreLane log tail:\n%s\nDesign brief: %s",
+			task.Name, stage.Name, logTail, task.DesignBrief)
+		if _, err := s.agent.Invoke(ctx, s.buildInvokeRequest(taskID, task, "RTL_REPAIR", prompt)); err != nil {
+			s.failStage(ctx, stage, attempt, "hardening auto-repair dispatch failed: "+err.Error())
+			return
+		}
+	}
+	if err := s.RetryStage(ctx, taskID, stage.Name); err != nil {
+		s.failStage(ctx, stage, attempt, "could not requeue "+stage.Name+" after repair: "+err.Error())
 	}
 }
 

@@ -3,6 +3,7 @@ import { NavLink, useParams, useSearchParams } from 'react-router-dom'
 import {
   AlertCircle,
   Bot,
+  Cpu,
   CheckCircle2,
   Clock3,
   FileCode2,
@@ -11,6 +12,7 @@ import {
   PlayCircle,
   RefreshCw,
   ShieldCheck,
+  Paperclip,
   Wrench,
   XCircle,
 } from 'lucide-react'
@@ -28,6 +30,8 @@ import {
   proposeWorkspacePatch,
   retryTaskStage,
   submitStageApproval,
+  uploadWorkspaceFile,
+  workspaceExportUrl,
   workspaceRawUrl,
 } from '@/api/tasks'
 import { EmptyState, ErrorState, LoadingState, MetricCard, SummaryRow } from '@/components/app/shared'
@@ -92,6 +96,7 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
   const [signoff, setSignoff] = useState<SignoffStatus | null>(null)
   const [showChangeBox, setShowChangeBox] = useState(false)
   const [changeRequest, setChangeRequest] = useState('')
+  const [changeFiles, setChangeFiles] = useState<File[]>([])
   const [agentTranscript, setAgentTranscript] = useState('')
   const [agentTranscriptPath, setAgentTranscriptPath] = useState('')
   const [simLog, setSimLog] = useState('')
@@ -139,16 +144,34 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
       setFiles(workspaceFiles)
       setSignoff(signoffStatus)
 
-      // Live agent activity: the deep-agent transcript for the CURRENT stage
-      // (thinking, tool calls, written files) streams into logs/*_deep_agent.md
-      // in the workspace — surface its tail in the runbook.
-      const stageLog = `logs/${(mergedTask.currentStage || '').toLowerCase()}_deep_agent.md`
-      const transcriptCandidates = workspaceFiles
-        .map((file) => file.path)
-        .filter((path) => path.startsWith('logs/') && path.includes('_deep_agent'))
-      const transcriptPath = transcriptCandidates.includes(stageLog)
-        ? stageLog
-        : transcriptCandidates[transcriptCandidates.length - 1] ?? ''
+      // Live activity: the log that explains what the CURRENT stage is doing —
+      // deep-agent transcripts for LLM stages, tool logs for EDA stages
+      // (librelane/lint/sim/DRC …), so a PNR or LVS failure is readable right
+      // in the runbook.
+      const stageName = (mergedTask.currentStage || '').toUpperCase()
+      const allPaths = workspaceFiles.map((file) => file.path)
+      const stageLogCandidates: Record<string, string[]> = {
+        SPEC_INGEST: ['context/uploads_digest.md'],
+        PLAN: ['logs/plan_deep_agent.md'],
+        RTL_GEN: ['logs/rtl_gen_deep_agent.md'],
+        RTL_REPAIR: ['logs/rtl_repair_deep_agent.md'],
+        TB_GEN: ['logs/tb_gen_deep_agent.md'],
+        SIM: ['logs/sim.log'],
+        LINT: ['logs/lint.log'],
+        SYNTH: ['logs/librelane.log'],
+        PNR: ['logs/librelane.log'],
+        DRC_LVS: ['logs/librelane.log'],
+        STA: ['logs/sta.log', 'logs/librelane.log'],
+        GL_SIM: ['logs/gl_sim.log'],
+        RENDER: ['logs/render.log'],
+        SIGNOFF: ['reports/signoff_summary.md', 'logs/librelane.log'],
+        EXPORT: ['exports/final_report.tex', 'logs/librelane.log'],
+      }
+      const deepAgentLogs = allPaths.filter((path) => path.startsWith('logs/') && path.includes('_deep_agent'))
+      const transcriptPath =
+        (stageLogCandidates[stageName] ?? []).find((candidate) => allPaths.includes(candidate)) ??
+        deepAgentLogs[deepAgentLogs.length - 1] ??
+        ''
       setAgentTranscriptPath(transcriptPath)
       if (transcriptPath) {
         try {
@@ -296,9 +319,21 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
     }
     setActionError(null)
     try {
-      await proposeWorkspacePatch(taskId, { instruction: changeRequest.trim() })
+      let instruction = changeRequest.trim()
+      if (changeFiles.length) {
+        const uploaded: string[] = []
+        for (const file of changeFiles) {
+          const { path } = await uploadWorkspaceFile(taskId, file)
+          uploaded.push(path)
+        }
+        instruction +=
+          `\n\nAttached reference files (already saved in the workspace): ${uploaded.join(', ')} — ` +
+          'read them (images are decoded by the vision model) and treat them as the updated spec/input.'
+      }
+      await proposeWorkspacePatch(taskId, { instruction })
       setActionMessage('Change request sent to the agents — watch the execution log.')
       setChangeRequest('')
+      setChangeFiles([])
       setShowChangeBox(false)
       setRefreshKey((value) => value + 1)
     } catch (err) {
@@ -361,11 +396,11 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
     const inputImages = images.filter(
       (path) => /input/i.test(path) && !path.startsWith('context/uploads/') && !isWaveform(path),
     )
+    // Exactly ONE desired + ONE chip output — the verification pair. Stray
+    // debug dumps (dbg_output.png etc.) belong to generatedImages, not here:
+    // two "CHIP OUTPUT" cards read as two scenarios.
     const outputImages = images.filter(
-      (path) =>
-        !isWaveform(path) &&
-        !inputImages.includes(path) &&
-        (/output|result/i.test(path) || (path.startsWith('waves/') && !/input/i.test(path))),
+      (path) => /(golden|chip)_output\.[a-z]+$/i.test(path) && !isWaveform(path),
     )
     const generatedImages = images.filter(
       (path) =>
@@ -464,10 +499,17 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
 
       const updatedSignoff = await getSignoffStatus(taskId)
       setSignoff(updatedSignoff)
-      setActionMessage('Final approval request recorded.')
+      setActionMessage('Signoff approved — the deliverables .zip download is starting.')
       setRefreshKey((value) => value + 1)
     } catch (err) {
-      setActionError(err instanceof Error ? err.message : 'Unable to request final approval')
+      // Approval may already be recorded — exporting is still the user's intent.
+      setActionMessage('Deliverables .zip download is starting.')
+    }
+    window.location.assign(workspaceExportUrl(taskId))
+    // The EXPORT stage runs within seconds of the approval — refresh the
+    // timeline a few times so its tile turns green without a manual reload.
+    for (const delayMs of [3000, 7000, 12000]) {
+      window.setTimeout(() => setRefreshKey((value) => value + 1), delayMs)
     }
   }
 
@@ -511,35 +553,33 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
             </div>
           </CardHeader>
           <CardContent className='space-y-5'>
-            <div className='grid gap-3 md:grid-cols-4'>
+            <div className='grid gap-3 md:grid-cols-5'>
               <MetricCard label='Current stage' value={detail.currentStage} icon={Wrench} />
               <MetricCard label='ETA' value={detail.etaLabel} icon={Clock3} />
               <MetricCard label='Owner' value={detail.ownerName} icon={Bot} />
+              <MetricCard label='PDK' value={(detail.pdkLabel || 'N/A').replace('gf180mcu_fd_sc_', '')} icon={Cpu} />
               <MetricCard label='Artifact lineage' value={`${detail.artifactLineageCount} linked outputs`} icon={PackageCheck} />
             </div>
 
             <div className='rounded-3xl bg-slate-50 p-4'>
               <div className='flex items-center justify-between'>
-                <div>
-                  <p className='text-sm font-semibold text-slate-900'>Phase timeline</p>
-                  <p className='mt-1 text-sm text-slate-500'>GET /api/v1/tasks/:id and GET /api/v1/tasks/:id/stages keep this timeline in sync.</p>
-                </div>
+                <p className='text-sm font-semibold text-slate-900'>Phase timeline</p>
                 <Badge variant='secondary' className='rounded-full bg-white text-slate-500'>
-                  {liveConnected ? 'WebSocket connected' : 'WebSocket reconnecting'}
+                  {liveConnected ? 'Live' : 'Reconnecting'}
                 </Badge>
               </div>
 
-              <div className='mt-5 grid gap-3 xl:grid-cols-5'>
+              <div className='mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5'>
                 {detail.stages.map((stage) => (
-                  <div key={stage.key} className='rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-100'>
+                  <div key={stage.key} className='min-w-0 rounded-2xl bg-white p-3 shadow-sm ring-1 ring-slate-100'>
                     <div className='flex items-center justify-between gap-2'>
-                      <p className='text-sm font-semibold text-slate-900'>{stage.label}</p>
-                      {stage.status === 'done' ? <CheckCircle2 className='h-4 w-4 text-emerald-500' /> : null}
-                      {stage.status === 'active' ? <PlayCircle className='h-4 w-4 text-blue-500' /> : null}
-                      {stage.status === 'failed' ? <XCircle className='h-4 w-4 text-rose-500' /> : null}
-                      {stage.status === 'queued' ? <Clock3 className='h-4 w-4 text-slate-300' /> : null}
+                      <p className='truncate text-sm font-semibold text-slate-900'>{stage.label}</p>
+                      {stage.status === 'done' ? <CheckCircle2 className='h-4 w-4 shrink-0 text-emerald-500' /> : null}
+                      {stage.status === 'active' ? <PlayCircle className='h-4 w-4 shrink-0 text-blue-500' /> : null}
+                      {stage.status === 'failed' ? <XCircle className='h-4 w-4 shrink-0 text-rose-500' /> : null}
+                      {stage.status === 'queued' ? <Clock3 className='h-4 w-4 shrink-0 text-slate-300' /> : null}
                     </div>
-                    <div className='mt-4 h-2 rounded-full bg-slate-100'>
+                    <div className='mt-3 h-2 rounded-full bg-slate-100'>
                       <div
                         className={`h-2 rounded-full ${
                           stage.status === 'done'
@@ -552,19 +592,16 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
                         }`}
                       />
                     </div>
-                    <div className='mt-4 flex items-center justify-between text-xs text-slate-400'>
-                      <span>Retries: {stage.retryCount ?? 0}</span>
-                      <Button
-                        variant='outline'
-                        size='sm'
-                        className='rounded-full border-slate-200'
-                        disabled={retryingStage === stage.key || stage.status === 'active'}
-                        onClick={() => void handleRetryStage(stage)}
-                      >
-                        <RefreshCw className={`mr-2 h-3.5 w-3.5 ${retryingStage === stage.key ? 'animate-spin' : ''}`} />
-                        Retry
-                      </Button>
-                    </div>
+                    <Button
+                      variant='outline'
+                      size='sm'
+                      className='mt-3 w-full rounded-full border-slate-200 text-xs'
+                      disabled={retryingStage === stage.key || stage.status === 'active'}
+                      onClick={() => void handleRetryStage(stage)}
+                    >
+                      <RefreshCw className={`mr-1.5 h-3 w-3 ${retryingStage === stage.key ? 'animate-spin' : ''}`} />
+                      Retry{(stage.retryCount ?? 0) > 0 ? ` (${stage.retryCount})` : ''}
+                    </Button>
                   </div>
                 ))}
               </div>
@@ -641,6 +678,29 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
                           placeholder='Describe what to change — e.g. "shrink the SRAM to 256B", "redo the testbench with more vectors", "regenerate the report"…'
                           className='min-h-24 rounded-2xl border-slate-200'
                         />
+                        <div className='flex items-center gap-2'>
+                          <label className='inline-flex h-11 cursor-pointer items-center gap-2 rounded-2xl border border-slate-200 px-4 text-sm text-slate-600 hover:bg-slate-50'>
+                            <Paperclip className='h-4 w-4' />
+                            Attach image / PDF / file
+                            <input
+                              type='file'
+                              multiple
+                              className='hidden'
+                              onChange={(event) => {
+                                setChangeFiles((current) => [...current, ...Array.from(event.target.files ?? [])])
+                                event.target.value = ''
+                              }}
+                            />
+                          </label>
+                          {changeFiles.length ? (
+                            <span className='text-xs text-slate-500'>
+                              {changeFiles.map((file) => file.name).join(', ')}{' '}
+                              <button type='button' className='text-rose-500 underline' onClick={() => setChangeFiles([])}>
+                                clear
+                              </button>
+                            </span>
+                          ) : null}
+                        </div>
                         <div className='flex gap-2'>
                           <Button onClick={() => void handleRequestChanges()} disabled={!changeRequest.trim()} className='h-11 flex-1 rounded-2xl bg-blue-600 hover:bg-blue-700'>
                             Send to agents
@@ -738,11 +798,11 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
 
           <Card className='rounded-3xl border-slate-200 shadow-none'>
             <CardHeader>
-              <CardTitle className='text-xl'>Live agent activity</CardTitle>
+              <CardTitle className='text-xl'>Live activity</CardTitle>
               <CardDescription>
                 {agentTranscriptPath
-                  ? `Deep-agent transcript (${agentTranscriptPath}) — thinking, tool calls, and written files, refreshed live.`
-                  : 'The deep-agent transcript will appear here once an LLM stage starts.'}
+                  ? `What the current stage is doing (${agentTranscriptPath}) — agent thinking/tool calls for LLM stages, tool logs (LibreLane, lint, sim, DRC/LVS, antenna checks) for EDA stages. Refreshed live.`
+                  : 'Stage activity (agent transcript or EDA tool log) will appear here once a stage starts.'}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -763,9 +823,16 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
       {tab === 'rtl' ? (
         <div className='grid gap-5 xl:grid-cols-2'>
           <Card className='rounded-3xl border-slate-200 shadow-none'>
-            <CardHeader>
-              <CardTitle className='text-xl'>RTL editor surface</CardTitle>
-              <CardDescription>Workspace files are loaded from the Orchestrator Service on demand.</CardDescription>
+            <CardHeader className='flex flex-row items-start justify-between space-y-0'>
+              <div>
+                <CardTitle className='text-xl'>RTL editor surface</CardTitle>
+                <CardDescription>Workspace files are loaded from the Orchestrator Service on demand.</CardDescription>
+              </div>
+              <Button asChild variant='outline' className='rounded-full'>
+                <a href={workspaceExportUrl(taskId)} download>
+                  Export .zip
+                </a>
+              </Button>
             </CardHeader>
             <CardContent className='space-y-4'>
               <ScrollArea className='max-h-72 overflow-y-auto'>
@@ -803,6 +870,12 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
                       className='mx-auto max-h-[32rem] rounded-xl border border-slate-200'
                     />
                   </div>
+                ) : selectedFile.toLowerCase().endsWith('.pdf') ? (
+                  <iframe
+                    src={workspaceRawUrl(taskId, selectedFile)}
+                    title={selectedFile}
+                    className='h-[42rem] w-full bg-white'
+                  />
                 ) : isBinaryPath(selectedFile) ? (
                   <div className='p-6 text-sm text-slate-300'>
                     Binary file — not rendered as text.{' '}
@@ -995,19 +1068,29 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
               </Card>
               <Card className='rounded-3xl border-slate-200 shadow-none'>
                 <CardHeader>
-                  <CardTitle className='text-xl'>Chip output / generated images</CardTitle>
-                  <CardDescription>Plots and images the agents or the simulation produced.</CardDescription>
+                  <CardTitle className='text-xl'>Desired output vs chip output</CardTitle>
+                  <CardDescription>
+                    The desired output is what the Python model computed from the input; the chip output is what the
+                    RTL actually computed. SIM only passes when they match value-for-value.
+                  </CardDescription>
                 </CardHeader>
                 <CardContent className='space-y-3'>
                   {simAssets.outputImages.length ? (
-                    simAssets.outputImages.map((path) => (
-                      <a key={path} href={workspaceRawUrl(taskId, path)} target='_blank' rel='noreferrer'>
-                        <div className='rounded-2xl border border-slate-200 bg-white p-3'>
-                          <img src={workspaceRawUrl(taskId, path)} alt={path} className='mx-auto max-h-64 rounded-xl' />
-                          <p className='mt-2 text-center text-xs text-slate-400'>{path}</p>
-                        </div>
-                      </a>
-                    ))
+                    [...simAssets.outputImages]
+                      .sort((a, b) => (a.includes('golden') ? -1 : 0) - (b.includes('golden') ? -1 : 0))
+                      .map((path) => (
+                        <a key={path} href={workspaceRawUrl(taskId, path)} target='_blank' rel='noreferrer'>
+                          <div className='rounded-2xl border border-slate-200 bg-white p-3'>
+                            <p className='mb-2 text-center text-base font-bold text-slate-800'>
+                              {path.includes('golden')
+                                ? 'DESIRED OUTPUT — computed by the Python model'
+                                : 'CHIP OUTPUT — computed by the RTL (must match the desired output)'}
+                            </p>
+                            <img src={workspaceRawUrl(taskId, path)} alt={path} className='mx-auto max-h-64 rounded-xl' />
+                            <p className='mt-2 text-center text-xs text-slate-400'>{path}</p>
+                          </div>
+                        </a>
+                      ))
                   ) : (
                     <EmptyState title='No output images yet' detail='Images the deep agents or simulation write into the workspace show up here.' />
                   )}
@@ -1101,7 +1184,13 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
                 {signoff.checklist.map((item) => (
                   <div key={item.id} className='flex gap-4 rounded-2xl border border-slate-200 p-4'>
                     <div className='mt-0.5'>
-                      {item.done ? <CheckCircle2 className='h-5 w-5 text-emerald-500' /> : <XCircle className='h-5 w-5 text-rose-500' />}
+                      {item.done || item.status === 'done' ? (
+                        <CheckCircle2 className='h-5 w-5 text-emerald-500' />
+                      ) : item.status === 'failed' ? (
+                        <XCircle className='h-5 w-5 text-rose-500' />
+                      ) : (
+                        <Clock3 className='h-5 w-5 text-amber-500' />
+                      )}
                     </div>
                     <div>
                       <p className='font-semibold text-slate-900'>{item.label}</p>
@@ -1139,7 +1228,7 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
                 {actionMessage ? <p className='rounded-2xl bg-emerald-50 px-4 py-3 text-sm text-emerald-700'>{actionMessage}</p> : null}
                 {actionError ? <p className='rounded-2xl bg-rose-50 px-4 py-3 text-sm text-rose-700'>{actionError}</p> : null}
                 <Button onClick={() => void handleRequestFinalApproval()} className='h-12 w-full rounded-2xl bg-blue-600 text-base hover:bg-blue-700'>
-                  Request final approval
+                  Export deliverables (.zip)
                 </Button>
               </CardContent>
             </Card>

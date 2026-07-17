@@ -88,10 +88,10 @@ export function MetricCard({
 }) {
   return (
     <Card className='rounded-2xl border-slate-200 bg-slate-50 shadow-none'>
-      <CardContent className='flex items-start justify-between p-4'>
-        <div>
+      <CardContent className='flex items-start justify-between gap-2 p-4'>
+        <div className='min-w-0'>
           <p className='text-xs uppercase tracking-widest text-slate-400'>{label}</p>
-          <p className='mt-3 text-lg font-semibold text-slate-900'>{value}</p>
+          <p className='mt-3 break-words text-lg font-semibold leading-snug text-slate-900'>{value}</p>
         </div>
         <div className='flex h-10 w-10 items-center justify-center rounded-2xl bg-white text-slate-600 shadow-sm'>
           <Icon className='h-4 w-4' />

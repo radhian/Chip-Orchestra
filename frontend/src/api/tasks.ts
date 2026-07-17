@@ -19,6 +19,15 @@ const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:808
 
 /** Browser-native URL for a raw workspace file (images, GDS, PDFs). Auth rides
  *  in the `?token=` query because <img src> cannot set an Authorization header. */
+export function workspaceExportUrl(taskId: string): string {
+  const params = new URLSearchParams()
+  const token = getStoredToken()
+  if (token) {
+    params.set('token', token)
+  }
+  return `${API_BASE_URL}/api/v1/tasks/${taskId}/workspace/export?${params.toString()}`
+}
+
 export function workspaceRawUrl(taskId: string, path: string, download = false): string {
   const params = new URLSearchParams({ path })
   const token = getStoredToken()
@@ -28,6 +37,9 @@ export function workspaceRawUrl(taskId: string, path: string, download = false):
   if (download) {
     params.set('download', '1')
   }
+  // Cache-buster (30 s buckets): workspace files are overwritten across runs
+  // under the same path, and browsers kept showing the previous run's image.
+  params.set('v', String(Math.floor(Date.now() / 30000)))
   return `${API_BASE_URL}/api/v1/tasks/${taskId}/workspace/raw?${params.toString()}`
 }
 
@@ -210,6 +222,21 @@ export async function proposeWorkspacePatch(id: string, payload: { instruction: 
 
 export async function getSignoffStatus(id: string): Promise<SignoffStatus> {
   return requestJson<SignoffStatus>(`/api/v1/tasks/${id}/signoff/status`)
+}
+
+export async function uploadWorkspaceFile(id: string, file: File): Promise<{ path: string }> {
+  const body = new FormData()
+  body.append('file', file)
+  const headers = new Headers()
+  const token = getStoredToken()
+  if (token) {
+    headers.set('Authorization', `Bearer ${token}`)
+  }
+  const response = await fetch(`${API_BASE_URL}/api/v1/tasks/${id}/workspace/upload`, { method: 'POST', body, headers })
+  if (!response.ok) {
+    throw new Error(`Upload failed (${response.status})`)
+  }
+  return response.json() as Promise<{ path: string }>
 }
 
 export async function submitStageApproval(id: string, stage: string, payload: ApprovalPayload): Promise<{ status: string }> {

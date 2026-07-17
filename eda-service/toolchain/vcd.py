@@ -54,8 +54,7 @@ def to_wave_json(text: str, max_signals: int = 32, max_points: int = 2000) -> Di
     ``{tmax, signals: [{name, width, wave: [[t, value|null], ...]}]}``.
     """
     names, widths, series = parse_vcd(text)
-    ids = [vid for vid in names if series.get(vid)]
-    ids = ids[:max_signals]
+    ids = _rank_by_activity([vid for vid in names if series.get(vid)], series)[:max_signals]
     tmax = max((series[v][-1][0] for v in ids if series[v]), default=0)
     out = []
     for vid in ids:
@@ -65,6 +64,16 @@ def to_wave_json(text: str, max_signals: int = 32, max_points: int = 2000) -> Di
             pts = pts[::step]
         out.append({"name": names[vid], "width": widths[vid], "wave": [[t, v] for t, v in pts]})
     return {"tmax": tmax, "signals": out}
+
+
+def _rank_by_activity(ids, series):
+    """Busiest signals first; constants last. Testbench localparams get dumped
+    as never-changing wires and used to fill the whole plot with flat lines
+    (CLK_PERIOD, MAZE_N, …) while the actual DUT activity was cut off."""
+    changing = [v for v in ids if len(series[v]) >= 3]
+    flat = [v for v in ids if len(series[v]) < 3]
+    changing.sort(key=lambda v: -len(series[v]))
+    return changing + flat
 
 
 def render_png(vcd_path, out_png, signals: str = "", max_traces: int = 12) -> "str | None":
@@ -82,7 +91,8 @@ def render_png(vcd_path, out_png, signals: str = "", max_traces: int = 12) -> "s
         names, widths, series = parse_vcd(Path(vcd_path).read_text(errors="replace"))
         want = [s.strip() for s in re.split(r"[,\s]+", signals) if s.strip()]
         ids = [vid for vid in names if series[vid]
-               and (not want or any(w.lower() in names[vid].lower() for w in want))][:max_traces]
+               and (not want or any(w.lower() in names[vid].lower() for w in want))]
+        ids = _rank_by_activity(ids, series)[:max_traces]
         if not ids:
             return None
         tmax = max((series[vid][-1][0] for vid in ids), default=0) or 1

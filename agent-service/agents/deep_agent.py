@@ -211,8 +211,29 @@ def make_fs_tools(base_dir: str | Path, on_clean_write=None) -> List:
             # missing sub-modules). Using check_file on a tb would report a phantom
             # "Unable to bind" from the stubbed-out DUT that no rewrite can clear.
             try:
-                from verilog_check import check_file, check_tb
+                from verilog_check import _UNPACKED_PORT_RE, _strip_comments, check_file, check_tb
                 is_tb = "tb/" in path.replace("\\", "/") or "_tb." in p.name
+                # HARDENING gate (GarudaChip): unpacked-array PORTS pass iverilog
+                # but plain yosys dies ("syntax error, unexpected '['") → no GDS,
+                # and this LibreLane build has no slang fallback. Reject at write
+                # time so the agent fixes it NOW.
+                if not is_tb and _UNPACKED_PORT_RE.search(_strip_comments(content)):
+                    _LAST_WRITE_ERR[str(p)] = ("unpacked array port", content)
+                    return (f"{note}\nCOMPILE ERRORS — this file declares an UNPACKED ARRAY "
+                            "PORT (`output reg [7:0] q [0:3]`) which the hardening flow's "
+                            "yosys Verilog-2005 frontend REJECTS (no GDS). Flatten it to a "
+                            "packed vector (`output reg [4*8-1:0] q_flat`, element i at bits "
+                            "[i*8 +: 8]) and update every instantiation, then write again NOW.")
+                # GOLDEN INDEPENDENCE: the testbench must never WRITE the desired
+                # output it is compared against — waves/golden_output.mem comes
+                # from the Python golden model only.
+                if is_tb and re.search(r"\$writememh\s*\(\s*\"[^\"]*golden", content):
+                    return (f"{note}\nCONTRACT VIOLATION — the testbench $writememh-writes "
+                            "waves/golden_output.mem. The DESIRED output must be produced by "
+                            "the Python golden model (run_python), NEVER by the testbench "
+                            "(that would compare the chip against the tb's own fabrication). "
+                            "Remove that dump (keep the chip_output.mem dump), generate "
+                            "waves/golden_output.mem with run_python, and write again NOW.")
                 err = check_tb(p, base / "rtl") if is_tb else check_file(p, base / "rtl")
                 if err:
                     _LAST_WRITE_ERR[str(p)] = (err, content)   # remember for the fix-lesson
