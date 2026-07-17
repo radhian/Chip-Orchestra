@@ -447,8 +447,15 @@ reinstalls, never asks for sudo, and never touches your `.env`):
 ### Prerequisites
 
 - Linux or macOS with `curl` and `git`
-- ~10 GB free disk (Docker images + PDK)
-- Internet access on first run (Docker Hub, Ollama)
+- **~45 GB free disk** — the EDA image builds on top of `hpretl/iic-osic-tools`
+  (~25 GB one-time pull; it donates OpenROAD, Magic and netgen), plus the
+  service images and the GF180MCU PDK
+- Internet access on first run (Docker Hub, Ollama, and Volare which
+  auto-installs the PDK into the persistent `pdk_data` volume on first boot)
+- Patience on the first build: pulling the toolbox image and building the EDA
+  service takes 10–30 minutes depending on bandwidth. Subsequent
+  `docker compose up -d --build` runs are fast (cached layers), and the PDK and
+  task workspaces persist in named volumes across rebuilds.
 
 Docker and Ollama are installed automatically on Linux if missing (you may be asked for `sudo`). On macOS install [Docker Desktop](https://docs.docker.com/get-docker/) first.
 

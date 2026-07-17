@@ -2,7 +2,10 @@
 # binaries — but the IIC-OSIC-TOOLS image ships a LibreLane-matched build.
 # Assemble it with its Ubuntu shared libs + dynamic loader (cross-distro:
 # the binaries must run through Ubuntu's ld-linux, never Debian's glibc).
-FROM hpretl/iic-osic-tools:latest AS openroad-dist
+# PINNED BY DIGEST (2026-06-22 build): the extraction below depends on this
+# image's exact /foss/tools layout — bump deliberately, then re-verify
+# `openroad -version`, `magic -dnull`, and `netgen -batch` in the built image.
+FROM hpretl/iic-osic-tools@sha256:7371bae55da486f492cc270ea6137c4fcf3b11971de7a4506a74f62be143537a AS openroad-dist
 USER root
 RUN mkdir -p /orpkg/syslibs \
     && cp -r /foss/tools/openroad-librelane /orpkg/openroad \
