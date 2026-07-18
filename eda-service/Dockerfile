@@ -5,16 +5,17 @@
 # PINNED BY DIGEST (2026-06-22 build): the extraction below depends on this
 # image's exact /foss/tools layout — bump deliberately, then re-verify
 # `openroad -version`, `magic -dnull`, and `netgen -batch` in the built image.
-FROM hpretl/iic-osic-tools@sha256:7371bae55da486f492cc270ea6137c4fcf3b11971de7a4506a74f62be143537a AS openroad-dist
+FROM --platform=linux/amd64 hpretl/iic-osic-tools@sha256:7371bae55da486f492cc270ea6137c4fcf3b11971de7a4506a74f62be143537a AS openroad-dist
 USER root
 RUN mkdir -p /orpkg/syslibs \
     && cp -r /foss/tools/openroad-librelane /orpkg/openroad \
     && for b in openroad sta; do \
          ldd /foss/tools/openroad-librelane/bin/$b 2>/dev/null \
            | awk '/=> \//{print $3}' | grep -v '^/foss' \
-           | xargs -I{} cp -Ln {} /orpkg/syslibs/ || true; \
+           | xargs -I{} cp -L --no-clobber {} /orpkg/syslibs/ 2>/dev/null || true; \
        done \
-    && cp -L /lib64/ld-linux-x86-64.so.2 /orpkg/syslibs/ \
+    && LD_SO=$(find /lib /lib64 /lib/x86_64-linux-gnu -name 'ld-linux-x86-64.so.2' 2>/dev/null | head -1) \
+    && [ -n "$LD_SO" ] && cp -L "$LD_SO" /orpkg/syslibs/ || true \
     # Ubuntu's Tcl/Tk runtime scripts must match the bundled libtcl (Debian's
     # 8.6.14 scripts + Ubuntu's 8.6.16 lib = "version conflict" in floorplan).
     && cp -r /usr/share/tcltk /orpkg/tcltk \
@@ -31,7 +32,7 @@ RUN mkdir -p /orpkg/syslibs \
     && for e in /orpkg/magic/lib/magic/tcl/magicexec /orpkg/magic/lib/magic/tcl/magicdnull \
                 /orpkg/netgen/lib/netgen/tcl/netgenexec; do \
          [ -f "$e" ] && ldd "$e" | awk '/=> \//{print $3}' | grep -v '^/foss' \
-           | xargs -I{} cp -Ln {} /orpkg/syslibs/ || true; \
+           | xargs -I{} cp -L --no-clobber {} /orpkg/syslibs/ 2>/dev/null || true; \
        done \
     && sed -i 's|/foss/tools/magic|/opt/orpkg/magic|g' /orpkg/magic/bin/magic \
     && sed -i 's|/foss/tools/netgen|/opt/orpkg/netgen|g' /orpkg/netgen/bin/netgen
@@ -92,14 +93,14 @@ ENV _LLN_OVERRIDE_YOSYS=/usr/local/bin/yosys-y
 # Ubuntu loader (direct execution would hit Debian/Ubuntu glibc clashes).
 COPY --from=openroad-dist /orpkg /opt/orpkg
 RUN for b in openroad sta; do \
-        printf '#!/bin/sh\nexport TCL_LIBRARY=/opt/orpkg/tcltk/tcl8.6 TK_LIBRARY=/opt/orpkg/tcltk/tk8.6\nexport PYTHONHOME=/opt/orpkg/pyhome\nexport PYTHONPATH=/usr/local/lib/python3.12/site-packages${PYTHONPATH:+:$PYTHONPATH}\nexec /opt/orpkg/syslibs/ld-linux-x86-64.so.2 --library-path /opt/orpkg/syslibs:/opt/orpkg/openroad/lib /opt/orpkg/openroad/bin/%s "$@"\n' "$b" > /usr/local/bin/$b \
+        printf '#!/bin/sh\nexport TCL_LIBRARY=/opt/orpkg/tcltk/tcl8.6 TK_LIBRARY=/opt/orpkg/tcltk/tk8.6\nexport PYTHONHOME=/opt/orpkg/pyhome\nexport PYTHONPATH=/usr/local/lib/python3.12/site-packages${PYTHONPATH:+:$PYTHONPATH}\nif [ -f /opt/orpkg/syslibs/ld-linux-x86-64.so.2 ]; then\n  exec /opt/orpkg/syslibs/ld-linux-x86-64.so.2 --library-path /opt/orpkg/syslibs:/opt/orpkg/openroad/lib /opt/orpkg/openroad/bin/%s "$@"\nelse\n  exec /opt/orpkg/openroad/bin/%s "$@"\nfi\n' "$b" "$b" > /usr/local/bin/$b \
         && chmod +x /usr/local/bin/$b; \
     done \
     && for e in magic/lib/magic/tcl/magicexec magic/lib/magic/tcl/magicdnull \
                 netgen/lib/netgen/tcl/netgenexec; do \
         [ -f /opt/orpkg/$e ] || continue; \
         mv /opt/orpkg/$e /opt/orpkg/$e.elf; \
-        printf '#!/bin/sh\nexport TCL_LIBRARY=/opt/orpkg/tcltk/tcl8.6 TK_LIBRARY=/opt/orpkg/tcltk/tk8.6\nexec /opt/orpkg/syslibs/ld-linux-x86-64.so.2 --library-path /opt/orpkg/syslibs:/opt/orpkg/openroad/lib /opt/orpkg/%s.elf "$@"\n' "$e" > /opt/orpkg/$e; \
+        printf '#!/bin/sh\nexport TCL_LIBRARY=/opt/orpkg/tcltk/tcl8.6 TK_LIBRARY=/opt/orpkg/tcltk/tk8.6\nif [ -f /opt/orpkg/syslibs/ld-linux-x86-64.so.2 ]; then\n  exec /opt/orpkg/syslibs/ld-linux-x86-64.so.2 --library-path /opt/orpkg/syslibs:/opt/orpkg/openroad/lib /opt/orpkg/%s.elf "$@"\nelse\n  exec /opt/orpkg/%s.elf "$@"\nfi\n' "$e" "$e" > /opt/orpkg/$e; \
         chmod +x /opt/orpkg/$e; \
     done \
     && ln -sf /opt/orpkg/magic/bin/magic /usr/local/bin/magic \
