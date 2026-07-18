@@ -12,9 +12,14 @@ Each job runs a single DAG stage against a standardized per-task workspace and r
 | --- | --- | --- |
 | `SIM` | `iverilog -g2012` + `vvp` (RTL + testbench), VCD waveform detection | `SimReport` |
 | `LINT` | `iverilog` lint pass over RTL | `LintReport` |
-| `SYNTH` / `PNR` / `DRC_LVS` | LibreLane hardening (config synthesis, metrics, GDS/PNG collection, signoff/tapeout readiness) | `SynthReport` / `PnrReport` / `DrcLvsReport` |
+| `SYNTH` / `PNR` / `DRC_LVS` | LibreLane hardening (config synthesis, metrics, GDS/PNG collection, signoff/tapeout readiness) with a bounded auto-tuning loop | `SynthReport` / `PnrReport` / `DrcLvsReport` |
+| `STA` / `POWER` | OpenSTA (`sta`) static timing / power; falls back to LibreLane metrics if the binary is missing | `StaReport` |
+| `GL_SIM` | Gate-level simulation (`iverilog` + post-PNR netlist + PDK cell models) | `GlSimReport` |
+| `RENDER` | Best-effort image generation — schematic (yosys/Graphviz), waveform (Matplotlib), GDS layout (gdstk/KLayout), metrics cards | `RenderReport` |
 | `SIGNOFF` | Structured signoff aggregation | `SignoffReport` |
 | _other_ | Mock-compatible fallback | `BaseReport` |
+
+Stage routing lives in `jobs/manager.py`; report dataclasses in `toolchain/reports.py` all extend `BaseReport`.
 
 ### Workspace layout
 ```
@@ -40,27 +45,32 @@ Tool invocation goes through a `CommandRunner` protocol (`runner.py`). The defau
 | Var | Default | Purpose |
 | --- | --- | --- |
 | `WORKSPACE_ROOT` | `/tmp/chip-orchestra/workspaces` | Root for per-task workspaces |
-| `IVERILOG_PATH` | _(empty)_ | Absolute path override for the Icarus Verilog compiler |
-| `IVERILOG_BIN` | `iverilog` | Icarus Verilog compiler binary |
-| `VVP_PATH` | _(empty)_ | Absolute path override for the Icarus Verilog runtime |
-| `VVP_BIN` | `vvp` | Icarus Verilog runtime binary |
-| `LIBRELANE_PATH` | _(empty)_ | Absolute path override for the LibreLane CLI |
-| `LIBRELANE_BIN` | `librelane` | LibreLane hardening binary |
-| `PDK` | `sky130A` | Target PDK |
-| `PDK_ROOT` | `/opt/pdk` | PDK install root |
-| `EDA_JOB_TIMEOUT_SIM` | `600` | Simulation timeout (s) |
+| `DATABASE_URL` | `mysql+pymysql://chip:chip@mysql:3306/chip_orchestra` | Job persistence (MySQL) |
+| `REDIS_URL` | `redis://redis:6379/0` | Job queue and SSE log streaming |
+| `PDK` | `gf180mcuD` | Target PDK (GlobalFoundries 180MCU) |
+| `PDK_ROOT` | `/opt/pdk` | PDK install root (mounted volume, auto-populated by Volare) |
+| `GF180_VOLTAGE` | `3v3` | GF180 corner selection (`3v3` or `5v0`) |
+| `EDA_JOB_TIMEOUT_SIM` | `120` | Simulation timeout (s) |
 | `EDA_JOB_TIMEOUT_HARDEN` | `3600` | Hardening timeout (s) |
+| `IVERILOG_BIN` / `IVERILOG_PATH` | `iverilog` / _(empty)_ | Icarus Verilog compiler binary / absolute-path override |
+| `VVP_BIN` / `VVP_PATH` | `vvp` / _(empty)_ | Icarus Verilog runtime binary / absolute-path override |
+| `LIBRELANE_BIN` / `LIBRELANE_PATH` | `librelane` / _(empty)_ | LibreLane hardening binary / absolute-path override |
+| `STA_BIN` | `sta` | OpenSTA binary |
+| `YOSYS_BIN` | `yosys` | Yosys binary (schematic render) |
+| `KLAYOUT_BIN` | `klayout` | KLayout binary (GDS render/checks) |
+| `_LLN_OVERRIDE_YOSYS` | `/usr/local/bin/yosys-y` | Yosys-with-Python shim used for pyosys/LibreLane steps |
 
 ## Docker image toolchain
 
-The `eda-service` Docker image now mirrors GarudaChip's installation pattern:
+The `eda-service` Docker image is self-contained — no host EDA tools are needed:
 
-- installs **Icarus Verilog** from Debian `apt`
-- installs **Nix** in single-user mode inside the image
-- installs **LibreLane** from the upstream flake (`github:librelane/librelane`)
-- keeps `PDK_ROOT` as a mounted volume so PDK assets can be enabled and reused across container rebuilds
+- base image **`python:3.12-slim`**
+- **Icarus Verilog, Verilator, yosys, KLayout, Graphviz** installed from Debian `apt`
+- **OpenROAD, OpenSTA, Magic, netgen** are copied out of the pinned `hpretl/iic-osic-tools` image (with their Ubuntu shared libraries and a bundled `ld-linux` loader, so they run inside the Debian base regardless of host distro)
+- **LibreLane, Volare, gdstk, pyosys, Matplotlib** installed from PyPI (a `yosys -y` shim exposes pyosys)
+- the **GF180MCU PDK (`gf180mcuD`)** is installed by **Volare** via `pdk/setup_pdk.sh` into `PDK_ROOT`, which is kept as a mounted volume so PDK assets are reused across container rebuilds
 
-Simulation is ready as soon as the container starts. Hardening is ready once a compatible PDK has been enabled under `PDK_ROOT`.
+Simulation and lint are ready as soon as the container starts. Hardening (SYNTH/PNR/STA/GL_SIM/RENDER/DRC_LVS) is ready once the PDK has been installed under `PDK_ROOT` on first boot.
 
 ## Local run
 ```bash
