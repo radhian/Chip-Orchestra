@@ -38,7 +38,7 @@ The platform combines AI planning, verification, EDA execution, artifact managem
 ## Features
 
 - AI-assisted RTL-to-GDSII design flow
-- Full 11-stage orchestration pipeline from spec ingest to export
+- Full 15-stage orchestration pipeline from spec ingest to export
 - Multi-agent orchestration
 - **Golden-first verification**: the Python golden model defines the desired output; the RTL must match it value-for-value before the flow proceeds
 - Automated verification and repair (budgeted SIM and hardening auto-repair loops)
@@ -62,12 +62,12 @@ flowchart TB
 
     subgraph OP[Orchestrator Plane]
         OPS[Orchestrator Service\nGo + Gin + GORM]
-        DAG[DAG Scheduler\n11-stage State Machine]
+        DAG[DAG Scheduler\n15-stage State Machine]
     end
 
     subgraph EXEC[Execution Plane]
         AG[Agent Service\nFastAPI + LangGraph]
-        EDA[EDA Service\nFastAPI + OpenLane / LibreLane Runner]
+        EDA[EDA Service\nFastAPI + LibreLane / OpenROAD Runner]
     end
 
     subgraph DATA[Data Plane]
@@ -109,11 +109,11 @@ chip-orchestra/
 ├── eda-service/
 ├── frontend/
 ├── docs/
-│   ├── architecture.md
+│   ├── ARCHITECTURE.md
+│   ├── architecture_v2.md
 │   ├── development.md
-│   ├── roadmap.md
-│   ├── vision.md
 │   ├── test-plan.md
+│   ├── diagrams/
 │   └── api/
 ├── scripts/
 ├── docker-compose.yml
@@ -143,38 +143,51 @@ flowchart TB
         TB_GEN["TB_GEN\nTestbench generation"]
     end
 
-    subgraph STAGE4["🔍 Stage 04 · Verification"]
+    subgraph STAGE4["🔍 Stage 04 · Verification & Repair"]
         direction LR
-        SIM["SIM\nSimulation"]
+        SIM["SIM\nSimulation vs golden model"]
         LINT["LINT\nStatic lint checks"]
+        RTL_REPAIR["RTL_REPAIR\nDeep-agent compile/golden repair"]
     end
 
     subgraph STAGE5["⚙️ Stage 05 · Implementation"]
         direction LR
-        SYNTH["SYNTH\nSynthesis"]
+        SYNTH["SYNTH\nSynthesis (gated)"]
         PNR["PNR\nPlace and route"]
+    end
+
+    subgraph STAGE6["🔬 Stage 06 · Physical Signoff"]
+        direction LR
+        STA["STA\nStatic timing analysis"]
+        GL_SIM["GL_SIM\nGate-level simulation"]
+        RENDER["RENDER\nLayout / waveform rendering"]
         DRC_LVS["DRC_LVS\nPhysical verification"]
     end
 
-    subgraph STAGE6["🏁 Stage 06 · Signoff & Delivery"]
+    subgraph STAGE7["🏁 Stage 07 · Signoff & Delivery"]
         direction LR
-        GDS["GDS\nGDS generation"]
-        SIGNOFF["SIGNOFF\nTiming / reports / signoff review"]
+        SIGNOFF["SIGNOFF\nTiming / reports / signoff review (gated)"]
         EXPORT["EXPORT\nBundle packaging and delivery"]
     end
 
     SPEC_INGEST --> PLAN
     PLAN --> RTL_GEN
-    PLAN --> TB_GEN
+    RTL_GEN --> TB_GEN
     RTL_GEN --> SIM
     TB_GEN --> SIM
-    RTL_GEN --> LINT
-    SIM --> SYNTH
-    LINT --> SYNTH
+    SIM --> LINT
+    SIM --> RTL_REPAIR
+    LINT --> RTL_REPAIR
+    RTL_REPAIR --> SYNTH
     SYNTH --> PNR
+    PNR --> STA
+    PNR --> GL_SIM
+    PNR --> RENDER
     PNR --> DRC_LVS
-    DRC_LVS --> GDS
-    GDS --> SIGNOFF
+    STA --> SIGNOFF
+    GL_SIM --> SIGNOFF
+    RENDER --> SIGNOFF
+    DRC_LVS --> SIGNOFF
     SIGNOFF --> EXPORT
 ```
 
@@ -184,30 +197,35 @@ SPEC_INGEST
     ▼
 PLAN
     │
-    ├──► RTL_GEN
-    │        │
-    │        ├──► SIM ──┐
-    │        └──► LINT ─┴──► SYNTH
+    ▼
+RTL_GEN
     │
-    └──► TB_GEN ───────────► SIM
-                              │
-                              ▼
-                             PNR
-                              │
-                              ▼
-                           DRC_LVS
-                              │
-                              ▼
-                              GDS
-                              │
-                              ▼
-                           SIGNOFF
-                              │
-                              ▼
-                            EXPORT
+    ├──► TB_GEN ──┐
+    │             ▼
+    └──────────► SIM
+                  │
+                  ├──► LINT ──┐
+                  └───────────┴──► RTL_REPAIR
+                                       │
+                                       ▼
+                                     SYNTH
+                                       │
+                                       ▼
+                                      PNR
+                                       │
+                    ┌──────┬───────────┼───────────┬──────┐
+                    ▼      ▼           ▼           ▼
+                   STA   GL_SIM     RENDER      DRC_LVS
+                    │      │           │           │
+                    └──────┴─────┬─────┴───────────┘
+                                 ▼
+                              SIGNOFF
+                                 │
+                                 ▼
+                               EXPORT
 ```
 
-The default pipeline now covers **11 orchestrated stages**:
+The default pipeline now covers **15 orchestrated stages**:
 
 1. `SPEC_INGEST`
 2. `PLAN`
@@ -215,11 +233,17 @@ The default pipeline now covers **11 orchestrated stages**:
 4. `TB_GEN`
 5. `SIM`
 6. `LINT`
-7. `SYNTH`
-8. `PNR`
-9. `DRC_LVS`
-10. `SIGNOFF`
-11. `EXPORT`
+7. `RTL_REPAIR`
+8. `SYNTH` *(gated)*
+9. `PNR`
+10. `STA`
+11. `GL_SIM`
+12. `RENDER`
+13. `DRC_LVS`
+14. `SIGNOFF` *(gated)*
+15. `EXPORT`
+
+`STA`, `GL_SIM`, `RENDER`, and `DRC_LVS` all fan out from `PNR` and run as parallel physical-signoff analyses that reconverge at `SIGNOFF`. `SYNTH` and `SIGNOFF` are marked as human-review gates in `FULL_FLOW_GATED` launch mode.
 
 Every stage is fully observable with:
 
@@ -259,8 +283,10 @@ The `eda-service` image is self-contained — no host tools needed:
 | Icarus Verilog, Verilator | Debian packages | simulation, lint |
 | yosys + pyosys wheel | Debian + PyPI (`yosys -y` shim) | synthesis, LibreLane pyosys steps |
 | OpenROAD (LibreLane build) | bundled from `hpretl/iic-osic-tools` | floorplan, place, CTS, route, STA |
+| OpenSTA | bundled from `hpretl/iic-osic-tools` | standalone `STA` stage (timing signoff) |
 | Magic, netgen | bundled from `hpretl/iic-osic-tools` | GDS stream-out, DRC, LVS |
 | KLayout | Debian package | GDS render/checks |
+| gdstk, Matplotlib, Graphviz | PyPI + Debian | `RENDER` stage layout / waveform / schematic images |
 | GF180MCU PDK (gf180mcuD) | auto-installed by Volare on first boot (`PDK`, `PDK_ROOT`) | all hardening stages |
 
 Timing closes on the **3.3V corner set** by default (`GF180_VOLTAGE=3v3` → tt_025C_3v30 / ss_125C_3v00 / ff_n40C_3v60); set `GF180_VOLTAGE=5v0` for LibreLane's stock 5V corners.
@@ -341,7 +367,7 @@ Critical engineering decisions—including RTL modifications, implementation, an
 | Database | MySQL |
 | Cache & Messaging | Redis |
 | AI Models | Ollama (default: `glm-5.2:cloud`; also Qwen, Mistral, etc.), ZhipuAI GLM API, Google Gemini |
-| EDA Toolchain | Icarus Verilog, OpenLane, LibreLane, OpenROAD |
+| EDA Toolchain | Icarus Verilog, Verilator, yosys+pyosys, LibreLane, OpenROAD, OpenSTA, Magic, netgen, KLayout |
 
 ---
 
@@ -371,8 +397,7 @@ Responsible for:
 - Self-repair
 - Reasoning trace generation
 
-Every LLM stage (PLAN / RTL_GEN / RTL_REPAIR / TB_GEN) runs a **RLM deep agent**
-(GarudaChip architecture): the agent treats large inputs as an environment on
+Every LLM stage (PLAN / RTL_GEN / RTL_REPAIR / TB_GEN) runs a **RLM deep agent**: the agent treats large inputs as an environment on
 disk — it peeks at file slices, greps across the design, delegates focused
 sub-tasks to fresh `llm_query` calls, computes data in a Python sandbox, and
 writes RTL with a **compile-check-on-write** feedback loop. Each agent can also:
@@ -396,9 +421,10 @@ deterministically once and pinned as `context/chip_input_grid.json`; the
 testbench dumps the RTL's computed result to `waves/chip_output.mem` (rendered
 to an image for the Simulation tab). The orchestrator enforces honesty gates:
 a SIM run with no printed verdict or no chip-output dump FAILS (and triggers a
-bounded auto-repair loop — deep agent debugs against the golden model, SIM
-re-runs, max 2 rounds per manual retry); PNR/DRC_LVS fail unless a real GDS
-exists (the PDK is auto-installed at LibreLane's pinned version on first boot).
+bounded auto-repair loop — the deep agent debugs against the golden model and
+SIM re-runs, up to `SIM_AUTO_REPAIR_ROUNDS`, default 10, per manual retry);
+PNR/DRC_LVS fail unless a real GDS exists (the PDK is auto-installed at
+LibreLane's pinned version on first boot).
 
 Set `AGENT_DEEP_AGENTS=0` to fall back to one-shot templated generation.
 
@@ -410,7 +436,11 @@ Responsible for:
 - Lint
 - Synthesis
 - Place & route
+- Static timing analysis (STA)
+- Gate-level simulation (GL_SIM)
+- Layout / waveform / schematic rendering (RENDER)
 - GDS generation
+- DRC / LVS physical verification
 - Signoff
 - Report generation
 - Artifact management
@@ -478,8 +508,7 @@ To run fully local instead (needs a capable GPU), pick any model from the
 
 Image uploads work with either choice: glm-5.2:cloud cannot read images itself,
 so the vision digest automatically routes to the first installed **local**
-vision model (e.g. `qwen3.5:9b`) — keep one pulled for image support, or set
-`GARUDA_VISION_MODEL` explicitly.
+vision model (e.g. `qwen3.5:9b`) — keep one pulled for image support.
 
 Re-running `install.sh` never overwrites the model already chosen in `.env`
 unless you pass `--model` explicitly.
@@ -532,11 +561,24 @@ Password: chip-orchestra
 
 - `GET /api/v1/tasks/:id/attempts/latest/events`
 - `GET /api/v1/tasks/:id/attempts/latest/artifacts`
+- `GET /api/v1/tasks/:id/attempts/latest/diagnosis`
 - `GET /api/v1/tasks/:id/workspace/files`
 - `GET /api/v1/tasks/:id/workspace/file?path=<file>`
-- `GET /api/v1/tasks/:id/workspace/download?path=<file>`
+- `GET /api/v1/tasks/:id/workspace/raw?path=<file>` (binary / JWT-in-query stream)
+- `GET /api/v1/tasks/:id/workspace/export` (workspace `.zip`)
+- `POST /api/v1/tasks/:id/workspace/upload`
+- `POST /api/v1/tasks/:id/workspace/propose-patch`
 
-The download endpoint streams workspace files as attachments, which powers the browser download actions in the Runbook and RTL Workspace views.
+### Signoff, review & events
+
+- `GET /api/v1/tasks/:id/signoff/status`
+- `POST /api/v1/tasks/:id/approvals/:stage`
+- `POST /api/v1/tasks/:id/waivers`
+- `POST /api/v1/tasks/:id/export-bundle`
+- `POST /api/v1/tasks/:id/stages/:stage/retry`
+- `GET /ws/tasks/:id/events` (WebSocket; supports `?token=<jwt>`)
+
+The workspace `raw`/`export` endpoints stream files as attachments and accept a JWT in the query string, which powers the browser download actions in the Runbook and RTL Workspace views.
 
 ---
 
