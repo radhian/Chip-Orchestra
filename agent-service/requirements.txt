@@ -1,19 +1,37 @@
+# Core service
 fastapi==0.115.5
 uvicorn[standard]==0.32.1
 sqlalchemy==2.0.36
 pymysql==1.1.1
 redis==5.2.0
-langchain==0.3.9
-langchain-core>=0.3.0
-langchain-community>=0.3.0
-langchain-openai>=0.2.0
-langchain-ollama>=0.2.0
-langchain-google-genai>=2.0
-openai>=1.40
-langgraph==0.2.56
 pydantic==2.10.2
 reportlab>=4.0
+
+# LangChain / deep-agent stack — versions matched to the GarudaChip lockfile
+langchain==0.3.30
+langchain-core==0.3.86
+langchain-community==0.3.31
+langchain-openai>=0.2.0
+langchain-ollama==0.3.10
+langchain-google-genai>=2.0
+openai>=1.40
+langgraph==1.0.1
+deepagents==0.0.5
+
+# Web research (search + fetch); crawl4ai is optional — it pulls Playwright +
+# a Chromium download, so the crawler falls back to plain requests when absent.
+# For browser-grade crawling: pip install "crawl4ai>=0.4"
+requests>=2.32
+ddgs==9.14.4
+googlesearch-python==1.3.0
+
+# Attachment ingestion (image upload digest + PDF text extraction)
+pypdf==6.13.1
+pillow==12.2.0
+
+# Tests
 pytest==8.3.3
 pytest-asyncio==0.24.0
-httpx==0.27.2
+# httpx left unpinned: ddgs 9.x needs a newer httpx than the old 0.27 pin.
+httpx>=0.28
 fakeredis==2.26.1

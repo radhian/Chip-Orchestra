@@ -71,6 +71,7 @@ type Task struct {
 	TemplateID   string     `gorm:"size:255" json:"template_id"`
 	PDKID        string     `gorm:"size:128" json:"pdk_id"`
 	StdcellLibID string     `gorm:"size:128" json:"stdcell_lib_id"`
+	LLMModel     string     `gorm:"size:128" json:"llm_model,omitempty"`
 	ReviewGates  string     `gorm:"type:text" json:"review_gates"`
 	OwnerID      string     `gorm:"type:char(36);index" json:"owner_id"`
 	OwnerName    string     `gorm:"size:255" json:"owner_name"`
@@ -86,8 +87,8 @@ type Task struct {
 
 type Stage struct {
 	ID            string      `gorm:"type:char(36);primaryKey" json:"stage_id"`
-	TaskID        string      `gorm:"type:char(36);index;not null" json:"task_id"`
-	Name          string      `gorm:"size:128;index:idx_task_stage_name,unique;not null" json:"name"`
+	TaskID        string      `gorm:"type:char(36);index:idx_task_stage_name,unique,priority:1;not null" json:"task_id"`
+	Name          string      `gorm:"size:128;index:idx_task_stage_name,unique,priority:2;not null" json:"name"`
 	Status        StageStatus `gorm:"size:64;index;not null" json:"status"`
 	DependsOn     string      `gorm:"type:text" json:"depends_on"`
 	SortOrder     int         `gorm:"not null" json:"sort_order"`

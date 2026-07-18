@@ -1,3 +1,42 @@
+# OpenROAD (PNR's core tool) has no Debian package and no prebuilt release
+# binaries — but the IIC-OSIC-TOOLS image ships a LibreLane-matched build.
+# Assemble it with its Ubuntu shared libs + dynamic loader (cross-distro:
+# the binaries must run through Ubuntu's ld-linux, never Debian's glibc).
+# PINNED BY DIGEST (2026-06-22 build): the extraction below depends on this
+# image's exact /foss/tools layout — bump deliberately, then re-verify
+# `openroad -version`, `magic -dnull`, and `netgen -batch` in the built image.
+FROM --platform=linux/amd64 hpretl/iic-osic-tools@sha256:7371bae55da486f492cc270ea6137c4fcf3b11971de7a4506a74f62be143537a AS openroad-dist
+USER root
+RUN mkdir -p /orpkg/syslibs \
+    && cp -r /foss/tools/openroad-librelane /orpkg/openroad \
+    && for b in openroad sta; do \
+         ldd /foss/tools/openroad-librelane/bin/$b 2>/dev/null \
+           | awk '/=> \//{print $3}' | grep -v '^/foss' \
+           | xargs -I{} cp -L --no-clobber {} /orpkg/syslibs/ 2>/dev/null || true; \
+       done \
+    && LD_SO=$(find /lib /lib64 /lib/x86_64-linux-gnu -name 'ld-linux-x86-64.so.2' 2>/dev/null | head -1) \
+    && [ -n "$LD_SO" ] && cp -L "$LD_SO" /orpkg/syslibs/ || true \
+    # Ubuntu's Tcl/Tk runtime scripts must match the bundled libtcl (Debian's
+    # 8.6.14 scripts + Ubuntu's 8.6.16 lib = "version conflict" in floorplan).
+    && cp -r /usr/share/tcltk /orpkg/tcltk \
+    # OpenROAD's EMBEDDED Python (odbpy steps) needs its own stdlib — the
+    # compiled-in /usr/lib/python3.x doesn't exist in the Debian image
+    # ("No module named 're'" at odb-setpowerconnections).
+    && PYV=$(ls /usr/lib | grep -E '^python3\.[0-9]+$' | head -1) \
+    && mkdir -p /orpkg/pyhome/lib \
+    && cp -r /usr/lib/$PYV /orpkg/pyhome/lib/$PYV \
+    # magic + netgen: Debian ships no magic at all and its "netgen" is a mesh
+    # generator, not the LVS tool — GDS stream-out died on FileNotFoundError.
+    && cp -r /foss/tools/magic /orpkg/magic \
+    && cp -r /foss/tools/netgen /orpkg/netgen \
+    && for e in /orpkg/magic/lib/magic/tcl/magicexec /orpkg/magic/lib/magic/tcl/magicdnull \
+                /orpkg/netgen/lib/netgen/tcl/netgenexec; do \
+         [ -f "$e" ] && ldd "$e" | awk '/=> \//{print $3}' | grep -v '^/foss' \
+           | xargs -I{} cp -L --no-clobber {} /orpkg/syslibs/ 2>/dev/null || true; \
+       done \
+    && sed -i 's|/foss/tools/magic|/opt/orpkg/magic|g' /orpkg/magic/bin/magic \
+    && sed -i 's|/foss/tools/netgen|/opt/orpkg/netgen|g' /orpkg/netgen/bin/netgen
+
 FROM python:3.12-slim
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -38,13 +77,47 @@ RUN apt-get update \
     && (apt-get install -y --no-install-recommends netgen || true) \
     && (apt-get install -y --no-install-recommends magic || true) \
     && (apt-get install -y --no-install-recommends opensta || true) \
+    # verilator: LibreLane's Verilator.Lint step aborts the whole hardening
+    # flow when the binary is missing (PNR failed with FileNotFoundError).
+    && (apt-get install -y --no-install-recommends verilator || true) \
     && rm -rf /var/lib/apt/lists/*
+
+# pyosys: LibreLane 3.x's Generate-JSON-Header/synthesis steps need yosys with
+# Python scripting (`yosys -y`); the distro binary lacks it, so the pip wheel's
+# bindings are used through the yosys-y shim (_LLN_OVERRIDE_YOSYS).
+COPY toolchain/yosys-y /usr/local/bin/yosys-y
+RUN chmod +x /usr/local/bin/yosys-y
+ENV _LLN_OVERRIDE_YOSYS=/usr/local/bin/yosys-y
+
+# OpenROAD + OpenSTA from the openroad-dist stage, executed via the bundled
+# Ubuntu loader (direct execution would hit Debian/Ubuntu glibc clashes).
+COPY --from=openroad-dist /orpkg /opt/orpkg
+RUN for b in openroad sta; do \
+        printf '#!/bin/sh\nexport TCL_LIBRARY=/opt/orpkg/tcltk/tcl8.6 TK_LIBRARY=/opt/orpkg/tcltk/tk8.6\nexport PYTHONHOME=/opt/orpkg/pyhome\nexport PYTHONPATH=/usr/local/lib/python3.12/site-packages${PYTHONPATH:+:$PYTHONPATH}\nif [ -f /opt/orpkg/syslibs/ld-linux-x86-64.so.2 ]; then\n  exec /opt/orpkg/syslibs/ld-linux-x86-64.so.2 --library-path /opt/orpkg/syslibs:/opt/orpkg/openroad/lib /opt/orpkg/openroad/bin/%s "$@"\nelse\n  exec /opt/orpkg/openroad/bin/%s "$@"\nfi\n' "$b" "$b" > /usr/local/bin/$b \
+        && chmod +x /usr/local/bin/$b; \
+    done \
+    && for e in magic/lib/magic/tcl/magicexec magic/lib/magic/tcl/magicdnull \
+                netgen/lib/netgen/tcl/netgenexec; do \
+        [ -f /opt/orpkg/$e ] || continue; \
+        mv /opt/orpkg/$e /opt/orpkg/$e.elf; \
+        printf '#!/bin/sh\nexport TCL_LIBRARY=/opt/orpkg/tcltk/tcl8.6 TK_LIBRARY=/opt/orpkg/tcltk/tk8.6\nif [ -f /opt/orpkg/syslibs/ld-linux-x86-64.so.2 ]; then\n  exec /opt/orpkg/syslibs/ld-linux-x86-64.so.2 --library-path /opt/orpkg/syslibs:/opt/orpkg/openroad/lib /opt/orpkg/%s.elf "$@"\nelse\n  exec /opt/orpkg/%s.elf "$@"\nfi\n' "$e" "$e" > /opt/orpkg/$e; \
+        chmod +x /opt/orpkg/$e; \
+    done \
+    && ln -sf /opt/orpkg/magic/bin/magic /usr/local/bin/magic \
+    && ln -sf /opt/orpkg/netgen/bin/netgen /usr/local/bin/netgen \
+    # magicdnull/magicexec/netgenexec HARDCODE /foss/tools/... script paths at
+    # compile time — without this symlink magic starts but never loads its own
+    # Tcl commands (WriteLEF produced no LEF and the antenna check crashed).
+    && mkdir -p /foss/tools \
+    && ln -sfn /opt/orpkg/magic /foss/tools/magic \
+    && ln -sfn /opt/orpkg/netgen /foss/tools/netgen \
+    && openroad -version
 
 # LibreLane / OpenLane (Python orchestrator) + Volare (PDK manager) + render libs.
 # librelane is the maintained fork; openlane is the fallback. gdstk + matplotlib
 # power the GDS/waveform/metrics PNG renders.
 RUN pip install --no-cache-dir librelane || pip install --no-cache-dir openlane \
-    && pip install --no-cache-dir volare matplotlib \
+    && pip install --no-cache-dir volare matplotlib pyosys \
     && pip install --no-cache-dir "gdstk" || pip install --no-cache-dir --no-build-isolation gdstk || echo "gdstk optional – KLayout fallback will be used" \
     && mkdir -p "${PDK_ROOT}"
 

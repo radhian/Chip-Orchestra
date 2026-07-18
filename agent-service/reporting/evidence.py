@@ -74,8 +74,18 @@ def collect_evidence(
     ctx.gds_files = _rel(workspace, sorted(gds_dir.glob("*"))) if gds_dir.is_dir() else []
     ctx.report_files = _rel(workspace, sorted(reports_dir.glob("*"))) if reports_dir.is_dir() else []
 
+    if not ctx.top_module:
+        # Structural detection (the module that instantiates the others) —
+        # taking the first sorted rtl file crowned a WEIGHTS file (.mem) as
+        # "top module actor_b1" in the final report.
+        try:
+            from verilog_check import pick_top
+            ctx.top_module = pick_top(rtl_dir) or ""
+        except Exception:  # noqa: BLE001
+            pass
     if not ctx.top_module and ctx.rtl_files:
-        ctx.top_module = Path(ctx.rtl_files[0]).stem
+        hdl = [f for f in ctx.rtl_files if f.endswith((".v", ".sv"))]
+        ctx.top_module = Path(hdl[0] if hdl else ctx.rtl_files[0]).stem
 
     # Load structured EDA stage reports (explicit list first, then any *_report.json).
     candidate_reports: List[str] = list(eda_reports or [])

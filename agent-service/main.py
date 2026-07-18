@@ -26,6 +26,11 @@ class AgentInvokeRequest(BaseModel):
     artifact_inventory: List[str] = Field(default_factory=list)
     eda_reports: List[str] = Field(default_factory=list)
     reference_files: List[str] = Field(default_factory=list)
+    # User-attached files ({"name", "content_base64"}) — images/PDFs/text saved
+    # into the workspace's context/uploads/ and digested (vision) before the
+    # stage runs. The orchestrator normally writes uploads at task creation;
+    # this field supports direct API invocations.
+    attachments: List[Dict[str, str]] = Field(default_factory=list)
 
 
 def build_services():
@@ -81,8 +86,45 @@ def create_app(
             "redis": request.app.state.redis_client.ping(),
         }
 
+    @app.get("/agent/models")
+    def list_models():
+        """List models available on the configured LLM provider (Ollama),
+        including cloud/local flags and whether vision (image upload) works."""
+        provider = os.getenv("LLM_PROVIDER", "mock").strip().lower() or "mock"
+        default_model = os.getenv("OLLAMA_MODEL", "").strip()
+        models: List[str] = []
+        detail: List[Dict[str, Any]] = []
+        vision = False
+        if provider == "ollama":
+            try:
+                from llm import list_ollama_models, model_supports_vision
+
+                detail = list_ollama_models()
+                models = [m["name"] for m in detail]
+                vision = model_supports_vision()
+            except Exception:
+                models, detail = [], []
+        return {
+            "provider": provider,
+            "default": default_model,
+            "models": models,
+            "detail": detail,
+            "vision": vision,
+        }
+
     @app.post("/agent/invoke")
     def invoke_agent(request: AgentInvokeRequest, fastapi_request: Request):
+        if request.attachments:
+            # Persist API-supplied attachments into the workspace so the stage
+            # handlers (and the vision digest) can see them.
+            try:
+                from context import files as wsfiles
+                from uploads import save_attachments
+
+                workspace = wsfiles.resolve_workspace(request.task_id, request.workspace_root)
+                save_attachments(workspace, request.attachments)
+            except Exception:
+                pass
         result = fastapi_request.app.state.deep_agent_graph.invoke(request.model_dump())
         return {
             "status": "success",

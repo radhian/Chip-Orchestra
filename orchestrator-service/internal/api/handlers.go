@@ -1,10 +1,16 @@
 package api
 
 import (
+	"archive/zip"
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
+	"os"
+	"path/filepath"
+	"regexp"
 	"sort"
 	"strings"
 	"time"
@@ -36,6 +42,15 @@ type loginRequest struct {
 	Password string `json:"password"`
 }
 
+// taskAttachment is a user-uploaded file (image / PDF / text) sent base64 with
+// the create-task request. It is written into the task workspace at
+// context/uploads/ BEFORE the first stage runs, so the agent service can build
+// the vision digest of it.
+type taskAttachment struct {
+	Name          string `json:"name"`
+	ContentBase64 string `json:"content_base64"`
+}
+
 type createTaskBody struct {
 	Task createTaskRequest `json:"task"`
 
@@ -51,6 +66,8 @@ type createTaskBody struct {
 		PDKID        string `json:"pdk_id"`
 		StdcellLibID string `json:"stdcell_lib_id"`
 	} `json:"design_context"`
+	LLMModel    string           `json:"llm_model"`
+	Attachments []taskAttachment `json:"attachments"`
 }
 
 type createTaskRequest struct {
@@ -64,9 +81,11 @@ type createTaskRequest struct {
 	TemplateID   string            `json:"template_id"`
 	PDKID        string            `json:"pdk_id"`
 	StdcellLibID string            `json:"stdcell_lib_id"`
+	LLMModel     string            `json:"llm_model"`
 	ReviewGates  []string          `json:"review_gates"`
 	OwnerID      string            `json:"owner_id"`
 	OwnerName    string            `json:"owner_name"`
+	Attachments  []taskAttachment  `json:"attachments"`
 }
 
 type patchTaskRequest struct {
@@ -110,10 +129,12 @@ func (a *App) RegisterRoutes(router *gin.Engine) {
 	api.Use(middleware.JWTAuth(a.JWTSecret))
 	{
 		api.GET("/auth/me", a.me)
+		api.GET("/llm/models", a.llmModels)
 		api.POST("/tasks", a.createTask)
 		api.GET("/tasks", a.listTasks)
 		api.GET("/tasks/:id", a.getTask)
 		api.PATCH("/tasks/:id", a.patchTask)
+		api.DELETE("/tasks/:id", a.deleteTask)
 		api.GET("/tasks/:id/stages", a.getStages)
 		api.POST("/tasks/:id/stages/:stage/retry", a.retryStage)
 		api.GET("/tasks/:id/attempts/latest/events", a.getEvents)
@@ -121,6 +142,9 @@ func (a *App) RegisterRoutes(router *gin.Engine) {
 		api.GET("/tasks/:id/attempts/latest/diagnosis", a.getDiagnosis)
 		api.GET("/tasks/:id/workspace/files", a.getWorkspaceFiles)
 		api.GET("/tasks/:id/workspace/file", a.getWorkspaceFile)
+		api.GET("/tasks/:id/workspace/raw", a.getWorkspaceRaw)
+		api.GET("/tasks/:id/workspace/export", a.exportWorkspaceZip)
+		api.POST("/tasks/:id/workspace/upload", a.uploadWorkspaceFile)
 		api.POST("/tasks/:id/workspace/propose-patch", a.proposePatch)
 		api.GET("/tasks/:id/signoff/status", a.getSignoffStatus)
 		api.POST("/tasks/:id/approvals/:stage", a.approveStage)
@@ -156,7 +180,9 @@ func (a *App) login(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid credentials"})
 		return
 	}
-	token, err := middleware.IssueToken(user, a.JWTSecret, time.Hour)
+	// 24h token: image/download URLs embed the JWT (`?token=`), and a 1-hour
+	// expiry made every <img> in a long-open tab break with 401s.
+	token, err := middleware.IssueToken(user, a.JWTSecret, 24*time.Hour)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -164,7 +190,7 @@ func (a *App) login(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"access_token": token,
 		"token_type":   "Bearer",
-		"expires_in":   3600,
+		"expires_in":   86400,
 		"user": gin.H{
 			"id":        user.ID,
 			"username":  user.Username,
@@ -177,6 +203,37 @@ func (a *App) login(c *gin.Context) {
 func (a *App) me(c *gin.Context) {
 	principal := c.MustGet("principal").(*middleware.JWTClaims)
 	c.JSON(http.StatusOK, gin.H{"id": principal.UserID, "username": principal.Username, "full_name": principal.FullName, "roles": principal.Roles})
+}
+
+func (a *App) deleteTask(c *gin.Context) {
+	ctx := c.Request.Context()
+	var task models.Task
+	if err := a.DB.WithContext(ctx).First(&task, "id = ?", c.Param("id")).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "task not found"})
+		return
+	}
+	if err := a.DB.WithContext(ctx).Where("task_id = ?", task.ID).Delete(&models.StageAttempt{}).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	if err := a.DB.WithContext(ctx).Where("task_id = ?", task.ID).Delete(&models.Stage{}).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	if err := a.DB.WithContext(ctx).Delete(&task).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"status": "deleted", "task_id": task.ID})
+}
+
+func (a *App) llmModels(c *gin.Context) {
+	models, err := a.Agent.Models(c.Request.Context())
+	if err != nil {
+		c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, models)
 }
 
 func (a *App) createTask(c *gin.Context) {
@@ -196,7 +253,9 @@ func (a *App) createTask(c *gin.Context) {
 			TemplateID:   body.Repo.TemplateID,
 			PDKID:        body.DesignContext.PDKID,
 			StdcellLibID: body.DesignContext.StdcellLibID,
+			LLMModel:     body.LLMModel,
 			ReviewGates:  []string{"BEFORE_SIGNOFF"},
+			Attachments:  body.Attachments,
 		}
 		if req.LaunchMode == "" {
 			req.LaunchMode = models.LaunchModeFullFlowGated
@@ -226,6 +285,7 @@ func (a *App) createTask(c *gin.Context) {
 		TemplateID:   req.TemplateID,
 		PDKID:        defaultString(req.PDKID, "sky130"),
 		StdcellLibID: defaultString(req.StdcellLibID, "sky130_fd_sc_hd"),
+		LLMModel:     req.LLMModel,
 		ReviewGates:  strings.Join(req.ReviewGates, ","),
 		OwnerID:      req.OwnerID,
 		OwnerName:    req.OwnerName,
@@ -241,6 +301,16 @@ func (a *App) createTask(c *gin.Context) {
 	if err := a.DB.WithContext(c.Request.Context()).Create(&task).Error; err != nil {
 		c.JSON(http.StatusConflict, gin.H{"error": err.Error()})
 		return
+	}
+
+	// Persist user attachments (images / PDFs / specs) into the shared task
+	// workspace BEFORE any stage is queued, so the agent service's vision
+	// digest sees them on the very first stage.
+	if len(req.Attachments) > 0 {
+		if err := a.saveTaskAttachments(task.ID, req.Attachments); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": fmt.Sprintf("failed to store attachments: %v", err)})
+			return
+		}
 	}
 
 	for idx, def := range a.Orch.Definitions() {
@@ -259,6 +329,46 @@ func (a *App) createTask(c *gin.Context) {
 	}
 	_ = a.Orch.QueueInitialStages(c.Request.Context(), task.ID)
 	c.JSON(http.StatusCreated, gin.H{"task_id": task.ID, "id": task.ID, "attempt_id": fmt.Sprintf("%s-attempt-1", task.ID), "status": task.Status, "current_stage": task.CurrentStage, "created_at": task.CreatedAt})
+}
+
+// saveTaskAttachments decodes base64 uploads and writes them under the task
+// workspace's context/uploads/ directory (marking images as REAL user uploads
+// via .user_images.txt, matching the agent service's convention).
+func (a *App) saveTaskAttachments(taskID string, attachments []taskAttachment) error {
+	updir := filepath.Join(a.Orch.TaskWorkspace(taskID), "context", "uploads")
+	if err := os.MkdirAll(updir, 0o755); err != nil {
+		return err
+	}
+	sanitize := regexp.MustCompile(`[^\w.\-]`)
+	imageExt := map[string]bool{".png": true, ".jpg": true, ".jpeg": true, ".webp": true, ".bmp": true, ".gif": true}
+	var imageNames []string
+	for _, att := range attachments {
+		name := sanitize.ReplaceAllString(filepath.Base(att.Name), "_")
+		if name == "" || name == "." {
+			continue
+		}
+		data, err := base64.StdEncoding.DecodeString(att.ContentBase64)
+		if err != nil {
+			return fmt.Errorf("attachment %q is not valid base64: %w", att.Name, err)
+		}
+		if len(data) > 32<<20 {
+			return fmt.Errorf("attachment %q exceeds the 32 MB limit", att.Name)
+		}
+		if err := os.WriteFile(filepath.Join(updir, name), data, 0o644); err != nil {
+			return err
+		}
+		if imageExt[strings.ToLower(filepath.Ext(name))] {
+			imageNames = append(imageNames, name)
+		}
+	}
+	if len(imageNames) > 0 {
+		f, err := os.OpenFile(filepath.Join(updir, ".user_images.txt"), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0o644)
+		if err == nil {
+			defer f.Close()
+			_, _ = f.WriteString(strings.Join(imageNames, "\n") + "\n")
+		}
+	}
+	return nil
 }
 
 func (a *App) listTasks(c *gin.Context) {
@@ -291,7 +401,7 @@ func (a *App) listTasks(c *gin.Context) {
 			"ownerId":        task.OwnerID,
 			"latest_attempt": task.AttemptCount,
 			"eta_seconds":    task.EtaSeconds,
-			"etaLabel":       etaLabel(task.EtaSeconds),
+			"etaLabel":       etaLabel(task),
 			"repoName":       defaultString(task.RepoSource, task.TemplateID),
 			"updated_at":     task.UpdatedAt,
 		})
@@ -316,14 +426,14 @@ func (a *App) getTask(c *gin.Context) {
 		OwnerName:            task.OwnerName,
 		OwnerID:              task.OwnerID,
 		CurrentStage:         task.CurrentStage,
-		EtaLabel:             etaLabel(task.EtaSeconds),
+		EtaLabel:             stagesEtaLabel(task, stages),
 		StatusLabel:          strings.Title(strings.ToLower(string(task.Status))),
 		Tone:                 statusTone(task.Status),
 		RepoName:             defaultString(task.RepoSource, task.TemplateID),
-		PDKLabel:             fmt.Sprintf("%s / %s", task.PDKID, task.StdcellLibID),
+		PDKLabel:             pdkLabel(task.PDKID, task.StdcellLibID),
 		ReviewGateLabel:      reviewGateLabel(task.ReviewGates),
 		RuntimeLabel:         "Orchestrator Service + Agent Service + EDA Service",
-		ArtifactLineageCount: a.listLength(c.Request.Context(), fmt.Sprintf("task:%s:artifacts", task.ID)),
+		ArtifactLineageCount: len(a.readTaskArtifacts(c.Request.Context(), task.ID)),
 		Stages:               make([]stageView, 0, len(stages)),
 		Attempts:             make([]gin.H, 0),
 	}
@@ -385,6 +495,9 @@ func (a *App) getStages(c *gin.Context) {
 
 func (a *App) retryStage(c *gin.Context) {
 	stageName := strings.ToUpper(c.Param("stage"))
+	// A MANUAL retry re-arms the SIM auto-repair budget (the automatic loop
+	// must never reset its own counter).
+	a.Orch.ResetSimRepairBudget(c.Request.Context(), c.Param("id"))
 	if err := a.Orch.RetryStage(c.Request.Context(), c.Param("id"), stageName); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -393,25 +506,108 @@ func (a *App) retryStage(c *gin.Context) {
 }
 
 func (a *App) getEvents(c *gin.Context) {
-	c.JSON(http.StatusOK, a.readJSONList(c.Request.Context(), fmt.Sprintf("task:%s:events", c.Param("id"))))
+	events := a.readJSONList(c.Request.Context(), fmt.Sprintf("task:%s:events", c.Param("id")))
+	// Legacy stage.updated events (recorded before events carried display
+	// fields) have no title and rendered as EMPTY rows — drop them.
+	filtered := make([]map[string]any, 0, len(events))
+	for _, event := range events {
+		if title, _ := event["title"].(string); title != "" {
+			filtered = append(filtered, event)
+		}
+	}
+	c.JSON(http.StatusOK, filtered)
 }
 
 func (a *App) getArtifacts(c *gin.Context) {
-	c.JSON(http.StatusOK, a.readJSONList(c.Request.Context(), fmt.Sprintf("task:%s:artifacts", c.Param("id"))))
+	taskID := c.Param("id")
+	artifacts := a.readTaskArtifacts(c.Request.Context(), taskID)
+	// Backfill `path` for legacy artifact records (stored before artifacts
+	// carried their workspace-relative path): find a workspace file whose
+	// basename matches the artifact name so the UI can open it instead of
+	// showing "Unavailable".
+	needsPath := false
+	for _, art := range artifacts {
+		if p, _ := art["path"].(string); p == "" {
+			needsPath = true
+			break
+		}
+	}
+	if needsPath {
+		byName := map[string]string{}
+		workspace := a.Orch.TaskWorkspace(taskID)
+		if info, err := os.Stat(workspace); err == nil && info.IsDir() {
+			_ = filepath.Walk(workspace, func(p string, info os.FileInfo, err error) error {
+				if err != nil || info.IsDir() {
+					return nil
+				}
+				if rel, relErr := filepath.Rel(workspace, p); relErr == nil {
+					if _, exists := byName[info.Name()]; !exists {
+						byName[info.Name()] = filepath.ToSlash(rel)
+					}
+				}
+				return nil
+			})
+		}
+		for _, art := range artifacts {
+			if p, _ := art["path"].(string); p == "" {
+				if name, _ := art["name"].(string); name != "" {
+					if rel, exists := byName[name]; exists {
+						art["path"] = rel
+					}
+				}
+			}
+		}
+	}
+	c.JSON(http.StatusOK, artifacts)
 }
 
 func (a *App) getDiagnosis(c *gin.Context) {
 	c.JSON(http.StatusOK, a.readJSONList(c.Request.Context(), fmt.Sprintf("task:%s:diagnosis", c.Param("id"))))
 }
 
+// getWorkspaceFiles lists the task's files from the SHARED WORKSPACE ON DISK
+// (the source of truth — the deep agents and eda-service write files there
+// directly), merged with the Redis index kept for stage-generated notes. The
+// old Redis-only listing is why artifacts existed on disk yet showed as
+// missing/unavailable in the UI.
 func (a *App) getWorkspaceFiles(c *gin.Context) {
-	entries, err := a.Redis.HGetAll(c.Request.Context(), fmt.Sprintf("task:%s:workspace:index", c.Param("id"))).Result()
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
+	taskID := c.Param("id")
+	seen := map[string]string{}
+
+	workspace := a.Orch.TaskWorkspace(taskID)
+	if info, err := os.Stat(workspace); err == nil && info.IsDir() {
+		_ = filepath.Walk(workspace, func(p string, info os.FileInfo, err error) error {
+			if err != nil || info.IsDir() {
+				return nil
+			}
+			if info.Size() > 32<<20 { // skip huge binaries (GDS streams etc.)
+				return nil
+			}
+			rel, relErr := filepath.Rel(workspace, p)
+			if relErr != nil {
+				return nil
+			}
+			rel = filepath.ToSlash(rel)
+			// hidden files, the python sandbox scratch dir, and LibreLane's
+			// internal run tree (hundreds of COMMANDS/state_in.json files) are noise
+			if strings.HasPrefix(filepath.Base(rel), ".") || strings.HasPrefix(rel, "work/") ||
+				strings.Contains(rel, "harden/chip/runs/") {
+				return nil
+			}
+			seen[rel] = "workspace file"
+			return nil
+		})
 	}
-	items := make([]gin.H, 0, len(entries))
-	for path, note := range entries {
+
+	entries, err := a.Redis.HGetAll(c.Request.Context(), fmt.Sprintf("task:%s:workspace:index", taskID)).Result()
+	if err == nil {
+		for path, note := range entries {
+			seen[path] = note
+		}
+	}
+
+	items := make([]gin.H, 0, len(seen))
+	for path, note := range seen {
 		parts := strings.Split(path, "/")
 		items = append(items, gin.H{"path": path, "name": parts[len(parts)-1], "note": note, "status": "Updated"})
 	}
@@ -419,9 +615,30 @@ func (a *App) getWorkspaceFiles(c *gin.Context) {
 	c.JSON(http.StatusOK, items)
 }
 
+var binaryFileRE = regexp.MustCompile(`(?i)\.(png|jpe?g|webp|bmp|gif|gds2?|oas|pdf|vcd|fst|zip|gz|tar|bin|lef|def|spef|db)$`)
+
+// getWorkspaceFile serves a TEXT file DISK-FIRST from the shared workspace,
+// falling back to the Redis copy for legacy entries. Binary files (images,
+// GDS, waves) are not dumped as garbage text — the client should use
+// /workspace/raw for those.
 func (a *App) getWorkspaceFile(c *gin.Context) {
+	taskID := c.Param("id")
 	path := c.Query("path")
-	content, err := a.Redis.Get(c.Request.Context(), fmt.Sprintf("task:%s:workspace:file:%s", c.Param("id"), path)).Result()
+	if binaryFileRE.MatchString(path) {
+		c.JSON(http.StatusOK, gin.H{"path": path, "content": fmt.Sprintf("// binary file — download it via /api/v1/tasks/%s/workspace/raw?path=%s", taskID, path)})
+		return
+	}
+	if path != "" && !strings.Contains(path, "..") && !filepath.IsAbs(path) {
+		full := filepath.Join(a.Orch.TaskWorkspace(taskID), filepath.FromSlash(path))
+		if info, err := os.Stat(full); err == nil && !info.IsDir() && info.Size() <= 32<<20 {
+			data, readErr := os.ReadFile(full)
+			if readErr == nil {
+				c.JSON(http.StatusOK, gin.H{"path": path, "content": string(data)})
+				return
+			}
+		}
+	}
+	content, err := a.Redis.Get(c.Request.Context(), fmt.Sprintf("task:%s:workspace:file:%s", taskID, path)).Result()
 	if err == redis.Nil {
 		c.JSON(http.StatusOK, gin.H{"path": path, "content": "// File not found"})
 		return
@@ -431,6 +648,119 @@ func (a *App) getWorkspaceFile(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"path": path, "content": content})
+}
+
+// getWorkspaceRaw streams a workspace file as raw bytes with its native
+// content type — what <img src> and browser download links need (auth via the
+// `?token=` JWT fallback). Text views should keep using /workspace/file.
+func (a *App) getWorkspaceRaw(c *gin.Context) {
+	path := c.Query("path")
+	if path == "" || strings.Contains(path, "..") || filepath.IsAbs(path) {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid path"})
+		return
+	}
+	full := filepath.Join(a.Orch.TaskWorkspace(c.Param("id")), filepath.FromSlash(path))
+	info, err := os.Stat(full)
+	if err != nil || info.IsDir() {
+		c.JSON(http.StatusNotFound, gin.H{"error": "file not found"})
+		return
+	}
+	// Workspace files are OVERWRITTEN across runs under the same path — a
+	// cached chip_output.png from the previous run masqueraded as the current
+	// result in the UI.
+	c.Header("Cache-Control", "no-store")
+	if c.Query("download") != "" {
+		c.FileAttachment(full, filepath.Base(full))
+		return
+	}
+	c.File(full)
+}
+
+// pdkLabel renders the task's PDK/library including the operating voltage the
+// hardening flow actually uses for GF180MCU (GF180_VOLTAGE, default 3.3V).
+func pdkLabel(pdkID, scl string) string {
+	label := fmt.Sprintf("%s / %s", pdkID, scl)
+	if strings.HasPrefix(pdkID, "gf180mcu") {
+		if os.Getenv("GF180_VOLTAGE") == "5v0" {
+			label += " @ 5.0V"
+		} else {
+			label += " @ 3.3V"
+		}
+	}
+	return label
+}
+
+var unsafeFilenameChars = regexp.MustCompile(`[^A-Za-z0-9._-]+`)
+
+// uploadWorkspaceFile receives a user attachment (image/PDF/anything) for an
+// EXISTING task — e.g. alongside a change request — and stores it in the
+// workspace under context/uploads/ where the agents already look for
+// reference material.
+func (a *App) uploadWorkspaceFile(c *gin.Context) {
+	file, err := c.FormFile("file")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "multipart 'file' field required"})
+		return
+	}
+	name := unsafeFilenameChars.ReplaceAllString(filepath.Base(file.Filename), "_")
+	if name == "" || name == "." {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid filename"})
+		return
+	}
+	dir := filepath.Join(a.Orch.TaskWorkspace(c.Param("id")), "context", "uploads")
+	if err := os.MkdirAll(dir, 0o755); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	if err := c.SaveUploadedFile(file, filepath.Join(dir, name)); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	rel := "context/uploads/" + name
+	_ = a.Redis.HSet(c.Request.Context(), fmt.Sprintf("task:%s:workspace:index", c.Param("id")), rel, "user upload").Err()
+	c.JSON(http.StatusOK, gin.H{"path": rel})
+}
+
+// exportWorkspaceZip streams the whole curated workspace (RTL, TB, waves,
+// reports, GDS, exports incl. the final PDF — same filtering as the file
+// listing) as one downloadable zip.
+func (a *App) exportWorkspaceZip(c *gin.Context) {
+	taskID := c.Param("id")
+	root := a.Orch.TaskWorkspace(taskID)
+	if _, err := os.Stat(root); err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "workspace not found"})
+		return
+	}
+	c.Header("Content-Type", "application/zip")
+	c.Header("Content-Disposition", fmt.Sprintf("attachment; filename=%q", "chip-orchestra-"+taskID+".zip"))
+	c.Header("Cache-Control", "no-store")
+	zw := zip.NewWriter(c.Writer)
+	defer zw.Close()
+	_ = filepath.Walk(root, func(p string, info os.FileInfo, err error) error {
+		if err != nil || info.IsDir() || !info.Mode().IsRegular() {
+			return nil
+		}
+		rel, rerr := filepath.Rel(root, p)
+		if rerr != nil {
+			return nil
+		}
+		rel = filepath.ToSlash(rel)
+		if strings.HasPrefix(filepath.Base(rel), ".") || strings.HasPrefix(rel, "work/") ||
+			strings.Contains(rel, "harden/chip/runs/") || strings.HasSuffix(rel, ".vvp") {
+			return nil
+		}
+		w, werr := zw.Create(rel)
+		if werr != nil {
+			return werr
+		}
+		f, ferr := os.Open(p)
+		if ferr != nil {
+			return nil
+		}
+		defer f.Close()
+		_, _ = io.Copy(w, f)
+		return nil
+	})
 }
 
 func (a *App) proposePatch(c *gin.Context) {
@@ -455,19 +785,109 @@ func (a *App) proposePatch(c *gin.Context) {
 }
 
 func (a *App) getSignoffStatus(c *gin.Context) {
+	taskID := c.Param("id")
 	var stages []models.Stage
-	_ = a.DB.WithContext(c.Request.Context()).Where("task_id = ?", c.Param("id")).Find(&stages).Error
+	_ = a.DB.WithContext(c.Request.Context()).Where("task_id = ?", taskID).Find(&stages).Error
 	signoffDone := false
+	stageStatus := map[string]models.StageStatus{}
 	for _, stage := range stages {
+		stageStatus[stage.Name] = stage.Status
 		if stage.Name == "SIGNOFF" && (stage.Status == models.StageStatusReleased || stage.Status == models.StageStatusSucceeded) {
 			signoffDone = true
 		}
 	}
+	// done | failed | pending — a stage that simply hasn't run yet must NOT
+	// render as a failure in the tapeout checklist.
+	itemStatus := func(names ...string) string {
+		allDone := true
+		for _, n := range names {
+			switch stageStatus[n] {
+			case models.StageStatusSucceeded, models.StageStatusReleased:
+			case models.StageStatusFailed:
+				return "failed"
+			default:
+				allDone = false
+			}
+		}
+		if allDone {
+			return "done"
+		}
+		return "pending"
+	}
+
+	// Real hardening evidence from the shared workspace: the GDS render (the
+	// PNG the RENDER stage produced under gds/) and the merged metrics of every
+	// EDA report (reports/*_report.json → "metrics"), so the signoff view can
+	// show the chip image and its parameter table.
+	workspace := a.Orch.TaskWorkspace(taskID)
+	gdsImage := ""
+	gdsFiles := []string{}
+	if entries, err := os.ReadDir(filepath.Join(workspace, "gds")); err == nil {
+		for _, entry := range entries {
+			if entry.IsDir() {
+				continue
+			}
+			rel := "gds/" + entry.Name()
+			gdsFiles = append(gdsFiles, rel)
+			ext := strings.ToLower(filepath.Ext(entry.Name()))
+			if gdsImage == "" && (ext == ".png" || ext == ".jpg" || ext == ".jpeg" || ext == ".svg") {
+				gdsImage = rel
+			}
+		}
+	}
+	// The RENDER stage writes its layout image to reports/gds.png (copying
+	// gds/<top>.png when hardening produced one); fall back there — and to the
+	// schematic render — so the signoff view shows the chip as soon as any
+	// layout/netlist image exists.
+	if gdsImage == "" {
+		for _, candidate := range []string{"reports/gds.png", "reports/schematic.png"} {
+			if _, err := os.Stat(filepath.Join(workspace, filepath.FromSlash(candidate))); err == nil {
+				gdsImage = candidate
+				gdsFiles = append(gdsFiles, candidate)
+				break
+			}
+		}
+	}
+	metrics := map[string]any{}
+	if reports, err := filepath.Glob(filepath.Join(workspace, "reports", "*_report.json")); err == nil {
+		sort.Strings(reports)
+		// pnr_report carries the REAL physical numbers (die area, WNS, Fmax);
+		// merge it last so a stub sta/sim report can't shadow them with zeros.
+		sort.SliceStable(reports, func(i, j int) bool {
+			return !strings.HasSuffix(reports[i], "pnr_report.json") && strings.HasSuffix(reports[j], "pnr_report.json")
+		})
+		for _, report := range reports {
+			data, readErr := os.ReadFile(report)
+			if readErr != nil {
+				continue
+			}
+			var parsed struct {
+				Metrics map[string]any `json:"metrics"`
+			}
+			if json.Unmarshal(data, &parsed) == nil {
+				for k, v := range parsed.Metrics {
+					// keep engineering parameters, drop presentation noise
+					if v == nil || k == "images" || k == "engine" || k == "rendered" {
+						continue
+					}
+					metrics[k] = v
+				}
+			}
+		}
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"stateLabel":      ternary(signoffDone, "Approved", "Awaiting final approval"),
 		"message":         ternary(signoffDone, "Signoff is approved and the export bundle can be delivered.", "The task remains blocked on final signoff approval."),
 		"packageContents": []string{"Final RTL snapshot and verification bundle", "EDA timing and implementation reports", "Approval trail with orchestrator review metadata"},
-		"checklist":       []gin.H{{"id": "signoff-1", "label": "DRC/LVS package ready", "detail": "Mock signoff package prepared by the EDA Service.", "done": signoffDone}, {"id": "signoff-2", "label": "Power and timing guardrail accepted", "detail": "Review the latest synthesized report before release.", "done": signoffDone}, {"id": "signoff-3", "label": "Tapeout handoff approved", "detail": "Orchestrator approval is required to release EXPORT.", "done": signoffDone}},
+		"checklist": []gin.H{
+			{"id": "signoff-1", "label": "DRC/LVS package ready", "detail": "DRC, LVS and antenna results from the LibreLane signoff run.", "done": itemStatus("DRC_LVS") == "done", "status": itemStatus("DRC_LVS")},
+			{"id": "signoff-2", "label": "Power and timing guardrail accepted", "detail": "Static timing (STA) and gate-level simulation must pass.", "done": itemStatus("STA", "GL_SIM") == "done", "status": itemStatus("STA", "GL_SIM")},
+			{"id": "signoff-3", "label": "Tapeout handoff approved", "detail": "Orchestrator approval is required to release EXPORT.", "done": signoffDone, "status": ternary(signoffDone, "done", itemStatus("SIGNOFF"))},
+		},
+		"gdsImage":        gdsImage,
+		"gdsFiles":        gdsFiles,
+		"metrics":         metrics,
 	})
 }
 
@@ -608,11 +1028,74 @@ func statusTone(status models.TaskStatus) string {
 	}
 }
 
-func etaLabel(seconds int) string {
-	if seconds <= 0 {
+// etaLabel is the cheap per-row label for the task LIST (no stage query).
+func etaLabel(task models.Task) string {
+	switch task.Status {
+	case models.TaskStatusCompleted:
+		return "Ready"
+	case models.TaskStatusFailed:
+		return "Blocked"
+	default:
+		return "In progress"
+	}
+}
+
+// stagesEtaLabel derives a REAL ETA from the stage DAG state instead of the
+// static task field (which showed "Ready" while the run was still going):
+// remaining agent stages ≈ 5 min each (LLM generation), EDA stages ≈ 2 min.
+func stagesEtaLabel(task models.Task, stages []models.Stage) string {
+	if task.Status == models.TaskStatusCompleted {
 		return "Ready"
 	}
-	return fmt.Sprintf("%d min", seconds/60)
+	remainingMin := 0
+	failed := false
+	for _, stage := range stages {
+		switch stage.Status {
+		case models.StageStatusSucceeded, models.StageStatusReleased:
+			continue
+		case models.StageStatusFailed:
+			failed = true
+		default:
+			switch stage.Name {
+			case "PLAN", "RTL_GEN", "TB_GEN", "RTL_REPAIR":
+				remainingMin += 5
+			case "SYNTH", "PNR":
+				remainingMin += 4
+			default:
+				remainingMin += 2
+			}
+		}
+	}
+	if failed {
+		return "Blocked — retry the failed stage"
+	}
+	if remainingMin == 0 {
+		return "Ready"
+	}
+	return fmt.Sprintf("≈ %d min", remainingMin)
+}
+
+// readTaskArtifacts reads the artifact list DEDUPED by name (stage retries
+// re-push their artifacts, which inflated the lineage count — 28 "linked
+// outputs" for a dozen real files). The LAST record for a name wins.
+func (a *App) readTaskArtifacts(ctx context.Context, taskID string) []map[string]any {
+	raw := a.readJSONList(ctx, fmt.Sprintf("task:%s:artifacts", taskID))
+	byKey := map[string]int{}
+	out := make([]map[string]any, 0, len(raw))
+	for _, art := range raw {
+		name, _ := art["name"].(string)
+		if name == "" {
+			out = append(out, art)
+			continue
+		}
+		if idx, seen := byKey[name]; seen {
+			out[idx] = art
+			continue
+		}
+		byKey[name] = len(out)
+		out = append(out, art)
+	}
+	return out
 }
 
 func humanizeStage(name string) string {

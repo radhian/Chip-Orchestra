@@ -40,10 +40,12 @@ The platform combines AI planning, verification, EDA execution, artifact managem
 - AI-assisted RTL-to-GDSII design flow
 - Full 11-stage orchestration pipeline from spec ingest to export
 - Multi-agent orchestration
-- Automated verification and repair
-- Browser-native task management
+- **Golden-first verification**: the Python golden model defines the desired output; the RTL must match it value-for-value before the flow proceeds
+- Automated verification and repair (budgeted SIM and hardening auto-repair loops)
+- **Complete bundled EDA toolchain** — iverilog, Verilator, yosys+pyosys, OpenROAD, KLayout, Magic, netgen — with the GF180MCU PDK auto-installed via Volare
+- Browser-native task management with live per-stage activity (agent transcripts + raw EDA tool logs)
 - Runbook artifact downloads for generated `.sv`, `.json`, and `.md` outputs
-- RTL Workspace per-file downloads
+- RTL Workspace per-file downloads, in-browser PDF report viewing, and one-click **Export .zip** of the whole workspace
 - Human-in-the-loop review
 - Self-hosted LLM support
 - Modular microservice architecture
@@ -230,6 +232,41 @@ Every stage is fully observable with:
 
 ---
 
+## Golden-First Verification & Self-Repair
+
+The chip is only considered correct when **input → RTL output equals input → Python output**, checked by code, not by an LLM:
+
+1. **Canonical input** — an uploaded image (e.g. a maze) is decoded into `context/chip_input_grid.json` + `rtl/*.mem` stimulus and rendered to `waves/chip_input.png`.
+2. **Desired output (Python first)** — the golden model implements *the algorithm the design brief specifies* (same weights, same fixed-point math as the RTL), runs on the canonical input, and writes `waves/golden_output.mem`. For data-driven designs (e.g. a DDPG RL accelerator) the NN weights are trained/derived in Python and baked into `rtl/*.mem` — the weights are part of the chip.
+3. **Chip output** — the testbench dumps the DUT's computed result (`$writememh`) to `waves/chip_output.mem` in the identical format. The testbench may **never** write the golden file (enforced at write time and again in SIM).
+4. **Deterministic comparison** — the SIM stage compares the two files value-by-value; any mismatch fails the stage with the exact differing cells, and both grids are rendered side-by-side in the UI (white free / black wall / red start / green goal / blue path).
+
+When a stage fails, the orchestrator dispatches the repair deep-agent with the evidence and re-runs automatically:
+
+| Loop | Trigger | Budget (env) |
+|---|---|---|
+| SIM auto-repair | testbench fails / golden mismatch | `SIM_AUTO_REPAIR_ROUNDS` (default 10) |
+| Hardening auto-repair | LibreLane produces no GDS | `HARDEN_AUTO_REPAIR_ROUNDS` (default 3) |
+
+A manual stage Retry re-arms the budgets. The repair agent may fix RTL, testbench, weights, or the golden model — but contracts forbid weakening the testbench, redefining the desired output, or swapping the algorithm.
+
+## Bundled EDA Toolchain
+
+The `eda-service` image is self-contained — no host tools needed:
+
+| Tool | Source | Used for |
+|---|---|---|
+| Icarus Verilog, Verilator | Debian packages | simulation, lint |
+| yosys + pyosys wheel | Debian + PyPI (`yosys -y` shim) | synthesis, LibreLane pyosys steps |
+| OpenROAD (LibreLane build) | bundled from `hpretl/iic-osic-tools` | floorplan, place, CTS, route, STA |
+| Magic, netgen | bundled from `hpretl/iic-osic-tools` | GDS stream-out, DRC, LVS |
+| KLayout | Debian package | GDS render/checks |
+| GF180MCU PDK (gf180mcuD) | auto-installed by Volare on first boot (`PDK`, `PDK_ROOT`) | all hardening stages |
+
+Timing closes on the **3.3V corner set** by default (`GF180_VOLTAGE=3v3` → tt_025C_3v30 / ss_125C_3v00 / ff_n40C_3v60); set `GF180_VOLTAGE=5v0` for LibreLane's stock 5V corners.
+
+The Ubuntu-built tools run through a bundled dynamic loader with their own shared libraries, Tcl runtime, and Python stdlib, so they work inside the Debian-based image regardless of host distro.
+
 ## Browser Experience
 
 ### Runbook artifact downloads
@@ -303,7 +340,7 @@ Critical engineering decisions—including RTL modifications, implementation, an
 | EDA | Python, FastAPI |
 | Database | MySQL |
 | Cache & Messaging | Redis |
-| AI Models | Ollama (Qwen, GLM, Mistral, etc.) |
+| AI Models | Ollama (default: `glm-5.2:cloud`; also Qwen, Mistral, etc.), ZhipuAI GLM API, Google Gemini |
 | EDA Toolchain | Icarus Verilog, OpenLane, LibreLane, OpenROAD |
 
 ---
@@ -334,6 +371,37 @@ Responsible for:
 - Self-repair
 - Reasoning trace generation
 
+Every LLM stage (PLAN / RTL_GEN / RTL_REPAIR / TB_GEN) runs a **RLM deep agent**
+(GarudaChip architecture): the agent treats large inputs as an environment on
+disk — it peeks at file slices, greps across the design, delegates focused
+sub-tasks to fresh `llm_query` calls, computes data in a Python sandbox, and
+writes RTL with a **compile-check-on-write** feedback loop. Each agent can also:
+
+- **find information online** — `search_web` (design-topic knowledge digests and
+  error-fix hints via SearXNG/DuckDuckGo/GitHub), `fetch_reference` (pull real
+  HDL or paper text on demand), plus a PLAN-stage reference hunt that anchors
+  the build on the closest open-source design (`context/anchor/`);
+- **see attached images** — uploads (block diagrams, schematics, datasheet
+  figures, PDFs) are read by a local vision model into a structural spec
+  (`context/uploads_digest.md`) that drives generation;
+- **remember fixes** — every broken→clean compile transition is stored as an
+  error→fix lesson and recalled in later runs (`recall_memory`);
+- **install what they need** — `pip_install` targets a persistent directory on
+  the shared workspace volume (`.pydeps/`), so packages survive container
+  restarts and are shared across tasks (`AGENT_PYDEPS_DIR` to relocate).
+
+**Verification is the contract.** Testbenches must check every output against a
+Python golden model (never "output changed"); chip-input images are sampled
+deterministically once and pinned as `context/chip_input_grid.json`; the
+testbench dumps the RTL's computed result to `waves/chip_output.mem` (rendered
+to an image for the Simulation tab). The orchestrator enforces honesty gates:
+a SIM run with no printed verdict or no chip-output dump FAILS (and triggers a
+bounded auto-repair loop — deep agent debugs against the golden model, SIM
+re-runs, max 2 rounds per manual retry); PNR/DRC_LVS fail unless a real GDS
+exists (the PDK is auto-installed at LibreLane's pinned version on first boot).
+
+Set `AGENT_DEEP_AGENTS=0` to fall back to one-shot templated generation.
+
 ### EDA Service (Python)
 
 Responsible for:
@@ -351,46 +419,82 @@ Responsible for:
 
 ## Quick Start
 
-### 1. Start the full stack with Docker Compose
+Everything installs and starts with **one script** — it checks/installs Docker and Ollama, pulls the LLM, writes `.env`, builds the 6 containers, and waits until every service is healthy:
 
 ```bash
-unzip chip_orchestra_feat_eda.zip
-cd chip_orchestra_feat_eda
-cp .env.example .env
-docker compose up --build
+git clone https://github.com/radhian/Chip-Orchestra.git
+cd Chip-Orchestra
+./scripts/install.sh
 ```
 
-Frontend:
+Then open the frontend and sign in:
 
 ```text
 http://localhost:4173
-```
-
-> The Dockerized frontend runs with `VITE_USE_MOCKS=true` by default. This is useful for UI walkthroughs, but it is not the recommended mode for validating the live backend flow.
-
-### 2. Test against the real backend
-
-```bash
-cd frontend
-cp .env.example .env
-npm install
-npm run dev
-```
-
-Frontend:
-
-```text
-http://localhost:5173
-```
-
-Use this mode when you want to exercise the real Orchestrator, Agent, and EDA services instead of the default mock-mode frontend container.
-
-### 3. Sign in
-
-```text
 Username: admin
 Password: chip-orchestra
 ```
+
+Day-to-day (run.sh only starts/stops the already-installed stack — it never
+reinstalls, never asks for sudo, and never touches your `.env`):
+
+```bash
+./scripts/run.sh          # start the stack and print the web link
+./scripts/run.sh stop     # stop the stack
+./scripts/run.sh --build  # start + rebuild images after a code change
+```
+
+### Prerequisites
+
+- Linux or macOS with `curl` and `git`
+- **~45 GB free disk** — the EDA image builds on top of `hpretl/iic-osic-tools`
+  (~25 GB one-time pull; it donates OpenROAD, Magic and netgen), plus the
+  service images and the GF180MCU PDK
+- Internet access on first run (Docker Hub, Ollama, and Volare which
+  auto-installs the PDK into the persistent `pdk_data` volume on first boot)
+- Patience on the first build: pulling the toolbox image and building the EDA
+  service takes 10–30 minutes depending on bandwidth. Subsequent
+  `docker compose up -d --build` runs are fast (cached layers), and the PDK and
+  task workspaces persist in named volumes across rebuilds.
+
+Docker and Ollama are installed automatically on Linux if missing (you may be asked for `sudo`). On macOS install [Docker Desktop](https://docs.docker.com/get-docker/) first.
+
+### Choosing the LLM
+
+The default model is **`glm-5.2:cloud`** — an [Ollama cloud model](https://ollama.com/cloud):
+inference runs on Ollama's servers, so no GPU is needed, but you must sign in once:
+
+```bash
+ollama signin
+./scripts/install.sh                          # uses glm-5.2:cloud
+```
+
+To run fully local instead (needs a capable GPU), pick any model from the
+[Ollama library](https://ollama.com/library):
+
+```bash
+./scripts/install.sh --model qwen3.5:9b
+```
+
+Image uploads work with either choice: glm-5.2:cloud cannot read images itself,
+so the vision digest automatically routes to the first installed **local**
+vision model (e.g. `qwen3.5:9b`) — keep one pulled for image support, or set
+`GARUDA_VISION_MODEL` explicitly.
+
+Re-running `install.sh` never overwrites the model already chosen in `.env`
+unless you pass `--model` explicitly.
+
+The model can be changed later by editing `OLLAMA_MODEL` in `.env` and running `docker compose up -d agent-service`. Other providers (ZhipuAI GLM API, Google Gemini, or a deterministic `mock` for CI) are configured via `LLM_PROVIDER` in `.env` — see the comments in [.env.example](.env.example).
+
+### Frontend hot-reload mode (optional, for development)
+
+```bash
+./scripts/install.sh --dev
+cd frontend
+npm run dev        # http://localhost:5173, proxies to the real backend on :8080
+```
+
+> Note: the frontend installs with plain `npm` from the public registry. If `npm install` ever fails with a 404 on `@rdservices/aime-code-inspector` or EACCES permission errors, make sure you are on the current master (the internal-registry dependency was removed) and that `frontend/node_modules` isn't owned by root from an earlier sudo install (`sudo rm -rf frontend/node_modules`, then re-run `./scripts/install.sh --dev` without sudo).
 
 ---
 
@@ -440,12 +544,11 @@ The download endpoint streams workspace files as attachments, which powers the b
 
 | Document | Description |
 |----------|-------------|
-| `docs/architecture.md` | Overall platform architecture |
+| `docs/ARCHITECTURE.md` | Overall platform architecture |
+| `docs/architecture_v2.md` | Microservice architecture (current) |
 | `docs/development.md` | Local development workflow |
-| `docs/roadmap.md` | Product roadmap |
-| `docs/vision.md` | Product vision and design principles |
 | `docs/test-plan.md` | Testing strategy |
-| `docs/api/orchestrator-service.md` | Orchestrator API |
+| `docs/api/operator-service.md` | Orchestrator API |
 | `docs/api/agent-service.md` | Agent API |
 | `docs/api/eda-service.md` | EDA API |
 

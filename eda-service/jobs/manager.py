@@ -7,7 +7,8 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from redis.asyncio import Redis
-from sqlalchemy import DateTime, Integer, String, Text, create_engine, select
+from sqlalchemy import DateTime, Integer, String, Text, create_engine, select, text
+from sqlalchemy.dialects import mysql
 from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column, sessionmaker
 
 from runner import CommandRunner, default_runner
@@ -30,12 +31,14 @@ class EDAJob(Base):
     stage: Mapped[str] = mapped_column(String(64), index=True)
     status: Mapped[str] = mapped_column(String(32), default="QUEUED")
     progress: Mapped[int] = mapped_column(Integer, default=0)
-    report_json: Mapped[str] = mapped_column(Text, default="{}")
+    # MEDIUMTEXT on MySQL: a SIM report with waveform/artifact metadata can
+    # exceed TEXT's 64KB and 1406 "Data too long" then failed the whole stage.
+    report_json: Mapped[str] = mapped_column(Text().with_variant(mysql.MEDIUMTEXT(), "mysql"), default="{}")
     error: Mapped[str] = mapped_column(Text, default="")
     # New (nullable) fields — preserve existing columns to avoid migration breakage.
     workspace_root: Mapped[str] = mapped_column(String(512), default="")
     stage_options: Mapped[str] = mapped_column(Text, default="{}")
-    artifact_index: Mapped[str] = mapped_column(Text, default="[]")
+    artifact_index: Mapped[str] = mapped_column(Text().with_variant(mysql.MEDIUMTEXT(), "mysql"), default="[]")
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -71,6 +74,15 @@ def run_stage(
     opts = opts or {}
     stage = stage.upper()
     top = str(opts.get("top_module") or opts.get("top") or "")
+    if not top:
+        # The agent flow records the top module in spec/spec.json — without it
+        # the SIM testbench selection and hardening had to guess (and picked a
+        # unit testbench / wrong module).
+        try:
+            spec = json.loads((workspace / "spec" / "spec.json").read_text())
+            top = str(spec.get("top_module") or "")
+        except Exception:  # noqa: BLE001
+            top = ""
     clock_port = str(opts.get("clock_port") or "clk")
     try:
         clock_period = float(opts.get("clock_period") or 10.0)
@@ -116,6 +128,15 @@ class EDAJobManager:
 
     def create_tables(self):
         Base.metadata.create_all(self.engine)
+        # create_all never ALTERs an existing table — widen the report columns
+        # in place on MySQL deployments created before the MEDIUMTEXT change.
+        if self.engine.dialect.name == "mysql":
+            try:
+                with self.engine.begin() as conn:
+                    conn.execute(text("ALTER TABLE eda_jobs MODIFY report_json MEDIUMTEXT"))
+                    conn.execute(text("ALTER TABLE eda_jobs MODIFY artifact_index MEDIUMTEXT"))
+            except Exception:  # noqa: BLE001 - best-effort migration
+                pass
 
     def create_job(
         self,
