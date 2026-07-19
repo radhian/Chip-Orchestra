@@ -17,6 +17,8 @@ import json
 import os
 import re
 import shutil
+import site
+import sysconfig
 from pathlib import Path
 from typing import Dict, List, Optional, Set, Tuple
 
@@ -165,6 +167,33 @@ def needs_slang(rtl_dir: Path) -> bool:
     return False
 
 
+def _slang_plugin_exists() -> bool:
+    candidates = []
+    for key in ("SLANG_PLUGIN_PATH", "YOSYS_SLANG_PLUGIN", "PYOSYS_SLANG_PLUGIN"):
+        if os.getenv(key):
+            candidates.append(Path(os.environ[key]))
+    for key in ("YOSYS_PLUGIN_DIR", "PYOSYS_PLUGIN_DIR"):
+        if os.getenv(key):
+            candidates.append(Path(os.environ[key]) / "slang.so")
+    for root in [sysconfig.get_path("purelib"), sysconfig.get_path("platlib"), *site.getsitepackages()]:
+        if root:
+            candidates.append(Path(root) / "pyosys" / "share" / "plugins" / "slang.so")
+    candidates.extend([
+        Path("/usr/local/lib/yosys/plugins/slang.so"),
+        Path("/usr/lib/yosys/plugins/slang.so"),
+        Path("/usr/share/yosys/plugins/slang.so"),
+    ])
+    return any(path.is_file() for path in dict.fromkeys(candidates))
+
+
+def _apply_slang_fallback(config: dict, lines: List[str]) -> dict:
+    if config.get("USE_SLANG") and not _slang_plugin_exists():
+        config = dict(config)
+        config["USE_SLANG"] = False
+        lines.append("WARNING: slang.so not found, disabling USE_SLANG (fallback mode)")
+    return config
+
+
 def detect_clock(rtl_dir: Path, top: str, default: str) -> str:
     """Return the top module's real clock port (FIRRTL 'clock', PULP 'clk_i', ...)."""
     text = ""
@@ -284,7 +313,7 @@ def _build_config(rtl_dir: Path, src_dir: Path, top: str, clock_port: str,
         "FP_SIZING": "relative", "FP_CORE_UTIL": core_util,
         "PL_TARGET_DENSITY_PCT": max(20, core_util + 5),
         "PRIMARY_GDSII_STREAMOUT_TOOL": "klayout",
-        **({"USE_SLANG": True} if has_sv else {}),
+        "USE_SLANG": has_sv,
         "LINTER_ERROR_ON_LATCH": False, "LINTER_ERROR_ON_MULTIDRIVEN": False,
         "ERROR_ON_LINTER_ERRORS": False, "ERROR_ON_LINTER_WARNINGS": False,
         "ERROR_ON_SYNTH_CHECKS": False, "ERROR_ON_UNMAPPED_CELLS": False,
@@ -376,7 +405,7 @@ def run_harden(
         if chip.exists():
             shutil.rmtree(chip, ignore_errors=True)
         src.mkdir(parents=True, exist_ok=True)
-        config = _build_config(rtl_dir, src, top, clock_port, clock_period, core_util)
+        config = _apply_slang_fallback(_build_config(rtl_dir, src, top, clock_port, clock_period, core_util), lines)
         (chip / "config.json").write_text(json.dumps(config, indent=2))
         if not config["VERILOG_FILES"]:
             report.errors.append("no synthesizable RTL files found")
@@ -400,6 +429,7 @@ def run_harden(
     if not reuse and tune_loaded:
         config = _build_config(rtl_dir, src, top, clock_port, clock_period, core_util)
         config.update(extra_cfg)
+        config = _apply_slang_fallback(config, lines)
         config["PL_TARGET_DENSITY_PCT"] = max(20, core_util + 5) + density_bump
         (chip / "config.json").write_text(json.dumps(config, indent=2))
         lines.append(f"RESUMING persisted auto-tune state: clock {clock_period} ns, "
@@ -505,6 +535,7 @@ def run_harden(
         lines.append("PARAMETER AUTO-TUNE: " + "; ".join(changes) + " — re-hardening")
         config = _build_config(rtl_dir, src, top, clock_port, clock_period, core_util)
         config.update(extra_cfg)
+        config = _apply_slang_fallback(config, lines)
         config["PL_TARGET_DENSITY_PCT"] = max(20, core_util + 5) + density_bump
         (chip / "config.json").write_text(json.dumps(config, indent=2))
         try:

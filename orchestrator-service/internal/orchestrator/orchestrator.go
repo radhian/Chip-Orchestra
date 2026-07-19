@@ -440,6 +440,10 @@ func (s *Service) pollEDARun(ctx context.Context, taskID, stageID, jobID string)
 			}
 			if stage.Name == "PNR" || stage.Name == "DRC_LVS" {
 				if !s.hasGDS(taskID) {
+					if isMissingSlangFailure(status.Error + "\n" + s.librelaneLogTail(taskID)) {
+						s.failStage(ctx, &stage, &attempt, missingSlangFailureMessage())
+						return
+					}
 					// HARDEN auto-repair loop (mirror of SIM's): most no-GDS
 					// failures are synthesizability defects in the RTL (e.g.
 					// SystemVerilog-only ports yosys rejects) — let the repair
@@ -482,6 +486,10 @@ func (s *Service) pollEDARun(ctx context.Context, taskID, stageID, jobID string)
 			_ = s.evaluateTask(ctx, taskID)
 			return
 		case "FAILED":
+			if isMissingSlangFailure(status.Error + "\n" + s.librelaneLogTail(taskID)) {
+				s.failStage(ctx, &stage, &attempt, missingSlangFailureMessage())
+				return
+			}
 			s.failStage(ctx, &stage, &attempt, status.Error)
 			return
 		}
@@ -755,6 +763,28 @@ func (s *Service) pnrWNS(taskID string) (float64, bool) {
 		return v, true
 	}
 	return 0, false
+}
+
+var missingSlangRE = regexp.MustCompile(`(?is)can't load module.*slang`)
+
+func isMissingSlangFailure(text string) bool {
+	return missingSlangRE.MatchString(text)
+}
+
+func missingSlangFailureMessage() string {
+	return "LibreLane slang plugin missing. Set USE_SLANG=false in config."
+}
+
+func (s *Service) librelaneLogTail(taskID string) string {
+	data, err := os.ReadFile(filepath.Join(s.taskWorkspace(taskID), "logs", "librelane.log"))
+	if err != nil {
+		return ""
+	}
+	text := string(data)
+	if len(text) > 4000 {
+		text = text[len(text)-4000:]
+	}
+	return text
 }
 
 func hardenRepairRounds() int {
