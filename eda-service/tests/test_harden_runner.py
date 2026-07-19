@@ -118,3 +118,31 @@ def test_run_harden_autodetects_top(tmp_path: Path) -> None:
     runner = FakeHardenRunner(produce_gds=False)
     report = run_harden(ws, runner=runner, stage="SYNTH")
     assert report.top == "chip_top"
+
+
+def test_run_harden_defaults_use_slang_false_for_plain_verilog(tmp_path: Path) -> None:
+    ws = _seed(tmp_path)
+    runner = FakeHardenRunner(produce_gds=True, clean=True)
+
+    run_harden(ws, top="uart_top", runner=runner, stage="SYNTH")
+
+    cfg = json.loads((ws / "exports" / "harden" / "chip" / "config.json").read_text())
+    assert cfg["USE_SLANG"] is False
+
+
+def test_run_harden_disables_slang_when_plugin_missing(tmp_path: Path, monkeypatch) -> None:
+    ws = ensure_workspace("task-sv", tmp_path)
+    (ws / "rtl" / "uart_top.sv").write_text(
+        "module uart_top(input logic clk, input logic rst, output logic q);\n"
+        "  always_ff @(posedge clk) q <= rst;\n"
+        "endmodule\n"
+    )
+    monkeypatch.setattr("toolchain.harden_runner._slang_plugin_exists", lambda: False)
+    runner = FakeHardenRunner(produce_gds=True, clean=True)
+
+    run_harden(ws, top="uart_top", runner=runner, stage="SYNTH")
+
+    cfg = json.loads((ws / "exports" / "harden" / "chip" / "config.json").read_text())
+    log = (ws / "logs" / "librelane.log").read_text()
+    assert cfg["USE_SLANG"] is False
+    assert "slang.so not found, disabling USE_SLANG (fallback mode)" in log

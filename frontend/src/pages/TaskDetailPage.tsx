@@ -164,7 +164,8 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
         STA: ['logs/sta.log', 'logs/librelane.log'],
         GL_SIM: ['logs/gl_sim.log'],
         RENDER: ['logs/render.log'],
-        SIGNOFF: ['reports/signoff_summary.md', 'logs/librelane.log'],
+        PADRING: ['logs/padring.log', 'padring/padring_gf180.svg'],
+        SIGNOFF: ['reports/signoff_summary.md', 'padring/padring_gf180.svg', 'logs/librelane.log'],
         EXPORT: ['exports/final_report.tex', 'logs/librelane.log'],
       }
       const deepAgentLogs = allPaths.filter((path) => path.startsWith('logs/') && path.includes('_deep_agent'))
@@ -501,7 +502,7 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
       setSignoff(updatedSignoff)
       setActionMessage('Signoff approved — the deliverables .zip download is starting.')
       setRefreshKey((value) => value + 1)
-    } catch (err) {
+    } catch {
       // Approval may already be recorded — exporting is still the user's intent.
       setActionMessage('Deliverables .zip download is starting.')
     }

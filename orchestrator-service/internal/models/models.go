@@ -71,6 +71,7 @@ type Task struct {
 	TemplateID   string     `gorm:"size:255" json:"template_id"`
 	PDKID        string     `gorm:"size:128" json:"pdk_id"`
 	StdcellLibID string     `gorm:"size:128" json:"stdcell_lib_id"`
+	Padring      string     `gorm:"size:64" json:"padring"`
 	LLMModel     string     `gorm:"size:128" json:"llm_model,omitempty"`
 	ReviewGates  string     `gorm:"type:text" json:"review_gates"`
 	OwnerID      string     `gorm:"type:char(36);index" json:"owner_id"`

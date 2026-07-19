@@ -65,6 +65,7 @@ type createTaskBody struct {
 	DesignContext struct {
 		PDKID        string `json:"pdk_id"`
 		StdcellLibID string `json:"stdcell_lib_id"`
+		Padring      string `json:"padring"`
 	} `json:"design_context"`
 	LLMModel    string           `json:"llm_model"`
 	Attachments []taskAttachment `json:"attachments"`
@@ -81,6 +82,7 @@ type createTaskRequest struct {
 	TemplateID   string            `json:"template_id"`
 	PDKID        string            `json:"pdk_id"`
 	StdcellLibID string            `json:"stdcell_lib_id"`
+	Padring      string            `json:"padring"`
 	LLMModel     string            `json:"llm_model"`
 	ReviewGates  []string          `json:"review_gates"`
 	OwnerID      string            `json:"owner_id"`
@@ -113,6 +115,7 @@ type taskDetailResponse struct {
 	Tone                 string      `json:"tone"`
 	RepoName             string      `json:"repoName"`
 	PDKLabel             string      `json:"pdkLabel"`
+	Padring              string      `json:"padring"`
 	ReviewGateLabel      string      `json:"reviewGateLabel"`
 	RuntimeLabel         string      `json:"runtimeLabel"`
 	ArtifactLineageCount int         `json:"artifactLineageCount"`
@@ -253,6 +256,7 @@ func (a *App) createTask(c *gin.Context) {
 			TemplateID:   body.Repo.TemplateID,
 			PDKID:        body.DesignContext.PDKID,
 			StdcellLibID: body.DesignContext.StdcellLibID,
+			Padring:      body.DesignContext.Padring,
 			LLMModel:     body.LLMModel,
 			ReviewGates:  []string{"BEFORE_SIGNOFF"},
 			Attachments:  body.Attachments,
@@ -285,6 +289,7 @@ func (a *App) createTask(c *gin.Context) {
 		TemplateID:   req.TemplateID,
 		PDKID:        defaultString(req.PDKID, "sky130"),
 		StdcellLibID: defaultString(req.StdcellLibID, "sky130_fd_sc_hd"),
+		Padring:      defaultString(req.Padring, "none"),
 		LLMModel:     req.LLMModel,
 		ReviewGates:  strings.Join(req.ReviewGates, ","),
 		OwnerID:      req.OwnerID,
@@ -431,6 +436,7 @@ func (a *App) getTask(c *gin.Context) {
 		Tone:                 statusTone(task.Status),
 		RepoName:             defaultString(task.RepoSource, task.TemplateID),
 		PDKLabel:             pdkLabel(task.PDKID, task.StdcellLibID),
+		Padring:              task.Padring,
 		ReviewGateLabel:      reviewGateLabel(task.ReviewGates),
 		RuntimeLabel:         "Orchestrator Service + Agent Service + EDA Service",
 		ArtifactLineageCount: len(a.readTaskArtifacts(c.Request.Context(), task.ID)),
@@ -885,9 +891,9 @@ func (a *App) getSignoffStatus(c *gin.Context) {
 			{"id": "signoff-2", "label": "Power and timing guardrail accepted", "detail": "Static timing (STA) and gate-level simulation must pass.", "done": itemStatus("STA", "GL_SIM") == "done", "status": itemStatus("STA", "GL_SIM")},
 			{"id": "signoff-3", "label": "Tapeout handoff approved", "detail": "Orchestrator approval is required to release EXPORT.", "done": signoffDone, "status": ternary(signoffDone, "done", itemStatus("SIGNOFF"))},
 		},
-		"gdsImage":        gdsImage,
-		"gdsFiles":        gdsFiles,
-		"metrics":         metrics,
+		"gdsImage": gdsImage,
+		"gdsFiles": gdsFiles,
+		"metrics":  metrics,
 	})
 }
 
