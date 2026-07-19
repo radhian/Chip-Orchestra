@@ -12,7 +12,7 @@ from sqlalchemy.dialects import mysql
 from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column, sessionmaker
 
 from runner import CommandRunner, default_runner
-from toolchain import run_gl_sim, run_harden, run_lint, run_mock_toolchain, run_render, run_simulation, run_sta
+from toolchain import run_gl_sim, run_harden, run_lint, run_mock_toolchain, run_padring, run_render, run_simulation, run_sta
 from toolchain.reports import BaseReport, SignoffReport
 from workspace import resolve_workspace
 
@@ -102,6 +102,8 @@ def run_stage(
         return run_gl_sim(workspace, top, stage_opts, runner, stage=stage)
     if stage == "RENDER":
         return run_render(workspace, top, stage_opts, runner, stage=stage)
+    if stage == "PADRING":
+        return run_padring(workspace, top, stage_opts, runner, stage=stage)
     if stage == "SIGNOFF":
         return _signoff_report(task_id, stage)
     # Fallback for any other stage: reuse the mock toolchain shape.

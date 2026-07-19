@@ -151,6 +151,7 @@ export interface CreateTaskPayload {
   template_id?: string
   pdk_id: string
   stdcell_lib_id: string
+  padring?: string
   llm_model?: string
   review_gates: ReviewGate[]
   agent_policy: AgentPolicy

@@ -20,6 +20,13 @@ const pdkOptions = [
 
 const defaultPdkOption = pdkOptions[0]
 
+const padringOptions = [
+  { value: 'none', label: 'None (no pad ring)' },
+  { value: 'gf180-v1', label: 'GF180MCU pad ring (gf180-v1)' },
+] as const
+
+const defaultPadringOption = padringOptions[0]
+
 const initialForm = {
   taskName: '',
   repoSource: '',
@@ -33,6 +40,7 @@ const initialForm = {
   pdkId: defaultPdkOption.pdkId as string,
   stdcellLibId: defaultPdkOption.stdcellLibId as string,
   pdkLabel: defaultPdkOption.label as string,
+  padring: defaultPadringOption.value as string,
   reviewGates: ['BEFORE_SIGNOFF'] as const,
   reviewGateLabel: 'Human approval required before signoff package',
   agentPolicy: {
@@ -134,6 +142,7 @@ export function CreateTaskPage() {
         template_id: form.templateId.trim() || undefined,
         pdk_id: form.pdkId,
         stdcell_lib_id: form.stdcellLibId,
+        padring: form.padring,
         llm_model: llmModel || undefined,
         review_gates: [...form.reviewGates],
         agent_policy: { ...form.agentPolicy },
@@ -157,6 +166,10 @@ export function CreateTaskPage() {
   function handlePdkChange(value: string) {
     const selected = pdkOptions.find((o) => o.value === value) ?? defaultPdkOption
     setForm((current) => ({ ...current, pdkChoice: selected.value, pdkId: selected.pdkId, stdcellLibId: selected.stdcellLibId, pdkLabel: selected.label }))
+  }
+
+  function handlePadringChange(value: string) {
+    setForm((current) => ({ ...current, padring: value }))
   }
 
   const sourceSummary = form.repoSource.trim() || 'Repository will be attached after you enter one.'
@@ -272,6 +285,20 @@ export function CreateTaskPage() {
                     {llmModels.map((model) => (
                       <SelectItem key={model} value={model}>
                         {model}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </Field>
+              <Field label='Padring' hint='Assembled during signoff as a chip-level GDS/LEF/DEF deliverable'>
+                <Select value={form.padring} onValueChange={handlePadringChange}>
+                  <SelectTrigger className='h-12 rounded-2xl border-slate-200 bg-white px-4 text-sm text-slate-700 shadow-none'>
+                    <SelectValue placeholder='Select pad ring' />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {padringOptions.map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
                       </SelectItem>
                     ))}
                   </SelectContent>

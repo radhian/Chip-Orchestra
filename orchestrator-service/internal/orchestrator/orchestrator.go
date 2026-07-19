@@ -75,7 +75,14 @@ func NewService(db *gorm.DB, redisClient *redis.Client, agent *dispatcher.Client
 			{Name: "GL_SIM", DependsOn: []string{"PNR"}, Kind: "eda"},
 			{Name: "RENDER", DependsOn: []string{"PNR"}, Kind: "eda"},
 			{Name: "DRC_LVS", DependsOn: []string{"PNR"}, Kind: "eda"},
-			{Name: "SIGNOFF", DependsOn: []string{"DRC_LVS", "STA", "GL_SIM", "RENDER"}, Kind: "agent", Gated: true},
+			// PADRING assembles the chip-level GF180 I/O pad ring around the
+			// hardened core. It is a signoff-phase deliverable: it depends on
+			// PNR (needs a hardened core to wrap) and runs in parallel with the
+			// other post-PNR checks, then feeds SIGNOFF so the pad-ring
+			// GDS/LEF/SVG is part of the tape-out evidence and approval gate.
+			// A no-op (skipped) success when padring != gf180-v1.
+			{Name: "PADRING", DependsOn: []string{"PNR"}, Kind: "eda"},
+			{Name: "SIGNOFF", DependsOn: []string{"DRC_LVS", "STA", "GL_SIM", "RENDER", "PADRING"}, Kind: "agent", Gated: true},
 			{Name: "EXPORT", DependsOn: []string{"SIGNOFF"}, Kind: "agent"},
 		},
 	}
@@ -350,6 +357,7 @@ func (s *Service) dispatchStage(ctx context.Context, taskID, stageID string) {
 		StageOptions: map[string]any{
 			"pdk_id":         task.PDKID,
 			"stdcell_lib_id": task.StdcellLibID,
+			"padring":        task.Padring,
 		},
 	})
 	if err != nil {
@@ -851,6 +859,14 @@ func (s *Service) stageImage(taskID, stageName string) string {
 				return candidate
 			}
 		}
+	case "PADRING":
+		// The pad-ring SVG preview is the natural thumbnail for this stage.
+		if img := scan("padring"); img != "" {
+			return img
+		}
+		if img := scan("gds"); img != "" {
+			return img
+		}
 	}
 	return ""
 }
@@ -922,6 +938,7 @@ var stageActivity = map[string]string{
 	"GL_SIM":      "EDA service is running gate-level simulation.",
 	"RENDER":      "EDA service is rendering the GDS layout image.",
 	"DRC_LVS":     "EDA service is running DRC/LVS checks.",
+	"PADRING":     "EDA service is assembling the GF180 chip-level I/O pad ring (GDS/LEF/DEF/SVG deliverables).",
 	"SIGNOFF":     "FlowAssistant is assembling the signoff summary from the EDA evidence.",
 	"EXPORT":      "FlowAssistant is assembling the final report, runbook and PDF.",
 }

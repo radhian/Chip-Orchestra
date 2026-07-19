@@ -107,6 +107,23 @@ class RenderReport(BaseReport):
     images: List[str] = field(default_factory=list)
 
 
+@dataclass
+class PadringReport(BaseReport):
+    stage: str = "PADRING"
+    design: str = ""
+    config: str = ""       # gf180-v1 / none
+    cfg_file: str = ""     # resolved padring config
+    def_file: str = ""     # padring DEF
+    gds: str = ""          # chip-level pad-ring GDS (primary deliverable)
+    lef: str = ""          # pad-ring abstract LEF
+    svg: str = ""          # visual preview
+    verilog: str = ""      # ring netlist
+    deliverables: List[str] = field(default_factory=list)
+    pad_summary: Dict[str, Any] = field(default_factory=dict)
+    used_real_tools: bool = False
+    skipped: bool = False
+
+
 # Physical (hardening) stages share the same underlying LibreLane run shape.
 HARDEN_REPORT_TYPES = {
     "SYNTH": SynthReport,
