@@ -10,7 +10,7 @@ ring around the hardened core, emitting the tape-out deliverable set:
 * ``padring/<design>_padring.svg`` - visual preview
 * ``padring/<design>_padring.v``   - ring netlist
 
-Assembles the chip natively in Python with ``gdstk`` by loading the bundled
+Assembles the chip natively in Python with ``gdspy`` by loading the bundled
 GF180MCU ``RING_PAD.gds`` and centering the hardened PNR core GDS inside it.
 The historical ``padring`` binary is still attempted for supporting DEF/SVG/V
 text deliverables when available, but chip-level GDS generation no longer
@@ -274,19 +274,19 @@ def _bbox_size(bbox: Optional[Tuple[Tuple[float, float], Tuple[float, float]]]) 
 
 
 def _merge_gds(path: Path, cfg: Dict, top: str, design: str, workspace: Path) -> Dict[str, object]:
-    """Merge the bundled GF180 padframe with the hardened core using gdstk."""
-    import gdstk
+    """Merge the bundled GF180 padframe with the hardened core using gdspy."""
+    import gdspy
 
     ring_path = _ring_pad_gds()
     if not ring_path.is_file():
         raise FileNotFoundError(f"Missing bundled padframe GDS: {ring_path}")
 
-    ring_lib = gdstk.read_gds(str(ring_path))
+    ring_lib = gdspy.GdsLibrary(infile=str(ring_path))
     ring_tops = ring_lib.top_level()
     if not ring_tops:
         raise ValueError(f"No top-level cell found in {ring_path}")
     ring_cell = ring_tops[0]
-    ring_bbox = ring_cell.bounding_box()
+    ring_bbox = ring_cell.get_bounding_box()
     ring_w, ring_h = _bbox_size(ring_bbox)
     if ring_bbox is None or ring_w <= 0 or ring_h <= 0:
         ring_w, ring_h = cfg["die_um"]
@@ -300,11 +300,11 @@ def _merge_gds(path: Path, cfg: Dict, top: str, design: str, workspace: Path) ->
     core_bbox = None
     core_offset = (0.0, 0.0)
     if core_path is not None:
-        core_lib = gdstk.read_gds(str(core_path))
+        core_lib = gdspy.GdsLibrary(infile=str(core_path))
         core_tops = core_lib.top_level()
         if core_tops:
             core_cell = core_tops[0]
-            core_bbox = core_cell.bounding_box()
+            core_bbox = core_cell.get_bounding_box()
             if core_bbox is not None:
                 core_w, core_h = _bbox_size(core_bbox)
                 core_offset = (
@@ -312,22 +312,17 @@ def _merge_gds(path: Path, cfg: Dict, top: str, design: str, workspace: Path) ->
                     ring_origin[1] + (ring_h - core_h) / 2 - core_bbox[0][1],
                 )
 
-    merged = gdstk.Library(unit=ring_lib.unit, precision=ring_lib.precision)
-    used_names = set()
-    for source_cell in ring_lib.cells:
-        used_names.add(source_cell.name)
-        merged.add(source_cell)
+    merged = gdspy.GdsLibrary(unit=ring_lib.unit, precision=ring_lib.precision)
+    for source_cell in ring_lib.cells.values():
+        merged.add(source_cell, overwrite_duplicate=True)
     if core_lib is not None:
-        for source_cell in core_lib.cells:
-            if source_cell.name in used_names:
-                source_cell.name = f"CORE_{source_cell.name}"
-            used_names.add(source_cell.name)
-            merged.add(source_cell)
+        for source_cell in core_lib.cells.values():
+            merged.add(source_cell, overwrite_duplicate=True)
 
     chip = merged.new_cell(design)
-    chip.add(gdstk.Reference(ring_cell))
+    chip.add(gdspy.CellReference(ring_cell))
     if core_cell is not None:
-        chip.add(gdstk.Reference(core_cell, origin=core_offset))
+        chip.add(gdspy.CellReference(core_cell, origin=core_offset))
 
     path.parent.mkdir(parents=True, exist_ok=True)
     merged.write_gds(str(path))
@@ -349,7 +344,7 @@ def _merge_gds(path: Path, cfg: Dict, top: str, design: str, workspace: Path) ->
 def _render_gds_preview(gds_path: Path, image_path: Path, title: str) -> bool:
     """Render a KLayout-style black-background preview with legend and scale bar."""
     try:
-        import gdstk
+        import gdspy
         import matplotlib
         matplotlib.use("Agg")
         import matplotlib.pyplot as plt
@@ -368,11 +363,11 @@ def _render_gds_preview(gds_path: Path, image_path: Path, title: str) -> bool:
     }
     fallback_colors = ["#38bdf8", "#fb7185", "#a3e635", "#facc15", "#c084fc", "#2dd4bf"]
 
-    lib = gdstk.read_gds(str(gds_path))
+    lib = gdspy.GdsLibrary(infile=str(gds_path))
     tops = lib.top_level()
     if not tops:
         return False
-    bbox = tops[0].bounding_box()
+    bbox = tops[0].get_bounding_box()
     if bbox is None:
         return False
 
@@ -380,19 +375,22 @@ def _render_gds_preview(gds_path: Path, image_path: Path, title: str) -> bool:
     ax.set_facecolor("black")
     seen_layers: Dict[int, str] = {}
     polygon_count = 0
-    for source_cell in [tops[0], *tops[0].dependencies(True)]:
-        for poly in source_cell.polygons:
-            layer = int(poly.layer)
-            name, color = layer_colors.get(layer, (f"L{layer}", fallback_colors[layer % len(fallback_colors)]))
-            ax.add_patch(MplPolygon(poly.points, closed=True, facecolor=color, edgecolor=color, alpha=0.78, linewidth=0.15))
-            seen_layers[layer] = name
-            polygon_count += 1
+    for source_cell in [tops[0], *tops[0].get_dependencies(True)]:
+        for polygon_set in source_cell.polygons:
+            for points, layer in zip(polygon_set.polygons, polygon_set.layers):
+                layer = int(layer)
+                name, color = layer_colors.get(layer, (f"L{layer}", fallback_colors[layer % len(fallback_colors)]))
+                ax.add_patch(MplPolygon(points, closed=True, facecolor=color, edgecolor=color, alpha=0.78, linewidth=0.15))
+                seen_layers[layer] = name
+                polygon_count += 1
+                if polygon_count >= 5000:
+                    break
             if polygon_count >= 5000:
                 break
         if polygon_count >= 5000:
             break
     for ref in tops[0].references:
-        ref_bbox = ref.bounding_box()
+        ref_bbox = ref.get_bounding_box()
         if ref_bbox is None:
             continue
         layer = 235
@@ -538,7 +536,7 @@ def run_padring(
     try:
         merge_stats = _merge_gds(gds_file, cfg, top, f"{top}_chip", workspace)
         gds_is_binary = True
-        log_lines.append("[padring] Python-native gdstk assembly succeeded.")
+        log_lines.append("[padring] Python-native gdspy assembly succeeded.")
         for key, value in merge_stats.items():
             log_lines.append(f"[padring] {key}={value}")
     except Exception as exc:  # noqa: BLE001

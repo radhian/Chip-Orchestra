@@ -32,13 +32,13 @@ def _ws(tmp_path: Path) -> Path:
     ws = ensure_workspace("task-padring", root=tmp_path)
     (ws / "rtl" / "chip_top.sv").write_text("module chip_top; endmodule\n")
     try:
-        import gdstk
+        import gdspy
 
         gds_dir = ws / "gds"
         gds_dir.mkdir(parents=True, exist_ok=True)
-        lib = gdstk.Library()
+        lib = gdspy.GdsLibrary()
         cell = lib.new_cell("chip_top")
-        cell.add(gdstk.rectangle((0, 0), (200, 120), layer=22, datatype=0))
+        cell.add(gdspy.Rectangle((0, 0), (200, 120), layer=22, datatype=0))
         lib.write_gds(str(gds_dir / "chip_top.gds"))
     except Exception:  # noqa: BLE001
         pass
@@ -63,9 +63,9 @@ def test_padring_gf180_v1_produces_deliverables(tmp_path: Path) -> None:
     assert (ws / "padring" / "chip_top_chip.svg").is_file()
     assert (ws / "padring" / "padring.log").is_file()
     assert rep.gds == "padring/chip_top_chip.gds"
-    import gdstk
+    import gdspy
 
-    merged = gdstk.read_gds(str(ws / rep.gds))
+    merged = gdspy.GdsLibrary(infile=str(ws / rep.gds))
     top_cells = merged.top_level()
     assert top_cells
     assert top_cells[0].name == "chip_top_chip"

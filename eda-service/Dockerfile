@@ -114,11 +114,10 @@ RUN for b in openroad sta; do \
     && openroad -version
 
 # LibreLane / OpenLane (Python orchestrator) + Volare (PDK manager) + render libs.
-# librelane is the maintained fork; openlane is the fallback. gdstk + matplotlib
+# librelane is the maintained fork; openlane is the fallback. gdspy + matplotlib
 # power the GDS/waveform/metrics PNG renders.
 RUN pip install --no-cache-dir librelane || pip install --no-cache-dir openlane \
-    && pip install --no-cache-dir volare matplotlib pyosys \
-    && pip install --no-cache-dir "gdstk" || pip install --no-cache-dir --no-build-isolation gdstk || echo "gdstk optional – KLayout fallback will be used" \
+    && pip install --no-cache-dir volare matplotlib pyosys gdspy \
     && mkdir -p "${PDK_ROOT}"
 
 WORKDIR /app
