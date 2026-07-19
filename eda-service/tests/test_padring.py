@@ -48,7 +48,7 @@ def test_padring_gf180_v1_produces_deliverables(tmp_path: Path) -> None:
         assert (ws / rel).is_file()
     # GDS mirrored into the standard gds/ dir for downstream previews.
     assert list((ws / "gds").glob("*.gds"))
-    assert rep.pad_summary["total_cells"] == 94
+    assert rep.pad_summary["total_cells"] == 73
     assert rep.metrics["die_area_um2"] > 0
 
 

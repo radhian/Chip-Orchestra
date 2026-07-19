@@ -51,14 +51,19 @@ GF180_V1 = {
         "gf180mcu_fd_io__fill5",
         "gf180mcu_fd_io__fill10",
     ],
+    # GF180MCU RING_PAD (openfasoc-tapeouts/gf180mcu_padframe/RING_PAD.gds)
+    # Pin assignment v1 — approved 2026-07-19
+    # Note: bi_t (bidirectional) pads only available on West side in this padframe.
+    # UART signals bound to West; clk/rst_n on South (in_c digital input pads).
     # pad class -> (cell, count)
     "pads": {
-        "analog": ("gf180mcu_fd_io__asig_5p0", 60),
-        "bidir": ("gf180mcu_fd_io__bi_t", 20),
-        "dvdd": ("gf180mcu_fd_io__dvdd", 4),
-        "dvss": ("gf180mcu_fd_io__dvss", 4),
-        "clk": ("gf180mcu_fd_io__in_s", 1),
-        "rst_n": ("gf180mcu_fd_io__in_c", 1),
+        "analog": ("gf180mcu_fd_io__asig_5p0", 58),
+        "clk": ("gf180mcu_fd_io__in_c", 1),      # clk: South
+        "rst_n": ("gf180mcu_fd_io__in_c", 1),    # rst_n: South
+        "uart_rx": ("gf180mcu_fd_io__bi_t", 1),  # uart_rx: West
+        "uart_tx": ("gf180mcu_fd_io__bi_t", 1),  # uart_tx: West
+        "dvdd": ("gf180mcu_fd_io__dvdd", 3),     # VDD: North x3
+        "dvss": ("gf180mcu_fd_io__dvss", 4),     # VSS: N/E/S/W distributed
     },
 }
 
@@ -121,17 +126,27 @@ def _pad_ring_rects(cfg: Dict):
     pad_w, pad_h = 75.0, 350.0
     edge_len = max(1.0, W - 2 * corner)
 
-    # Ordered flat list of pads.
-    flat: List[str] = []
-    for name, (_, count) in cfg["pads"].items():
-        flat += [name] * count
-    n = len(flat)
-    per_edge = max(1, (n + 3) // 4)
+    # Final NanoCGRA RING_PAD v1 assignment by edge:
+    #   South: clk/rst_n use in_c digital input pads.
+    #   West: UART uses bi_t pads (only available on West in this padframe).
+    #   North: VDD uses three dvdd pads.
+    #   VSS: dvss is distributed one pad per side.
+    analog_count = cfg["pads"].get("analog", (None, 0))[1]
+    edge_pads_by_side = [
+        ["dvss", "clk", "rst_n"],
+        ["dvss"],
+        ["dvss", "dvdd", "dvdd", "dvdd"],
+        ["dvss", "uart_rx", "uart_tx"],
+    ]
+    side_index = 0
+    for _ in range(analog_count):
+        edge_pads_by_side[side_index].append("analog")
+        side_index = (side_index + 1) % 4
 
     rects = []
     idx = 0
     for edge in range(4):
-        edge_pads = flat[edge * per_edge:(edge + 1) * per_edge]
+        edge_pads = edge_pads_by_side[edge]
         m = len(edge_pads)
         if m == 0:
             continue
