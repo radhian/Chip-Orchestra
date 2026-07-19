@@ -218,3 +218,9 @@ func (h *schedulerHarness) mustStage(taskID, name string) models.Stage {
 	require.NoError(h.t, h.db.First(&stage, "task_id = ? AND name = ?", taskID, name).Error)
 	return stage
 }
+
+func TestMissingSlangFailureDetection(t *testing.T) {
+	assert.True(t, isMissingSlangFailure("ERROR: Can't load module `./slang':\n/usr/local/lib/python3.12/site-packages/pyosys/share/plugins/slang.so: cannot open shared object file"))
+	assert.False(t, isMissingSlangFailure("ERROR: unrelated LibreLane failure"))
+	assert.Equal(t, "LibreLane slang plugin missing. Set USE_SLANG=false in config.", missingSlangFailureMessage())
+}

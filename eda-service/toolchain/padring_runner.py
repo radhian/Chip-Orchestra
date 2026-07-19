@@ -10,22 +10,19 @@ ring around the hardened core, emitting the tape-out deliverable set:
 * ``padring/<design>_padring.svg`` - visual preview
 * ``padring/<design>_padring.v``   - ring netlist
 
-Mirrors the reference flow (https://github.com/JuanMoya/padring_gf180): the
-``padring`` tool consumes a ``.cfg`` + IO LEFs to produce a DEF, which KLayout
-(``def2stream``) then streams to GDS.
-
-Like the other runners this stage is *best-effort*: it shells out to the real
-``padring`` / KLayout binaries through the injectable :class:`CommandRunner`,
-and when those tools (or the GF180 PDK) are unavailable it degrades to writing
-deterministic deliverable files so the pad-ring deliverable always exists and
-the pipeline stays exercisable in dev / CI. Only the ``gf180-v1`` config is
-supported; any other value (``none`` / unset) is a no-op success.
+Assembles the chip natively in Python with ``gdstk`` by loading the bundled
+GF180MCU ``RING_PAD.gds`` and centering the hardened PNR core GDS inside it.
+The historical ``padring`` binary is still attempted for supporting DEF/SVG/V
+text deliverables when available, but chip-level GDS generation no longer
+depends on external padring/KLayout binaries and never writes a text placeholder
+for the primary GDS deliverable. Only the ``gf180-v1`` config is supported; any
+other value (``none`` / unset) is a no-op success.
 """
 from __future__ import annotations
 
 import os
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
 
 from runner import CommandRunner, default_runner
 
@@ -251,31 +248,189 @@ def _render_verilog(cfg: Dict, design: str) -> str:
     return "\n".join(lines) + "\n"
 
 
-def _write_gds(path: Path, cfg: Dict, design: str) -> bool:
-    """Write a real GDSII via gdstk when available; else a placeholder.
+def _toolchain_dir() -> Path:
+    return Path(__file__).resolve().parent
 
-    Returns True when a binary GDS was produced by gdstk.
-    """
+
+def _ring_pad_gds() -> Path:
+    return _toolchain_dir() / "gf180" / "RING_PAD.gds"
+
+
+def _find_core_gds(workspace: Path, top: str, chip_gds: Path) -> Optional[Path]:
+    preferred = workspace / "gds" / f"{top}.gds"
+    if preferred.is_file():
+        return preferred
+    candidates = sorted((workspace / "gds").glob("*.gds"))
+    for candidate in candidates:
+        if candidate.resolve() != chip_gds.resolve() and "padring" not in candidate.stem and "chip" not in candidate.stem:
+            return candidate
+    return None
+
+
+def _bbox_size(bbox: Optional[Tuple[Tuple[float, float], Tuple[float, float]]]) -> Tuple[float, float]:
+    if bbox is None:
+        return 0.0, 0.0
+    return bbox[1][0] - bbox[0][0], bbox[1][1] - bbox[0][1]
+
+
+def _merge_gds(path: Path, cfg: Dict, top: str, design: str, workspace: Path) -> Dict[str, object]:
+    """Merge the bundled GF180 padframe with the hardened core using gdstk."""
+    import gdstk
+
+    ring_path = _ring_pad_gds()
+    if not ring_path.is_file():
+        raise FileNotFoundError(f"Missing bundled padframe GDS: {ring_path}")
+
+    ring_lib = gdstk.read_gds(str(ring_path))
+    ring_tops = ring_lib.top_level()
+    if not ring_tops:
+        raise ValueError(f"No top-level cell found in {ring_path}")
+    ring_cell = ring_tops[0]
+    ring_bbox = ring_cell.bounding_box()
+    ring_w, ring_h = _bbox_size(ring_bbox)
+    if ring_bbox is None or ring_w <= 0 or ring_h <= 0:
+        ring_w, ring_h = cfg["die_um"]
+        ring_origin = (0.0, 0.0)
+    else:
+        ring_origin = (ring_bbox[0][0], ring_bbox[0][1])
+
+    core_path = _find_core_gds(workspace, top, path)
+    core_lib = None
+    core_cell = None
+    core_bbox = None
+    core_offset = (0.0, 0.0)
+    if core_path is not None:
+        core_lib = gdstk.read_gds(str(core_path))
+        core_tops = core_lib.top_level()
+        if core_tops:
+            core_cell = core_tops[0]
+            core_bbox = core_cell.bounding_box()
+            if core_bbox is not None:
+                core_w, core_h = _bbox_size(core_bbox)
+                core_offset = (
+                    ring_origin[0] + (ring_w - core_w) / 2 - core_bbox[0][0],
+                    ring_origin[1] + (ring_h - core_h) / 2 - core_bbox[0][1],
+                )
+
+    merged = gdstk.Library(unit=ring_lib.unit, precision=ring_lib.precision)
+    used_names = set()
+    for source_cell in ring_lib.cells:
+        used_names.add(source_cell.name)
+        merged.add(source_cell)
+    if core_lib is not None:
+        for source_cell in core_lib.cells:
+            if source_cell.name in used_names:
+                source_cell.name = f"CORE_{source_cell.name}"
+            used_names.add(source_cell.name)
+            merged.add(source_cell)
+
+    chip = merged.new_cell(design)
+    chip.add(gdstk.Reference(ring_cell))
+    if core_cell is not None:
+        chip.add(gdstk.Reference(core_cell, origin=core_offset))
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    merged.write_gds(str(path))
+    core_w, core_h = _bbox_size(core_bbox)
+    return {
+        "ring_path": str(ring_path),
+        "core_path": str(core_path) if core_path else "",
+        "ring_width_um": round(ring_w, 3),
+        "ring_height_um": round(ring_h, 3),
+        "core_width_um": round(core_w, 3),
+        "core_height_um": round(core_h, 3),
+        "core_offset_x_um": round(core_offset[0], 3),
+        "core_offset_y_um": round(core_offset[1], 3),
+        "top_cell": chip.name,
+        "merged_cells": len(merged.cells),
+    }
+
+
+def _render_gds_preview(gds_path: Path, image_path: Path, title: str) -> bool:
+    """Render a KLayout-style black-background preview with legend and scale bar."""
     try:
         import gdstk
+        import matplotlib
+        matplotlib.use("Agg")
+        import matplotlib.pyplot as plt
+        from matplotlib.patches import Patch, Polygon as MplPolygon, Rectangle
     except Exception:  # noqa: BLE001
-        # Deterministic placeholder so the deliverable always exists.
-        W, H = cfg["die_um"]
-        path.write_text(
-            f"# GDSII placeholder for {design} ({cfg['config_id']})\n"
-            f"# die {W:g} x {H:g} um; gdstk unavailable in this environment.\n"
-        )
         return False
-    lib = gdstk.Library()
-    cell = lib.new_cell(design)
-    W, H = cfg["die_um"]
-    rects, corner = _pad_ring_rects(cfg)
-    cell.add(gdstk.rectangle((0, 0), (W, H), layer=235, datatype=0))       # PR boundary
-    for cx, cy in ((0, 0), (W - corner, 0), (0, H - corner), (W - corner, H - corner)):
-        cell.add(gdstk.rectangle((cx, cy), (cx + corner, cy + corner), layer=10, datatype=0))
-    for x, y, w, h, _cls in rects:
-        cell.add(gdstk.rectangle((x, y), (x + w, y + h), layer=30, datatype=0))
-    lib.write_gds(str(path))
+
+    layer_colors = {
+        22: ("Metal1", "#3b82f6"),
+        30: ("Metal2", "#22c55e"),
+        34: ("Metal3", "#f59e0b"),
+        36: ("Metal4", "#ef4444"),
+        42: ("Metal5", "#a855f7"),
+        62: ("Top metal", "#f8fafc"),
+        235: ("Boundary", "#94a3b8"),
+    }
+    fallback_colors = ["#38bdf8", "#fb7185", "#a3e635", "#facc15", "#c084fc", "#2dd4bf"]
+
+    lib = gdstk.read_gds(str(gds_path))
+    tops = lib.top_level()
+    if not tops:
+        return False
+    bbox = tops[0].bounding_box()
+    if bbox is None:
+        return False
+
+    fig, ax = plt.subplots(figsize=(10, 10), facecolor="black")
+    ax.set_facecolor("black")
+    seen_layers: Dict[int, str] = {}
+    polygon_count = 0
+    for source_cell in [tops[0], *tops[0].dependencies(True)]:
+        for poly in source_cell.polygons:
+            layer = int(poly.layer)
+            name, color = layer_colors.get(layer, (f"L{layer}", fallback_colors[layer % len(fallback_colors)]))
+            ax.add_patch(MplPolygon(poly.points, closed=True, facecolor=color, edgecolor=color, alpha=0.78, linewidth=0.15))
+            seen_layers[layer] = name
+            polygon_count += 1
+            if polygon_count >= 5000:
+                break
+        if polygon_count >= 5000:
+            break
+    for ref in tops[0].references:
+        ref_bbox = ref.bounding_box()
+        if ref_bbox is None:
+            continue
+        layer = 235
+        name, color = layer_colors[layer]
+        rxmin, rymin = ref_bbox[0]
+        rxmax, rymax = ref_bbox[1]
+        ax.add_patch(Rectangle((rxmin, rymin), rxmax - rxmin, rymax - rymin, fill=False, edgecolor=color, linewidth=0.8, alpha=0.95))
+        seen_layers[layer] = name
+
+    xmin, ymin = bbox[0]
+    xmax, ymax = bbox[1]
+    width = xmax - xmin
+    height = ymax - ymin
+    margin = max(width, height) * 0.04
+    ax.set_xlim(xmin - margin, xmax + margin)
+    ax.set_ylim(ymin - margin, ymax + margin)
+    ax.set_aspect("equal", adjustable="box")
+    ax.set_title(title, color="white", fontsize=14, pad=12)
+    ax.tick_params(colors="#cbd5e1", labelsize=8)
+    for spine in ax.spines.values():
+        spine.set_color("#475569")
+
+    scale_um = 500.0 if width >= 1000 else max(10.0, round(width / 5 / 10) * 10)
+    sx = xmin + margin
+    sy = ymin + margin
+    ax.add_patch(Rectangle((sx, sy), scale_um, max(height * 0.008, 2.0), color="white"))
+    ax.text(sx, sy + max(height * 0.018, 8.0), f"{scale_um:g} µm", color="white", fontsize=9, va="bottom")
+
+    handles = [Patch(facecolor=layer_colors.get(layer, (name, fallback_colors[layer % len(fallback_colors)]))[1], label=name)
+               for layer, name in sorted(seen_layers.items())[:12]]
+    if handles:
+        legend = ax.legend(handles=handles, loc="upper right", facecolor="#020617", edgecolor="#334155", fontsize=8)
+        for text in legend.get_texts():
+            text.set_color("white")
+
+    image_path.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(image_path, dpi=180, bbox_inches="tight", facecolor=fig.get_facecolor())
+    plt.close(fig)
     return True
 
 
@@ -376,23 +531,37 @@ def run_padring(
     report.lef = f"padring/{lef_file.name}"
     _emit(report.lef, "lef", "pad-ring abstract LEF")
 
-    # 6. GDS — try KLayout def2stream, else gdstk / placeholder. Primary deliverable.
-    gds_file = pad_dir / f"{design}.gds"
-    gds_from_klayout = False
-    if used_real:
-        kcmd = [_klayout(), "-zz", "-rd", f"in_def={def_file}", "-rd", f"out_file={gds_file}"]
-        try:
-            kres = runner.run(kcmd, cwd=pad_dir, timeout=600)
-            log_lines.append("$ " + " ".join(kcmd))
-            if not kres.not_found and kres.returncode == 0 and gds_file.is_file():
-                gds_from_klayout = True
-        except Exception as exc:  # noqa: BLE001
-            log_lines.append(f"[padring] klayout error: {exc}")
-    gds_is_binary = gds_from_klayout
-    if not gds_file.is_file():
-        gds_is_binary = _write_gds(gds_file, cfg, design)
+    # 6. GDS — Python-native assembly is the primary path, no external binary required.
+    gds_file = pad_dir / f"{top}_chip.gds"
+    merge_stats: Dict[str, object] = {}
+    gds_is_binary = False
+    try:
+        merge_stats = _merge_gds(gds_file, cfg, top, f"{top}_chip", workspace)
+        gds_is_binary = True
+        log_lines.append("[padring] Python-native gdstk assembly succeeded.")
+        for key, value in merge_stats.items():
+            log_lines.append(f"[padring] {key}={value}")
+    except Exception as exc:  # noqa: BLE001
+        log_lines.append(f"[padring] Python-native GDS assembly failed: {exc}")
+        if used_real:
+            kcmd = [_klayout(), "-zz", "-rd", f"in_def={def_file}", "-rd", f"out_file={gds_file}"]
+            try:
+                kres = runner.run(kcmd, cwd=pad_dir, timeout=600)
+                log_lines.append("$ " + " ".join(kcmd))
+                gds_is_binary = not kres.not_found and kres.returncode == 0 and gds_file.is_file()
+            except Exception as klayout_exc:  # noqa: BLE001
+                log_lines.append(f"[padring] klayout error: {klayout_exc}")
+        if not gds_is_binary:
+            raise
     report.gds = f"padring/{gds_file.name}"
     _emit(report.gds, "gds", "chip-level pad-ring GDSII (primary deliverable)")
+
+    preview_file = pad_dir / f"{top}_chip_preview.png"
+    if _render_gds_preview(gds_file, preview_file, f"{top} GF180 pad-ring assembly"):
+        _emit(f"padring/{preview_file.name}", "layout_preview", "chip-level GDS preview with layer legend and scale bar")
+    svg_render = pad_dir / f"{top}_chip.svg"
+    if _render_gds_preview(gds_file, svg_render, f"{top} GF180 pad-ring assembly"):
+        _emit(f"padring/{svg_render.name}", "layout_preview", "chip-level GDS SVG render")
 
     # Copy GDS into the standard gds/ dir so RENDER / signoff previews pick it up.
     gds_copy = gds_dir / f"{design}.gds"
@@ -407,7 +576,7 @@ def run_padring(
     report.design = design
     report.pad_summary = pad_summary
     report.deliverables = deliverables
-    report.used_real_tools = used_real and (gds_from_klayout or gds_is_binary)
+    report.used_real_tools = gds_is_binary
     W, H = cfg["die_um"]
     report.metrics = {
         "config": config_id,
@@ -417,6 +586,7 @@ def run_padring(
         "die_area_um2": round(W * H, 2),
         "used_real_tools": report.used_real_tools,
         **{f"pads_{k}": v for k, v in pad_summary.items()},
+        **{f"assembly_{k}": v for k, v in merge_stats.items()},
     }
     report.summary = (
         f"Assembled {config_id} pad ring '{design}' ({pad_summary['total_cells']} cells: "
@@ -424,9 +594,13 @@ def run_padring(
         f"Deliverables: {', '.join(deliverables)}."
     )
 
-    (logs_dir / "padring.log").write_text("\n".join(log_lines) + "\n")
+    log_text = "\n".join(log_lines) + "\n"
+    (logs_dir / "padring.log").write_text(log_text)
+    (pad_dir / "padring.log").write_text(log_text)
     register_artifact(artifacts, path="logs/padring.log", kind="log", stage=stage, base=workspace)
+    register_artifact(artifacts, path="padring/padring.log", kind="log", stage=stage, base=workspace)
     report.raw_log_paths.append("logs/padring.log")
+    report.raw_log_paths.append("padring/padring.log")
     report.artifacts = artifacts
     return report
 
