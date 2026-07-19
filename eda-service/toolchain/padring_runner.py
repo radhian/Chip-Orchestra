@@ -273,6 +273,10 @@ def _bbox_size(bbox: Optional[Tuple[Tuple[float, float], Tuple[float, float]]]) 
     return bbox[1][0] - bbox[0][0], bbox[1][1] - bbox[0][1]
 
 
+def _bbox_center(bbox: Tuple[Tuple[float, float], Tuple[float, float]]) -> Tuple[float, float]:
+    return (bbox[0][0] + bbox[1][0]) / 2, (bbox[0][1] + bbox[1][1]) / 2
+
+
 def _merge_gds(path: Path, cfg: Dict, top: str, design: str, workspace: Path) -> Dict[str, object]:
     """Merge the bundled GF180 padframe with the hardened core using gdspy."""
     import gdspy
@@ -281,62 +285,73 @@ def _merge_gds(path: Path, cfg: Dict, top: str, design: str, workspace: Path) ->
     if not ring_path.is_file():
         raise FileNotFoundError(f"Missing bundled padframe GDS: {ring_path}")
 
+    core_path = _find_core_gds(workspace, top, path)
+    if core_path is None:
+        raise FileNotFoundError(f"Missing hardened core GDS for top '{top}' in {workspace / 'gds'}")
+
     ring_lib = gdspy.GdsLibrary(infile=str(ring_path))
+    core_lib = gdspy.GdsLibrary(infile=str(core_path))
     ring_tops = ring_lib.top_level()
+    core_tops = core_lib.top_level()
     if not ring_tops:
         raise ValueError(f"No top-level cell found in {ring_path}")
-    ring_cell = ring_tops[0]
-    ring_bbox = ring_cell.get_bounding_box()
-    ring_w, ring_h = _bbox_size(ring_bbox)
-    if ring_bbox is None or ring_w <= 0 or ring_h <= 0:
-        ring_w, ring_h = cfg["die_um"]
-        ring_origin = (0.0, 0.0)
-    else:
-        ring_origin = (ring_bbox[0][0], ring_bbox[0][1])
+    if not core_tops:
+        raise ValueError(f"No top-level cell found in {core_path}")
 
-    core_path = _find_core_gds(workspace, top, path)
-    core_lib = None
-    core_cell = None
-    core_bbox = None
-    core_offset = (0.0, 0.0)
-    if core_path is not None:
-        core_lib = gdspy.GdsLibrary(infile=str(core_path))
-        core_tops = core_lib.top_level()
-        if core_tops:
-            core_cell = core_tops[0]
-            core_bbox = core_cell.get_bounding_box()
-            if core_bbox is not None:
-                core_w, core_h = _bbox_size(core_bbox)
-                core_offset = (
-                    ring_origin[0] + (ring_w - core_w) / 2 - core_bbox[0][0],
-                    ring_origin[1] + (ring_h - core_h) / 2 - core_bbox[0][1],
-                )
+    ring_cell = ring_tops[0]
+    core_cell = core_tops[0]
+    ring_bbox = ring_cell.get_bounding_box()
+    core_bbox = core_cell.get_bounding_box()
+    if ring_bbox is None:
+        raise ValueError(f"Could not get bounding box for padframe cell {ring_cell.name}")
+    if core_bbox is None:
+        raise ValueError(f"Could not get bounding box for core cell {core_cell.name}")
+
+    ring_w, ring_h = _bbox_size(ring_bbox)
+    core_w, core_h = _bbox_size(core_bbox)
+    ring_cx, ring_cy = _bbox_center(ring_bbox)
+    core_cx, core_cy = _bbox_center(core_bbox)
+    core_offset = (ring_cx - core_cx, ring_cy - core_cy)
 
     merged = gdspy.GdsLibrary(unit=ring_lib.unit, precision=ring_lib.precision)
     for source_cell in ring_lib.cells.values():
         merged.add(source_cell, overwrite_duplicate=True)
-    if core_lib is not None:
-        for source_cell in core_lib.cells.values():
-            merged.add(source_cell, overwrite_duplicate=True)
+
+    core_name_map: Dict[str, str] = {}
+    for source_cell in core_lib.cells.values():
+        original_name = source_cell.name
+        if original_name in merged.cells:
+            source_cell.name = f"CORE_{original_name}"
+        core_name_map[original_name] = source_cell.name
+        merged.add(source_cell, overwrite_duplicate=True)
 
     chip = merged.new_cell(design)
-    chip.add(gdspy.CellReference(ring_cell))
-    if core_cell is not None:
-        chip.add(gdspy.CellReference(core_cell, origin=core_offset))
+    chip.add(gdspy.CellReference(merged.cells[ring_cell.name]))
+    core_ref_name = core_name_map.get(core_cell.name, core_cell.name)
+    chip.add(gdspy.CellReference(merged.cells[core_ref_name], origin=core_offset))
 
     path.parent.mkdir(parents=True, exist_ok=True)
     merged.write_gds(str(path))
-    core_w, core_h = _bbox_size(core_bbox)
+    chip_bbox = chip.get_bounding_box()
+    chip_w, chip_h = _bbox_size(chip_bbox)
     return {
         "ring_path": str(ring_path),
-        "core_path": str(core_path) if core_path else "",
+        "core_path": str(core_path),
         "ring_width_um": round(ring_w, 3),
         "ring_height_um": round(ring_h, 3),
+        "ring_center_x_um": round(ring_cx, 3),
+        "ring_center_y_um": round(ring_cy, 3),
         "core_width_um": round(core_w, 3),
         "core_height_um": round(core_h, 3),
+        "core_center_x_um": round(core_cx, 3),
+        "core_center_y_um": round(core_cy, 3),
         "core_offset_x_um": round(core_offset[0], 3),
         "core_offset_y_um": round(core_offset[1], 3),
+        "chip_width_um": round(chip_w, 3),
+        "chip_height_um": round(chip_h, 3),
         "top_cell": chip.name,
+        "ring_cell": ring_cell.name,
+        "core_cell": core_ref_name,
         "merged_cells": len(merged.cells),
     }
 
@@ -348,7 +363,8 @@ def _render_gds_preview(gds_path: Path, image_path: Path, title: str) -> bool:
         import matplotlib
         matplotlib.use("Agg")
         import matplotlib.pyplot as plt
-        from matplotlib.patches import Patch, Polygon as MplPolygon, Rectangle
+        from matplotlib.collections import PolyCollection
+        from matplotlib.patches import Patch, Rectangle
     except Exception:  # noqa: BLE001
         return False
 
@@ -367,7 +383,8 @@ def _render_gds_preview(gds_path: Path, image_path: Path, title: str) -> bool:
     tops = lib.top_level()
     if not tops:
         return False
-    bbox = tops[0].get_bounding_box()
+    top_cell = tops[0]
+    bbox = top_cell.get_bounding_box()
     if bbox is None:
         return False
 
@@ -375,30 +392,30 @@ def _render_gds_preview(gds_path: Path, image_path: Path, title: str) -> bool:
     ax.set_facecolor("black")
     seen_layers: Dict[int, str] = {}
     polygon_count = 0
-    for source_cell in [tops[0], *tops[0].get_dependencies(True)]:
-        for polygon_set in source_cell.polygons:
-            for points, layer in zip(polygon_set.polygons, polygon_set.layers):
-                layer = int(layer)
-                name, color = layer_colors.get(layer, (f"L{layer}", fallback_colors[layer % len(fallback_colors)]))
-                ax.add_patch(MplPolygon(points, closed=True, facecolor=color, edgecolor=color, alpha=0.78, linewidth=0.15))
-                seen_layers[layer] = name
-                polygon_count += 1
-                if polygon_count >= 5000:
-                    break
-            if polygon_count >= 5000:
-                break
-        if polygon_count >= 5000:
+    polygons_by_spec = top_cell.get_polygons(by_spec=True, depth=None)
+    for (layer, _datatype), polygons in sorted(polygons_by_spec.items()):
+        layer = int(layer)
+        name, color = layer_colors.get(layer, (f"L{layer}", fallback_colors[layer % len(fallback_colors)]))
+        remaining = 50000 - polygon_count
+        if remaining <= 0:
             break
-    for ref in tops[0].references:
+        layer_polygons = polygons[:remaining]
+        if layer_polygons:
+            ax.add_collection(PolyCollection(layer_polygons, facecolors=color, edgecolors=color,
+                                             alpha=0.78, linewidths=0.15))
+            seen_layers[layer] = name
+            polygon_count += len(layer_polygons)
+        if polygon_count >= 50000:
+            break
+    for ref in top_cell.references:
         ref_bbox = ref.get_bounding_box()
         if ref_bbox is None:
             continue
-        layer = 235
-        name, color = layer_colors[layer]
         rxmin, rymin = ref_bbox[0]
         rxmax, rymax = ref_bbox[1]
-        ax.add_patch(Rectangle((rxmin, rymin), rxmax - rxmin, rymax - rymin, fill=False, edgecolor=color, linewidth=0.8, alpha=0.95))
-        seen_layers[layer] = name
+        ax.add_patch(Rectangle((rxmin, rymin), rxmax - rxmin, rymax - rymin,
+                               fill=False, edgecolor="#94a3b8", linewidth=0.8, alpha=0.95))
+        seen_layers[235] = "Boundary"
 
     xmin, ymin = bbox[0]
     xmax, ymax = bbox[1]
