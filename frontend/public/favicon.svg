@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Chip Orchestra microchip icon">
+  <defs>
+    <linearGradient id="chip-orchestra-blue" x1="0" y1="0" x2="0" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#38bdf8"/>
+      <stop offset="0.52" stop-color="#0ea5e9"/>
+      <stop offset="1" stop-color="#1d4ed8"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="url(#chip-orchestra-blue)"/>
+  <g fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="21" y="21" width="22" height="22" rx="4"/>
+    <path d="M27 28h10v8H27z" opacity="0.92"/>
+    <path d="M25 14v7M32 14v7M39 14v7"/>
+    <path d="M25 43v7M32 43v7M39 43v7"/>
+    <path d="M14 25h7M14 32h7M14 39h7"/>
+    <path d="M43 25h7M43 32h7M43 39h7"/>
+  </g>
+</svg>
