@@ -67,6 +67,31 @@ def _fmt(v) -> str:
     return str(v)
 
 
+def _padring_preview(workspace: Path, report: dict) -> str:
+    for artifact in report.get("artifacts", []) or []:
+        path = str(artifact.get("path") or "")
+        if path.endswith("_chip_preview.png") and (workspace / path).is_file():
+            return path
+    for rel in report.get("deliverables", []) or []:
+        rel = str(rel)
+        if rel.endswith("_chip_preview.png") and (workspace / rel).is_file():
+            return rel
+    previews = sorted((workspace / "padring").glob("*_chip_preview.png"))
+    if previews:
+        return str(previews[0].relative_to(workspace))
+    return ""
+
+
+def _padring_breakdown(report: dict, metrics: dict) -> str:
+    pad_summary = report.get("pad_summary") or {}
+    parts = []
+    for key in ("analog", "clk", "rst_n", "uart_rx", "uart_tx", "dvdd", "dvss", "corners"):
+        value = pad_summary.get(key, metrics.get(f"pads_{key}"))
+        if value not in (None, ""):
+            parts.append(f"{key}: {_fmt(value)}")
+    return "; ".join(parts)
+
+
 def generate_pdf(workspace: Path, ctx: ReportContext) -> Optional[str]:
     workspace = Path(workspace)
     try:
@@ -323,6 +348,29 @@ def generate_pdf(workspace: Path, ctx: ReportContext) -> Optional[str]:
         figure(rel, cap)
     if not any((workspace / r).is_file() for r, _ in _FIGURES[5:]):
         figure("gds/layout.png", _FIGURES[5][1])
+
+    padring_report = ctx.stage_reports.get("PADRING") or {}
+    if padring_report and not padring_report.get("skipped"):
+        config = str(padring_report.get("config") or m.get("config") or "gf180-v1")
+        if config != "none":
+            pdk = str(m.get("pdk") or padring_report.get("pdk") or "gf180mcuD")
+            die_w = _fmt(m.get("die_width_um", 2935.0))
+            die_h = _fmt(m.get("die_height_um", 2935.0))
+            total_io = _fmt((padring_report.get("pad_summary") or {}).get("total_io", m.get("pads_total_io", "")))
+            breakdown = _padring_breakdown(padring_report, m)
+            story.append(Paragraph("B. Pad-ring assembly", h2))
+            story.append(Paragraph(
+                "The pad-ring stage integrates the hardened core inside the GF180MCU "
+                "<font face='Courier'>RING_PAD</font> padframe. The selected configuration is "
+                f"<font face='Courier'>{config}</font> on PDK <font face='Courier'>{pdk}</font>, "
+                f"with a {die_w} × {die_h} µm die. "
+                + (f"The assembly includes {total_io} IO pads" if total_io else "The assembly includes the configured IO pads")
+                + (f" ({breakdown}). " if breakdown else ". ")
+                + "The padring provides power/ground pads (DVDD/DVSS), digital input pads "
+                "(clk, rst_n), and bidirectional pads (uart_rx, uart_tx).", body))
+            preview = _padring_preview(workspace, padring_report)
+            if preview:
+                figure(preview, "Chip-level GF180 pad-ring assembly preview: the RING_PAD perimeter surrounds the centered hardened core.", max_h=7.0)
 
     # Per-stage verdicts — the full pipeline trail.
     if ctx.stage_reports:
