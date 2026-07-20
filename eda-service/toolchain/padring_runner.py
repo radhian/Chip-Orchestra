@@ -294,8 +294,8 @@ METAL2_LAYER = 30            # GF180MCU Metal2 — signal routing
 METAL2_DATATYPE = 0
 METAL3_LAYER = 34            # GF180MCU Metal3 — power straps
 METAL3_DATATYPE = 0
-_SIGNAL_ROUTE_WIDTH_UM = 1.0     # Metal2 signal wire width
-_POWER_STRAP_WIDTH_UM = 2.0      # Metal3 power strap width
+_SIGNAL_ROUTE_WIDTH_UM = 0.5     # Metal2 signal wire width
+_POWER_STRAP_WIDTH_UM = 1.0      # Metal3 power strap width
 
 _POWER_NET_ALIASES = {
     "vdd", "vss",
@@ -667,6 +667,104 @@ def _render_gds_preview(gds_path: Path, image_path: Path, title: str) -> bool:
     }
     fallback_colors = ["#38bdf8", "#fb7185", "#a3e635", "#facc15", "#c084fc", "#2dd4bf"]
 
+    def _append_polyline(target: Dict[int, list], layer: int, points) -> None:
+        if points is None or len(points) < 2:
+            return
+        target.setdefault(layer, []).append(points)
+
+    def _append_polygon(target: Dict[int, list], layer: int, polygon) -> None:
+        if polygon is None or len(polygon) < 2:
+            return
+        target.setdefault(layer, []).append(polygon)
+
+    def _polygon_route_polyline(polygon):
+        try:
+            xs = polygon[:, 0]
+            ys = polygon[:, 1]
+            xmin, xmax = float(xs.min()), float(xs.max())
+            ymin, ymax = float(ys.min()), float(ys.max())
+            ux = sorted({round(float(x), 6) for x in xs})
+            uy = sorted({round(float(y), 6) for y in ys})
+        except Exception:  # noqa: BLE001
+            return None
+
+        if len(ux) == 3 and len(uy) == 3:
+            x01 = ux[1] - ux[0]
+            x12 = ux[2] - ux[1]
+            y01 = uy[1] - uy[0]
+            y12 = uy[2] - uy[1]
+            x_leg_left = x01 <= x12
+            y_leg_bottom = y01 <= y12
+
+            spine_x = (ux[0] + ux[1]) / 2.0 if x_leg_left else (ux[1] + ux[2]) / 2.0
+            spine_y = (uy[0] + uy[1]) / 2.0 if y_leg_bottom else (uy[1] + uy[2]) / 2.0
+            horiz_end_x = ux[2] if x_leg_left else ux[0]
+            vert_end_y = uy[2] if y_leg_bottom else uy[0]
+            return [(spine_x, vert_end_y), (spine_x, spine_y), (horiz_end_x, spine_y)]
+
+        if (xmax - xmin) >= (ymax - ymin):
+            ymid = (ymin + ymax) / 2.0
+            return [(xmin, ymid), (xmax, ymid)]
+        xmid = (xmin + xmax) / 2.0
+        return [(xmid, ymin), (xmid, ymax)]
+
+    def _collect_routing_overlay(cell) -> Tuple[Dict[int, list], Dict[int, list]]:
+        routing_polygons: Dict[int, list] = {METAL2_LAYER: [], METAL3_LAYER: []}
+        routing_lines: Dict[int, list] = {METAL2_LAYER: [], METAL3_LAYER: []}
+
+        for path in list(getattr(cell, "paths", [])):
+            if not isinstance(path, (gdspy.FlexPath, gdspy.RobustPath)):
+                continue
+            path_layers = [int(layer) for layer in list(getattr(path, "layers", []) or [])]
+            spine_points = getattr(path, "points", None)
+            extracted_any = False
+
+            try:
+                by_spec = path.get_polygons(by_spec=True)
+                for (layer, _datatype), polygons in by_spec.items():
+                    layer = int(layer)
+                    if layer not in (METAL2_LAYER, METAL3_LAYER):
+                        continue
+                    for polygon in polygons:
+                        _append_polygon(routing_polygons, layer, polygon)
+                        extracted_any = True
+            except Exception:  # noqa: BLE001
+                pass
+
+            if not extracted_any:
+                try:
+                    polyset = path.to_polygonset()
+                    for layer, polygon in zip(getattr(polyset, "layers", []), getattr(polyset, "polygons", [])):
+                        layer = int(layer)
+                        if layer not in (METAL2_LAYER, METAL3_LAYER):
+                            continue
+                        _append_polygon(routing_polygons, layer, polygon)
+                        extracted_any = True
+                except Exception:  # noqa: BLE001
+                    pass
+
+            if spine_points is not None:
+                for layer in path_layers:
+                    if layer in (METAL2_LAYER, METAL3_LAYER):
+                        _append_polyline(routing_lines, layer, spine_points)
+
+            if not extracted_any and spine_points is not None:
+                for layer in path_layers:
+                    if layer in (METAL2_LAYER, METAL3_LAYER):
+                        _append_polyline(routing_lines, layer, spine_points)
+
+        for polygonset in list(getattr(cell, "polygons", [])):
+            for layer, polygon in zip(getattr(polygonset, "layers", []), getattr(polygonset, "polygons", [])):
+                layer = int(layer)
+                if layer not in (METAL2_LAYER, METAL3_LAYER):
+                    continue
+                _append_polygon(routing_polygons, layer, polygon)
+                route_polyline = _polygon_route_polyline(polygon)
+                if route_polyline is not None:
+                    _append_polyline(routing_lines, layer, route_polyline)
+
+        return routing_polygons, routing_lines
+
     lib = gdspy.GdsLibrary(infile=str(gds_path))
     tops = lib.top_level()
     if not tops:
@@ -680,8 +778,17 @@ def _render_gds_preview(gds_path: Path, image_path: Path, title: str) -> bool:
     ax.set_facecolor("black")
     seen_layers: Dict[int, str] = {}
     polygon_count = 0
+
+    routing_polygons, routing_lines = _collect_routing_overlay(top_cell)
+    for layer in (METAL2_LAYER, METAL3_LAYER):
+        if routing_polygons.get(layer) or routing_lines.get(layer):
+            seen_layers[layer] = layer_colors.get(layer, (f"L{layer}", "#ffffff"))[0]
+
     polygons_by_spec = top_cell.get_polygons(by_spec=True, depth=None)
-    for (layer, _datatype), polygons in sorted(polygons_by_spec.items()):
+    for spec, polygons in sorted(polygons_by_spec.items(), key=lambda item: str(item[0])):
+        if not (isinstance(spec, tuple) and len(spec) == 2):
+            continue
+        layer, _datatype = spec
         layer = int(layer)
         name, color = layer_colors.get(layer, (f"L{layer}", fallback_colors[layer % len(fallback_colors)]))
         remaining = 50000 - polygon_count
@@ -695,6 +802,25 @@ def _render_gds_preview(gds_path: Path, image_path: Path, title: str) -> bool:
             polygon_count += len(layer_polygons)
         if polygon_count >= 50000:
             break
+
+    route_lw = {METAL2_LAYER: 1.6, METAL3_LAYER: 2.4}
+    route_alpha = {METAL2_LAYER: 0.98, METAL3_LAYER: 0.98}
+    for layer in (METAL2_LAYER, METAL3_LAYER):
+        _, color = layer_colors.get(layer, (f"L{layer}", "#ffffff"))
+        lw = route_lw.get(layer, 1.5)
+        alpha = route_alpha.get(layer, 0.95)
+
+        for line_pts in routing_lines.get(layer, []):
+            xs = [pt[0] for pt in line_pts]
+            ys = [pt[1] for pt in line_pts]
+            ax.plot(xs, ys, color=color, linewidth=lw, alpha=alpha, zorder=10, solid_capstyle="round")
+
+        if not routing_lines.get(layer):
+            for pts in routing_polygons.get(layer, []):
+                xs = list(pts[:, 0]) + [pts[0, 0]]
+                ys = list(pts[:, 1]) + [pts[0, 1]]
+                ax.plot(xs, ys, color=color, linewidth=lw, alpha=alpha, zorder=10, solid_capstyle="round")
+
     for ref in top_cell.references:
         ref_bbox = ref.get_bounding_box()
         if ref_bbox is None:
@@ -724,11 +850,14 @@ def _render_gds_preview(gds_path: Path, image_path: Path, title: str) -> bool:
     ax.add_patch(Rectangle((sx, sy), scale_um, max(height * 0.008, 2.0), color="white"))
     ax.text(sx, sy + max(height * 0.018, 8.0), f"{scale_um:g} µm", color="white", fontsize=9, va="bottom")
 
-    # Legend: always try to include Metal2/Metal3 first, then a few others.
     handles: List[Patch] = []
+    polygon_layer_keys = {
+        int(spec[0]) for spec in polygons_by_spec.keys()
+        if isinstance(spec, tuple) and len(spec) == 2
+    }
 
     for key in (30, 34):
-        if key in seen_layers or any(spec[0] == key for spec in polygons_by_spec.keys()):
+        if key in seen_layers or key in polygon_layer_keys:
             name, color = layer_colors.get(key, (f"L{key}", "#ffffff"))
             handles.append(Patch(facecolor=color, label=name))
 
