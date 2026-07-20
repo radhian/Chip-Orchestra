@@ -277,6 +277,160 @@ def _bbox_center(bbox: Tuple[Tuple[float, float], Tuple[float, float]]) -> Tuple
     return (bbox[0][0] + bbox[1][0]) / 2, (bbox[0][1] + bbox[1][1]) / 2
 
 
+# ---------------------------------------------------------------------------
+# Top-level pad-to-core metal routing.
+#
+# After the padframe + core are merged into CHIP_TOP, we draw chip-level metal
+# wires connecting each IO pad's inner-edge pin to the corresponding core pin.
+# GF180MCU routing layers used here:
+#   * Metal2 (layer 30) — thin signal routes (clk / rst_n / uart_rx / uart_tx)
+#   * Metal3 (layer 34) — wide power straps (DVDD / DVSS)
+# Pad pins are approximated from the RING_PAD placement geometry and core pins
+# from the placed core bounding-box edges (the core GDS carries no signal-level
+# pin shapes in this flow), so the routes are representative Manhattan wires
+# rather than signoff-accurate connections.
+# ---------------------------------------------------------------------------
+METAL2_LAYER = 30            # GF180MCU Metal2 — signal routing
+METAL2_DATATYPE = 0
+METAL3_LAYER = 34            # GF180MCU Metal3 — power straps
+METAL3_DATATYPE = 0
+_SIGNAL_ROUTE_WIDTH_UM = 1.0     # Metal2 signal wire width
+_POWER_STRAP_WIDTH_UM = 2.0      # Metal3 power strap width
+_SIGNAL_NETS = ("clk", "rst_n", "uart_rx", "uart_tx")
+_POWER_NETS = ("dvdd", "dvss")
+
+
+def _pad_inner_edge_points(
+    cfg: Dict, ring_bbox: Tuple[Tuple[float, float], Tuple[float, float]]
+) -> Dict[str, List[Tuple[float, float, str]]]:
+    """Compute per-net pad inner-edge pin points in assembled-chip coordinates.
+
+    Reuses the same deterministic pad distribution as the DEF/SVG deliverables
+    (``_pad_ring_rects``), then shifts each pad into the CHIP_TOP coordinate
+    frame using the RING_PAD bounding-box origin. For every pad the *inner*
+    edge (the edge facing the core) is returned together with the side it sits
+    on (``N``/``S``/``E``/``W``), which drives the L-route orientation.
+    """
+    W, H = cfg["die_um"]
+    rects, _ = _pad_ring_rects(cfg)
+    rxmin, rymin = ring_bbox[0]
+    points: Dict[str, List[Tuple[float, float, str]]] = {}
+    for x, y, w, h, cls in rects:
+        if abs(y) < 1e-6:                     # south edge — inner edge faces up
+            side, ix, iy = "S", x + w / 2, y + h
+        elif abs((y + h) - H) < 1e-6:         # north edge — inner edge faces down
+            side, ix, iy = "N", x + w / 2, y
+        elif abs(x) < 1e-6:                   # west edge — inner edge faces right
+            side, ix, iy = "W", x + w, y + h / 2
+        elif abs((x + w) - W) < 1e-6:         # east edge — inner edge faces left
+            side, ix, iy = "E", x, y + h / 2
+        else:
+            continue
+        points.setdefault(cls, []).append((ix + rxmin, iy + rymin, side))
+    return points
+
+
+def _core_edge_point(
+    side: str,
+    placed_core_bbox: Tuple[Tuple[float, float], Tuple[float, float]],
+    frac: float,
+) -> Tuple[float, float]:
+    """Approximate a core pin on the core boundary edge facing ``side``.
+
+    ``frac`` (clamped to [0.15, 0.85]) spreads multiple pins along the edge so
+    routes from different pads on the same side do not collapse onto one point.
+    """
+    (cxmin, cymin), (cxmax, cymax) = placed_core_bbox
+    frac = min(0.85, max(0.15, frac))
+    if side == "S":
+        return (cxmin + (cxmax - cxmin) * frac, cymin)
+    if side == "N":
+        return (cxmin + (cxmax - cxmin) * frac, cymax)
+    if side == "W":
+        return (cxmin, cymin + (cymax - cymin) * frac)
+    return (cxmax, cymin + (cymax - cymin) * frac)  # East
+
+
+def _l_route_points(
+    start: Tuple[float, float], end: Tuple[float, float], side: str
+) -> List[Tuple[float, float]]:
+    """Build an L-shaped (single-bend) Manhattan path from ``start`` to ``end``.
+
+    North/South pads route vertically first then horizontally; East/West pads
+    route horizontally first then vertically, so the wire leaves the pad
+    perpendicular to the die edge it sits on.
+    """
+    (sx, sy), (ex, ey) = start, end
+    if side in ("S", "N"):
+        return [(sx, sy), (sx, ey), (ex, ey)]
+    return [(sx, sy), (ex, sy), (ex, ey)]
+
+
+def _route_pad_to_core(
+    lib,
+    chip_top,
+    ring_bbox: Tuple[Tuple[float, float], Tuple[float, float]],
+    core_bbox: Tuple[Tuple[float, float], Tuple[float, float]],
+    cfg: Dict,
+) -> Dict[str, object]:
+    """Draw top-level pad-to-core metal routing directly into ``chip_top``.
+
+    ``core_bbox`` is the *placed* core bounding box (already shifted by the
+    core placement offset), i.e. in the same CHIP_TOP frame as ``ring_bbox``.
+    Signal nets become thin Metal2 L-routes; power/ground nets become wide
+    Metal3 straps. Geometry is added to ``chip_top`` so a ``depth=0`` polygon
+    query returns exactly the routing (excluding the RING_PAD/core references).
+    """
+    import gdspy
+
+    pad_points = _pad_inner_edge_points(cfg, ring_bbox)
+
+    # Spread core-side pins along each edge, counting all nets that land there.
+    side_counts: Dict[str, int] = {}
+
+    def _next_frac(side: str) -> float:
+        n = side_counts.get(side, 0)
+        side_counts[side] = n + 1
+        return 0.25 + 0.18 * n
+
+    used_layers = set()
+    signal_routes = 0
+    power_routes = 0
+
+    # Signal nets: thin Metal2 L-routes.
+    for net in _SIGNAL_NETS:
+        for px, py, side in pad_points.get(net, []):
+            core_pt = _core_edge_point(side, core_bbox, _next_frac(side))
+            pts = _l_route_points((px, py), core_pt, side)
+            chip_top.add(
+                gdspy.FlexPath(pts, _SIGNAL_ROUTE_WIDTH_UM,
+                               layer=METAL2_LAYER, datatype=METAL2_DATATYPE)
+            )
+            used_layers.add((METAL2_LAYER, METAL2_DATATYPE))
+            signal_routes += 1
+
+    # Power / ground nets: wide Metal3 straps.
+    for net in _POWER_NETS:
+        for px, py, side in pad_points.get(net, []):
+            core_pt = _core_edge_point(side, core_bbox, _next_frac(side))
+            pts = _l_route_points((px, py), core_pt, side)
+            chip_top.add(
+                gdspy.FlexPath(pts, _POWER_STRAP_WIDTH_UM,
+                               layer=METAL3_LAYER, datatype=METAL3_DATATYPE)
+            )
+            used_layers.add((METAL3_LAYER, METAL3_DATATYPE))
+            power_routes += 1
+
+    return {
+        "routes_total": signal_routes + power_routes,
+        "routes_signal": signal_routes,
+        "routes_power": power_routes,
+        "route_layers": ",".join(f"{layer}/{dt}" for layer, dt in sorted(used_layers)),
+        "route_signal_width_um": _SIGNAL_ROUTE_WIDTH_UM,
+        "route_power_width_um": _POWER_STRAP_WIDTH_UM,
+    }
+
+
 def _merge_gds(path: Path, cfg: Dict, top: str, design: str, workspace: Path) -> Dict[str, object]:
     """Merge the bundled GF180 padframe with the hardened core using gdspy."""
     import gdspy
@@ -330,6 +484,14 @@ def _merge_gds(path: Path, cfg: Dict, top: str, design: str, workspace: Path) ->
     core_ref_name = core_name_map.get(core_cell.name, core_cell.name)
     chip.add(gdspy.CellReference(merged.cells[core_ref_name], origin=core_offset))
 
+    # Top-level pad-to-core metal routing (Metal2 signals + Metal3 power straps),
+    # added directly into CHIP_TOP after the padframe/core references are placed.
+    placed_core_bbox = (
+        (core_bbox[0][0] + core_offset[0], core_bbox[0][1] + core_offset[1]),
+        (core_bbox[1][0] + core_offset[0], core_bbox[1][1] + core_offset[1]),
+    )
+    route_stats = _route_pad_to_core(merged, chip, ring_bbox, placed_core_bbox, cfg)
+
     path.parent.mkdir(parents=True, exist_ok=True)
     merged.write_gds(str(path))
     chip_bbox = chip.get_bounding_box()
@@ -353,6 +515,7 @@ def _merge_gds(path: Path, cfg: Dict, top: str, design: str, workspace: Path) ->
         "ring_cell": ring_cell.name,
         "core_cell": core_ref_name,
         "merged_cells": len(merged.cells),
+        **route_stats,
     }
 
 
