@@ -1,10 +1,10 @@
-FROM golang:1.23-alpine AS builder
-ENV GOPROXY=https://goproxy.cn,direct
+FROM --platform=$BUILDPLATFORM golang:1.23-alpine AS builder
 WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod tidy
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -o /orchestrator ./cmd/orchestrator
+ARG TARGETOS TARGETARCH
+RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -o /orchestrator ./cmd/orchestrator
 
 FROM alpine:3.20
 WORKDIR /app

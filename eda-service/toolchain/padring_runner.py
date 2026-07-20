@@ -277,6 +277,276 @@ def _bbox_center(bbox: Tuple[Tuple[float, float], Tuple[float, float]]) -> Tuple
     return (bbox[0][0] + bbox[1][0]) / 2, (bbox[0][1] + bbox[1][1]) / 2
 
 
+# ---------------------------------------------------------------------------
+# Top-level pad-to-core metal routing.
+#
+# After the padframe + core are merged into CHIP_TOP, we draw chip-level metal
+# wires connecting each IO pad's inner-edge pin to the corresponding core pin.
+# GF180MCU routing layers used here:
+#   * Metal2 (layer 30) — thin signal routes (clk / rst_n / uart_rx / uart_tx)
+#   * Metal3 (layer 34) — wide power straps (DVDD / DVSS)
+# Pad pins are approximated from the RING_PAD placement geometry and core pins
+# from the placed core bounding-box edges (the core GDS carries no signal-level
+# pin shapes in this flow), so the routes are representative Manhattan wires
+# rather than signoff-accurate connections.
+# ---------------------------------------------------------------------------
+METAL2_LAYER = 30            # GF180MCU Metal2 — signal routing
+METAL2_DATATYPE = 0
+METAL3_LAYER = 34            # GF180MCU Metal3 — power straps
+METAL3_DATATYPE = 0
+_SIGNAL_ROUTE_WIDTH_UM = 0.5     # Metal2 signal wire width
+_POWER_STRAP_WIDTH_UM = 1.0      # Metal3 power strap width
+
+_POWER_NET_ALIASES = {
+    "vdd", "vss",
+    "dvdd", "dvss",
+    "vdde", "vsse",
+    "dvddio", "dvssio",
+    "vdde", "vsse",
+}
+
+
+def _normalize_net(name: str) -> str:
+    return (name or "").strip().lower()
+
+
+def _parse_def_pins(def_path: Path) -> List[str]:
+    """Extract pin names from a DEF PINS section.
+
+    We only need pin names (not geometry) to avoid routing phantom nets.
+    """
+    try:
+        lines = def_path.read_text(errors="ignore").splitlines()
+    except Exception:  # noqa: BLE001
+        return []
+
+    in_pins = False
+    pins: List[str] = []
+    for line in lines:
+        s = line.strip()
+        if not in_pins:
+            if s.startswith("PINS"):
+                in_pins = True
+            continue
+        if s.startswith("END PINS"):
+            break
+        if s.startswith("-"):
+            parts = s.split()
+            if len(parts) >= 2:
+                pins.append(parts[1])
+    return pins
+
+
+def _find_core_def(workspace: Path, top: str, chip_gds: Path) -> Optional[Path]:
+    """Best-effort finder for the hardened core DEF.
+
+    LibreLane-style outputs typically place the DEF under workspace/pnr/<top>.def.
+    """
+    preferred = workspace / "pnr" / f"{top}.def"
+    if preferred.is_file():
+        return preferred
+
+    candidates = sorted(workspace.glob("**/pnr/*.def"))
+    for candidate in candidates:
+        # Avoid picking the pad-ring DEF.
+        if "padring" in candidate.stem or "chip" in candidate.stem:
+            continue
+        return candidate
+    return None
+
+
+def _pad_inner_edge_points(
+    cfg: Dict, ring_bbox: Tuple[Tuple[float, float], Tuple[float, float]]
+) -> Dict[str, List[Tuple[float, float, str]]]:
+    """Compute per-net pad inner-edge pin points in assembled-chip coordinates.
+
+    Reuses the same deterministic pad distribution as the DEF/SVG deliverables
+    (``_pad_ring_rects``), then shifts each pad into the CHIP_TOP coordinate
+    frame using the RING_PAD bounding-box origin. For every pad the *inner*
+    edge (the edge facing the core) is returned together with the side it sits
+    on (``N``/``S``/``E``/``W``), which drives the L-route orientation.
+    """
+    W, H = cfg["die_um"]
+    rects, _ = _pad_ring_rects(cfg)
+    rxmin, rymin = ring_bbox[0]
+    points: Dict[str, List[Tuple[float, float, str]]] = {}
+    for x, y, w, h, cls in rects:
+        if abs(y) < 1e-6:                     # south edge — inner edge faces up
+            side, ix, iy = "S", x + w / 2, y + h
+        elif abs((y + h) - H) < 1e-6:         # north edge — inner edge faces down
+            side, ix, iy = "N", x + w / 2, y
+        elif abs(x) < 1e-6:                   # west edge — inner edge faces right
+            side, ix, iy = "W", x + w, y + h / 2
+        elif abs((x + w) - W) < 1e-6:         # east edge — inner edge faces left
+            side, ix, iy = "E", x, y + h / 2
+        else:
+            continue
+        points.setdefault(cls, []).append((ix + rxmin, iy + rymin, side))
+    return points
+
+
+def _core_edge_point(
+    side: str,
+    placed_core_bbox: Tuple[Tuple[float, float], Tuple[float, float]],
+    frac: float,
+) -> Tuple[float, float]:
+    """Approximate a core pin on the core boundary edge facing ``side``.
+
+    ``frac`` (clamped to [0.15, 0.85]) spreads multiple pins along the edge so
+    routes from different pads on the same side do not collapse onto one point.
+    """
+    (cxmin, cymin), (cxmax, cymax) = placed_core_bbox
+    frac = min(0.85, max(0.15, frac))
+    if side == "S":
+        return (cxmin + (cxmax - cxmin) * frac, cymin)
+    if side == "N":
+        return (cxmin + (cxmax - cxmin) * frac, cymax)
+    if side == "W":
+        return (cxmin, cymin + (cymax - cymin) * frac)
+    return (cxmax, cymin + (cymax - cymin) * frac)  # East
+
+
+def _l_route_points(
+    start: Tuple[float, float], end: Tuple[float, float], side: str
+) -> List[Tuple[float, float]]:
+    """Build an L-shaped (single-bend) Manhattan path from ``start`` to ``end``.
+
+    North/South pads route vertically first then horizontally; East/West pads
+    route horizontally first then vertically, so the wire leaves the pad
+    perpendicular to the die edge it sits on.
+    """
+    (sx, sy), (ex, ey) = start, end
+    if side in ("S", "N"):
+        return [(sx, sy), (sx, ey), (ex, ey)]
+    return [(sx, sy), (ex, sy), (ex, ey)]
+
+
+def _route_pad_to_core(
+    lib,
+    chip_top,
+    ring_bbox: Tuple[Tuple[float, float], Tuple[float, float]],
+    core_bbox: Tuple[Tuple[float, float], Tuple[float, float]],
+    cfg: Dict,
+    workspace: Path,
+    top: str,
+    chip_gds: Path,
+) -> Dict[str, object]:
+    """Draw top-level pad-to-core metal routing directly into ``chip_top``.
+
+    This routing is deliberately *best-effort* and non-signoff: we only want the
+    final GDS preview to show that routing exists, and we want to avoid routing
+    phantom nets (e.g. UART pins on designs that don't have UART).
+
+    Signal nets become thin Metal2 L-routes; power/ground nets become wide Metal3
+    straps.
+    """
+    import gdspy
+
+    pad_points = _pad_inner_edge_points(cfg, ring_bbox)
+
+    # Candidate signal nets come from the pad-ring config keys, excluding analog
+    # and any power aliases.
+    pad_nets = sorted(pad_points.keys())
+    signal_candidates = [
+        n for n in pad_nets
+        if _normalize_net(n) not in _POWER_NET_ALIASES and _normalize_net(n) != "analog"
+    ]
+
+    # Priority 1: use core DEF pins if available.
+    def_pins: List[str] = []
+    core_def = _find_core_def(workspace, top, chip_gds)
+    if core_def is not None:
+        def_pins = _parse_def_pins(core_def)
+
+    def_pin_set = {_normalize_net(p) for p in def_pins}
+
+    # Priority 2: cfg-provided explicit signal list (if present).
+    cfg_signals = [str(s) for s in (cfg.get("signals") or []) if str(s).strip()]
+    cfg_signal_set = {_normalize_net(s) for s in cfg_signals}
+
+    signal_nets: List[str] = []
+    route_warning = ""
+
+    if def_pin_set:
+        signal_nets = [n for n in signal_candidates if _normalize_net(n) in def_pin_set]
+        if not signal_nets and signal_candidates:
+            route_warning = (
+                "No signal nets matched core DEF pins; skipping signal routing to avoid phantom nets. "
+                f"pad_candidates={signal_candidates} def_pins={sorted(def_pin_set)}"
+            )
+    elif cfg_signal_set:
+        signal_nets = [n for n in signal_candidates if _normalize_net(n) in cfg_signal_set]
+        if not signal_nets and signal_candidates:
+            route_warning = (
+                "No signal nets matched cfg-provided signal list; skipping signal routing. "
+                f"pad_candidates={signal_candidates} cfg_signals={sorted(cfg_signal_set)}"
+            )
+    else:
+        # Last resort: keep old behavior but only for nets that actually exist in the padframe.
+        # This still avoids routing nets that have no pads.
+        signal_nets = list(signal_candidates)
+
+    # Power nets: always route DVDD/DVSS pads if present; also route VDD/VSS if present.
+    power_nets = [n for n in pad_nets if _normalize_net(n) in _POWER_NET_ALIASES]
+
+    # Spread core-side pins along each edge, counting all nets that land there.
+    side_counts: Dict[str, int] = {}
+
+    def _next_frac(side: str) -> float:
+        n = side_counts.get(side, 0)
+        side_counts[side] = n + 1
+        return 0.25 + 0.18 * n
+
+    used_layers = set()
+    signal_routes = 0
+    power_routes = 0
+
+    # Signal nets: thin Metal2 L-routes.
+    for net in signal_nets:
+        for px, py, side in pad_points.get(net, []):
+            core_pt = _core_edge_point(side, core_bbox, _next_frac(side))
+            pts = _l_route_points((px, py), core_pt, side)
+            chip_top.add(
+                gdspy.FlexPath(
+                    pts,
+                    _SIGNAL_ROUTE_WIDTH_UM,
+                    layer=METAL2_LAYER,
+                    datatype=METAL2_DATATYPE,
+                )
+            )
+            used_layers.add((METAL2_LAYER, METAL2_DATATYPE))
+            signal_routes += 1
+
+    # Power / ground nets: wide Metal3 straps.
+    for net in power_nets:
+        for px, py, side in pad_points.get(net, []):
+            core_pt = _core_edge_point(side, core_bbox, _next_frac(side))
+            pts = _l_route_points((px, py), core_pt, side)
+            chip_top.add(
+                gdspy.FlexPath(
+                    pts,
+                    _POWER_STRAP_WIDTH_UM,
+                    layer=METAL3_LAYER,
+                    datatype=METAL3_DATATYPE,
+                )
+            )
+            used_layers.add((METAL3_LAYER, METAL3_DATATYPE))
+            power_routes += 1
+
+    return {
+        "routes_total": signal_routes + power_routes,
+        "routes_signal": signal_routes,
+        "routes_power": power_routes,
+        "route_layers": ",".join(f"{layer}/{dt}" for layer, dt in sorted(used_layers)),
+        "route_signal_width_um": _SIGNAL_ROUTE_WIDTH_UM,
+        "route_power_width_um": _POWER_STRAP_WIDTH_UM,
+        "route_signal_nets": ",".join(signal_nets),
+        "route_power_nets": ",".join(power_nets),
+        "route_core_def": str(core_def) if core_def else "",
+        "route_warning": route_warning,
+    }
+
+
 def _merge_gds(path: Path, cfg: Dict, top: str, design: str, workspace: Path) -> Dict[str, object]:
     """Merge the bundled GF180 padframe with the hardened core using gdspy."""
     import gdspy
@@ -330,6 +600,23 @@ def _merge_gds(path: Path, cfg: Dict, top: str, design: str, workspace: Path) ->
     core_ref_name = core_name_map.get(core_cell.name, core_cell.name)
     chip.add(gdspy.CellReference(merged.cells[core_ref_name], origin=core_offset))
 
+    # Top-level pad-to-core metal routing (Metal2 signals + Metal3 power straps),
+    # added directly into CHIP_TOP after the padframe/core references are placed.
+    placed_core_bbox = (
+        (core_bbox[0][0] + core_offset[0], core_bbox[0][1] + core_offset[1]),
+        (core_bbox[1][0] + core_offset[0], core_bbox[1][1] + core_offset[1]),
+    )
+    route_stats = _route_pad_to_core(
+        merged,
+        chip,
+        ring_bbox,
+        placed_core_bbox,
+        cfg,
+        workspace,
+        top,
+        path,
+    )
+
     path.parent.mkdir(parents=True, exist_ok=True)
     merged.write_gds(str(path))
     chip_bbox = chip.get_bounding_box()
@@ -353,6 +640,7 @@ def _merge_gds(path: Path, cfg: Dict, top: str, design: str, workspace: Path) ->
         "ring_cell": ring_cell.name,
         "core_cell": core_ref_name,
         "merged_cells": len(merged.cells),
+        **route_stats,
     }
 
 
@@ -370,14 +658,112 @@ def _render_gds_preview(gds_path: Path, image_path: Path, title: str) -> bool:
 
     layer_colors = {
         22: ("Metal1", "#3b82f6"),
-        30: ("Metal2", "#22c55e"),
-        34: ("Metal3", "#f59e0b"),
+        30: ("Metal2", "#00ff50"),
+        34: ("Metal3", "#ffdc00"),
         36: ("Metal4", "#ef4444"),
         42: ("Metal5", "#a855f7"),
         62: ("Top metal", "#f8fafc"),
         235: ("Boundary", "#94a3b8"),
     }
     fallback_colors = ["#38bdf8", "#fb7185", "#a3e635", "#facc15", "#c084fc", "#2dd4bf"]
+
+    def _append_polyline(target: Dict[int, list], layer: int, points) -> None:
+        if points is None or len(points) < 2:
+            return
+        target.setdefault(layer, []).append(points)
+
+    def _append_polygon(target: Dict[int, list], layer: int, polygon) -> None:
+        if polygon is None or len(polygon) < 2:
+            return
+        target.setdefault(layer, []).append(polygon)
+
+    def _polygon_route_polyline(polygon):
+        try:
+            xs = polygon[:, 0]
+            ys = polygon[:, 1]
+            xmin, xmax = float(xs.min()), float(xs.max())
+            ymin, ymax = float(ys.min()), float(ys.max())
+            ux = sorted({round(float(x), 6) for x in xs})
+            uy = sorted({round(float(y), 6) for y in ys})
+        except Exception:  # noqa: BLE001
+            return None
+
+        if len(ux) == 3 and len(uy) == 3:
+            x01 = ux[1] - ux[0]
+            x12 = ux[2] - ux[1]
+            y01 = uy[1] - uy[0]
+            y12 = uy[2] - uy[1]
+            x_leg_left = x01 <= x12
+            y_leg_bottom = y01 <= y12
+
+            spine_x = (ux[0] + ux[1]) / 2.0 if x_leg_left else (ux[1] + ux[2]) / 2.0
+            spine_y = (uy[0] + uy[1]) / 2.0 if y_leg_bottom else (uy[1] + uy[2]) / 2.0
+            horiz_end_x = ux[2] if x_leg_left else ux[0]
+            vert_end_y = uy[2] if y_leg_bottom else uy[0]
+            return [(spine_x, vert_end_y), (spine_x, spine_y), (horiz_end_x, spine_y)]
+
+        if (xmax - xmin) >= (ymax - ymin):
+            ymid = (ymin + ymax) / 2.0
+            return [(xmin, ymid), (xmax, ymid)]
+        xmid = (xmin + xmax) / 2.0
+        return [(xmid, ymin), (xmid, ymax)]
+
+    def _collect_routing_overlay(cell) -> Tuple[Dict[int, list], Dict[int, list]]:
+        routing_polygons: Dict[int, list] = {METAL2_LAYER: [], METAL3_LAYER: []}
+        routing_lines: Dict[int, list] = {METAL2_LAYER: [], METAL3_LAYER: []}
+
+        for path in list(getattr(cell, "paths", [])):
+            if not isinstance(path, (gdspy.FlexPath, gdspy.RobustPath)):
+                continue
+            path_layers = [int(layer) for layer in list(getattr(path, "layers", []) or [])]
+            spine_points = getattr(path, "points", None)
+            extracted_any = False
+
+            try:
+                by_spec = path.get_polygons(by_spec=True)
+                for (layer, _datatype), polygons in by_spec.items():
+                    layer = int(layer)
+                    if layer not in (METAL2_LAYER, METAL3_LAYER):
+                        continue
+                    for polygon in polygons:
+                        _append_polygon(routing_polygons, layer, polygon)
+                        extracted_any = True
+            except Exception:  # noqa: BLE001
+                pass
+
+            if not extracted_any:
+                try:
+                    polyset = path.to_polygonset()
+                    for layer, polygon in zip(getattr(polyset, "layers", []), getattr(polyset, "polygons", [])):
+                        layer = int(layer)
+                        if layer not in (METAL2_LAYER, METAL3_LAYER):
+                            continue
+                        _append_polygon(routing_polygons, layer, polygon)
+                        extracted_any = True
+                except Exception:  # noqa: BLE001
+                    pass
+
+            if spine_points is not None:
+                for layer in path_layers:
+                    if layer in (METAL2_LAYER, METAL3_LAYER):
+                        _append_polyline(routing_lines, layer, spine_points)
+
+            if not extracted_any and spine_points is not None:
+                for layer in path_layers:
+                    if layer in (METAL2_LAYER, METAL3_LAYER):
+                        _append_polyline(routing_lines, layer, spine_points)
+
+        for polygonset in list(getattr(cell, "polygons", [])):
+            for layer, polygon in zip(getattr(polygonset, "layers", []), getattr(polygonset, "polygons", [])):
+                layer = int(layer)
+                if layer not in (METAL2_LAYER, METAL3_LAYER):
+                    continue
+                _append_polygon(routing_polygons, layer, polygon)
+                route_polyline = _polygon_route_polyline(polygon)
+                if route_polyline is not None:
+                    _append_polyline(routing_lines, layer, route_polyline)
+
+        return routing_polygons, routing_lines
 
     lib = gdspy.GdsLibrary(infile=str(gds_path))
     tops = lib.top_level()
@@ -392,8 +778,17 @@ def _render_gds_preview(gds_path: Path, image_path: Path, title: str) -> bool:
     ax.set_facecolor("black")
     seen_layers: Dict[int, str] = {}
     polygon_count = 0
+
+    routing_polygons, routing_lines = _collect_routing_overlay(top_cell)
+    for layer in (METAL2_LAYER, METAL3_LAYER):
+        if routing_polygons.get(layer) or routing_lines.get(layer):
+            seen_layers[layer] = layer_colors.get(layer, (f"L{layer}", "#ffffff"))[0]
+
     polygons_by_spec = top_cell.get_polygons(by_spec=True, depth=None)
-    for (layer, _datatype), polygons in sorted(polygons_by_spec.items()):
+    for spec, polygons in sorted(polygons_by_spec.items(), key=lambda item: str(item[0])):
+        if not (isinstance(spec, tuple) and len(spec) == 2):
+            continue
+        layer, _datatype = spec
         layer = int(layer)
         name, color = layer_colors.get(layer, (f"L{layer}", fallback_colors[layer % len(fallback_colors)]))
         remaining = 50000 - polygon_count
@@ -407,6 +802,25 @@ def _render_gds_preview(gds_path: Path, image_path: Path, title: str) -> bool:
             polygon_count += len(layer_polygons)
         if polygon_count >= 50000:
             break
+
+    route_lw = {METAL2_LAYER: 1.6, METAL3_LAYER: 2.4}
+    route_alpha = {METAL2_LAYER: 0.98, METAL3_LAYER: 0.98}
+    for layer in (METAL2_LAYER, METAL3_LAYER):
+        _, color = layer_colors.get(layer, (f"L{layer}", "#ffffff"))
+        lw = route_lw.get(layer, 1.5)
+        alpha = route_alpha.get(layer, 0.95)
+
+        for line_pts in routing_lines.get(layer, []):
+            xs = [pt[0] for pt in line_pts]
+            ys = [pt[1] for pt in line_pts]
+            ax.plot(xs, ys, color=color, linewidth=lw, alpha=alpha, zorder=10, solid_capstyle="round")
+
+        if not routing_lines.get(layer):
+            for pts in routing_polygons.get(layer, []):
+                xs = list(pts[:, 0]) + [pts[0, 0]]
+                ys = list(pts[:, 1]) + [pts[0, 1]]
+                ax.plot(xs, ys, color=color, linewidth=lw, alpha=alpha, zorder=10, solid_capstyle="round")
+
     for ref in top_cell.references:
         ref_bbox = ref.get_bounding_box()
         if ref_bbox is None:
@@ -436,8 +850,25 @@ def _render_gds_preview(gds_path: Path, image_path: Path, title: str) -> bool:
     ax.add_patch(Rectangle((sx, sy), scale_um, max(height * 0.008, 2.0), color="white"))
     ax.text(sx, sy + max(height * 0.018, 8.0), f"{scale_um:g} µm", color="white", fontsize=9, va="bottom")
 
-    handles = [Patch(facecolor=layer_colors.get(layer, (name, fallback_colors[layer % len(fallback_colors)]))[1], label=name)
-               for layer, name in sorted(seen_layers.items())[:12]]
+    handles: List[Patch] = []
+    polygon_layer_keys = {
+        int(spec[0]) for spec in polygons_by_spec.keys()
+        if isinstance(spec, tuple) and len(spec) == 2
+    }
+
+    for key in (30, 34):
+        if key in seen_layers or key in polygon_layer_keys:
+            name, color = layer_colors.get(key, (f"L{key}", "#ffffff"))
+            handles.append(Patch(facecolor=color, label=name))
+
+    for layer, name in sorted(seen_layers.items()):
+        if layer in (30, 34):
+            continue
+        color = layer_colors.get(layer, (name, fallback_colors[layer % len(fallback_colors)]))[1]
+        handles.append(Patch(facecolor=color, label=name))
+        if len(handles) >= 12:
+            break
+
     if handles:
         legend = ax.legend(handles=handles, loc="upper right", facecolor="#020617", edgecolor="#334155", fontsize=8)
         for text in legend.get_texts():
@@ -602,6 +1033,11 @@ def run_padring(
         "used_real_tools": report.used_real_tools,
         **{f"pads_{k}": v for k, v in pad_summary.items()},
         **{f"assembly_{k}": v for k, v in merge_stats.items()},
+        # Routing stats (promoted for easy consumption in report JSON)
+        "routes_total": merge_stats.get("routes_total", 0),
+        "routes_signal": merge_stats.get("routes_signal", 0),
+        "routes_power": merge_stats.get("routes_power", 0),
+        "route_layers": merge_stats.get("route_layers", ""),
     }
     report.summary = (
         f"Assembled {config_id} pad ring '{design}' ({pad_summary['total_cells']} cells: "
