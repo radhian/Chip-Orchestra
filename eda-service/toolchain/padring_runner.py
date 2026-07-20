@@ -296,8 +296,63 @@ METAL3_LAYER = 34            # GF180MCU Metal3 — power straps
 METAL3_DATATYPE = 0
 _SIGNAL_ROUTE_WIDTH_UM = 1.0     # Metal2 signal wire width
 _POWER_STRAP_WIDTH_UM = 2.0      # Metal3 power strap width
-_SIGNAL_NETS = ("clk", "rst_n", "uart_rx", "uart_tx")
-_POWER_NETS = ("dvdd", "dvss")
+
+_POWER_NET_ALIASES = {
+    "vdd", "vss",
+    "dvdd", "dvss",
+    "vdde", "vsse",
+    "dvddio", "dvssio",
+    "vdde", "vsse",
+}
+
+
+def _normalize_net(name: str) -> str:
+    return (name or "").strip().lower()
+
+
+def _parse_def_pins(def_path: Path) -> List[str]:
+    """Extract pin names from a DEF PINS section.
+
+    We only need pin names (not geometry) to avoid routing phantom nets.
+    """
+    try:
+        lines = def_path.read_text(errors="ignore").splitlines()
+    except Exception:  # noqa: BLE001
+        return []
+
+    in_pins = False
+    pins: List[str] = []
+    for line in lines:
+        s = line.strip()
+        if not in_pins:
+            if s.startswith("PINS"):
+                in_pins = True
+            continue
+        if s.startswith("END PINS"):
+            break
+        if s.startswith("-"):
+            parts = s.split()
+            if len(parts) >= 2:
+                pins.append(parts[1])
+    return pins
+
+
+def _find_core_def(workspace: Path, top: str, chip_gds: Path) -> Optional[Path]:
+    """Best-effort finder for the hardened core DEF.
+
+    LibreLane-style outputs typically place the DEF under workspace/pnr/<top>.def.
+    """
+    preferred = workspace / "pnr" / f"{top}.def"
+    if preferred.is_file():
+        return preferred
+
+    candidates = sorted(workspace.glob("**/pnr/*.def"))
+    for candidate in candidates:
+        # Avoid picking the pad-ring DEF.
+        if "padring" in candidate.stem or "chip" in candidate.stem:
+            continue
+        return candidate
+    return None
 
 
 def _pad_inner_edge_points(
@@ -372,18 +427,67 @@ def _route_pad_to_core(
     ring_bbox: Tuple[Tuple[float, float], Tuple[float, float]],
     core_bbox: Tuple[Tuple[float, float], Tuple[float, float]],
     cfg: Dict,
+    workspace: Path,
+    top: str,
+    chip_gds: Path,
 ) -> Dict[str, object]:
     """Draw top-level pad-to-core metal routing directly into ``chip_top``.
 
-    ``core_bbox`` is the *placed* core bounding box (already shifted by the
-    core placement offset), i.e. in the same CHIP_TOP frame as ``ring_bbox``.
-    Signal nets become thin Metal2 L-routes; power/ground nets become wide
-    Metal3 straps. Geometry is added to ``chip_top`` so a ``depth=0`` polygon
-    query returns exactly the routing (excluding the RING_PAD/core references).
+    This routing is deliberately *best-effort* and non-signoff: we only want the
+    final GDS preview to show that routing exists, and we want to avoid routing
+    phantom nets (e.g. UART pins on designs that don't have UART).
+
+    Signal nets become thin Metal2 L-routes; power/ground nets become wide Metal3
+    straps.
     """
     import gdspy
 
     pad_points = _pad_inner_edge_points(cfg, ring_bbox)
+
+    # Candidate signal nets come from the pad-ring config keys, excluding analog
+    # and any power aliases.
+    pad_nets = sorted(pad_points.keys())
+    signal_candidates = [
+        n for n in pad_nets
+        if _normalize_net(n) not in _POWER_NET_ALIASES and _normalize_net(n) != "analog"
+    ]
+
+    # Priority 1: use core DEF pins if available.
+    def_pins: List[str] = []
+    core_def = _find_core_def(workspace, top, chip_gds)
+    if core_def is not None:
+        def_pins = _parse_def_pins(core_def)
+
+    def_pin_set = {_normalize_net(p) for p in def_pins}
+
+    # Priority 2: cfg-provided explicit signal list (if present).
+    cfg_signals = [str(s) for s in (cfg.get("signals") or []) if str(s).strip()]
+    cfg_signal_set = {_normalize_net(s) for s in cfg_signals}
+
+    signal_nets: List[str] = []
+    route_warning = ""
+
+    if def_pin_set:
+        signal_nets = [n for n in signal_candidates if _normalize_net(n) in def_pin_set]
+        if not signal_nets and signal_candidates:
+            route_warning = (
+                "No signal nets matched core DEF pins; skipping signal routing to avoid phantom nets. "
+                f"pad_candidates={signal_candidates} def_pins={sorted(def_pin_set)}"
+            )
+    elif cfg_signal_set:
+        signal_nets = [n for n in signal_candidates if _normalize_net(n) in cfg_signal_set]
+        if not signal_nets and signal_candidates:
+            route_warning = (
+                "No signal nets matched cfg-provided signal list; skipping signal routing. "
+                f"pad_candidates={signal_candidates} cfg_signals={sorted(cfg_signal_set)}"
+            )
+    else:
+        # Last resort: keep old behavior but only for nets that actually exist in the padframe.
+        # This still avoids routing nets that have no pads.
+        signal_nets = list(signal_candidates)
+
+    # Power nets: always route DVDD/DVSS pads if present; also route VDD/VSS if present.
+    power_nets = [n for n in pad_nets if _normalize_net(n) in _POWER_NET_ALIASES]
 
     # Spread core-side pins along each edge, counting all nets that land there.
     side_counts: Dict[str, int] = {}
@@ -398,25 +502,33 @@ def _route_pad_to_core(
     power_routes = 0
 
     # Signal nets: thin Metal2 L-routes.
-    for net in _SIGNAL_NETS:
+    for net in signal_nets:
         for px, py, side in pad_points.get(net, []):
             core_pt = _core_edge_point(side, core_bbox, _next_frac(side))
             pts = _l_route_points((px, py), core_pt, side)
             chip_top.add(
-                gdspy.FlexPath(pts, _SIGNAL_ROUTE_WIDTH_UM,
-                               layer=METAL2_LAYER, datatype=METAL2_DATATYPE)
+                gdspy.FlexPath(
+                    pts,
+                    _SIGNAL_ROUTE_WIDTH_UM,
+                    layer=METAL2_LAYER,
+                    datatype=METAL2_DATATYPE,
+                )
             )
             used_layers.add((METAL2_LAYER, METAL2_DATATYPE))
             signal_routes += 1
 
     # Power / ground nets: wide Metal3 straps.
-    for net in _POWER_NETS:
+    for net in power_nets:
         for px, py, side in pad_points.get(net, []):
             core_pt = _core_edge_point(side, core_bbox, _next_frac(side))
             pts = _l_route_points((px, py), core_pt, side)
             chip_top.add(
-                gdspy.FlexPath(pts, _POWER_STRAP_WIDTH_UM,
-                               layer=METAL3_LAYER, datatype=METAL3_DATATYPE)
+                gdspy.FlexPath(
+                    pts,
+                    _POWER_STRAP_WIDTH_UM,
+                    layer=METAL3_LAYER,
+                    datatype=METAL3_DATATYPE,
+                )
             )
             used_layers.add((METAL3_LAYER, METAL3_DATATYPE))
             power_routes += 1
@@ -428,6 +540,10 @@ def _route_pad_to_core(
         "route_layers": ",".join(f"{layer}/{dt}" for layer, dt in sorted(used_layers)),
         "route_signal_width_um": _SIGNAL_ROUTE_WIDTH_UM,
         "route_power_width_um": _POWER_STRAP_WIDTH_UM,
+        "route_signal_nets": ",".join(signal_nets),
+        "route_power_nets": ",".join(power_nets),
+        "route_core_def": str(core_def) if core_def else "",
+        "route_warning": route_warning,
     }
 
 
@@ -490,7 +606,16 @@ def _merge_gds(path: Path, cfg: Dict, top: str, design: str, workspace: Path) ->
         (core_bbox[0][0] + core_offset[0], core_bbox[0][1] + core_offset[1]),
         (core_bbox[1][0] + core_offset[0], core_bbox[1][1] + core_offset[1]),
     )
-    route_stats = _route_pad_to_core(merged, chip, ring_bbox, placed_core_bbox, cfg)
+    route_stats = _route_pad_to_core(
+        merged,
+        chip,
+        ring_bbox,
+        placed_core_bbox,
+        cfg,
+        workspace,
+        top,
+        path,
+    )
 
     path.parent.mkdir(parents=True, exist_ok=True)
     merged.write_gds(str(path))
@@ -533,8 +658,8 @@ def _render_gds_preview(gds_path: Path, image_path: Path, title: str) -> bool:
 
     layer_colors = {
         22: ("Metal1", "#3b82f6"),
-        30: ("Metal2", "#22c55e"),
-        34: ("Metal3", "#f59e0b"),
+        30: ("Metal2", "#00ff50"),
+        34: ("Metal3", "#ffdc00"),
         36: ("Metal4", "#ef4444"),
         42: ("Metal5", "#a855f7"),
         62: ("Top metal", "#f8fafc"),
@@ -599,8 +724,22 @@ def _render_gds_preview(gds_path: Path, image_path: Path, title: str) -> bool:
     ax.add_patch(Rectangle((sx, sy), scale_um, max(height * 0.008, 2.0), color="white"))
     ax.text(sx, sy + max(height * 0.018, 8.0), f"{scale_um:g} µm", color="white", fontsize=9, va="bottom")
 
-    handles = [Patch(facecolor=layer_colors.get(layer, (name, fallback_colors[layer % len(fallback_colors)]))[1], label=name)
-               for layer, name in sorted(seen_layers.items())[:12]]
+    # Legend: always try to include Metal2/Metal3 first, then a few others.
+    handles: List[Patch] = []
+
+    for key in (30, 34):
+        if key in seen_layers or any(spec[0] == key for spec in polygons_by_spec.keys()):
+            name, color = layer_colors.get(key, (f"L{key}", "#ffffff"))
+            handles.append(Patch(facecolor=color, label=name))
+
+    for layer, name in sorted(seen_layers.items()):
+        if layer in (30, 34):
+            continue
+        color = layer_colors.get(layer, (name, fallback_colors[layer % len(fallback_colors)]))[1]
+        handles.append(Patch(facecolor=color, label=name))
+        if len(handles) >= 12:
+            break
+
     if handles:
         legend = ax.legend(handles=handles, loc="upper right", facecolor="#020617", edgecolor="#334155", fontsize=8)
         for text in legend.get_texts():
@@ -765,6 +904,11 @@ def run_padring(
         "used_real_tools": report.used_real_tools,
         **{f"pads_{k}": v for k, v in pad_summary.items()},
         **{f"assembly_{k}": v for k, v in merge_stats.items()},
+        # Routing stats (promoted for easy consumption in report JSON)
+        "routes_total": merge_stats.get("routes_total", 0),
+        "routes_signal": merge_stats.get("routes_signal", 0),
+        "routes_power": merge_stats.get("routes_power", 0),
+        "route_layers": merge_stats.get("route_layers", ""),
     }
     report.summary = (
         f"Assembled {config_id} pad ring '{design}' ({pad_summary['total_cells']} cells: "
