@@ -1,0 +1,31 @@
+services:
+  eda-service:
+    platform: linux/amd64
+    build:
+      context: ../../Chip-Orchestra-dev-branch/eda-service
+      args:
+        PDK_ROOT: ${PDK_ROOT:-/opt/pdk}
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: mysql+pymysql://${MYSQL_USER:-chip}:${MYSQL_PASSWORD}@${MYSQL_HOST:-10.0.0.10}:3306/${MYSQL_DATABASE:-chip_orchestra}
+      REDIS_URL: redis://${REDIS_HOST:-10.0.0.10}:6379/0
+      WORKSPACE_ROOT: /srv/chip-orchestra/workspaces
+      PDK_ROOT: ${PDK_ROOT:-/opt/pdk}
+      PDK: ${PDK:-gf180mcuD}
+      GF180_VOLTAGE: ${GF180_VOLTAGE:-3v3}
+    ports:
+      - "8002:8002"
+    volumes:
+      - workspace_data:/srv/chip-orchestra/workspaces
+      - pdk_data:${PDK_ROOT:-/opt/pdk}
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8002/health')\""]
+      interval: 20s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  workspace_data:
+  pdk_data:
