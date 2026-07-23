@@ -1,0 +1,101 @@
+services:
+  mysql:
+    image: mysql:8.4
+    restart: unless-stopped
+    command: ["mysqld", "--default-authentication-plugin=mysql_native_password"]
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-chip_orchestra}
+      MYSQL_USER: ${MYSQL_USER:-chip}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    networks:
+      - app
+
+  redis:
+    image: redis:7.2-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    networks:
+      - app
+
+  agent-service:
+    build:
+      context: ../../Chip-Orchestra-dev-branch/agent-service
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: mysql+pymysql://${MYSQL_USER:-chip}:${MYSQL_PASSWORD}@mysql:3306/${MYSQL_DATABASE:-chip_orchestra}
+      REDIS_URL: redis://redis:6379/0
+      WORKSPACE_ROOT: /srv/chip-orchestra/workspaces
+      AGENT_ARTIFACT_ROOT: /srv/chip-orchestra/workspaces
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - workspace_data:/srv/chip-orchestra/workspaces
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8001/health')\""]
+      interval: 15s
+      timeout: 5s
+      retries: 12
+    networks:
+      - app
+
+  orchestrator-service:
+    build:
+      context: ../../Chip-Orchestra-dev-branch/orchestrator-service
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      PORT: 8080
+      MYSQL_DSN: ${MYSQL_USER:-chip}:${MYSQL_PASSWORD}@tcp(mysql:3306)/${MYSQL_DATABASE:-chip_orchestra}?charset=utf8mb4&parseTime=True&loc=UTC
+      REDIS_ADDR: redis:6379
+      AGENT_SERVICE_URL: http://agent-service:8001
+      EDA_SERVICE_URL: ${EDA_SERVICE_URL}
+      WORKSPACE_ROOT: /srv/chip-orchestra/workspaces
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      agent-service:
+        condition: service_healthy
+    volumes:
+      - workspace_data:/srv/chip-orchestra/workspaces
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/health >/dev/null 2>&1 || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 12
+    networks:
+      - app
+
+volumes:
+  mysql_data:
+  redis_data:
+  workspace_data:
+
+networks:
+  app:
+    driver: bridge
