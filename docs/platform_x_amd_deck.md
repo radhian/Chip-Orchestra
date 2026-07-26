@@ -10,8 +10,6 @@ Prepared by: Radhian Ferel Armansyah
 
 ## In one page
 
-If I had to say this in the simplest possible way:
-
 - **What Chip Orchestra is:** a platform that takes a natural-language chip spec and drives it all the way to verified RTL and manufacturable GDSII, with the full RTL-to-GDSII flow run as one visible, controllable system instead of a messy chain of scripts.
 - **Why this matters now:** LLMs made “generate some Verilog” much easier. What still feels unfinished is the rest of the journey: planning, verification, execution, retries, artifacts, signoff, and keeping engineers in control the whole time.
 - **Why AMD matters:** both sides of the workload fit AMD well. The LLM side can run on self-hosted GLM-5.2 over ROCm, and the EDA side is CPU-heavy and a good fit for EPYC. That gives us a real all-AMD story without CUDA dependence or proprietary API lock-in.
@@ -63,10 +61,10 @@ flowchart TB
 
 A few principles shaped the product from the beginning:
 
-- **Task-first orchestration**, —every design should live as a structured task with its own inputs, execution graph, artifacts, reports, approvals, and outputs.
-- **Transparent AI**, —if the AI plans something, retries something, patches something, or reasons about something, engineers should be able to see it.
-- **Unified EDA execution**, —simulation, lint, synthesis, PnR, GDS, and signoff should feel like one flow, not disconnected islands.
-- **Human control at the important moments**, —engineers should stay in charge of the decisions that actually matter.
+- **Task-first orchestration**, every design should live as a structured task with its own inputs, execution graph, artifacts, reports, approvals, and outputs.
+- **Transparent AI**, if the AI plans something, retries something, patches something, or reasons about something, engineers should be able to see it.
+- **Unified EDA execution**, simulation, lint, synthesis, PnR, GDS, and signoff should feel like one flow, not disconnected islands.
+- **Human control at the important moments**, engineers should stay in charge of the decisions that actually matter.
 
 ---
 
@@ -123,13 +121,13 @@ What makes the AMD angle genuinely interesting is that Chip Orchestra is not jus
 
 ```mermaid
 flowchart LR
-    subgraph GPU["GPU half, —the reasoning engine"]
+    subgraph GPU["GPU half, the reasoning engine"]
         direction TB
         G1["LLM planning, RTL/TB gen,<br/>verification, self-repair"]
         G2["Self-hosted GLM-5.2<br/>on AMD Instinct + ROCm"]
         G1 --> G2
     end
-    subgraph CPU["CPU half, —the EDA back end"]
+    subgraph CPU["CPU half, the EDA back end"]
         direction TB
         C1["Synthesis, PnR, DRC/LVS,<br/>GDS, signoff (OpenROAD/OpenLane)"]
         C2["Massively parallel,<br/>runs great on AMD EPYC cores"]
@@ -142,19 +140,19 @@ flowchart LR
 
 A lot of “AI for chips” narratives quietly assume NVIDIA plus CUDA somewhere underneath. Ours does not need to.
 
-- **The model side can run on AMD Instinct through ROCm**, —ROCm is positioned as the industry’s only open GPU software platform, which matters if you care about avoiding single-vendor dependency [1]. MI300X brings 192 GB HBM3 and 5.3 TB/s [2]; MI325X pushes memory further; MI355X adds even more headroom with native FP4 [3].
-- **The EDA side is fundamentally CPU-heavy**, —synthesis, PnR, and physical flow execution are a very natural fit for EPYC cores.
-- **So the all-AMD story is real, not cosmetic**, —one infrastructure direction can cover both the AI layer and the EDA execution layer.
-- **The model quality story is also clean**, —it’s the same open GLM-5.2 weights as the cloud path. The difference is really about operational tuning and throughput, not model identity.
+- **The model side can run on AMD Instinct through ROCm**, ROCm is positioned as the industry’s only open GPU software platform, which matters if you care about avoiding single-vendor dependency [1]. MI300X brings 192 GB HBM3 and 5.3 TB/s [2]; MI325X pushes memory further; MI355X adds even more headroom with native FP4 [3].
+- **The EDA side is fundamentally CPU-heavy**, synthesis, PnR, and physical flow execution are a very natural fit for EPYC cores.
+- **So the all-AMD story is real, not cosmetic**, one infrastructure direction can cover both the AI layer and the EDA execution layer.
+- **The model quality story is also clean**, it’s the same open GLM-5.2 weights as the cloud path. The difference is really about operational tuning and throughput, not model identity.
 
 The hardware profiles already in this folder are below:
 
 | `HW_PROFILE` | GPUs | HBM/GPU | Quant | Note |
 |---|---|---|---|---|
-| `mi300x` | 8× MI300X | 192 GB | FP8 | Mainstream, validated, —start here |
+| `mi300x` | 8× MI300X | 192 GB | FP8 | Mainstream, validated, start here |
 | `mi325x` | 8× MI325X | 256 GB | FP8 | More KV/concurrency headroom |
 | `mi355x-fp8` | 4× MI355X | 288 GB | FP8 | CDNA4, ~8 TB/s |
-| `mi355x-fp4` | 4× MI355X | 288 GB | MXFP4 | Native FP4, —**best perf/TCO** |
+| `mi355x-fp4` | 4× MI355X | 288 GB | MXFP4 | Native FP4, **best perf/TCO** |
 
 ---
 
@@ -168,7 +166,7 @@ ALELEON is built on **AMD EPYC** with accelerators and 100 Gbps Mellanox interco
 flowchart TB
     subgraph CO["Chip Orchestra brings"]
         X1["A sticky, high-value vertical<br/>workload (chip design)"]
-        X2["Uses BOTH EPYC (EDA) and<br/>Instinct (LLM), —fills the fleet"]
+        X2["Uses BOTH EPYC (EDA) and<br/>Instinct (LLM), fills the fleet"]
         X3["Sovereign / on-prem story:<br/>IP never leaves Indonesia"]
     end
     subgraph EF["Efison brings"]
@@ -214,7 +212,7 @@ The AI-agent newcomers are exciting, but most of them still live inside the old 
 
 ```mermaid
 quadrantChart
-    title Positioning, —orchestration depth vs. openness of stack
+    title Positioning, orchestration depth vs. openness of stack
     x-axis "Closed / proprietary stack" --> "Open / self-hostable stack"
     y-axis "Point tool / plugin" --> "Full RTL-to-GDSII orchestration"
     quadrant-1 "Open + orchestrated (our lane)"
@@ -243,7 +241,7 @@ The easiest way to say it is this: we are not trying to be just another chip cop
 | Observability | Log files, closed | Editor-scoped | Terminal logs | **Every prompt/retry/artifact traced in browser** |
 | Human-in-the-loop | Manual, tool-by-tool | Suggestion accept/reject | N/A | **Explicit approval gates on RTL/impl/tapeout** |
 | Compute stack | Proprietary, mostly NVIDIA/x86 | Cloud API (NVIDIA) | CPU tools | **Fully AMD: ROCm LLM + EPYC EDA** |
-| Lock-in | High (licenses + APIs) | High (SaaS API) | Low | **Low, —open weights + open EDA + open ROCm** |
+| Lock-in | High (licenses + APIs) | High (SaaS API) | Low | **Low, open weights + open EDA + open ROCm** |
 | Deploy | On-prem/cloud, heavy | SaaS | Self-host | **Self-host, sovereign, container-native** |
 
 If I had to compress our differentiation into one sentence:
@@ -260,11 +258,11 @@ If the goal is to be smart about effort, the first moves should be the ones that
 
 ```mermaid
 quadrantChart
-    title Prioritization, —pick high-benefit / low-cost first
+    title Prioritization, pick high-benefit / low-cost first
     x-axis "Low cost / effort" --> "High cost / effort"
     y-axis "Low benefit" --> "High benefit"
     quadrant-1 "Do next (invest)"
-    quadrant-2 "Quick wins, —do FIRST"
+    quadrant-2 "Quick wins, do FIRST"
     quadrant-3 "Fill-ins (later)"
     quadrant-4 "Question / defer"
     "Deploy on Efison AMD (reuse ROCm path)": [0.22, 0.90]
