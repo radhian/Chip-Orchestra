@@ -1,6 +1,6 @@
-# Chip Orchestra × AMD 
+# Chip Orchestra × AMD
 
-### An AI-native EDA orchestration platform, built to run fully on AMD
+### Building an AI-native chip workflow that can run fully on AMD
 
 **Partnership deck**
 Prepared for: Efison Lisan Teknologi (efisonlt.com)
@@ -8,31 +8,25 @@ Prepared by: Radhian Ferel Armansyah
 
 ---
 
-## TL;DR
+## In one page
 
-- **What Chip Orchestra is:** an AI-native platform that turns a natural-language spec into
-  verified RTL and a manufacturable GDSII, running the *entire* RTL-to-GDSII lifecycle as one
-  observable, human-gated execution graph, not a pile of disconnected scripts.
-- **Why now:** LLMs made "generate Verilog" easy; nobody made "orchestrate the whole chip flow"
-  trustworthy. The gap is orchestration + observability + open compute, exactly our lane.
-- **The AMD thesis:** the whole stack, the LLM (self-hosted GLM-5.2 on ROCm) *and* the EDA
-  back end (OpenLane/OpenROAD, which is CPU/EPYC-bound), runs on AMD silicon. No CUDA, no
-  proprietary-API lock-in.
-- **The Efison thesis:** Efison already operates AMD-powered HPC (ALELEON, EPYC + accelerators)
-  and sells "Computation for Everybody." Chip Orchestra is a high-value, sticky, sovereign
-  workload that monetizes that exact fleet.
-- **The ask:** co-validate Chip Orchestra on Efison's AMD hardware, publish a joint reference
-  design + benchmark, and stand up "Chip design as a service, on Indonesian AMD infrastructure."
+If I had to say this in the simplest possible way:
+
+- **What Chip Orchestra is:** a platform that takes a natural-language chip spec and drives it all the way to verified RTL and manufacturable GDSII, with the full RTL-to-GDSII flow run as one visible, controllable system instead of a messy chain of scripts.
+- **Why this matters now:** LLMs made “generate some Verilog” much easier. What still feels unfinished is the rest of the journey: planning, verification, execution, retries, artifacts, signoff, and keeping engineers in control the whole time.
+- **Why AMD matters:** both sides of the workload fit AMD well. The LLM side can run on self-hosted GLM-5.2 over ROCm, and the EDA side is CPU-heavy and a good fit for EPYC. That gives us a real all-AMD story without CUDA dependence or proprietary API lock-in.
+- **Why Efison makes sense:** Efison already has AMD-powered HPC infrastructure with ALELEON and already speaks the language of open compute. Chip Orchestra is the kind of high-value workload that can make that infrastructure more strategic, not just more utilized.
+- **What I’d love to do together:** validate Chip Orchestra on Efison’s AMD hardware, publish a joint reference design and benchmark, and explore a “chip design on Indonesian AMD infrastructure” offering.
 
 ---
 
-## Why we built Chip Orchestra
+## Why we started Chip Orchestra
 
-Modern digital chip development is still stitched together from disconnected tools, tribal Tcl
-scripts, and manual hand-offs. AI improved *RTL generation*, but there is still no unified
-execution layer that owns the **complete** design lifecycle with observability and human control.
+What pushed us to build this was pretty simple: chip development is still more fragmented than it should be.
 
-We deliberately reframed the question:
+A lot of real-world flows are still held together by scattered tools, old scripts, manual handoffs, and knowledge that mostly lives in people’s heads. AI has clearly helped on the RTL generation side, but the bigger problem was never just “can a model write Verilog?” The bigger problem is whether the whole flow can be orchestrated in a way that is trustworthy, visible, and still engineer-controlled.
+
+That’s the question we cared about.
 
 ```mermaid
 flowchart LR
@@ -43,7 +37,7 @@ flowchart LR
     style Q2 fill:#d5f0dd,stroke:#1e8449
 ```
 
-The status quo vs. what we orchestrate:
+This is the shift we’re trying to make:
 
 ```mermaid
 flowchart TB
@@ -67,22 +61,20 @@ flowchart TB
     OLD -.->|"we replace this"| NEW
 ```
 
-**Core design principles that make it defensible:**
+A few principles shaped the product from the beginning:
 
-- **Task-first orchestration**, every design is a structured task owning its inputs, DAG,
-  artifacts, reports, approvals and outputs.
-- **Transparent AI**, every prompt, retrieved context, patch, retry and reasoning step stays
-  visible. No black box.
-- **Unified EDA execution**, sim, lint, synth, PnR, GDS, signoff run in one pipeline with full
-  artifact lineage.
-- **Human-in-the-loop**, RTL edits, implementation and tapeout stay gated behind explicit human
-  approval.
+- **Task-first orchestration**, —every design should live as a structured task with its own inputs, execution graph, artifacts, reports, approvals, and outputs.
+- **Transparent AI**, —if the AI plans something, retries something, patches something, or reasons about something, engineers should be able to see it.
+- **Unified EDA execution**, —simulation, lint, synthesis, PnR, GDS, and signoff should feel like one flow, not disconnected islands.
+- **Human control at the important moments**, —engineers should stay in charge of the decisions that actually matter.
 
 ---
 
-## The system today (what already works)
+## What already exists today
 
-An 11-stage orchestrated pipeline across four planes and six containers.
+This is not a concept deck built around a future idea. A working system already exists.
+
+Today Chip Orchestra runs an 11-stage orchestrated pipeline across four planes and six containers.
 
 ```mermaid
 flowchart TB
@@ -115,30 +107,29 @@ flowchart TB
     style EDA fill:#e8f0fe,stroke:#1a73e8
 ```
 
-The 11 stages, every one observable (AI reasoning, logs, artifacts, retries, reports, approval
-checkpoints):
+The pipeline is:
 
 `SPEC_INGEST → PLAN → RTL_GEN → TB_GEN → SIM → LINT → SYNTH → PNR → DRC_LVS → SIGNOFF → EXPORT`
 
-The **ROCm self-hosting path already exists** in this very folder
-(`deploy/selfhosted-llm-rocm/`): it points `agent-service` at an OpenAI-compatible vLLM-ROCm /
-ATOM server with **zero application code changes**, only env vars and a serving container.
+What matters here is not just the stages themselves, but that every stage is observable: reasoning, logs, artifacts, retries, reports, approval checkpoints.
+
+Just as important for this conversation: the **ROCm self-hosting path already exists** in this exact folder (`deploy/selfhosted-llm-rocm/`). It already points `agent-service` at an OpenAI-compatible vLLM-ROCm or ATOM server with **no application code changes required**. It’s basically env vars plus the serving container.
 
 ---
 
-## Why AMD, and why "fully AMD" is a genuine differentiator
+## Why AMD is more than a hardware choice for us
 
-Chip Orchestra has **two compute-hungry halves**, and both map cleanly onto AMD silicon:
+What makes the AMD angle genuinely interesting is that Chip Orchestra is not just “an AI app that happens to need GPUs.” It has two heavy compute halves, and both land naturally on AMD.
 
 ```mermaid
 flowchart LR
-    subgraph GPU["GPU half, the reasoning engine"]
+    subgraph GPU["GPU half, —the reasoning engine"]
         direction TB
         G1["LLM planning, RTL/TB gen,<br/>verification, self-repair"]
         G2["Self-hosted GLM-5.2<br/>on AMD Instinct + ROCm"]
         G1 --> G2
     end
-    subgraph CPU["CPU half, the EDA back end"]
+    subgraph CPU["CPU half, —the EDA back end"]
         direction TB
         C1["Synthesis, PnR, DRC/LVS,<br/>GDS, signoff (OpenROAD/OpenLane)"]
         C2["Massively parallel,<br/>runs great on AMD EPYC cores"]
@@ -149,40 +140,35 @@ flowchart LR
     style C2 fill:#e8f0fe,stroke:#1a73e8
 ```
 
-Most "AI for chips" stories are GPU-only and quietly assume NVIDIA + CUDA. Ours is different:
+A lot of “AI for chips” narratives quietly assume NVIDIA plus CUDA somewhere underneath. Ours does not need to.
 
-- **The LLM runs on AMD Instinct via ROCm**, ROCm is the industry's only *open* GPU software
-  platform, which frees customers from single-vendor lock-in [1]. The MI300X packs 192 GB HBM3
-  at 5.3 TB/s [2]; MI325X extends HBM to 256 GB; MI355X (CDNA4) reaches 288 GB, ~8 TB/s and
-  native FP4 [3].
-- **The EDA back end is CPU-bound** and thrives on EPYC core counts, so an all-AMD node keeps
-  *both* halves on the same fleet, same procurement, same support contract.
-- **Model quality is identical to cloud** (same open GLM-5.2 weights); only throughput/latency
-  depends on tuning (FP8/MXFP4, MTP speculative decoding, AITER kernels, correct DSA backend).
+- **The model side can run on AMD Instinct through ROCm**, —ROCm is positioned as the industry’s only open GPU software platform, which matters if you care about avoiding single-vendor dependency [1]. MI300X brings 192 GB HBM3 and 5.3 TB/s [2]; MI325X pushes memory further; MI355X adds even more headroom with native FP4 [3].
+- **The EDA side is fundamentally CPU-heavy**, —synthesis, PnR, and physical flow execution are a very natural fit for EPYC cores.
+- **So the all-AMD story is real, not cosmetic**, —one infrastructure direction can cover both the AI layer and the EDA execution layer.
+- **The model quality story is also clean**, —it’s the same open GLM-5.2 weights as the cloud path. The difference is really about operational tuning and throughput, not model identity.
 
-Hardware profiles already shipped in this folder:
+The hardware profiles already in this folder are below:
 
 | `HW_PROFILE` | GPUs | HBM/GPU | Quant | Note |
 |---|---|---|---|---|
-| `mi300x` | 8× MI300X | 192 GB | FP8 | Mainstream, validated, start here |
+| `mi300x` | 8× MI300X | 192 GB | FP8 | Mainstream, validated, —start here |
 | `mi325x` | 8× MI325X | 256 GB | FP8 | More KV/concurrency headroom |
 | `mi355x-fp8` | 4× MI355X | 288 GB | FP8 | CDNA4, ~8 TB/s |
-| `mi355x-fp4` | 4× MI355X | 288 GB | MXFP4 | Native FP4, **best perf/TCO** |
+| `mi355x-fp4` | 4× MI355X | 288 GB | MXFP4 | Native FP4, —**best perf/TCO** |
 
 ---
 
-## Why Efison, the mutual benefit
+## Why I think Efison is the right partner
 
-Efison Lisan Teknologi ("Computation for Everybody") already operates **AMD-powered HPC** in
-Indonesia: the ALELEON Supercomputer is built on **AMD EPYC** CPUs with accelerators and 100 Gbps
-Mellanox interconnect, and offers public HPC plus system integration [4][5]. Chip Orchestra is a
-near-perfect workload for that fleet.
+Efison already has something rare and valuable: real AMD-powered HPC infrastructure in Indonesia, plus the operational muscle to make it useful.
+
+ALELEON is built on **AMD EPYC** with accelerators and 100 Gbps Mellanox interconnect, and Efison already offers public HPC and system integration around that stack [4][5]. That means this is not a hypothetical fit. The infrastructure and the operating model are already close to what Chip Orchestra needs.
 
 ```mermaid
 flowchart TB
     subgraph CO["Chip Orchestra brings"]
         X1["A sticky, high-value vertical<br/>workload (chip design)"]
-        X2["Uses BOTH EPYC (EDA) and<br/>Instinct (LLM), fills the fleet"]
+        X2["Uses BOTH EPYC (EDA) and<br/>Instinct (LLM), —fills the fleet"]
         X3["Sovereign / on-prem story:<br/>IP never leaves Indonesia"]
     end
     subgraph EF["Efison brings"]
@@ -205,38 +191,30 @@ flowchart TB
     style WIN fill:#d5f0dd,stroke:#1e8449
 ```
 
-**Why it's compelling for Efison specifically:**
+Why this feels especially compelling for Efison:
 
-- **Higher-margin utilization** of AMD capacity than generic HPC batch jobs, chip design is
-  premium, recurring, and latency-sensitive (keeps GPUs warm).
-- **Sovereign compute angle**, semiconductor IP is sensitive; "your design never leaves
-  Indonesian soil, on open AMD infrastructure" is a real selling point vs. US SaaS EDA.
-- **AMD co-marketing**, a published all-AMD RTL-to-GDSII reference is exactly the kind of
-  ecosystem win AMD amplifies, giving Efison visibility beyond Indonesia.
-- **Zero lock-in for Efison's customers**, ROCm + open-source EDA (OpenLane/OpenROAD) means no
-  per-seat proprietary EDA license floor to resell.
+- **It gives Efison a higher-value workload than generic HPC cycles.** Chip design is premium, recurring, and operationally sticky.
+- **It creates a strong sovereign-compute story.** Semiconductor IP is sensitive. “Your chip design stays on Indonesian infrastructure, on open AMD compute” is a meaningful pitch.
+- **It is something AMD itself can amplify.** A credible all-AMD RTL-to-GDSII reference is exactly the kind of ecosystem example that gets attention.
+- **It avoids the classic resale trap of proprietary EDA.** ROCm plus open-source EDA means you’re not building the offer around expensive per-seat licensing dependency.
 
 ---
 
-## Market position, where the money and the moats are
+## Where we sit in the market
 
-The EDA market is a tight oligopoly: TrendForce data for 2024 puts **Synopsys ~31%, Cadence ~30%,
-Siemens EDA ~13%, ~74% combined** [6], and the big three's combined share has climbed from under
-75% (2014) to over 85% (2023) by other counts [7]. Synopsys closed a **$35B Ansys acquisition** in
-July 2025, consolidating further [8]. Meanwhile a new wave of **AI chip agents** (e.g. ChipAgents,
-which raised a $21M Series A backed by Micron/MediaTek/Ericsson, claiming up to 10x productivity)
-is attacking the *design-authoring* layer [9][10].
+The current EDA market is still dominated by a small number of incumbents. TrendForce-linked reporting for 2024 puts **Synopsys at ~31%, Cadence at ~30%, and Siemens EDA at ~13%**, for a combined **~74%** [6]. Other reporting puts the top-three share above 85% by 2023 [7]. Synopsys’ **$35B Ansys acquisition** in July 2025 only reinforces how concentrated the market has become [8].
 
-Two structural gaps neither camp fills well:
+At the same time, there’s a newer wave of AI-native chip companies attacking parts of the flow, especially authoring and verification. ChipAgents is a good example: a $21M Series A, strong strategic backers, and a very clear productivity story [9][10].
 
-1. Incumbents own signoff-grade tools but are **closed, expensive, GPU/CUDA-agnostic-at-best**, and
-   not orchestration-native.
-2. New chip agents are **IDE plugins for RTL/verification**, they make an engineer faster inside
-   the old flow, but they don't own the *end-to-end orchestrated pipeline* or the *compute layer*.
+To me, that creates a very clear opening.
+
+The incumbents are powerful, but they are still mostly closed, expensive, and not truly built around orchestration as the product.
+
+The AI-agent newcomers are exciting, but most of them still live inside the old workflow. They make a designer faster in the editor, but they do not own the full end-to-end pipeline, nor the compute stack that runs it.
 
 ```mermaid
 quadrantChart
-    title Positioning, orchestration depth vs. openness of stack
+    title Positioning, —orchestration depth vs. openness of stack
     x-axis "Closed / proprietary stack" --> "Open / self-hostable stack"
     y-axis "Point tool / plugin" --> "Full RTL-to-GDSII orchestration"
     quadrant-1 "Open + orchestrated (our lane)"
@@ -250,9 +228,13 @@ quadrantChart
     "Chip Orchestra + AMD": [0.85, 0.88]
 ```
 
+That is the space I believe Chip Orchestra occupies: open, self-hostable, and orchestration-native.
+
 ---
 
-## How we differentiate (feature-level)
+## What makes us different in practical terms
+
+The easiest way to say it is this: we are not trying to be just another chip copilot, and we are not trying to be another traditional EDA stack.
 
 | Dimension | Incumbent EDA (Synopsys/Cadence/Siemens) | AI chip agents (ChipAgents et al.) | Raw open EDA (OpenLane) | **Chip Orchestra + AMD** |
 |---|---|---|---|---|
@@ -261,24 +243,28 @@ quadrantChart
 | Observability | Log files, closed | Editor-scoped | Terminal logs | **Every prompt/retry/artifact traced in browser** |
 | Human-in-the-loop | Manual, tool-by-tool | Suggestion accept/reject | N/A | **Explicit approval gates on RTL/impl/tapeout** |
 | Compute stack | Proprietary, mostly NVIDIA/x86 | Cloud API (NVIDIA) | CPU tools | **Fully AMD: ROCm LLM + EPYC EDA** |
-| Lock-in | High (licenses + APIs) | High (SaaS API) | Low | **Low, open weights + open EDA + open ROCm** |
+| Lock-in | High (licenses + APIs) | High (SaaS API) | Low | **Low, —open weights + open EDA + open ROCm** |
 | Deploy | On-prem/cloud, heavy | SaaS | Self-host | **Self-host, sovereign, container-native** |
 
-**Our wedge in one sentence:** *the only AI-native, fully observable RTL-to-GDSII orchestrator that
-runs end-to-end on open, self-hostable, all-AMD infrastructure.* Incumbents won't abandon their
-CUDA/proprietary margins; agent startups won't build the compute layer or the signoff pipeline.
+If I had to compress our differentiation into one sentence:
+
+**Chip Orchestra is an AI-native RTL-to-GDSII orchestrator that is observable end to end and can run on open, self-hostable, all-AMD infrastructure.**
+
+That matters because the incumbents are unlikely to walk away from their closed economics, and the newer agent companies are unlikely to build the full compute + orchestration + physical-flow stack.
 
 ---
 
 ## Opportunity map, benefit vs. cost vs. risk
 
+If the goal is to be smart about effort, the first moves should be the ones that are easy to ship but strong in proof value.
+
 ```mermaid
 quadrantChart
-    title Prioritization, pick high-benefit / low-cost first
+    title Prioritization, —pick high-benefit / low-cost first
     x-axis "Low cost / effort" --> "High cost / effort"
     y-axis "Low benefit" --> "High benefit"
     quadrant-1 "Do next (invest)"
-    quadrant-2 "Quick wins, do FIRST"
+    quadrant-2 "Quick wins, —do FIRST"
     quadrant-3 "Fill-ins (later)"
     quadrant-4 "Question / defer"
     "Deploy on Efison AMD (reuse ROCm path)": [0.22, 0.90]
@@ -291,7 +277,7 @@ quadrantChart
     "Custom signoff to match Calibre": [0.90, 0.40]
 ```
 
-Detailed table (H = high, M = medium, L = low):
+A more grounded breakdown:
 
 | Opportunity | Benefit | Cost/effort | Risk | Verdict |
 |---|---|---|---|---|
@@ -305,20 +291,17 @@ Detailed table (H = high, M = medium, L = low):
 | Analog/mixed-signal + FPGA flows | M | H | H | Later |
 | Custom signoff to rival Calibre-clean | H (long term) | **H** | **H** | Defer / partner |
 
-**High-benefit, low-cost wins (start here):**
+If I were prioritizing this together with Efison, I would start with these three:
 
-1. **Stand it up on Efison's AMD box using the ROCm path we already shipped**, near-zero net-new
-   engineering; env vars + serving container only.
-2. **Publish a joint all-AMD RTL-to-GDSII reference + benchmark**, cheap to produce, high
-   marketing leverage, and the single most credible proof point for the partnership.
-3. **Ship the MXFP4/MI355X preset**, best perf/TCO with tuning we already understand; strong
-   "cheaper than the NVIDIA+proprietary alternative" narrative.
+1. **Deploy it on Efison’s AMD hardware using the ROCm path already in the repo**, this is the fastest path to something real.
+2. **Publish a joint all-AMD reference design and benchmark**, this is probably the strongest credibility-per-week move available.
+3. **Productize the MXFP4 / MI355X preset**, this sharpens the perf/TCO story in a way the market will immediately understand.
 
 ---
 
-## Challenges & tradeoffs
+## The honest part: challenges and tradeoffs
 
-We are not pretending this is free. Key tradeoffs we've consciously made:
+I don’t think this story works unless we are honest about where the rough edges still are.
 
 ```mermaid
 mindmap
@@ -343,24 +326,20 @@ mindmap
       Tradeoff: moat is orchestration + data/traces + AMD-optimized ops, not IP lockup
 ```
 
-Explicit tradeoff decisions worth calling out:
+The tradeoffs we’ve made are pretty intentional:
 
-- **We chose openness over a license moat.** Open weights + open EDA + ROCm means low lock-in for
-  customers (a selling point) but no software-license annuity, so our moat must be the
-  orchestration layer, observability/traces, and AMD-tuned operations, not lock-in.
-- **We chose self-hosting over easy SaaS.** Sovereignty and cost control win in target markets, at
-  the price of heavier ops (large model weights, ROCm tuning), mitigated by the preflight /
-  healthcheck / profile scripts already in this folder.
-- **We chose to *not* fight Calibre on day one.** Advanced-node signoff trust is the incumbents'
-  fortress; we start where open PDKs (SkyWater SKY130, GF180) and education/prototyping demand is
-  real, and treat advanced-node signoff as a partner/later problem.
-- **We chose GLM-5.2 open weights over a frontier closed API.** Quality is competitive and
-  self-hostable on AMD; we accept being one step behind the absolute frontier in exchange for
-  control, cost, and the all-AMD story.
+- **We chose openness over a traditional software moat.** Open weights, open EDA, and ROCm make adoption easier and lock-in lower. That’s good for customers, but it means our moat has to come from orchestration, traces, workflow quality, and AMD-optimized operations.
+- **We chose self-hosting over the easiest SaaS route.** That creates more operational work, but it also gives us sovereignty, control, and a much better fit for sensitive semiconductor IP.
+- **We chose not to pretend we can replace advanced-node signoff overnight.** Open EDA is real and useful, but “Calibre-clean” still matters. So the practical move is to win first in open-PDK, education, prototyping, and selected production-adjacent workflows, then expand.
+- **We chose open GLM-5.2 over a closed frontier API.** That gives us control and a cleaner all-AMD story, even if it means accepting that the absolute frontier moves fast.
+
+I actually think this honesty helps the partnership story rather than hurts it. It makes the near-term path much clearer.
 
 ---
 
-## The ask & next steps
+## What I’d like to do next
+
+The partnership path I have in mind is straightforward: prove the stack on Efison’s AMD hardware, tune it, publish the result, then decide how big to make the commercial offer.
 
 ```mermaid
 sequenceDiagram
@@ -376,14 +355,13 @@ sequenceDiagram
     Note over CO,EF: New revenue line for Efison,<br/>go-to-market + proof point for us
 ```
 
-**Concrete asks for a pilot (all low-cost, high-signal):**
+My suggested pilot ask is simple:
 
-1. One AMD node (ideally 8× MI300X + EPYC head node) for a 6–8 week validation.
-2. Co-author a public reference design + benchmark on Efison AMD infrastructure.
-3. Explore a joint "Chip Design as a Service" offering with Efison as the local/sovereign channel.
+1. One AMD node, ideally **8× MI300X with an EPYC head node**, for a 6–8 week validation window.
+2. A joint public reference design and benchmark run on Efison AMD infrastructure.
+3. A serious conversation about a local, sovereign **Chip Design as a Service** offer once the validation is done.
 
-**What we bring on day one:** a working, container-native platform whose ROCm self-hosting path
-(this exact folder) needs *only env vars and a serving container*, no application code changes.
+And what we bring immediately is not a vague promise. We bring a working, container-native platform whose ROCm self-hosting path already exists in this exact folder and only needs env vars plus a serving container to connect.
 
 ---
 
