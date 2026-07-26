@@ -270,36 +270,6 @@ CUDA/proprietary margins; agent startups won't build the compute layer or the si
 
 ---
 
-## Product & development roadmap
-
-```mermaid
-gantt
-    title Chip Orchestra × AMD × Efison, phased roadmap
-    dateFormat YYYY-MM-DD
-    axisFormat %b '%y
-
-    section Phase 0, Foundation (done)
-    ROCm self-host path (vLLM/ATOM)      :done, p0a, 2026-05-01, 2026-07-01
-    11-stage orchestration + OpenLane     :done, p0b, 2026-04-01, 2026-07-01
-
-    section Phase 1, Validate on Efison (0-3 mo)
-    Deploy on ALELEON (MI300X + EPYC)     :active, p1a, 2026-08-01, 45d
-    Joint reference design + benchmark    :p1b, after p1a, 30d
-    Perf tuning (FP8/MXFP4, AITER, MTP)   :p1c, after p1a, 40d
-
-    section Phase 2, Productize service (3-6 mo)
-    Multi-tenant + quota/billing hooks    :p2a, 2026-11-01, 60d
-    Sovereign / on-prem hardening         :p2b, 2026-11-15, 45d
-    MXFP4 on MI355X TCO track             :p2c, 2026-12-01, 45d
-
-    section Phase 3, Scale & moat (6-12 mo)
-    Distributed EDA across EPYC nodes     :p3a, 2027-02-01, 75d
-    Design-knowledge RAG + repo-aware     :p3b, 2027-03-01, 75d
-    Analog/MS + FPGA flow extensions      :p3c, 2027-04-01, 90d
-```
-
----
-
 ## Opportunity map, benefit vs. cost vs. risk
 
 ```mermaid
