@@ -15,7 +15,7 @@ LLM_SERVE_PORT="${LLM_SERVE_PORT:-8000}"
 MAX_MODEL_LEN="${MAX_MODEL_LEN:-524288}"
 HF_TOKEN="${HF_TOKEN:-}"
 HF_CACHE_DIR="${HF_CACHE_DIR:-/data/hf-cache}"
-IMAGE="${VLLM_IMAGE:-rocm/vllm:latest}"
+IMAGE="${VLLM_IMAGE:-docker.io/rocm/vllm:latest}"
 
 case "$HW_PROFILE" in
   mi300x|mi325x)

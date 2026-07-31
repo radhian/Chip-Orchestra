@@ -2,7 +2,7 @@
 # agent-service runs separately on Strix Halo and is reached through AGENT_SERVICE_URL.
 services:
   mysql:
-    image: mysql:8.4
+    image: docker.io/library/mysql:8.4
     restart: unless-stopped
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE:-chip_orchestra}
@@ -20,7 +20,7 @@ services:
       retries: 12
 
   redis:
-    image: redis:7.2-alpine
+    image: docker.io/library/redis:7.2-alpine
     restart: unless-stopped
     command: ["redis-server", "--appendonly", "yes"]
     ports:
