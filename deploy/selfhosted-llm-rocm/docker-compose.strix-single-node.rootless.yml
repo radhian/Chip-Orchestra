@@ -48,6 +48,14 @@ services:
   orchestrator-service:
     networks:
       - chip-orchestra
+    # Rootless Podman custom networks may hand containers only the embedded
+    # aardvark/netavark DNS server (10.89.x.1). On some hosts that resolver
+    # does not forward external names, breaking downloads and API calls. Pin
+    # public resolvers for outbound DNS while service-name routing still uses
+    # explicit host-gateway fallbacks below.
+    dns:
+      - ${CONTAINER_DNS_1:-1.1.1.1}
+      - ${CONTAINER_DNS_2:-8.8.8.8}
     environment:
       # Rootless Podman DNS (netavark/aardvark-dns) can intermittently fail to
       # resolve service names from one container to another. Use the host-published
@@ -63,6 +71,9 @@ services:
   eda-service:
     networks:
       - chip-orchestra
+    dns:
+      - ${CONTAINER_DNS_1:-1.1.1.1}
+      - ${CONTAINER_DNS_2:-8.8.8.8}
     extra_hosts:
       - "mysql:host-gateway"
       - "redis:host-gateway"
@@ -72,6 +83,9 @@ services:
       - chip-orchestra
 
   agent-service:
+    dns:
+      - ${CONTAINER_DNS_1:-1.1.1.1}
+      - ${CONTAINER_DNS_2:-8.8.8.8}
     environment:
       # LLM backend is driven by strix-core.rootless.env. The default in
       # strix-agent.yml is the external llama-swap, but we set it explicitly
