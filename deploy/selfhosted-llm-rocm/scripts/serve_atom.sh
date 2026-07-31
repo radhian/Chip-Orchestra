@@ -14,7 +14,7 @@ HW_PROFILE="${HW_PROFILE:-mi300x}"
 LLM_SERVE_PORT="${LLM_SERVE_PORT:-8000}"
 HF_TOKEN="${HF_TOKEN:-}"
 HF_CACHE_DIR="${HF_CACHE_DIR:-/data/hf-cache}"
-IMAGE="${ATOM_IMAGE:-rocm/atom-dev:latest}"
+IMAGE="${ATOM_IMAGE:-docker.io/rocm/atom-dev:latest}"
 
 case "$HW_PROFILE" in
   mi300x|mi325x)

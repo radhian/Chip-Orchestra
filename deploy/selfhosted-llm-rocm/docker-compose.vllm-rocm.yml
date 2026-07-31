@@ -9,7 +9,7 @@
 # =============================================================================
 services:
   glm-vllm:
-    image: rocm/vllm:latest
+    image: docker.io/rocm/vllm:latest
     container_name: glm52-vllm-rocm
     # ROCm device passthrough (equivalent to the docker run flags AMD documents).
     devices:
