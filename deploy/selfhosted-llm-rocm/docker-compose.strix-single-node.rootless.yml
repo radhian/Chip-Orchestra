@@ -10,18 +10,73 @@
 # use the in-project mysql/redis service names instead of the old two-node R9700
 # LAN host path. This avoids unnecessary host networking when everything runs on
 # 172.16.1.10.
+#
+# --- Networking / DNS notes ---
+# podman-compose sometimes fails to resolve compose service names (e.g. the
+# eda-service "Temporary failure in name resolution" for `mysql`) when the
+# rootless netavark + aardvark-dns pipeline is not set up. Two things below make
+# this robust:
+#   1. An explicit shared network `chip-orchestra` all services join, so
+#      podman-compose always creates ONE network (and DNS) shared by all
+#      containers regardless of which -f file they came from.
+#   2. `extra_hosts` fallback using `host-gateway`. If aardvark-dns still is
+#      unavailable, the service names resolve to the Podman host (172.16.1.10)
+#      and reach the published ports (mysql/redis/glm host bind is 0.0.0.0).
+#      This works because r9700-core.yml already exposes mysql:3306 and
+#      redis:6379 on the host and docker-compose.strix-full.yml exposes GLM
+#      at ${LLM_HOST_PORT:-10001} on the host.
+#      NOTE: because the container-network path is preferred, `mysql` and
+#      `redis` are addressed on their in-container 3306/6379 defaults. The
+#      host-gateway fallback also reaches them on the same numbers since the
+#      host publishes `${MYSQL_PORT:-3306}` / `${REDIS_PORT:-6379}` on 0.0.0.0.
+#      The glm-server host-gateway fallback uses ${LLM_HOST_PORT:-10001} — see
+#      the OPENAI_BASE_URL_FALLBACK note in strix-core.rootless.env.
 services:
+  mysql:
+    networks:
+      - chip-orchestra
+
+  redis:
+    networks:
+      - chip-orchestra
+
+  orchestrator-service:
+    networks:
+      - chip-orchestra
+    extra_hosts:
+      - "mysql:host-gateway"
+      - "redis:host-gateway"
+
+  eda-service:
+    networks:
+      - chip-orchestra
+    extra_hosts:
+      - "mysql:host-gateway"
+      - "redis:host-gateway"
+
+  frontend:
+    networks:
+      - chip-orchestra
+
   glm-server:
     # Compose normally appends sequences from multiple -f files. Podman rejects
     # keep-groups when video/render are also present, so this must replace the
     # base Strix group_add list rather than merge with it.
     group_add: !override
       - keep-groups
+    networks:
+      - chip-orchestra
 
   agent-service:
     environment:
       DATABASE_URL: mysql+pymysql://${MYSQL_USER:-chip}:${MYSQL_PASSWORD:-chip}@mysql:3306/${MYSQL_DATABASE:-chip_orchestra}
       REDIS_URL: redis://redis:6379/0
+    networks:
+      - chip-orchestra
+    extra_hosts:
+      - "mysql:host-gateway"
+      - "redis:host-gateway"
+      - "glm-server:host-gateway"
     depends_on:
       mysql:
         condition: service_healthy
@@ -29,3 +84,8 @@ services:
         condition: service_healthy
       glm-server:
         condition: service_healthy
+
+networks:
+  chip-orchestra:
+    name: chip-orchestra
+    driver: bridge
