@@ -131,4 +131,6 @@ COPY . .
 RUN chmod +x pdk/setup_pdk.sh 2>/dev/null || true
 EXPOSE 8002
 # Auto-install the PDK (via Volare) if PDK_ROOT is empty, then start the service.
-CMD ["bash", "-lc", "pdk/setup_pdk.sh || true; uvicorn main:app --host 0.0.0.0 --port 8002"]
+# PDK setup is required by default so PNR failures surface at container startup
+# instead of much later as "PDK gf180mcuD was not found".
+CMD ["bash", "-lc", "pdk/setup_pdk.sh; uvicorn main:app --host 0.0.0.0 --port 8002"]
