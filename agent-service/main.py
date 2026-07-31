@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from contextlib import asynccontextmanager
 import os
+import time
 from typing import Any, Dict, List
 
 from fastapi import FastAPI, Request
@@ -33,15 +34,45 @@ class AgentInvokeRequest(BaseModel):
     attachments: List[Dict[str, str]] = Field(default_factory=list)
 
 
+def _startup_retry_timeout_seconds() -> float:
+    raw = os.getenv("STARTUP_RETRY_TIMEOUT", "120s").strip()
+    if raw.endswith("ms"):
+        return max(float(raw[:-2]) / 1000.0, 1.0)
+    if raw.endswith("s"):
+        return max(float(raw[:-1]), 1.0)
+    if raw.endswith("m"):
+        return max(float(raw[:-1]) * 60.0, 1.0)
+    try:
+        return max(float(raw), 1.0)
+    except ValueError:
+        return 120.0
+
+
 def build_services():
     database_url = os.getenv("DATABASE_URL", "mysql+pymysql://chip:chip@mysql:3306/chip_orchestra")
     redis_url = os.getenv("REDIS_URL", "redis://redis:6379/0")
-    redis_client = Redis.from_url(redis_url, decode_responses=True)
-    memory_store = MemoryStore(database_url=database_url, redis_client=redis_client)
-    memory_store.create_tables()
-    tool_registry = ToolRegistry(redis_client)
-    graph = DeepAgentGraph(tool_registry, memory_store)
-    return redis_client, memory_store, tool_registry, graph
+    deadline = time.monotonic() + _startup_retry_timeout_seconds()
+    attempt = 0
+    last_error: Exception | None = None
+    while True:
+        attempt += 1
+        redis_client = Redis.from_url(redis_url, decode_responses=True)
+        try:
+            redis_client.ping()
+            memory_store = MemoryStore(database_url=database_url, redis_client=redis_client)
+            memory_store.create_tables()
+            tool_registry = ToolRegistry(redis_client)
+            graph = DeepAgentGraph(tool_registry, memory_store)
+            return redis_client, memory_store, tool_registry, graph
+        except Exception as exc:
+            last_error = exc
+            close = getattr(redis_client, "close", None)
+            if callable(close):
+                close()
+            if time.monotonic() >= deadline:
+                raise RuntimeError(f"Agent dependencies not ready after retries: {last_error}") from last_error
+            print(f"[startup] waiting for mysql/redis (attempt {attempt}): {exc}", flush=True)
+            time.sleep(2)
 
 
 def _assign_services(app: FastAPI, redis_client: Redis, memory_store: MemoryStore, tool_registry: ToolRegistry, deep_agent_graph: DeepAgentGraph | Any):

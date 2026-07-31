@@ -12,12 +12,15 @@
 # R9700 via docker-compose.r9700-core.yml.
 services:
   glm-server:
-    image: ${LLAMA_IMAGE:-ghcr.io/kyuz0/amd-strix-halo-toolboxes:rocm-7rc-llama}
+    image: ${LLAMA_IMAGE:-ghcr.io/ggml-org/llama.cpp:server-rocm}
     container_name: glm-strixhalo
     restart: unless-stopped
     devices:
       - /dev/kfd
       - /dev/dri
+    group_add:
+      - video
+      - render
     ipc: host
     security_opt:
       - seccomp:unconfined
@@ -31,7 +34,6 @@ services:
       # Exposed for validation; agent reaches it via localhost/service name.
       - "${LLM_SERVE_PORT:-10000}:${LLM_SERVE_PORT:-10000}"
     command: >
-      llama-server
       -hf ${GLM_MODEL_REPO:-unsloth/GLM-4.5-Air-GGUF}:${GLM_MODEL_FILE:-GLM-4.5-Air-Q4_K_M.gguf}
       --model /models/${GLM_MODEL_FILE:-GLM-4.5-Air-Q4_K_M.gguf}
       --alias ${OPENAI_MODEL:-GLM-5.2}
