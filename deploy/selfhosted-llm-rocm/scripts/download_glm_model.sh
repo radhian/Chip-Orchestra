@@ -18,20 +18,66 @@
 #
 # The script prefers huggingface-cli (fastest, resumable). If that is not
 # available it falls back to curl against the HF resolve URL.
+#
+# Env parsing note:
+#   podman-compose --env-file uses simple KEY=VALUE parsing (no shell rules),
+#   so env files can contain unquoted values with spaces, e.g.
+#     DEFAULT_FULL_NAME=Radhian Ferel Armansyah
+#   That is invalid for `source`/`.`, which would try to run `Ferel` as a
+#   command. So this script parses only the exact keys it needs from the file
+#   using awk, rather than sourcing it.
 # ---------------------------------------------------------------------------
 set -euo pipefail
 
 ENV_FILE="${1:-}"
+
+_get_env_kv() {
+  # Print the raw value of KEY from an env file, respecting the last occurrence,
+  # stripping surrounding single/double quotes, and ignoring commented lines.
+  local env_file="$1" key="$2"
+  awk -v k="$key" '
+    /^[[:space:]]*#/ {next}
+    {
+      # match "KEY=" at start (allow leading spaces)
+      idx = index($0, "=")
+      if (idx == 0) next
+      lhs = substr($0, 1, idx - 1)
+      # strip whitespace from lhs
+      gsub(/^[[:space:]]+|[[:space:]]+$/, "", lhs)
+      if (lhs != k) next
+      val = substr($0, idx + 1)
+      # strip a trailing CR (Windows line endings)
+      sub(/\r$/, "", val)
+      # unquote if fully wrapped in single or double quotes
+      n = length(val)
+      if (n >= 2) {
+        first = substr(val, 1, 1)
+        last  = substr(val, n, 1)
+        if ((first == "\"" && last == "\"") || (first == "'"'"'" && last == "'"'"'")) {
+          val = substr(val, 2, n - 2)
+        }
+      }
+      last_val = val
+      found = 1
+    }
+    END { if (found) print last_val }
+  ' "$env_file"
+}
+
 if [[ -n "${ENV_FILE}" ]]; then
   if [[ ! -f "${ENV_FILE}" ]]; then
     echo "ERROR: env file '${ENV_FILE}' not found." >&2
     exit 1
   fi
-  # shellcheck disable=SC2046
-  set -a
-  # shellcheck disable=SC1090
-  source "${ENV_FILE}"
-  set +a
+  # Pull only the keys we care about — do NOT source the file (values may
+  # contain spaces, which is legal for podman-compose --env-file but not for
+  # POSIX shell).
+  _v_model_dir="$(_get_env_kv "${ENV_FILE}" MODEL_DIR || true)"
+  _v_repo="$(_get_env_kv "${ENV_FILE}" GLM_MODEL_REPO || true)"
+  _v_file="$(_get_env_kv "${ENV_FILE}" GLM_MODEL_FILE || true)"
+  [[ -n "${_v_model_dir}" ]] && MODEL_DIR="${_v_model_dir}"
+  [[ -n "${_v_repo}"     ]] && GLM_MODEL_REPO="${_v_repo}"
+  [[ -n "${_v_file}"     ]] && GLM_MODEL_FILE="${_v_file}"
 fi
 
 MODEL_DIR="${MODEL_DIR:-${HOME}/chip-orchestra/models}"
