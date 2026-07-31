@@ -31,8 +31,10 @@ services:
     volumes:
       - ${MODEL_DIR:-/data/models}:/models
     ports:
-      # Exposed for validation; agent reaches it via localhost/service name.
-      - "${LLM_SERVE_PORT:-10000}:${LLM_SERVE_PORT:-10000}"
+      # Exposed for host-side validation. Keep the container port stable for
+      # agent-service (OPENAI_BASE_URL=http://glm-server:10000/v1 by default),
+      # while allowing the host bind port to move if :10000 is already occupied.
+      - "${LLM_HOST_PORT:-10000}:${LLM_SERVE_PORT:-10000}"
     command: >
       -hf ${GLM_MODEL_REPO:-unsloth/GLM-4.5-Air-GGUF}:${GLM_MODEL_FILE:-GLM-4.5-Air-Q4_K_M.gguf}
       --model /models/${GLM_MODEL_FILE:-GLM-4.5-Air-Q4_K_M.gguf}
