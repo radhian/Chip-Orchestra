@@ -1,0 +1,52 @@
+# Strix Halo stack: agent-service only.
+# It connects to MySQL/Redis on R9700 and uses the same shared workspace mount.
+services:
+  agent-service:
+    build:
+      context: ../..
+      dockerfile: agent-service/Dockerfile
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: mysql+pymysql://${MYSQL_USER:-chip}:${MYSQL_PASSWORD:-chip}@${R9700_HOST:-172.16.1.36}:${MYSQL_PORT:-3306}/${MYSQL_DATABASE:-chip_orchestra}
+      REDIS_URL: redis://${R9700_HOST:-172.16.1.36}:${REDIS_PORT:-6379}/0
+      DEFAULT_USERNAME: ${DEFAULT_USERNAME:-admin}
+      DEFAULT_FULL_NAME: ${DEFAULT_FULL_NAME:-Admin Admin}
+      WORKSPACE_ROOT: ${WORKSPACE_ROOT:-/srv/chip-orchestra/workspaces}
+      AGENT_ARTIFACT_ROOT: ${AGENT_ARTIFACT_ROOT:-/srv/chip-orchestra/workspaces}
+      LLM_PROVIDER: ${LLM_PROVIDER:-glm}
+      OPENAI_BASE_URL: ${OPENAI_BASE_URL:-http://172.16.1.36:8005/v1}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-EMPTY}
+      OPENAI_MODEL: ${OPENAI_MODEL:-R9700}
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-glm-5.2:cloud}
+      OLLAMA_TIMEOUT: ${OLLAMA_TIMEOUT:-600}
+      OLLAMA_NUM_CTX: ${OLLAMA_NUM_CTX:-32768}
+      OLLAMA_THINK: ${OLLAMA_THINK:-1}
+      OLLAMA_REPEAT_PENALTY: ${OLLAMA_REPEAT_PENALTY:-1.18}
+      OLLAMA_REPEAT_LAST_N: ${OLLAMA_REPEAT_LAST_N:-256}
+      OLLAMA_NUM_PREDICT: ${OLLAMA_NUM_PREDICT:-8192}
+      OLLAMA_VISION_NUM_CTX: ${OLLAMA_VISION_NUM_CTX:-8192}
+      OLLAMA_VISION_TIMEOUT: ${OLLAMA_VISION_TIMEOUT:-240}
+      GARUDA_VISION: ${GARUDA_VISION:-}
+      GARUDA_VISION_MODEL: ${GARUDA_VISION_MODEL:-}
+      AGENT_DEEP_AGENTS: ${AGENT_DEEP_AGENTS:-1}
+      GARUDA_DEEP_BUDGET_S: ${GARUDA_DEEP_BUDGET_S:-2400}
+      GARUDA_PY_TIMEOUT_S: ${GARUDA_PY_TIMEOUT_S:-600}
+      AGENT_PYDEPS_DIR: ${AGENT_PYDEPS_DIR:-}
+      AGENT_WEB_RESEARCH: ${AGENT_WEB_RESEARCH:-1}
+      SEARXNG_URL: ${SEARXNG_URL:-}
+      GITHUB_TOKEN: ${GITHUB_TOKEN:-}
+      GARUDA_RESEARCH_BUDGET_S: ${GARUDA_RESEARCH_BUDGET_S:-420}
+      GARUDA_CLONE_TIMEOUT_S: ${GARUDA_CLONE_TIMEOUT_S:-90}
+      MAX_REPAIR_ITERS: ${MAX_REPAIR_ITERS:-3}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "${AGENT_BIND_HOST:-172.16.1.10}:${AGENT_PORT:-8001}:8001"
+    volumes:
+      - ${WORKSPACE_HOST_PATH:-/srv/chip-orchestra/workspaces}:${WORKSPACE_ROOT:-/srv/chip-orchestra/workspaces}
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8001/health')\" || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
