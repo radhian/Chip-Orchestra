@@ -48,9 +48,17 @@ services:
   orchestrator-service:
     networks:
       - chip-orchestra
+    environment:
+      # Rootless Podman DNS (netavark/aardvark-dns) can intermittently fail to
+      # resolve service names from one container to another. Use the host-published
+      # EDA port as the default SIM/HARDEN endpoint for the single-node topology;
+      # this keeps orchestrator -> eda-service independent of embedded DNS.
+      EDA_SERVICE_URL: ${EDA_SERVICE_URL:-http://host.containers.internal:8002}
     extra_hosts:
       - "mysql:host-gateway"
       - "redis:host-gateway"
+      - "eda-service:host-gateway"
+      - "host.containers.internal:host-gateway"
 
   eda-service:
     networks:

@@ -119,10 +119,12 @@ def create_app(
 
     @app.get("/agent/models")
     def list_models():
-        """List models available on the configured LLM provider — Ollama
-        (installed models, local/cloud flags) — including whether vision (image
-        upload) works, so the UI picker offers the models that can actually run
-        this task."""
+        """List models available on the configured LLM provider.
+
+        Ollama uses /api/tags; OpenAI-compatible providers (including
+        llama-swap) use /v1/models. If provider model discovery fails, still
+        return the configured default model so the UI picker is usable.
+        """
         provider = os.getenv("LLM_PROVIDER", "mock").strip().lower() or "mock"
         default_model = os.getenv("OPENAI_MODEL" if provider in {"openai", "glm", "zhipu", "zhipuai", "openai-compatible"} else "OLLAMA_MODEL", "").strip()
         models: List[str] = []
@@ -152,6 +154,8 @@ def create_app(
                 models = [m["name"] for m in detail]
             except Exception:
                 models, detail = [], []
+        if default_model and default_model not in models:
+            models = [default_model, *models]
         return {
             "provider": provider,
             "default": default_model,

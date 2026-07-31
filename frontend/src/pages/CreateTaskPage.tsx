@@ -290,7 +290,7 @@ export function CreateTaskPage() {
             </div>
 
             <div className='grid gap-5 md:grid-cols-2'>
-              <Field label='LLM model' hint={llmHint}>
+              <Field label='LLM model' hint='Models detected from the configured LLM provider'>
                 <Select value={llmModel} onValueChange={setLlmModel}>
                   <SelectTrigger className='h-12 rounded-2xl border-slate-200 bg-white px-4 text-sm text-slate-700 shadow-none'>
                     <SelectValue placeholder={llmModels.length ? 'Select LLM model' : 'Using server default model'} />
