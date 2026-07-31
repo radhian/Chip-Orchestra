@@ -1,0 +1,28 @@
+# Strix Halo SINGLE-NODE rootless override.
+# Use this override when running the whole stack in one Podman Compose project:
+#   podman-compose --env-file strix-core.rootless.env \
+#     -f docker-compose.r9700-core.yml \
+#     -f docker-compose.strix-full.yml \
+#     -f docker-compose.strix-single-node.rootless.yml \
+#     up -d --build
+#
+# It keeps the Strix Halo rootless GPU access fix and changes agent-service to
+# use the in-project mysql/redis service names instead of the old two-node R9700
+# LAN host path. This avoids unnecessary host networking when everything runs on
+# 172.16.1.10.
+services:
+  glm-server:
+    group_add:
+      - keep-groups
+
+  agent-service:
+    environment:
+      DATABASE_URL: mysql+pymysql://${MYSQL_USER:-chip}:${MYSQL_PASSWORD:-chip}@mysql:3306/${MYSQL_DATABASE:-chip_orchestra}
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      glm-server:
+        condition: service_healthy
