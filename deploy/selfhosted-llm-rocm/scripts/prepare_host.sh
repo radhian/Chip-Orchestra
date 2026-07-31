@@ -9,11 +9,19 @@
 #      Podman, OR bind 0.0.0.0 and run rootless (see the rootless env file).
 #
 # Works both ways:
-#   Rootful:   sudo ./scripts/prepare_host.sh
-#   Rootless:  ./scripts/prepare_host.sh            (no sudo; workspace under $HOME)
+#   Rootful:   sudo ./scripts/prepare_host.sh [ENV_FILE]
+#   Rootless:  ./scripts/prepare_host.sh [ENV_FILE]   (no sudo; workspace under $HOME)
 #
-# Override the workspace location with WORKSPACE_HOST_PATH=/abs/path
+# PASS THE SAME ENV FILE you give podman-compose so the exact bind-mount source
+# dirs get created (this is the single source of truth — no path drift):
+#   ./scripts/prepare_host.sh r9700-core.rootless.env
+#   ./scripts/prepare_host.sh strix-agent.rootless.env
+#
+# Without an env file it falls back to WORKSPACE_HOST_PATH / MODEL_DIR from the
+# environment, or the mode default below.
 set -euo pipefail
+
+ENV_FILE="${1:-${ENV_FILE:-}}"
 
 if [[ "${EUID}" -eq 0 ]]; then
   MODE="rootful"
@@ -23,6 +31,20 @@ else
   MODE="rootless"
   WORKSPACE_HOST_PATH="${WORKSPACE_HOST_PATH:-${HOME}/chip-orchestra/workspaces}"
   ENV_HINT="r9700-core.rootless.env"
+fi
+
+# The env file is the source of truth: read the exact paths compose will mount.
+if [[ -n "${ENV_FILE}" ]]; then
+  if [[ ! -f "${ENV_FILE}" ]]; then
+    echo "ERROR: env file '${ENV_FILE}' not found." >&2
+    exit 1
+  fi
+  ENV_HINT="${ENV_FILE}"
+  _wp="$(grep -E '^[[:space:]]*WORKSPACE_HOST_PATH=' "${ENV_FILE}" | tail -1 | cut -d= -f2- | tr -d '"'"'"'' )"
+  _md="$(grep -E '^[[:space:]]*MODEL_DIR=' "${ENV_FILE}" | tail -1 | cut -d= -f2- | tr -d '"'"'"'' )"
+  [[ -n "${_wp}" ]] && WORKSPACE_HOST_PATH="${_wp}"
+  [[ -n "${_md}" ]] && MODEL_DIR="${_md}"
+  echo "==> Using paths from ${ENV_FILE}"
 fi
 
 echo "==> Mode: ${MODE}"
