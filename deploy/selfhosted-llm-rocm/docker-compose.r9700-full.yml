@@ -159,9 +159,6 @@ services:
       VITE_USE_MOCKS: "false"
       VITE_DEFAULT_USERNAME: ${DEFAULT_USERNAME:-admin}
       VITE_DEFAULT_PASSWORD: ${DEFAULT_PASSWORD:-chip-orchestra}
-    depends_on:
-      orchestrator-service:
-        condition: service_healthy
     ports:
       - "${FRONTEND_PORT:-4173}:4173"
 

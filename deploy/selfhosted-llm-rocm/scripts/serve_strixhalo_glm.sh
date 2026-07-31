@@ -28,7 +28,7 @@ NGL="${NGL:-999}"                 # offload all layers to the iGPU
 CTX="${CTX:-32768}"
 # GPU (GTT/unified) memory budget for the iGPU, in MiB. Set in BIOS/kernel too.
 GGML_VRAM_MB="${GGML_VRAM_MB:-}"
-IMAGE="${LLAMA_IMAGE:-ghcr.io/kyuz0/amd-strix-halo-toolboxes:rocm-7rc-llama}"
+IMAGE="${LLAMA_IMAGE:-ghcr.io/ggml-org/llama.cpp:server-rocm}"
 HSA_OVERRIDE="${HSA_OVERRIDE_GFX_VERSION:-11.5.1}"
 
 echo ">> Strix Halo GLM server"
@@ -49,7 +49,6 @@ docker run -d --rm \
   -e HF_HUB_ENABLE_HF_TRANSFER=1 \
   ${GGML_VRAM_MB:+-e GGML_VK_VISIBLE_DEVICES=0} \
   "$IMAGE" \
-  llama-server \
     --hf-repo "$MODEL_REPO" \
     --hf-file "$MODEL_FILE" \
     --model "/models/${MODEL_FILE}" \

@@ -34,8 +34,9 @@ func main() {
 	seedFullName := getenv("DEFAULT_FULL_NAME", "Admin")
 	seedEmail := getenv("DEFAULT_EMAIL", "admin@chip-orchestra.local")
 	seedPassword := getenv("DEFAULT_PASSWORD", "chip-orchestra")
+	startupRetryDeadline := time.Now().Add(getenvDuration("STARTUP_RETRY_TIMEOUT", 2*time.Minute))
 
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	db, err := waitForMySQL(dsn, startupRetryDeadline)
 	if err != nil {
 		log.Fatalf("failed to connect mysql: %v", err)
 	}
@@ -43,8 +44,8 @@ func main() {
 		log.Fatalf("failed to migrate schema: %v", err)
 	}
 
-	redisClient := redis.NewClient(&redis.Options{Addr: redisAddr})
-	if err := redisClient.Ping(ctx).Err(); err != nil {
+	redisClient, err := waitForRedis(ctx, redisAddr, startupRetryDeadline)
+	if err != nil {
 		log.Fatalf("failed to connect redis: %v", err)
 	}
 
@@ -73,19 +74,62 @@ func main() {
 	}
 }
 
+func waitForMySQL(dsn string, deadline time.Time) (*gorm.DB, error) {
+	var lastErr error
+	for attempt := 1; ; attempt++ {
+		db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+		if err == nil {
+			sqlDB, sqlErr := db.DB()
+			if sqlErr == nil {
+				ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+				pingErr := sqlDB.PingContext(ctx)
+				cancel()
+				if pingErr == nil {
+					return db, nil
+				}
+				lastErr = pingErr
+			} else {
+				lastErr = sqlErr
+			}
+		} else {
+			lastErr = err
+		}
+		if time.Now().After(deadline) {
+			return nil, fmt.Errorf("mysql not ready after retries: %w", lastErr)
+		}
+		log.Printf("mysql not ready yet (attempt %d): %v", attempt, lastErr)
+		time.Sleep(2 * time.Second)
+	}
+}
+
+func waitForRedis(ctx context.Context, addr string, deadline time.Time) (*redis.Client, error) {
+	var lastErr error
+	for attempt := 1; ; attempt++ {
+		client := redis.NewClient(&redis.Options{Addr: addr})
+		if err := client.Ping(ctx).Err(); err == nil {
+			return client, nil
+		} else {
+			lastErr = err
+			_ = client.Close()
+		}
+		if time.Now().After(deadline) {
+			return nil, fmt.Errorf("redis not ready after retries: %w", lastErr)
+		}
+		log.Printf("redis not ready yet (attempt %d): %v", attempt, lastErr)
+		time.Sleep(2 * time.Second)
+	}
+}
+
 func seedDefaultUser(ctx context.Context, db *gorm.DB, username, fullName, email, password string) error {
 	var user models.User
-	adminRole := string(models.UserRoleAdmin)
-	err := db.WithContext(ctx).
-		Where("username = ? OR roles = ? OR roles LIKE ? OR roles LIKE ? OR roles LIKE ?", username, adminRole, adminRole+",%", "%,"+adminRole+",%", "%,"+adminRole).
-		First(&user).Error
+	err := db.WithContext(ctx).Where("username = ?", username).First(&user).Error
 	if err == nil {
 		return nil
 	}
 	if err != gorm.ErrRecordNotFound {
 		return err
 	}
-	user = models.User{ID: uuid.NewString(), Username: username, FullName: fullName, Email: email, PasswordHash: middleware.HashPassword(password), Roles: adminRole}
+	user = models.User{ID: uuid.NewString(), Username: username, FullName: fullName, Email: email, PasswordHash: middleware.HashPassword(password), Roles: string(models.UserRoleAdmin)}
 	return db.WithContext(ctx).Create(&user).Error
 }
 
@@ -107,4 +151,17 @@ func getenv(key, fallback string) string {
 		return value
 	}
 	return fallback
+}
+
+func getenvDuration(key string, fallback time.Duration) time.Duration {
+	value := os.Getenv(key)
+	if value == "" {
+		return fallback
+	}
+	duration, err := time.ParseDuration(value)
+	if err != nil {
+		log.Printf("invalid %s=%q, using default %s", key, value, fallback)
+		return fallback
+	}
+	return duration
 }
