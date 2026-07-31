@@ -11,7 +11,8 @@ import os
 from pathlib import Path
 from typing import Dict, List, Optional, Union
 
-WORKSPACE_SUBDIRS = ("rtl", "tb", "reports", "logs", "waves", "gds", "context", "exports", "spec", "plans")
+WORKSPACE_SUBDIRS = ("rtl", "tb", "reports", "logs", "waves", "gds", "context", "exports",
+                     "spec", "plans", "golden", "sw")
 
 DEFAULT_ARTIFACT_ROOT = "/tmp/chip-orchestra/workspaces"
 

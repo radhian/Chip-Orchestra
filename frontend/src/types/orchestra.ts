@@ -134,6 +134,55 @@ export interface SignoffStatus {
   metrics?: Record<string, string | number | boolean | null>
 }
 
+/** One thing the golden model produced that the reviewer should look at. */
+export interface GoldenPreview {
+  kind: 'image' | 'waveform' | 'value'
+  path: string
+  label: string
+}
+
+export interface GoldenIP {
+  name: string
+  file?: string
+  /** 'ip' (leaf block) | 'subtop' (integrator) | 'top' (chip) */
+  tier?: string
+  role?: string
+  ports?: string
+}
+
+export interface GoldenTestResults {
+  ran?: boolean
+  total?: number
+  passed?: number
+  failed?: number
+  files?: string[]
+}
+
+export interface GoldenSummary {
+  top?: string
+  design_brief?: string
+  ips?: GoldenIP[]
+  models?: string[]
+  vectors?: string[]
+  tests?: GoldenTestResults
+  previews?: GoldenPreview[]
+  notes?: string
+  report?: string
+  contract?: string
+}
+
+/** Payload behind the GOLDEN_GEN review dialog: what the Python reference model
+ *  computed, whether its own test suite passed, and whether the gate is open. */
+export interface GoldenReview {
+  stage: string
+  status: string
+  awaitingApproval: boolean
+  available: boolean
+  summary: GoldenSummary
+  report: string
+  testLog: string
+}
+
 export interface AgentPolicy {
   autonomy_level: AgentAutonomyLevel
   retry_budget: number
@@ -151,6 +200,7 @@ export interface CreateTaskPayload {
   template_id?: string
   pdk_id: string
   stdcell_lib_id: string
+  voltage?: string
   padring?: string
   llm_model?: string
   review_gates: ReviewGate[]

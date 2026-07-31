@@ -1,0 +1,350 @@
+import { useEffect, useMemo, useState } from 'react'
+import { AlertCircle, CheckCircle2, FlaskConical, Image as ImageIcon, ShieldCheck, XCircle } from 'lucide-react'
+
+import { getGoldenReview, workspaceRawUrl } from '@/api/tasks'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { Textarea } from '@/components/ui/textarea'
+import type { GoldenPreview, GoldenReview } from '@/types/orchestra'
+
+const IMAGE_EXT = /\.(png|jpe?g|webp|bmp|gif|svg)$/i
+
+function tierLabel(tier?: string): string {
+  switch ((tier ?? '').toLowerCase()) {
+    case 'top':
+      return 'TOP'
+    case 'subtop':
+      return 'SUB-TOP'
+    default:
+      return 'IP'
+  }
+}
+
+function tierClass(tier?: string): string {
+  switch ((tier ?? '').toLowerCase()) {
+    case 'top':
+      return 'bg-violet-100 text-violet-700 border-violet-200'
+    case 'subtop':
+      return 'bg-sky-100 text-sky-700 border-sky-200'
+    default:
+      return 'bg-slate-100 text-slate-600 border-slate-200'
+  }
+}
+
+/** Renders one golden output: an image/waveform inline, a text/JSON dump as
+ *  monospace, so the reviewer judges the ACTUAL result rather than a claim. */
+function PreviewCard({ taskId, preview }: { taskId: string; preview: GoldenPreview }) {
+  const [text, setText] = useState('')
+  const isImage = preview.kind !== 'value' && IMAGE_EXT.test(preview.path)
+
+  useEffect(() => {
+    if (isImage) return
+    let cancelled = false
+    void (async () => {
+      try {
+        const response = await fetch(workspaceRawUrl(taskId, preview.path))
+        const body = await response.text()
+        if (!cancelled) setText(body.slice(0, 4000))
+      } catch {
+        if (!cancelled) setText('(could not read this output)')
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [isImage, preview.path, taskId])
+
+  return (
+    <figure className='min-w-0 rounded-2xl border border-slate-200 bg-white p-3'>
+      <figcaption className='mb-2 flex items-center gap-2 text-xs font-semibold text-slate-600'>
+        <ImageIcon className='h-3.5 w-3.5 shrink-0' />
+        <span className='truncate'>{preview.label}</span>
+      </figcaption>
+      {isImage ? (
+        <img
+          src={workspaceRawUrl(taskId, preview.path)}
+          alt={preview.label}
+          className='max-h-72 w-full rounded-xl bg-slate-50 object-contain'
+        />
+      ) : (
+        <pre className='max-h-56 overflow-auto rounded-xl bg-slate-900 p-3 text-[11px] leading-5 text-slate-100'>
+          {text || 'loading…'}
+        </pre>
+      )}
+      <p className='mt-2 truncate text-[11px] text-slate-400'>{preview.path}</p>
+    </figure>
+  )
+}
+
+/** The GOLDEN_GEN human gate. The Python reference model is the definition of
+ *  correct for every later stage, so the flow stops here and asks the one
+ *  question that matters: is this output what you wanted? Approving starts
+ *  RTL_GEN; rejecting sends the model back for rework with the reviewer's note. */
+export function GoldenReviewDialog({
+  taskId,
+  open,
+  onOpenChange,
+  onApprove,
+  onReject,
+  refreshKey = 0,
+}: {
+  taskId: string
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  onApprove: () => Promise<void> | void
+  onReject: (comment: string) => Promise<void> | void
+  refreshKey?: number
+}) {
+  const [review, setReview] = useState<GoldenReview | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [busy, setBusy] = useState<'approve' | 'reject' | null>(null)
+  const [showReject, setShowReject] = useState(false)
+  const [comment, setComment] = useState('')
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!open || !taskId) return
+    let cancelled = false
+    setLoading(true)
+    void (async () => {
+      try {
+        const data = await getGoldenReview(taskId)
+        if (!cancelled) {
+          setReview(data)
+          setError(null)
+        }
+      } catch (err) {
+        if (!cancelled) setError(err instanceof Error ? err.message : 'Unable to load the golden model')
+      } finally {
+        if (!cancelled) setLoading(false)
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [open, taskId, refreshKey])
+
+  const summary = review?.summary
+  const tests = summary?.tests
+  const testsGreen = Boolean(tests?.ran && (tests?.passed ?? 0) > 0 && !(tests?.failed ?? 0))
+  const previews = useMemo(() => summary?.previews ?? [], [summary])
+  const ips = useMemo(() => summary?.ips ?? [], [summary])
+
+  async function handle(action: 'approve' | 'reject') {
+    setBusy(action)
+    setError(null)
+    try {
+      if (action === 'approve') {
+        await onApprove()
+      } else {
+        await onReject(comment.trim())
+      }
+      onOpenChange(false)
+      setShowReject(false)
+      setComment('')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : `Unable to ${action} the golden model`)
+    } finally {
+      setBusy(null)
+    }
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      {/* flex (not the grid default): grid children get min-width:auto and refuse
+          to shrink, which pushed the preview columns past the modal edge where
+          overflow-hidden clipped them. gap-0 because each band owns its padding. */}
+      <DialogContent className='flex max-h-[92vh] w-[min(96vw,64rem)] max-w-4xl flex-col gap-0 overflow-hidden p-0'>
+        <DialogHeader className='shrink-0 space-y-2 border-b border-slate-200 p-6 pb-4 pr-12'>
+          <DialogTitle className='flex items-center gap-2 text-xl'>
+            <FlaskConical className='h-5 w-5 text-amber-500' />
+            Golden model review
+          </DialogTitle>
+          <DialogDescription className='text-sm leading-6'>
+            The Python reference model defines what "correct" means for this chip — the RTL and every
+            testbench are generated to reproduce its numbers bit-exactly. Check the output below:
+            approve it to start RTL generation, or reject it and the model is rebuilt with your
+            correction.
+          </DialogDescription>
+        </DialogHeader>
+
+        {/* min-h-0 lets flex actually shrink this band; the viewport override
+            undoes Radix's display:table wrapper, which sizes to content and so
+            ignored the modal width. */}
+        <ScrollArea className='min-h-0 w-full flex-1 [&>[data-radix-scroll-area-viewport]>div]:!block'>
+          <div className='w-full min-w-0 space-y-5 p-6'>
+            {loading && !review ? <p className='text-sm text-slate-500'>Loading the golden model…</p> : null}
+
+            {review && !review.available ? (
+              <div className='flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800'>
+                <AlertCircle className='mt-0.5 h-4 w-4 shrink-0' />
+                <span>
+                  No golden-model manifest was found in the workspace yet. Check the GOLDEN_GEN
+                  transcript (<code>logs/golden_gen_deep_agent.md</code>) — you can still reject to
+                  re-run the stage.
+                </span>
+              </div>
+            ) : null}
+
+            {/* Verification status first: an unverified model is not a reference. */}
+            {tests ? (
+              <div
+                className={`flex items-center gap-3 rounded-2xl border p-4 text-sm ${
+                  testsGreen
+                    ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
+                    : 'border-rose-200 bg-rose-50 text-rose-800'
+                }`}
+              >
+                {testsGreen ? (
+                  <CheckCircle2 className='h-5 w-5 shrink-0' />
+                ) : (
+                  <XCircle className='h-5 w-5 shrink-0' />
+                )}
+                <span>
+                  <span className='font-semibold'>
+                    {tests.passed ?? 0}/{tests.total ?? 0} golden tests passing
+                  </span>
+                  {tests.failed ? ` — ${tests.failed} FAILING` : ''}
+                  {!tests.ran ? ' — the suite never executed' : ''}
+                  {summary?.vectors?.length
+                    ? `. Exported vectors for ${summary.vectors.length} module(s), which become the per-IP testbenches.`
+                    : '. No test vectors were exported yet.'}
+                </span>
+              </div>
+            ) : null}
+
+            {previews.length ? (
+              <section className='space-y-3'>
+                <h3 className='text-sm font-semibold text-slate-900'>What the model computed</h3>
+                <div className='grid min-w-0 gap-3 md:grid-cols-2'>
+                  {previews.map((preview) => (
+                    <PreviewCard key={preview.path} taskId={taskId} preview={preview} />
+                  ))}
+                </div>
+              </section>
+            ) : review?.available ? (
+              <p className='rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700'>
+                The model produced no renderable output. Judge it from the report and test results
+                below, or reject and ask for a rendered result.
+              </p>
+            ) : null}
+
+            {ips.length ? (
+              <section className='space-y-3'>
+                <h3 className='text-sm font-semibold text-slate-900'>
+                  IP blocks to be built in Verilog ({ips.length})
+                </h3>
+                <div className='overflow-x-auto rounded-2xl border border-slate-200'>
+                  <table className='w-full min-w-[32rem] text-left text-sm'>
+                    <thead className='bg-slate-50 text-xs uppercase text-slate-500'>
+                      <tr>
+                        <th className='px-3 py-2 font-medium'>Module</th>
+                        <th className='px-3 py-2 font-medium'>Tier</th>
+                        <th className='px-3 py-2 font-medium'>Role</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {ips.map((ip) => (
+                        <tr key={ip.name} className='border-t border-slate-100'>
+                          <td className='px-3 py-2 font-mono text-xs text-slate-800'>{ip.name}</td>
+                          <td className='px-3 py-2'>
+                            <Badge className={`rounded-full border px-2 py-0.5 text-[10px] ${tierClass(ip.tier)}`}>
+                              {tierLabel(ip.tier)}
+                            </Badge>
+                          </td>
+                          <td className='px-3 py-2 text-slate-600'>{ip.role || '—'}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+            ) : null}
+
+            {summary?.notes ? (
+              <section className='space-y-2'>
+                <h3 className='text-sm font-semibold text-slate-900'>What to look at</h3>
+                <p className='rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm leading-6 text-slate-700'>
+                  {summary.notes}
+                </p>
+              </section>
+            ) : null}
+
+            {review?.report ? (
+              <section className='space-y-2'>
+                <h3 className='text-sm font-semibold text-slate-900'>Golden model report</h3>
+                <pre className='max-h-64 overflow-auto rounded-2xl bg-slate-900 p-4 text-[11px] leading-5 text-slate-100'>
+                  {review.report}
+                </pre>
+              </section>
+            ) : null}
+
+            {review?.testLog && !testsGreen ? (
+              <section className='space-y-2'>
+                <h3 className='text-sm font-semibold text-slate-900'>Test log</h3>
+                <pre className='max-h-56 overflow-auto rounded-2xl bg-slate-900 p-4 text-[11px] leading-5 text-slate-100'>
+                  {review.testLog}
+                </pre>
+              </section>
+            ) : null}
+
+            {error ? <p className='text-sm text-rose-600'>{error}</p> : null}
+          </div>
+        </ScrollArea>
+
+        {/* Stacked footer: the reject textarea sits above the action row, so the
+            class default (row + space-x) is overridden in both directions. */}
+        <DialogFooter className='shrink-0 flex-col items-stretch gap-3 border-t border-slate-200 p-6 pt-4 sm:flex-col sm:space-x-0'>
+          {showReject ? (
+            <Textarea
+              value={comment}
+              onChange={(event) => setComment(event.target.value)}
+              placeholder='What is wrong with this output? e.g. "the edges are inverted — expected white edges on black", "the path never reaches the goal", "quantize the weights to Q1.7, not Q4.4"…'
+              className='min-h-24 rounded-2xl border-slate-200'
+            />
+          ) : null}
+          <div className='flex w-full flex-col gap-2 sm:flex-row'>
+            <Button
+              onClick={() => void handle('approve')}
+              disabled={busy !== null}
+              className='h-12 flex-1 rounded-2xl bg-emerald-600 hover:bg-emerald-700'
+            >
+              <ShieldCheck className='mr-2 h-4 w-4' />
+              {busy === 'approve' ? 'Approving…' : 'Output is correct — start RTL generation'}
+            </Button>
+            {showReject ? (
+              <Button
+                variant='outline'
+                onClick={() => void handle('reject')}
+                disabled={busy !== null}
+                className='h-12 flex-1 rounded-2xl border-rose-200 text-rose-600 hover:bg-rose-50'
+              >
+                <XCircle className='mr-2 h-4 w-4' />
+                {busy === 'reject' ? 'Sending…' : 'Send correction & rebuild'}
+              </Button>
+            ) : (
+              <Button
+                variant='outline'
+                onClick={() => setShowReject(true)}
+                disabled={busy !== null}
+                className='h-12 flex-1 rounded-2xl border-slate-200'
+              >
+                <XCircle className='mr-2 h-4 w-4' />
+                Output is wrong
+              </Button>
+            )}
+          </div>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
+}

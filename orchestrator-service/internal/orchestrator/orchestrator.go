@@ -29,6 +29,12 @@ type StageDefinition struct {
 	DependsOn []string
 	Kind      string
 	Gated     bool
+	// RequiresApproval holds the stage in AWAITING_APPROVAL after it SUCCEEDS,
+	// so a human decides whether the flow continues. Dependents stay blocked
+	// until ApproveStage releases it; RejectStage re-runs the stage with the
+	// reviewer's correction. (Distinct from Gated, which only labels the
+	// review-gate copy shown in the UI.)
+	RequiresApproval bool
 }
 
 type Service struct {
@@ -58,7 +64,15 @@ func NewService(db *gorm.DB, redisClient *redis.Client, agent *dispatcher.Client
 		stageDefs: []StageDefinition{
 			{Name: "SPEC_INGEST", Kind: "agent"},
 			{Name: "PLAN", DependsOn: []string{"SPEC_INGEST"}, Kind: "agent"},
-			{Name: "RTL_GEN", DependsOn: []string{"PLAN"}, Kind: "agent"},
+			// GOLDEN_GEN builds the EXECUTABLE PYTHON REFERENCE before any RTL
+			// exists: a model per IP + sub-toplevel + toplevel, a test suite for
+			// every one of them, exported per-module vectors, and a rendered
+			// preview of the result. It is human-gated (RequiresApproval): the
+			// user confirms the golden output is what they wanted, and only then
+			// does RTL_GEN start — generating hardware against an unreviewed
+			// reference just moves the disagreement to signoff.
+			{Name: "GOLDEN_GEN", DependsOn: []string{"PLAN"}, Kind: "agent", Gated: true, RequiresApproval: true},
+			{Name: "RTL_GEN", DependsOn: []string{"GOLDEN_GEN"}, Kind: "agent"},
 			// TB_GEN waits for RTL_GEN so the testbench is written against the
 			// actual generated module interface instead of only the plan;
 			// independently generated RTL+TB tend to drift and fail SIM.
@@ -333,10 +347,25 @@ func (s *Service) dispatchStage(ctx context.Context, taskID, stageID string) {
 		stage.Status = models.StageStatusSucceeded
 		stage.Progress = 100
 		stage.CompletedAt = &nowDone
+		// HUMAN GATE: the work is done, but the flow does not advance until the
+		// reviewer accepts it. Dependents require SUCCEEDED/RELEASED, so parking
+		// the stage in AWAITING_APPROVAL blocks them without failing anything.
+		if def.RequiresApproval {
+			stage.Status = models.StageStatusAwaitingApproval
+		}
 		_ = s.db.WithContext(ctx).Save(&attempt).Error
 		_ = s.db.WithContext(ctx).Save(&stage).Error
 		s.recordAgentOutputs(ctx, taskID, stage.Name, resp)
-		_ = s.publishEvent(ctx, taskID, map[string]any{"type": "stage.updated", "task_id": taskID, "stage": stage.Name, "status": stage.Status, "progress": 100, "timestamp": nowDone.Format(time.RFC3339)})
+		event := map[string]any{"type": "stage.updated", "task_id": taskID, "stage": stage.Name, "status": stage.Status, "progress": 100, "timestamp": nowDone.Format(time.RFC3339)}
+		if def.RequiresApproval {
+			event["title"] = fmt.Sprintf("%s needs your review", stage.Name)
+			event["detail"] = "The golden model is built and its tests pass. Check the output shown in the review dialog: approve it to start RTL generation, or reject it with a correction and the model is rebuilt."
+			event["tone"] = "warning"
+			if img := s.stageImage(taskID, stage.Name); img != "" {
+				event["image"] = img
+			}
+		}
+		_ = s.publishEvent(ctx, taskID, event)
 		_ = s.evaluateTask(ctx, taskID)
 		return
 	}
@@ -358,6 +387,7 @@ func (s *Service) dispatchStage(ctx context.Context, taskID, stageID string) {
 			"pdk_id":         task.PDKID,
 			"stdcell_lib_id": task.StdcellLibID,
 			"padring":        task.Padring,
+			"voltage":        task.Voltage,
 		},
 	})
 	if err != nil {
@@ -433,7 +463,7 @@ func (s *Service) pollEDARun(ctx context.Context, taskID, stageID, jobID string)
 				if s.hasChipInput(taskID) {
 					if _, err := os.Stat(filepath.Join(s.taskWorkspace(taskID), "waves", "golden_output.mem")); err != nil {
 						s.failStage(ctx, &stage, &attempt,
-							"no golden_output.mem — the Python golden model's desired output is required to verify the chip; retry TB_GEN")
+							"no golden_output.mem — the Python golden model's desired output is required to verify the chip; retry GOLDEN_GEN to regenerate it (it is a GOLDEN_GEN deliverable)")
 						return
 					}
 				}
@@ -540,7 +570,65 @@ func (s *Service) ApproveStage(ctx context.Context, taskID, stageName string) er
 	if err := s.db.WithContext(ctx).Save(&stage).Error; err != nil {
 		return err
 	}
+	// A fresh approval must not carry an old rejection's correction into the
+	// next run of the stage.
+	_ = s.redis.Del(ctx, reviewFeedbackKey(taskID, stage.Name)).Err()
+	_ = s.publishEvent(ctx, taskID, map[string]any{
+		"type": "stage.updated", "task_id": taskID, "stage": stage.Name,
+		"status": string(models.StageStatusReleased), "progress": 100,
+		"title":  fmt.Sprintf("%s approved", stage.Name),
+		"detail": "The reviewer accepted this stage's output — the flow continues.",
+		"tone":   "success", "timestamp": time.Now().UTC().Format(time.RFC3339),
+	})
 	return s.evaluateTask(ctx, taskID)
+}
+
+// reviewFeedbackKey holds the reviewer's correction for a rejected stage until
+// its next dispatch, where it is appended to the agent prompt.
+func reviewFeedbackKey(taskID, stageName string) string {
+	return fmt.Sprintf("task:%s:review_feedback:%s", taskID, strings.ToUpper(stageName))
+}
+
+// RejectStage records WHY the reviewer rejected a stage's output and re-runs the
+// stage (plus its dependents) so the agent can correct it. Used by the
+// GOLDEN_GEN gate: "the output is wrong" has to send the golden model back for
+// rework, not simply stall the task.
+func (s *Service) RejectStage(ctx context.Context, taskID, stageName, comment string) error {
+	stageName = strings.ToUpper(stageName)
+	var stage models.Stage
+	if err := s.db.WithContext(ctx).Where("task_id = ? AND name = ?", taskID, stageName).First(&stage).Error; err != nil {
+		return err
+	}
+	comment = strings.TrimSpace(comment)
+	if comment == "" {
+		comment = "The reviewer rejected this output as incorrect but gave no detail — re-examine the result against the design brief, find what is wrong, and fix it."
+	}
+	if err := s.redis.Set(ctx, reviewFeedbackKey(taskID, stageName), comment, 7*24*time.Hour).Err(); err != nil {
+		return err
+	}
+	_ = s.publishEvent(ctx, taskID, map[string]any{
+		"type": "stage.updated", "task_id": taskID, "stage": stageName,
+		"status": string(models.StageStatusQueued), "progress": 0,
+		"title":  fmt.Sprintf("%s rejected — reworking", stageName),
+		"detail": "Reviewer feedback: " + comment,
+		"tone":   "warning", "timestamp": time.Now().UTC().Format(time.RFC3339),
+	})
+	return s.RetryStage(ctx, taskID, stageName)
+}
+
+// reviewFeedback returns the pending reviewer correction for a stage ("" when
+// none), consumed by buildInvokeRequest on the re-run. Tolerates a nil Redis
+// client: buildInvokeRequest is also called from contexts wired without one,
+// and feedback is an enhancement to the prompt, never a prerequisite for it.
+func (s *Service) reviewFeedback(ctx context.Context, taskID, stageName string) string {
+	if s == nil || s.redis == nil {
+		return ""
+	}
+	value, err := s.redis.Get(ctx, reviewFeedbackKey(taskID, stageName)).Result()
+	if err != nil {
+		return ""
+	}
+	return strings.TrimSpace(value)
 }
 
 func (s *Service) taskWorkspace(taskID string) string {
@@ -608,6 +696,7 @@ func (s *Service) buildInvokeRequest(taskID string, task models.Task, stageName,
 			"current_stage":  task.CurrentStage,
 			"pdk_id":         task.PDKID,
 			"stdcell_lib_id": task.StdcellLibID,
+			"voltage":        task.Voltage,
 			"llm_model":      task.LLMModel,
 			"design_brief":   task.DesignBrief,
 			"workspace_root": workspace,
@@ -615,6 +704,14 @@ func (s *Service) buildInvokeRequest(taskID string, task models.Task, stageName,
 	}
 	if stageName == "SIGNOFF" || stageName == "EXPORT" {
 		req.EDAReports = s.edaReportPaths()
+	}
+	// A rejected human gate re-runs the stage: carry the reviewer's correction
+	// into the prompt, otherwise the agent rebuilds the same rejected output.
+	if feedback := s.reviewFeedback(context.Background(), taskID, stageName); feedback != "" {
+		req.Prompt = req.Prompt + "\n\nTHE REVIEWER REJECTED YOUR PREVIOUS OUTPUT FOR THIS STAGE. " +
+			"Their correction is authoritative — address it specifically, do not simply " +
+			"regenerate the same result:\n" + feedback
+		req.Context["review_feedback"] = feedback
 	}
 	return req
 }
@@ -877,6 +974,17 @@ func (s *Service) stageImage(taskID, stageName string) string {
 	switch stageName {
 	case "SPEC_INGEST", "PLAN":
 		return scan("context/uploads")
+	case "GOLDEN_GEN":
+		// The rendered golden result is the thing the reviewer has to look at.
+		for _, candidate := range []string{"waves/golden_output.png", "waves/chip_input.png"} {
+			if _, err := os.Stat(filepath.Join(s.taskWorkspace(taskID), filepath.FromSlash(candidate))); err == nil {
+				return candidate
+			}
+		}
+		if img := scan("golden/outputs"); img != "" {
+			return img
+		}
+		return scan("waves")
 	case "SIM", "GL_SIM":
 		return scan("waves")
 	case "RENDER", "DRC_LVS", "SIGNOFF", "EXPORT":
@@ -957,9 +1065,10 @@ func (s *Service) recordEDAOutputs(ctx context.Context, taskID, stageName string
 var stageActivity = map[string]string{
 	"SPEC_INGEST": "SpecInterpreter is decomposing the design brief and digesting attached images/PDFs (vision).",
 	"PLAN":        "FlowAssistant deep agent is researching references online and writing the execution plan + build contract.",
-	"RTL_GEN":     "RTLAuthor deep agent is generating the RTL modules (compile-checked on every write) — live transcript: logs/rtl_gen_deep_agent.md.",
+	"GOLDEN_GEN":  "GoldenModeler deep agent is building the Python golden model — one model per IP, sub-toplevel and toplevel, a test suite for each, exported vectors and a rendered output for your review — live transcript: logs/golden_gen_deep_agent.md.",
+	"RTL_GEN":     "RTLAuthor deep agent is generating the Verilog IP / sub-toplevel / toplevel modules against the approved golden model (compile-checked on every write) — live transcript: logs/rtl_gen_deep_agent.md.",
 	"RTL_REPAIR":  "RTLAuthor deep agent is repairing compile errors (web fix search + remembered lessons) — live transcript: logs/rtl_repair_deep_agent.md.",
-	"TB_GEN":      "Verifier deep agent is writing self-checking testbenches — live transcript: logs/tb_gen_deep_agent.md.",
+	"TB_GEN":      "Verifier deep agent is writing one self-checking Verilog testbench per IP, sub-toplevel and toplevel from the golden vectors — live transcript: logs/tb_gen_deep_agent.md.",
 	"SIM":         "EDA service is compiling and simulating the design with the generated testbench (iverilog/vvp).",
 	"LINT":        "EDA service is linting the RTL.",
 	"SYNTH":       "EDA service is synthesizing the design (yosys via LibreLane).",

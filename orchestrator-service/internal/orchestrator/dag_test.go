@@ -91,6 +91,84 @@ func TestRetryStageResetsTargetAndDownstreamStages(t *testing.T) {
 	assert.NotEqual(t, models.StageStatusFailed, rtlStage.Status)
 }
 
+// The golden model is the reference the whole flow is built against, so
+// GOLDEN_GEN must PARK on success and keep RTL_GEN out of the queue until a
+// human accepts the output.
+func TestGoldenGenAwaitsApprovalBeforeRTLGen(t *testing.T) {
+	h := newSchedulerHarness(t)
+	defer h.Close()
+
+	taskID := uuid.NewString()
+	h.seedTask(taskID, models.TaskStatusRunning, "GOLDEN_GEN")
+	h.seedStages(taskID,
+		stageSeed{Name: "PLAN", Status: models.StageStatusSucceeded},
+		stageSeed{Name: "GOLDEN_GEN", Status: models.StageStatusQueued},
+		stageSeed{Name: "RTL_GEN", Status: models.StageStatusNotStarted},
+	)
+
+	// Dispatch synchronously: driving this through evaluateTask's goroutine
+	// races the shared in-memory SQLite handle, and a "table is locked" read
+	// makes dispatchStage bail out silently — which would show up here as a
+	// flake rather than as the behaviour under test.
+	golden := h.mustStage(taskID, "GOLDEN_GEN")
+	h.service.dispatchStage(context.Background(), taskID, golden.ID)
+
+	assert.Equal(t, models.StageStatusAwaitingApproval, h.mustStage(taskID, "GOLDEN_GEN").Status,
+		"a succeeded GOLDEN_GEN must park for human review, not go straight to SUCCEEDED")
+	assert.Equal(t, models.StageStatusNotStarted, h.mustStage(taskID, "RTL_GEN").Status,
+		"RTL_GEN must not start while the golden model is unreviewed")
+
+	// The attempt itself succeeded — the hold is a gate, not a failure.
+	var attempts []models.StageAttempt
+	require.NoError(t, h.db.Where("task_id = ? AND stage_name = ?", taskID, "GOLDEN_GEN").Find(&attempts).Error)
+	require.Len(t, attempts, 1)
+	assert.Equal(t, models.StageStatusSucceeded, attempts[0].Status)
+
+	require.NoError(t, h.service.ApproveStage(context.Background(), taskID, "golden_gen"))
+
+	require.Eventually(t, func() bool {
+		return h.mustStage(taskID, "GOLDEN_GEN").Status == models.StageStatusReleased &&
+			h.mustStage(taskID, "RTL_GEN").Status == models.StageStatusSucceeded
+	}, 4*time.Second, 50*time.Millisecond)
+}
+
+// Rejecting the gate has to DO something: the reviewer's correction is stored
+// for the re-run and the stage goes back through the agent.
+func TestRejectStageRecordsFeedbackAndRerunsStage(t *testing.T) {
+	h := newSchedulerHarness(t)
+	defer h.Close()
+
+	taskID := uuid.NewString()
+	h.seedTask(taskID, models.TaskStatusBlocked, "GOLDEN_GEN")
+	h.seedStages(taskID,
+		stageSeed{Name: "PLAN", Status: models.StageStatusSucceeded},
+		stageSeed{Name: "GOLDEN_GEN", Status: models.StageStatusAwaitingApproval},
+		stageSeed{Name: "RTL_GEN", Status: models.StageStatusNotStarted},
+	)
+
+	require.NoError(t, h.service.RejectStage(context.Background(), taskID,
+		"golden_gen", "the sobel output is inverted — dark edges on white"))
+
+	feedback := h.service.reviewFeedback(context.Background(), taskID, "GOLDEN_GEN")
+	assert.Contains(t, feedback, "sobel output is inverted")
+
+	stage := h.mustStage(taskID, "GOLDEN_GEN")
+	assert.Equal(t, 1, stage.RetryCount)
+
+	// The re-run lands back on the gate, and the correction rides along in the
+	// prompt the agent receives.
+	require.Eventually(t, func() bool {
+		return h.mustStage(taskID, "GOLDEN_GEN").Status == models.StageStatusAwaitingApproval
+	}, 3*time.Second, 50*time.Millisecond)
+	assert.Equal(t, models.StageStatusNotStarted, h.mustStage(taskID, "RTL_GEN").Status)
+
+	var task models.Task
+	require.NoError(t, h.db.First(&task, "id = ?", taskID).Error)
+	req := h.service.buildInvokeRequest(taskID, task, "GOLDEN_GEN", "Execute stage GOLDEN_GEN")
+	assert.Contains(t, req.Prompt, "REVIEWER REJECTED")
+	assert.Contains(t, req.Prompt, "sobel output is inverted")
+}
+
 func TestApproveStageReleasesGateAndAdvancesDownstream(t *testing.T) {
 	h := newSchedulerHarness(t)
 	defer h.Close()

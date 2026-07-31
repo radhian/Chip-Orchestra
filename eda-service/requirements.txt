@@ -7,7 +7,6 @@ redis==5.2.0
 langchain==0.3.9
 langgraph==0.2.56
 langchain-ollama>=0.2
-langchain-google-genai>=2.0
 pydantic==2.10.2
 # waveform PNG rendering (VCD step plots for the UI)
 matplotlib>=3.8

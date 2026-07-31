@@ -34,6 +34,19 @@ class ReportContext:
     stage_reports: Dict[str, Any] = field(default_factory=dict)
     architecture_notes: str = ""
     artifacts: List[Dict[str, Any]] = field(default_factory=list)
+    # GOLDEN_GEN's manifest (golden/golden_summary.json): the human-approved
+    # Python reference model's IP decomposition, test results and vectors.
+    golden: Dict[str, Any] = field(default_factory=dict)
+    golden_files: List[str] = field(default_factory=list)
+    # Measured cycle budget: clock edges actually counted in the simulation
+    # waveform, plus the derived throughput. Empty when no VCD was produced.
+    timing_profile: Dict[str, Any] = field(default_factory=dict)
+    # Ordered module chain the data traverses (top -> sub-toplevel -> leaf IPs),
+    # rendered as the report's dataflow description.
+    dataflow: List[Dict[str, str]] = field(default_factory=list)
+    # golden/module_math.json: per-module purpose + governing equations (LaTeX
+    # bodies) authored by the agent that wrote the golden model.
+    module_math: Dict[str, Any] = field(default_factory=dict)
 
     def as_dict(self) -> Dict[str, Any]:
         from dataclasses import asdict
@@ -43,6 +56,96 @@ class ReportContext:
 
 def _rel(workspace: Path, paths: List[Path]) -> List[str]:
     return [str(p.relative_to(workspace)) for p in paths if p.is_file()]
+
+
+_TIMESCALE_UNITS = {"s": 1e9, "ms": 1e6, "us": 1e3, "ns": 1.0, "ps": 1e-3, "fs": 1e-6}
+
+
+def _vcd_timing(vcd: Path) -> Dict[str, Any]:
+    """Count the clock cycles the simulation actually ran.
+
+    "How many cycles does the chip need?" is the first question asked of an
+    accelerator, and nothing in the flow recorded it — the VCD is the only
+    artifact that knows. Counts rising edges on the clock net rather than
+    dividing the end time by a period, so a testbench that gates or stalls the
+    clock still reports the truth. Best-effort: returns {} on any surprise, as
+    the report must never fail over a missing waveform.
+    """
+    import re
+
+    # Streamed in two passes, never fully materialized: these waveforms reach
+    # tens of MB, and splitting the value-change body into a token list cost
+    # far more memory than the whole report is worth.
+    scale_ns = 1.0
+    clk_id = ""
+    best = 99
+    header: List[str] = []
+    try:
+        with vcd.open("r", errors="replace") as fh:
+            for line in fh:
+                header.append(line)
+                if "$enddefinitions" in line:
+                    break
+            head = "".join(header)
+            m = re.search(r"\$timescale\s+(\d+)\s*([munpf]?s)\s*\$end", head)
+            if m:
+                scale_ns = int(m.group(1)) * _TIMESCALE_UNITS.get(m.group(2), 1.0)
+            # Pick the clock net: exact "clk"/"clock" outranks a derived net
+            # such as "clk_en" or "clk_div", which would count the wrong edges.
+            for var in re.finditer(r"\$var\s+\w+\s+1\s+(\S+)\s+([^$]+?)\s*\$end", head):
+                name = var.group(2).strip().split("[")[0].strip().lstrip("\\").lower()
+                rank = 0 if name in ("clk", "clock") else \
+                    1 if name.startswith(("clk", "clock")) else 9
+                if rank < best:
+                    best, clk_id = rank, var.group(1)
+            if not clk_id:
+                return {}
+
+            rise = "1" + clk_id
+            fall = "0" + clk_id
+            cycles = 0
+            last = None
+            end_time = 0
+            for line in fh:
+                tok = line.strip()
+                if not tok:
+                    continue
+                if tok[0] == "#":
+                    try:
+                        end_time = int(tok[1:])
+                    except ValueError:
+                        pass
+                elif tok == rise:
+                    if last == "0":
+                        cycles += 1
+                    last = "1"
+                elif tok == fall:
+                    last = "0"
+    except OSError:
+        return {}
+
+    profile: Dict[str, Any] = {
+        "clock_cycles": cycles,
+        "sim_time_ns": round(end_time * scale_ns, 3),
+    }
+    if cycles:
+        profile["ns_per_cycle"] = round(end_time * scale_ns / cycles, 3)
+    return profile
+
+
+def _dataflow_chain(golden: Dict[str, Any], top: str) -> List[Dict[str, str]]:
+    """Order the IP blocks the data passes through, top-down, from the approved
+    golden manifest — the same decomposition the RTL was generated against."""
+    ips = [ip for ip in (golden.get("ips") or []) if isinstance(ip, dict) and ip.get("name")]
+    if not ips:
+        return []
+    order = {"top": 0, "subtop": 1}
+    ips.sort(key=lambda ip: order.get(str(ip.get("tier", "")).lower(), 2))
+    chain = [{"name": str(ip["name"]), "tier": str(ip.get("tier", "ip")),
+              "role": str(ip.get("role", "") or "")} for ip in ips]
+    if top and not any(c["name"] == top for c in chain):
+        chain.insert(0, {"name": top, "tier": "top", "role": "Top-level integration"})
+    return chain
 
 
 def collect_evidence(
@@ -121,5 +224,45 @@ def collect_evidence(
     arch_note = reports_dir / "rtl_architecture.md"
     if arch_note.is_file():
         ctx.architecture_notes = arch_note.read_text(errors="replace")
+
+    # The golden reference model: the specification the RTL was measured
+    # against, approved by a human before generation started.
+    golden_dir = workspace / "golden"
+    if golden_dir.is_dir():
+        ctx.golden_files = _rel(workspace, sorted(golden_dir.rglob("*")))
+        try:
+            ctx.golden = json.loads(
+                (golden_dir / "golden_summary.json").read_text(errors="replace"))
+        except (OSError, json.JSONDecodeError):
+            ctx.golden = {}
+        if not isinstance(ctx.golden, dict):
+            ctx.golden = {}
+        try:
+            math_doc = json.loads((golden_dir / "module_math.json").read_text(errors="replace"))
+            ctx.module_math = math_doc if isinstance(math_doc, dict) else {}
+        except (OSError, json.JSONDecodeError):
+            ctx.module_math = {}
+
+    # Cycle budget, measured from the waveform the self-checking testbench
+    # produced. Prefer the RTL run; fall back to any VCD in waves/.
+    for candidate in ("design.vcd", "sim.vcd", "dump.vcd"):
+        vcd = waves_dir / candidate
+        if vcd.is_file():
+            ctx.timing_profile = _vcd_timing(vcd)
+            break
+    else:
+        vcds = sorted(waves_dir.glob("*.vcd")) if waves_dir.is_dir() else []
+        if vcds:
+            ctx.timing_profile = _vcd_timing(vcds[0])
+
+    # Derive the achievable sample rate from the CLOSED clock period, not the
+    # simulation's: the simulation clock is arbitrary, the PNR one is real.
+    period = ctx.metrics.get("clock_period_ns")
+    cycles = ctx.timing_profile.get("clock_cycles")
+    if cycles and isinstance(period, (int, float)) and period > 0:
+        ctx.timing_profile["latency_us_at_clock"] = round(cycles * float(period) / 1000.0, 3)
+        ctx.timing_profile["throughput_per_s"] = round(1e9 / (cycles * float(period)), 1)
+
+    ctx.dataflow = _dataflow_chain(ctx.golden, ctx.top_module)
 
     return ctx

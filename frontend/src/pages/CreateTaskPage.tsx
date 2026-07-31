@@ -13,9 +13,9 @@ import { Textarea } from '@/components/ui/textarea'
 import type { CreateTaskInput, TaskAttachment } from '@/types/orchestra'
 
 const pdkOptions = [
-  { value: 'gf180mcuD-3v3', pdkId: 'gf180mcuD', stdcellLibId: 'gf180mcu_fd_sc_mcu7t5v0', label: 'gf180mcuD / mcu7t5v0 @ 3.3V (default)' },
-  { value: 'gf180mcuD-5v0', pdkId: 'gf180mcuD', stdcellLibId: 'gf180mcu_fd_sc_mcu7t5v0', label: 'gf180mcuD / mcu7t5v0 @ 5.0V' },
-  { value: 'sky130', pdkId: 'sky130', stdcellLibId: 'sky130_fd_sc_hd', label: 'sky130 / sky130_fd_sc_hd' },
+  { value: 'gf180mcuD-3v3', pdkId: 'gf180mcuD', stdcellLibId: 'gf180mcu_fd_sc_mcu7t5v0', voltage: '3v3', label: 'gf180mcuD / mcu7t5v0 @ 3.3V (default)' },
+  { value: 'gf180mcuD-5v0', pdkId: 'gf180mcuD', stdcellLibId: 'gf180mcu_fd_sc_mcu7t5v0', voltage: '5v0', label: 'gf180mcuD / mcu7t5v0 @ 5.0V' },
+  { value: 'sky130', pdkId: 'sky130', stdcellLibId: 'sky130_fd_sc_hd', voltage: '', label: 'sky130 / sky130_fd_sc_hd' },
 ] as const
 
 const defaultPdkOption = pdkOptions[0]
@@ -26,6 +26,14 @@ const padringOptions = [
 ] as const
 
 const defaultPadringOption = padringOptions[0]
+
+/** Where a picked model runs: an Ollama `*:cloud` tag proxies inference to
+ *  Ollama's servers, everything else runs on the local daemon. */
+function modelOrigin(model: string): string {
+  const name = model.toLowerCase()
+  if (name.includes(':cloud') || name.includes('-cloud')) return 'Ollama cloud'
+  return 'local'
+}
 
 const initialForm = {
   taskName: '',
@@ -39,6 +47,7 @@ const initialForm = {
   pdkChoice: defaultPdkOption.value as string,
   pdkId: defaultPdkOption.pdkId as string,
   stdcellLibId: defaultPdkOption.stdcellLibId as string,
+  voltage: defaultPdkOption.voltage as string,
   pdkLabel: defaultPdkOption.label as string,
   padring: defaultPadringOption.value as string,
   reviewGates: ['BEFORE_SIGNOFF'] as const,
@@ -66,6 +75,10 @@ export function CreateTaskPage() {
   const [llmModels, setLlmModels] = useState<string[]>([])
   const [attachments, setAttachments] = useState<TaskAttachment[]>([])
   const [attachmentError, setAttachmentError] = useState<string | null>(null)
+  const llmHint = useMemo(() => {
+    if (!llmModels.length) return 'No models detected — the server default will be used'
+    return 'Models detected on the connected Ollama server'
+  }, [llmModels])
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
   useEffect(() => {
@@ -142,6 +155,7 @@ export function CreateTaskPage() {
         template_id: form.templateId.trim() || undefined,
         pdk_id: form.pdkId,
         stdcell_lib_id: form.stdcellLibId,
+        voltage: form.voltage || undefined,
         padring: form.padring,
         llm_model: llmModel || undefined,
         review_gates: [...form.reviewGates],
@@ -165,7 +179,7 @@ export function CreateTaskPage() {
 
   function handlePdkChange(value: string) {
     const selected = pdkOptions.find((o) => o.value === value) ?? defaultPdkOption
-    setForm((current) => ({ ...current, pdkChoice: selected.value, pdkId: selected.pdkId, stdcellLibId: selected.stdcellLibId, pdkLabel: selected.label }))
+    setForm((current) => ({ ...current, pdkChoice: selected.value, pdkId: selected.pdkId, stdcellLibId: selected.stdcellLibId, voltage: selected.voltage, pdkLabel: selected.label }))
   }
 
   function handlePadringChange(value: string) {
@@ -276,7 +290,7 @@ export function CreateTaskPage() {
             </div>
 
             <div className='grid gap-5 md:grid-cols-2'>
-              <Field label='LLM model' hint='Models detected on the connected Ollama server'>
+              <Field label='LLM model' hint={llmHint}>
                 <Select value={llmModel} onValueChange={setLlmModel}>
                   <SelectTrigger className='h-12 rounded-2xl border-slate-200 bg-white px-4 text-sm text-slate-700 shadow-none'>
                     <SelectValue placeholder={llmModels.length ? 'Select LLM model' : 'Using server default model'} />
@@ -284,7 +298,12 @@ export function CreateTaskPage() {
                   <SelectContent>
                     {llmModels.map((model) => (
                       <SelectItem key={model} value={model}>
-                        {model}
+                        <span className='flex w-full items-center justify-between gap-3'>
+                          <span>{model}</span>
+                          {/* Where the model actually runs — local weights vs.
+                              an Ollama cloud tag. */}
+                          <span className='text-xs text-slate-400'>{modelOrigin(model)}</span>
+                        </span>
                       </SelectItem>
                     ))}
                   </SelectContent>

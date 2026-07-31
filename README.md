@@ -38,9 +38,11 @@ The platform combines AI planning, verification, EDA execution, artifact managem
 ## Features
 
 - AI-assisted RTL-to-GDSII design flow
-- Full 15-stage orchestration pipeline from spec ingest to export
+- Full 16-stage orchestration pipeline from spec ingest to export
 - Multi-agent orchestration
-- **Golden-first verification**: the Python golden model defines the desired output; the RTL must match it value-for-value before the flow proceeds
+- **Golden-first verification**: a dedicated `GOLDEN_GEN` stage builds an executable Python reference — one model per IP, per sub-toplevel and for the toplevel, each with its own test suite and exported input/expected vectors — *before any RTL exists*. The RTL must match it value-for-value before the flow proceeds
+- **Human gate on the golden output**: the model's computed result (processed image, solved grid, plotted values, waveform) is shown for review; approving it starts RTL generation, rejecting it rebuilds the model with your correction
+- **Hierarchical multi-file RTL**: `RTL_GEN` emits plain Verilog-2001 with one module per `.v` file across three tiers (leaf IPs → sub-toplevel integrators → chip top), and `TB_GEN` writes one self-checking `tb/<module>_tb.v` per module from the golden vectors
 - Automated verification and repair (budgeted SIM and hardening auto-repair loops)
 - **Complete bundled EDA toolchain** — iverilog, Verilator, yosys+pyosys, OpenROAD, KLayout, Magic, netgen — with the GF180MCU PDK auto-installed via Volare
 - Browser-native task management with live per-stage activity (agent transcripts + raw EDA tool logs)
@@ -62,7 +64,7 @@ flowchart TB
 
     subgraph OP[Orchestrator Plane]
         OPS[Orchestrator Service\nGo + Gin + GORM]
-        DAG[DAG Scheduler\n15-stage State Machine]
+        DAG[DAG Scheduler\n16-stage State Machine]
     end
 
     subgraph EXEC[Execution Plane]
@@ -137,10 +139,15 @@ flowchart TB
         PLAN["PLAN\nAI planning and runbook generation"]
     end
 
-    subgraph STAGE3["🧾 Stage 03 · Design Authoring"]
+    subgraph STAGE2B["🐍 Stage 03 · Golden Reference"]
         direction LR
-        RTL_GEN["RTL_GEN\nRTL generation"]
-        TB_GEN["TB_GEN\nTestbench generation"]
+        GOLDEN_GEN["GOLDEN_GEN\nPython model per IP + tests\nHUMAN GATE: is the output correct?"]
+    end
+
+    subgraph STAGE3["🧾 Stage 04 · Design Authoring"]
+        direction LR
+        RTL_GEN["RTL_GEN\nMulti-file Verilog: IPs, sub-top, top"]
+        TB_GEN["TB_GEN\nOne testbench per module"]
     end
 
     subgraph STAGE4["🔍 Stage 04 · Verification & Repair"]
@@ -171,7 +178,8 @@ flowchart TB
     end
 
     SPEC_INGEST --> PLAN
-    PLAN --> RTL_GEN
+    PLAN --> GOLDEN_GEN
+    GOLDEN_GEN --> RTL_GEN
     RTL_GEN --> TB_GEN
     RTL_GEN --> SIM
     TB_GEN --> SIM
@@ -196,6 +204,9 @@ SPEC_INGEST
     │
     ▼
 PLAN
+    │
+    ▼
+GOLDEN_GEN  ◀── human gate: approve the Python golden model's output
     │
     ▼
 RTL_GEN
@@ -225,23 +236,24 @@ RTL_GEN
                                EXPORT
 ```
 
-The default pipeline now covers **15 orchestrated stages**:
+The default pipeline now covers **16 orchestrated stages**:
 
 1. `SPEC_INGEST`
 2. `PLAN`
-3. `RTL_GEN`
-4. `TB_GEN`
-5. `SIM`
-6. `LINT`
-7. `RTL_REPAIR`
-8. `SYNTH` *(gated)*
-9. `PNR`
-10. `STA`
-11. `GL_SIM`
-12. `RENDER`
-13. `DRC_LVS`
-14. `SIGNOFF` *(gated)*
-15. `EXPORT`
+3. `GOLDEN_GEN` *(human-gated)* — the executable Python reference model
+4. `RTL_GEN`
+5. `TB_GEN`
+6. `SIM`
+7. `LINT`
+8. `RTL_REPAIR`
+9. `SYNTH` *(gated)*
+10. `PNR`
+11. `STA`
+12. `GL_SIM`
+13. `RENDER`
+14. `DRC_LVS`
+15. `SIGNOFF` *(gated)*
+16. `EXPORT`
 
 `STA`, `GL_SIM`, `RENDER`, and `DRC_LVS` all fan out from `PNR` and run as parallel physical-signoff analyses that reconverge at `SIGNOFF`. `SYNTH` and `SIGNOFF` are marked as human-review gates in `FULL_FLOW_GATED` launch mode.
 
@@ -366,7 +378,7 @@ Critical engineering decisions—including RTL modifications, implementation, an
 | EDA | Python, FastAPI |
 | Database | MySQL |
 | Cache & Messaging | Redis |
-| AI Models | Ollama (default: `glm-5.2:cloud`; also Qwen, Mistral, etc.), ZhipuAI GLM API, Google Gemini |
+| AI Models | Ollama (default: `glm-5.2:cloud`; also Qwen, Mistral, etc.), ZhipuAI GLM API |
 | EDA Toolchain | Icarus Verilog, Verilator, yosys+pyosys, LibreLane, OpenROAD, OpenSTA, Magic, netgen, KLayout |
 
 ---
@@ -397,7 +409,7 @@ Responsible for:
 - Self-repair
 - Reasoning trace generation
 
-Every LLM stage (PLAN / RTL_GEN / RTL_REPAIR / TB_GEN) runs a **RLM deep agent**: the agent treats large inputs as an environment on
+Every LLM stage (PLAN / GOLDEN_GEN / RTL_GEN / RTL_REPAIR / TB_GEN) runs a **RLM deep agent**: the agent treats large inputs as an environment on
 disk — it peeks at file slices, greps across the design, delegates focused
 sub-tasks to fresh `llm_query` calls, computes data in a Python sandbox, and
 writes RTL with a **compile-check-on-write** feedback loop. Each agent can also:
@@ -513,7 +525,7 @@ vision model (e.g. `qwen3.5:9b`) — keep one pulled for image support.
 Re-running `install.sh` never overwrites the model already chosen in `.env`
 unless you pass `--model` explicitly.
 
-The model can be changed later by editing `OLLAMA_MODEL` in `.env` and running `docker compose up -d agent-service`. Other providers (ZhipuAI GLM API, Google Gemini, or a deterministic `mock` for CI) are configured via `LLM_PROVIDER` in `.env` — see the comments in [.env.example](.env.example).
+The model can be changed later by editing `OLLAMA_MODEL` in `.env` and running `docker compose up -d agent-service`. Other providers (ZhipuAI GLM API, or a deterministic `mock` for CI) are configured via `LLM_PROVIDER` in `.env` — see the comments in [.env.example](.env.example).
 
 ### Frontend hot-reload mode (optional, for development)
 

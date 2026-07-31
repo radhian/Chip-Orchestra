@@ -105,7 +105,7 @@ def run_simulation(
     # Stale outputs must never masquerade as this run's results: the chip
     # output dump (and its render) belongs to THE RUN THAT PRODUCED IT — an old
     # chip_output.mem once showed up (and compared) as if the new tb had
-    # written it. golden_output.* stays: TB_GEN produces it, not the sim.
+    # written it. golden_output.* stays: GOLDEN_GEN produces it, not the sim.
     for stale in (vvp_path, vcd_path, workspace / "design.vcd",
                   waves_dir / "chip_output.mem", waves_dir / "chip_output.png"):
         if stale.exists():

@@ -48,7 +48,14 @@ inputs as an environment on disk.
 You manage REAL files for one chip design with your file tools — `list_files`,
 `read_file_disk` (reads a SLICE: pass start_line/max_lines), `write_file_disk`,
 `delete_file_disk`, and `grep_files` (regex-probe across files). RTL lives under
-`rtl/`, testbenches under `tb/`, offloaded context under `context/`.
+`rtl/`, testbenches under `tb/`, the Python golden model under `golden/`,
+offloaded context under `context/`.
+
+FILE-FORMAT CONTRACT: hardware is written as MULTI-FILE VERILOG-2001 — one module
+per `rtl/<module>.v`, one testbench per `tb/<module>_tb.v`, shared macros in
+`rtl/params.vh`. `.sv`/`.svh` under rtl/ or tb/ are REJECTED on write (yosys can't
+read them here), so never use `logic`, `always_ff`, typedefs, packed structs,
+interfaces or unpacked-array ports.
 
 How to work (RLM loop):
 0. STATE FIRST. If `context/state.md` exists, read it before anything else — it is the
@@ -191,6 +198,19 @@ def make_fs_tools(base_dir: str | Path, on_clean_write=None) -> List:
         and COMPILE-CHECKED on write: if the result says COMPILE ERRORS, fix the file and
         write it again before moving on."""
         p = _resolve(path)
+        rel = (path or "").replace("\\", "/")
+        # PLAIN-VERILOG CONTRACT: the design and its testbenches are multi-file
+        # Verilog-2001 (`.v`, headers `.vh`). A `.sv` under rtl/ or tb/ is
+        # rejected at write time — iverilog would accept it but the hardening
+        # flow's yosys Verilog-2005 frontend needs slang (absent in this
+        # LibreLane build), so SystemVerilog silently costs the GDS.
+        if p.suffix in (".sv", ".svh") and (rel.startswith(("rtl/", "tb/"))):
+            want = rel[:-len(p.suffix)] + (".vh" if p.suffix == ".svh" else ".v")
+            return (f"REJECTED {path} — this flow is MULTI-FILE VERILOG-2001 ONLY. "
+                    f"Write `{want}` instead (one module per file) and use plain Verilog "
+                    "constructs: `reg`/`wire` not `logic`, `always @(posedge clk)` not "
+                    "`always_ff`, packed vectors not structs/interfaces/typedefs, and no "
+                    "unpacked-array ports. Write again NOW with the .v path.")
         p.parent.mkdir(parents=True, exist_ok=True)
         fixnote = ""
         if p.suffix in (".v", ".sv", ".vh"):
@@ -338,22 +358,24 @@ def make_python_tools(base_dir: str | Path, timeout: int = 0) -> List:
     # this package needed in the subprocess). Model = the run's active pick, passed via env.
     _LLM_HELPER = (
         "def llm(prompt, temperature=0.2):\n"
-        "    \"\"\"One fresh local-LLM call — the RLM recursion primitive, callable from code.\n"
+        "    \"\"\"One fresh LLM call — the RLM recursion primitive, callable from code.\n"
+        "    Routes to the run's active Ollama model.\n"
         "    Loop over chunks/files and call this per piece; collect the results.\"\"\"\n"
         "    import json as _j, os as _o, urllib.request as _u\n"
-        "    _b = _o.environ.get('OLLAMA_BASE_URL', 'http://localhost:11434').rstrip('/')\n"
         "    _m = _o.environ.get('GARUDA_LLM_MODEL') or _o.environ.get('OLLAMA_MODEL', 'qwen3.5:9b')\n"
+        "    def _count(_in, _out):\n"
+        "        try:  # token accounting — folded into the stage's token note\n"
+        "            with open('context/tokens.jsonl', 'a') as _f:\n"
+        "                _f.write(_j.dumps({'in': _in, 'out': _out}) + chr(10))\n"
+        "        except Exception:\n"
+        "            pass\n"
+        "    _b = _o.environ.get('OLLAMA_BASE_URL', 'http://localhost:11434').rstrip('/')\n"
         "    _body = {'model': _m, 'messages': [{'role': 'user', 'content': str(prompt)[:24000]}],\n"
         "             'stream': False, 'think': False, 'options': {'temperature': temperature}}\n"
         "    _rq = _u.Request(_b + '/api/chat', _j.dumps(_body).encode(),\n"
         "                     {'Content-Type': 'application/json'})\n"
         "    _r = _j.loads(_u.urlopen(_rq, timeout=600).read())\n"
-        "    try:  # token accounting — folded into the stage's token note\n"
-        "        with open('context/tokens.jsonl', 'a') as _f:\n"
-        "            _f.write(_j.dumps({'in': _r.get('prompt_eval_count', 0),\n"
-        "                               'out': _r.get('eval_count', 0)}) + chr(10))\n"
-        "    except Exception:\n"
-        "        pass\n"
+        "    _count(_r.get('prompt_eval_count', 0), _r.get('eval_count', 0))\n"
         "    return _r['message']['content']\n"
     )
 
@@ -498,6 +520,33 @@ def _looks_repetitive(text: str) -> bool:
     return len(set(lines[-30:])) <= 3
 
 
+class DeepAgentProviderError(RuntimeError):
+    """The LLM provider refused to serve the run — no credit, bad key, rate
+    limit, unreachable daemon, missing model. NOT an agent mistake: no amount of
+    retrying or repair prompting can produce work, so the stage must fail loudly
+    with the provider's own message instead of handing an empty result forward."""
+
+
+# Substrings that mark a provider-level refusal in the exception text. Matched
+# case-insensitively against the whole message: langchain wraps the upstream
+# body, so the HTTP status and the human sentence both survive into `str(e)`.
+_PROVIDER_FAIL_MARKERS = (
+    "status code: 401", "status code: 402", "status code: 403", "status code: 429",
+    "extra usage balance is empty", "insufficient_quota", "insufficient balance",
+    "quota exceeded", "rate limit", "invalid api key", "incorrect api key",
+    "authentication", "unauthorized", "payment required",
+    "connection refused", "connection error", "failed to connect",
+    "max retries exceeded", "name or service not known",
+    "model not found", "try pulling it first",
+)
+
+
+def _is_provider_failure(exc: BaseException) -> bool:
+    """True when the abort is the PROVIDER refusing, not the agent stumbling."""
+    text = f"{type(exc).__name__}: {exc}".lower()
+    return any(marker in text for marker in _PROVIDER_FAIL_MARKERS)
+
+
 def run_step_agent(base_dir: str | Path, goal: str, extra_tools=None,
                    instructions: str | None = None, temperature: float = 0.2,
                    model=None, on_clean_write=None, recursion_limit: int = 60,
@@ -590,5 +639,12 @@ def run_step_agent(base_dir: str | Path, goal: str, extra_tools=None,
                 break
     except Exception as e:  # noqa: BLE001 — return what we have; caller decides
         log_lines.append(f"\n(deep agent aborted: {e})")
+        # A provider refusal is not something the caller can work around: the
+        # model never ran, so "whatever is on disk" is nothing. Surfacing it as
+        # a normal empty return is how an out-of-credit run reached the human
+        # approval gate asking someone to approve an empty golden model.
+        if _is_provider_failure(e):
+            _flush()
+            raise DeepAgentProviderError(str(e)) from e
     _flush()
     return final

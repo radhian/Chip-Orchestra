@@ -2,10 +2,14 @@
 # ---------------------------------------------------------------------------
 # Chip Orchestra — daily driver. Starts/stops the ALREADY-INSTALLED stack.
 #
-#   ./scripts/run.sh            start the stack and print the web link
+#   ./scripts/run.sh            rebuild images from the current code, then start
 #   ./scripts/run.sh stop       stop the stack
-#   ./scripts/run.sh restart    stop + start
-#   ./scripts/run.sh --build    start and rebuild images (after a code change)
+#   ./scripts/run.sh restart    stop + rebuild + start
+#   ./scripts/run.sh --no-build start without rebuilding (images as-is)
+#
+# Rebuilding is the DEFAULT so the running stack always matches the working
+# tree — a code change you cannot see in the browser is worse than a slow
+# start. Docker layer cache makes a no-change rebuild a few seconds.
 #
 # run.sh NEVER reinstalls, never asks for sudo, and never rewrites your .env.
 # First-time setup (Docker/Ollama install, model pull, .env creation) is
@@ -24,15 +28,16 @@ die()  { echo "${red}✘${reset} $*"; exit 1; }
 # read a KEY=value from .env (without sourcing arbitrary content)
 envval() { grep -E "^$1=" .env 2>/dev/null | tail -1 | cut -d= -f2- | tr -d '"' ; }
 
-BUILD=false
+BUILD=true
 CMD="start"
 while [ $# -gt 0 ]; do
   case "$1" in
-    stop)      CMD="stop"; shift ;;
-    restart)   CMD="restart"; shift ;;
-    start)     CMD="start"; shift ;;
-    --build)   BUILD=true; shift ;;
-    -h|--help) sed -n '2,13p' "$0"; exit 0 ;;
+    stop)       CMD="stop"; shift ;;
+    restart)    CMD="restart"; shift ;;
+    start)      CMD="start"; shift ;;
+    --build)    BUILD=true; shift ;;   # kept for muscle memory; now the default
+    --no-build) BUILD=false; shift ;;
+    -h|--help) sed -n '2,17p' "$0"; exit 0 ;;
     *) die "Unknown option: $1 (see --help). For installation use ./scripts/install.sh" ;;
   esac
 done

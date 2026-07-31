@@ -5,6 +5,7 @@ import type {
   CreateTaskInput,
   DiagnosisItem,
   ExportBundleResponse,
+  GoldenReview,
   ListTasksParams,
   RunbookEvent,
   SignoffStatus,
@@ -89,6 +90,10 @@ function mapStageStatus(status: string): TaskStage['status'] {
       return 'active'
     case 'FAILED':
       return 'failed'
+    case 'AWAITING_APPROVAL':
+      // Waiting on a human, not on the machine — the timeline shows it as the
+      // stage in play so the run doesn't look stalled.
+      return 'active'
     default:
       return 'queued'
   }
@@ -179,12 +184,18 @@ export async function updateTask(id: string, payload: { description?: string; st
 }
 
 export async function getTaskStages(id: string): Promise<TaskStage[]> {
-  const response = await requestJson<{ stages?: Array<{ name: string; status: string; retry_count?: number }> }>(`/api/v1/tasks/${id}/stages`)
+  const response = await requestJson<{
+    stages?: Array<{ name: string; status: string; retry_count?: number; pending_approval?: boolean }>
+  }>(`/api/v1/tasks/${id}/stages`)
   return (response.stages ?? []).map((stage) => ({
     key: stage.name.toLowerCase(),
     label: stage.name.replace(/_/g, ' '),
     status: mapStageStatus(stage.status),
     retryCount: Number(stage.retry_count ?? 0),
+    // The detail page replaces the task's stage list with this one, so an
+    // awaiting-approval stage has to carry its gate flag through here or the
+    // review prompt never renders.
+    pendingApproval: Boolean(stage.pending_approval) || stage.status === 'AWAITING_APPROVAL',
   }))
 }
 
@@ -222,6 +233,12 @@ export async function proposeWorkspacePatch(id: string, payload: { instruction: 
 
 export async function getSignoffStatus(id: string): Promise<SignoffStatus> {
   return requestJson<SignoffStatus>(`/api/v1/tasks/${id}/signoff/status`)
+}
+
+/** The golden-model review payload (GOLDEN_GEN): IP models, test results and the
+ *  rendered outputs the user approves before RTL generation starts. */
+export async function getGoldenReview(id: string): Promise<GoldenReview> {
+  return requestJson<GoldenReview>(`/api/v1/tasks/${id}/golden/review`)
 }
 
 export async function uploadWorkspaceFile(id: string, file: File): Promise<{ path: string }> {

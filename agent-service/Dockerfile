@@ -3,10 +3,15 @@ FROM python:3.12-slim
 # iverilog is bundled so the deep agents' compile-check-on-write loop can
 # verify generated RTL (iverilog -tnull) without a round-trip to eda-service.
 # git enables the reference-anchor shallow clone (no GitHub API rate limits).
+# The texlive packages let EXPORT compile the IEEE Access report to PDF in
+# place: latex-recommended/-extra carry what IEEEtran.cls needs (fonts,
+# cite, url, graphicx drivers) — without them the stage can only emit .tex.
 ENV DEBIAN_FRONTEND=noninteractive \
     IVERILOG_BIN=iverilog
 RUN apt-get update \
     && apt-get install -y --no-install-recommends iverilog git ca-certificates \
+       texlive-latex-base texlive-latex-recommended texlive-latex-extra \
+       texlive-fonts-recommended \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app

@@ -336,8 +336,8 @@ Then set the environment variables shown in the DNS section.
 For a low-cost Hostinger VPS deployment, do not run a large local model on the `KVM 2` core VM. The core VM is sized around cloud inference. Use one of:
 
 - GLM-compatible endpoint
-- Gemini
 - OpenAI-compatible endpoint
+- An Ollama `*:cloud` model (inference on Ollama's servers, no local GPU)
 
 ### 13.2 Keep EDA jobs single-concurrency at first
 

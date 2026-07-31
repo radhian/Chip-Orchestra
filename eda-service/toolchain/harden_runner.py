@@ -57,6 +57,20 @@ def _pdk() -> str:
     return os.getenv("PDK", "gf180mcuD")
 
 
+def _voltage(opts: Optional[Dict] = None) -> str:
+    """Resolve the GF180MCU corner for THIS job.
+
+    The per-task selection sent by the orchestrator wins; GF180_VOLTAGE is only
+    the deploy-wide fallback for tasks created before voltage became per-task.
+    """
+    raw = str((opts or {}).get("voltage") or "").strip().lower()
+    if raw in ("5v0", "5.0v", "5v", "5"):
+        return "5v0"
+    if raw in ("3v3", "3.3v", "3v", "3.3"):
+        return "3v3"
+    return "5v0" if os.getenv("GF180_VOLTAGE", "3v3") == "5v0" else "3v3"
+
+
 def _pdk_root() -> str:
     return os.getenv("PDK_ROOT", os.path.expanduser("~/.ciel"))
 
@@ -256,7 +270,7 @@ def _absolutize_readmem(path: Path, rtl_dir: Path) -> None:
 
 
 def _build_config(rtl_dir: Path, src_dir: Path, top: str, clock_port: str,
-                  clock_period: float, core_util: int) -> dict:
+                  clock_period: float, core_util: int, voltage: str = "3v3") -> dict:
     want = set(closure_files(rtl_dir, top))
     design_files: List[str] = []
     for p in (sorted(rtl_dir.glob("*.v")) + sorted(rtl_dir.glob("*.sv"))):
@@ -281,12 +295,13 @@ def _build_config(rtl_dir: Path, src_dir: Path, top: str, clock_port: str,
     for staged in sorted(src_dir.glob("*.v")) + sorted(src_dir.glob("*.sv")):
         _absolutize_readmem(staged, rtl_dir)
     has_sv = needs_slang(rtl_dir)
-    # GF180MCU at 3.3V (default; GF180_VOLTAGE=5v0 restores the 5V corners).
-    # Providing LIB explicitly makes LibreLane skip its hardcoded 5V corner
-    # set, so the whole timing flow (synth + STA + PnR) runs on 3.3V libs.
+    # GF180MCU at 3.3V. Providing LIB explicitly makes LibreLane skip its
+    # hardcoded 5V corner set, so the whole timing flow (synth + STA + PnR)
+    # runs on 3.3V libs. At 5v0 we leave LIB unset and let LibreLane use its
+    # native 5V corners.
     volt_cfg: dict = {}
     pdk_name = _pdk()
-    if pdk_name.startswith("gf180mcu") and os.getenv("GF180_VOLTAGE", "3v3") != "5v0":
+    if pdk_name.startswith("gf180mcu") and voltage != "5v0":
         scl = "gf180mcu_fd_sc_mcu7t5v0"
         lib_dir = f"{os.getenv('PDK_ROOT', '/opt/pdk')}/{pdk_name}/libs.ref/{scl}/lib"
         volt_cfg = {
@@ -337,6 +352,7 @@ def run_harden(
 ) -> BaseReport:
     """Run LibreLane on ``workspace/rtl`` and return the stage-appropriate report."""
     opts = opts or {}
+    voltage = _voltage(opts)
     workspace = Path(workspace)
     rtl_dir = workspace / "rtl"
     logs_dir = workspace / "logs"
@@ -405,7 +421,7 @@ def run_harden(
         if chip.exists():
             shutil.rmtree(chip, ignore_errors=True)
         src.mkdir(parents=True, exist_ok=True)
-        config = _apply_slang_fallback(_build_config(rtl_dir, src, top, clock_port, clock_period, core_util), lines)
+        config = _apply_slang_fallback(_build_config(rtl_dir, src, top, clock_port, clock_period, core_util, voltage), lines)
         (chip / "config.json").write_text(json.dumps(config, indent=2))
         if not config["VERILOG_FILES"]:
             report.errors.append("no synthesizable RTL files found")
@@ -427,7 +443,7 @@ def run_harden(
     # fresh runs so retries start from the converged recipe instead of
     # re-climbing the whole tuning ladder.
     if not reuse and tune_loaded:
-        config = _build_config(rtl_dir, src, top, clock_port, clock_period, core_util)
+        config = _build_config(rtl_dir, src, top, clock_port, clock_period, core_util, voltage)
         config.update(extra_cfg)
         config = _apply_slang_fallback(config, lines)
         config["PL_TARGET_DENSITY_PCT"] = max(20, core_util + 5) + density_bump
@@ -533,7 +549,7 @@ def run_harden(
         if not changes:
             break
         lines.append("PARAMETER AUTO-TUNE: " + "; ".join(changes) + " — re-hardening")
-        config = _build_config(rtl_dir, src, top, clock_port, clock_period, core_util)
+        config = _build_config(rtl_dir, src, top, clock_port, clock_period, core_util, voltage)
         config.update(extra_cfg)
         config = _apply_slang_fallback(config, lines)
         config["PL_TARGET_DENSITY_PCT"] = max(20, core_util + 5) + density_bump
@@ -584,7 +600,7 @@ def run_harden(
     if isinstance(wns_val, (int, float)) and (clock_period - wns_val) > 0.5:
         report.metrics["fmax_mhz"] = round(1000.0 / (clock_period - wns_val), 1)
     if _pdk().startswith("gf180mcu"):
-        report.metrics["voltage"] = "5.0V" if os.getenv("GF180_VOLTAGE", "3v3") == "5v0" else "3.3V"
+        report.metrics["voltage"] = "5.0V" if voltage == "5v0" else "3.3V"
     report.signoff = signoff
     report.tapeout_ready = bool(gds) and signoff.get("clean", False)
 

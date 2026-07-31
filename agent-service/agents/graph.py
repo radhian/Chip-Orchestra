@@ -15,6 +15,7 @@ __all__ = ["AgentResult", "DeepAgentGraph"]
 STAGE_AGENTS = {
     "SPEC_INGEST": "SpecInterpreter",
     "PLAN": "FlowAssistant",
+    "GOLDEN_GEN": "GoldenModeler",
     "RTL_GEN": "RTLAuthor",
     "RTL_REPAIR": "RTLAuthor",
     "TB_GEN": "Verifier",

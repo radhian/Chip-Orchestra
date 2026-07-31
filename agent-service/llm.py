@@ -7,13 +7,12 @@ with an optional local VLM for reading uploaded diagrams.
 
 Configure via .env (see .env.example):
 
-    LLM_PROVIDER        ollama | google | openai/glm | mock   (default: mock)
+    LLM_PROVIDER        ollama | openai/glm | mock   (default: mock)
     OLLAMA_MODEL        e.g. qwen3.5:9b
     OLLAMA_BASE_URL     default http://localhost:11434
     OLLAMA_NUM_CTX      context window (Ollama defaults to 2048 otherwise!)
     OLLAMA_THINK        1 = enable the qwen3 thinking pass
     GARUDA_VISION_MODEL force a specific vision model for describe_image
-    GOOGLE_API_KEY      required when LLM_PROVIDER=google
 
 Two layers live here:
 
@@ -94,8 +93,15 @@ def set_model(name) -> None:
 
 
 def current_model() -> str:
-    """The Ollama chat model in effect right now (override if set, else .env)."""
-    return _MODEL_OVERRIDE or os.getenv("OLLAMA_MODEL", "glm-5.2:cloud")
+    """The chat model in effect right now: the per-run override the UI picked if
+    set, else the active provider's .env default. Provider-aware, so a pick from
+    a non-Ollama provider is not dropped on the floor by reading OLLAMA_MODEL."""
+    if _MODEL_OVERRIDE:
+        return _MODEL_OVERRIDE
+    provider = get_provider()
+    if provider in ("openai", "glm", "zhipu", "zhipuai", "openai-compatible"):
+        return _env("OPENAI_MODEL", "LLM_MODEL", default="glm-4.6")
+    return os.getenv("OLLAMA_MODEL", "glm-5.2:cloud")
 
 
 def list_ollama_models() -> "list[dict]":
@@ -161,7 +167,7 @@ def vision_model() -> "str | None":
 
     Resolution order: GARUDA_VISION_MODEL env → the active chat model if IT
     reports vision → the first installed LOCAL model with a 'vision' capability
-    → None. Google provider is handled separately in describe_image."""
+    → None."""
     forced = os.getenv("GARUDA_VISION_MODEL", "").strip()
     if forced:
         return forced
@@ -184,8 +190,6 @@ def model_supports_vision(name: "str | None" = None) -> bool:
         return True
     if force in ("0", "false", "no", "off"):
         return False
-    if get_provider() in ("google", "gemini"):
-        return True
     return vision_model() is not None
 
 
@@ -265,9 +269,7 @@ def provider_label() -> str:
     if provider == "ollama":
         m = current_model()
         return f"Ollama · {m} ({'cloud' if is_cloud_model(m) else 'local'})"
-    if provider in ("google", "gemini"):
-        return f"Google · {os.getenv('GOOGLE_MODEL', 'gemini-2.5-pro')}"
-    return provider
+    return f"{provider} · {current_model()}"
 
 
 # --------------------------------------------------------------------------- #
@@ -372,23 +374,6 @@ def get_chat_model(temperature: float = 0.2, **kwargs):
             **kwargs,
         )
 
-    if provider in ("google", "gemini"):
-        from langchain_google_genai import ChatGoogleGenerativeAI
-
-        api_key = os.getenv("GOOGLE_API_KEY")
-        if not api_key:
-            raise RuntimeError(
-                "LLM_PROVIDER=google but GOOGLE_API_KEY is not set. "
-                "Add it to your .env file or switch LLM_PROVIDER=ollama."
-            )
-        return ChatGoogleGenerativeAI(
-            model=str(kwargs.pop("model", None) or os.getenv("GOOGLE_MODEL", "gemini-2.5-pro")),
-            google_api_key=api_key,
-            temperature=temperature,
-            callbacks=[_TOKEN_CB],
-            **kwargs,
-        )
-
     if provider in ("openai", "glm", "zhipu", "zhipuai", "openai-compatible"):
         from langchain_openai import ChatOpenAI
 
@@ -399,8 +384,7 @@ def get_chat_model(temperature: float = 0.2, **kwargs):
             )
         base_url = _env("OPENAI_BASE_URL", "LLM_BASE_URL", "OPENAI_API_BASE")
         openai_kwargs = {
-            "model": str(kwargs.pop("model", None)
-                         or _env("OPENAI_MODEL", "LLM_MODEL", default="glm-4.6")),
+            "model": str(kwargs.pop("model", None) or current_model()),
             "api_key": api_key,
             "temperature": temperature,
             "callbacks": [_TOKEN_CB],
@@ -411,7 +395,7 @@ def get_chat_model(temperature: float = 0.2, **kwargs):
         return ChatOpenAI(**openai_kwargs)
 
     raise ValueError(
-        f"Unknown LLM_PROVIDER={provider!r}. Use 'ollama', 'google', 'openai'/'glm', or 'mock'."
+        f"Unknown LLM_PROVIDER={provider!r}. Use 'ollama', 'openai'/'glm', or 'mock'."
     )
 
 
@@ -530,8 +514,6 @@ def build_llm_runtime(model_override: Optional[str] = None) -> LLMRuntime:
 
     if provider == "ollama":
         model = model_override or current_model()
-    elif provider in ("google", "gemini"):
-        model = model_override or _env("GOOGLE_MODEL", default="gemini-2.5-pro")
     else:
         model = model_override or _env("OPENAI_MODEL", "LLM_MODEL", default="glm-4.6")
 

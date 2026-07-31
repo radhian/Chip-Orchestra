@@ -13,7 +13,7 @@ from agents.stage_handlers import StageContext, dispatch
 
 def _ctx(tmp_path: Path, stage: str, **kwargs) -> StageContext:
     workspace = tmp_path
-    for sub in ("rtl", "tb", "reports", "waves", "gds", "spec", "plans", "exports"):
+    for sub in ("rtl", "tb", "reports", "waves", "gds", "spec", "plans", "exports", "golden", "logs"):
         (workspace / sub).mkdir(parents=True, exist_ok=True)
     return StageContext(task_id="task-42", stage=stage, workspace=workspace, **kwargs)
 
@@ -34,8 +34,32 @@ def test_rtl_gen_writes_top_module(tmp_path: Path) -> None:
     result = dispatch(sc)
 
     assert result.agent_name == "RTLAuthor"
-    assert (tmp_path / "rtl/alu.sv").is_file()
+    assert (tmp_path / "rtl/alu.v").is_file()
     assert (tmp_path / "reports/rtl_architecture.md").is_file()
+
+
+def test_golden_gen_writes_runnable_model_and_passing_tests(tmp_path: Path) -> None:
+    sc = _ctx(tmp_path, "GOLDEN_GEN", context={"top_module": "accel"})
+    result = dispatch(sc)
+
+    assert result.agent_name == "GoldenModeler"
+    assert (tmp_path / "golden/model/accel.py").is_file()
+    assert (tmp_path / "golden/tests/test_accel.py").is_file()
+    assert (tmp_path / "context/golden_contract.md").is_file()
+
+    # The stage RUNS the golden suite itself rather than trusting a self-report.
+    tests = json.loads((tmp_path / "golden/test_results.json").read_text())
+    assert tests["ran"] is True
+    assert tests["passed"] >= 1 and tests["failed"] == 0
+
+    # Exported vectors are what TB_GEN turns into per-module testbenches.
+    vectors = json.loads((tmp_path / "golden/vectors/accel.json").read_text())
+    assert vectors["module"] == "accel"
+    assert vectors["vectors"]
+
+    summary = json.loads((tmp_path / "golden/golden_summary.json").read_text())
+    assert summary["top"] == "accel"
+    assert result.structured_conclusion["awaiting_review"] is True
 
 
 def test_tb_gen_writes_self_checking_testbench(tmp_path: Path) -> None:
@@ -43,7 +67,7 @@ def test_tb_gen_writes_self_checking_testbench(tmp_path: Path) -> None:
     result = dispatch(sc)
 
     assert result.agent_name == "Verifier"
-    tb = (tmp_path / "tb/alu_tb.sv").read_text()
+    tb = (tmp_path / "tb/alu_tb.v").read_text()
     assert "$dumpfile" in tb
     assert "alu dut" in tb
 

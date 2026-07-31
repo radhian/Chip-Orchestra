@@ -162,7 +162,7 @@ def generate_rtl(brief: str, top: str, runtime: Optional[LLMRuntime] = None) -> 
     runtime = runtime or build_llm_runtime()
     if runtime.is_mock:
         code = mock_rtl(top)
-        return RTLResult(top=top, code=code, filename=f"{top}.sv", compiled=True,
+        return RTLResult(top=top, code=code, filename=f"{top}.v", compiled=True,
                          attempts=0, provider="mock", log="mock template (no LLM)")
 
     few = _few_shot(brief)
@@ -175,11 +175,11 @@ def generate_rtl(brief: str, top: str, runtime: Optional[LLMRuntime] = None) -> 
     code = extract_code(raw)
     if not code:
         code = mock_rtl(top)
-        return RTLResult(top=top, code=code, filename=f"{top}.sv", compiled=True,
+        return RTLResult(top=top, code=code, filename=f"{top}.v", compiled=True,
                          attempts=1, provider=runtime.provider, log="empty LLM output; used template")
 
     resolved_top = detect_top(code, top)
-    filename = f"{resolved_top}.sv"
+    filename = f"{resolved_top}.v"
     ok, log = compile_check({filename: code})
     attempts = 1
     repaired = False
@@ -189,7 +189,7 @@ def generate_rtl(brief: str, top: str, runtime: Optional[LLMRuntime] = None) -> 
         all_hints.extend(hints)
         code = _repair_rtl(runtime, code, resolved_top, log, hints)
         resolved_top = detect_top(code, resolved_top)
-        filename = f"{resolved_top}.sv"
+        filename = f"{resolved_top}.v"
         ok, log = compile_check({filename: code})
         attempts += 1
         repaired = True

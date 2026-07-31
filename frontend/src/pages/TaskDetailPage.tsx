@@ -7,6 +7,7 @@ import {
   CheckCircle2,
   Clock3,
   FileCode2,
+  FlaskConical,
   ListChecks,
   PackageCheck,
   PlayCircle,
@@ -34,6 +35,7 @@ import {
   workspaceExportUrl,
   workspaceRawUrl,
 } from '@/api/tasks'
+import { GoldenReviewDialog } from '@/components/app/GoldenReviewDialog'
 import { EmptyState, ErrorState, LoadingState, MetricCard, SummaryRow } from '@/components/app/shared'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -109,6 +111,8 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
   const [liveConnected, setLiveConnected] = useState(false)
   const [refreshKey, setRefreshKey] = useState(0)
   const [retryingStage, setRetryingStage] = useState<string | null>(null)
+  const [goldenDialogOpen, setGoldenDialogOpen] = useState(false)
+  const [goldenDismissed, setGoldenDismissed] = useState(false)
 
   // Background refreshes (live WebSocket events) must NOT swap the page to a
   // spinner, clear action feedback, or reset the file selection — doing so on
@@ -153,6 +157,7 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
       const stageLogCandidates: Record<string, string[]> = {
         SPEC_INGEST: ['context/uploads_digest.md'],
         PLAN: ['logs/plan_deep_agent.md'],
+        GOLDEN_GEN: ['logs/golden_gen_deep_agent.md', 'golden/golden_report.md'],
         RTL_GEN: ['logs/rtl_gen_deep_agent.md'],
         RTL_REPAIR: ['logs/rtl_repair_deep_agent.md'],
         TB_GEN: ['logs/tb_gen_deep_agent.md'],
@@ -359,6 +364,40 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
     }
   }
 
+  // GOLDEN_GEN gate — the Python reference model is the definition of correct
+  // for every later stage, so the run stops and asks whether its output is what
+  // the user wanted. "No" is a real answer: it sends the model back for rework
+  // with the reviewer's note instead of stalling the task.
+  const goldenGate = useMemo(
+    () => (detail?.stages ?? []).find((stage) => stage.key === 'golden_gen' && stage.pendingApproval),
+    [detail?.stages],
+  )
+
+  // Pop the review dialog as soon as the gate opens; a manual close is
+  // remembered so live refreshes don't reopen it on top of the user.
+  useEffect(() => {
+    if (goldenGate && !goldenDismissed) {
+      setGoldenDialogOpen(true)
+    }
+    if (!goldenGate) {
+      setGoldenDismissed(false)
+      setGoldenDialogOpen(false)
+    }
+  }, [goldenDismissed, goldenGate])
+
+  async function handleRejectGolden(comment: string) {
+    if (!taskId) {
+      return
+    }
+    setActionError(null)
+    await submitStageApproval(taskId, 'golden_gen', {
+      decision: 'reject',
+      comment: comment || 'The golden model output is not correct.',
+    })
+    setActionMessage('Correction sent — the golden model is being rebuilt.')
+    setRefreshKey((value) => value + 1)
+  }
+
   // Diagnoses accumulate per stage — the LATEST one describes the current
   // state of the run (showing [0] left a stale SPEC_INGEST note on screen).
   const latestDiagnosis = useMemo(() => (diagnoses.length ? diagnoses[diagnoses.length - 1] : undefined), [diagnoses])
@@ -378,7 +417,7 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
       list.push(file)
       groups.set(folder, list)
     }
-    const order = ['rtl', 'tb', 'waves', 'gds', 'reports', 'spec', 'plans', 'context', 'sw', 'logs', 'exports', '(root)']
+    const order = ['golden', 'rtl', 'tb', 'waves', 'gds', 'reports', 'spec', 'plans', 'context', 'sw', 'logs', 'exports', '(root)']
     return [...groups.entries()].sort(([a], [b]) => {
       const ia = order.indexOf(a) === -1 ? order.length : order.indexOf(a)
       const ib = order.indexOf(b) === -1 ? order.length : order.indexOf(b)
@@ -623,7 +662,11 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
                     <AlertCircle className='h-4 w-4' />
                     <p className='font-semibold'>{latestDiagnosis.title}</p>
                   </div>
-                  <p className='mt-3 text-sm leading-6 text-amber-800/80'>{latestDiagnosis.detail}</p>
+                  {/* Amber carries the WARNING signal in the icon and title; the
+                      body is long-form prose, so it reads in neutral high-
+                      contrast text. Amber-on-amber was legible as a colour cue
+                      but poor as something to actually read. */}
+                  <p className='mt-3 text-sm leading-6 text-slate-800'>{latestDiagnosis.detail}</p>
                 </div>
                 <div className='space-y-3 rounded-2xl border border-slate-200 p-4'>
                   <SummaryRow icon={Bot} title='Suggested by' value={latestDiagnosis.suggestedBy} />
@@ -648,15 +691,30 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
                   <div className='space-y-3'>
                     <p className='text-sm leading-6 text-slate-500'>
                       <span className='font-semibold text-amber-600'>{situation.stage.label} is waiting for your review.</span>{' '}
-                      Inspect the artifacts and reports, then release the gate.
+                      {situation.stage.key === 'golden_gen'
+                        ? 'The Python golden model is built and tested — confirm its output is what you wanted before the RTL is generated from it.'
+                        : 'Inspect the artifacts and reports, then release the gate.'}
                     </p>
-                    <Button
-                      onClick={() => void handleApproveGate((situation.stage as TaskStage).key)}
-                      className='h-12 w-full rounded-2xl bg-slate-900 hover:bg-slate-800'
-                    >
-                      <ShieldCheck className='mr-2 h-4 w-4' />
-                      Approve {situation.stage.label} gate
-                    </Button>
+                    {situation.stage.key === 'golden_gen' ? (
+                      <Button
+                        onClick={() => {
+                          setGoldenDismissed(false)
+                          setGoldenDialogOpen(true)
+                        }}
+                        className='h-12 w-full rounded-2xl bg-amber-600 hover:bg-amber-700'
+                      >
+                        <FlaskConical className='mr-2 h-4 w-4' />
+                        Review golden model output
+                      </Button>
+                    ) : (
+                      <Button
+                        onClick={() => void handleApproveGate((situation.stage as TaskStage).key)}
+                        className='h-12 w-full rounded-2xl bg-slate-900 hover:bg-slate-800'
+                      >
+                        <ShieldCheck className='mr-2 h-4 w-4' />
+                        Approve {situation.stage.label} gate
+                      </Button>
+                    )}
                   </div>
                 ) : situation.kind === 'running' && situation.stage ? (
                   <div className='flex items-center gap-3 rounded-2xl border border-indigo-100 bg-indigo-50 p-4 text-sm leading-6 text-indigo-700'>
@@ -1239,6 +1297,20 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
           <EmptyState title='No signoff status available' detail='The backend has not returned signoff data for this task yet.' />
         )
       ) : null}
+
+      <GoldenReviewDialog
+        taskId={taskId}
+        open={goldenDialogOpen}
+        onOpenChange={(next) => {
+          setGoldenDialogOpen(next)
+          if (!next) {
+            setGoldenDismissed(true)
+          }
+        }}
+        onApprove={() => handleApproveGate('golden_gen')}
+        onReject={handleRejectGolden}
+        refreshKey={refreshKey}
+      />
     </div>
   )
 }

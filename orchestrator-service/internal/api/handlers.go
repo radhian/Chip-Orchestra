@@ -66,6 +66,7 @@ type createTaskBody struct {
 		PDKID        string `json:"pdk_id"`
 		StdcellLibID string `json:"stdcell_lib_id"`
 		Padring      string `json:"padring"`
+		Voltage      string `json:"voltage"`
 	} `json:"design_context"`
 	LLMModel    string           `json:"llm_model"`
 	Attachments []taskAttachment `json:"attachments"`
@@ -83,6 +84,7 @@ type createTaskRequest struct {
 	PDKID        string            `json:"pdk_id"`
 	StdcellLibID string            `json:"stdcell_lib_id"`
 	Padring      string            `json:"padring"`
+	Voltage      string            `json:"voltage"`
 	LLMModel     string            `json:"llm_model"`
 	ReviewGates  []string          `json:"review_gates"`
 	OwnerID      string            `json:"owner_id"`
@@ -150,6 +152,7 @@ func (a *App) RegisterRoutes(router *gin.Engine) {
 		api.POST("/tasks/:id/workspace/upload", a.uploadWorkspaceFile)
 		api.POST("/tasks/:id/workspace/propose-patch", a.proposePatch)
 		api.GET("/tasks/:id/signoff/status", a.getSignoffStatus)
+		api.GET("/tasks/:id/golden/review", a.getGoldenReview)
 		api.POST("/tasks/:id/approvals/:stage", a.approveStage)
 		api.POST("/tasks/:id/waivers", a.createWaiver)
 		api.POST("/tasks/:id/export-bundle", a.exportBundle)
@@ -257,6 +260,7 @@ func (a *App) createTask(c *gin.Context) {
 			PDKID:        body.DesignContext.PDKID,
 			StdcellLibID: body.DesignContext.StdcellLibID,
 			Padring:      body.DesignContext.Padring,
+			Voltage:      body.DesignContext.Voltage,
 			LLMModel:     body.LLMModel,
 			ReviewGates:  []string{"BEFORE_SIGNOFF"},
 			Attachments:  body.Attachments,
@@ -290,6 +294,7 @@ func (a *App) createTask(c *gin.Context) {
 		PDKID:        defaultString(req.PDKID, "sky130"),
 		StdcellLibID: defaultString(req.StdcellLibID, "sky130_fd_sc_hd"),
 		Padring:      defaultString(req.Padring, "none"),
+		Voltage:      normalizeVoltage(req.Voltage),
 		LLMModel:     req.LLMModel,
 		ReviewGates:  strings.Join(req.ReviewGates, ","),
 		OwnerID:      req.OwnerID,
@@ -435,7 +440,7 @@ func (a *App) getTask(c *gin.Context) {
 		StatusLabel:          strings.Title(strings.ToLower(string(task.Status))),
 		Tone:                 statusTone(task.Status),
 		RepoName:             defaultString(task.RepoSource, task.TemplateID),
-		PDKLabel:             pdkLabel(task.PDKID, task.StdcellLibID),
+		PDKLabel:             pdkLabel(task.PDKID, task.StdcellLibID, task.Voltage),
 		Padring:              task.Padring,
 		ReviewGateLabel:      reviewGateLabel(task.ReviewGates),
 		RuntimeLabel:         "Orchestrator Service + Agent Service + EDA Service",
@@ -494,7 +499,12 @@ func (a *App) getStages(c *gin.Context) {
 		if stage.DependsOn != "" {
 			dependsOn = strings.Split(stage.DependsOn, ",")
 		}
-		items = append(items, gin.H{"stage_id": stage.ID, "name": stage.Name, "status": stage.Status, "depends_on": dependsOn, "retry_count": stage.RetryCount, "started_at": stage.StartedAt})
+		// pending_approval must ride along: the task detail page rebuilds its
+		// stage list from THIS endpoint, so a gate omitted here is a gate the
+		// UI can never show (the review prompt simply never appeared).
+		items = append(items, gin.H{"stage_id": stage.ID, "name": stage.Name, "status": stage.Status,
+			"depends_on": dependsOn, "retry_count": stage.RetryCount, "started_at": stage.StartedAt,
+			"pending_approval": stage.Status == models.StageStatusAwaitingApproval})
 	}
 	c.JSON(http.StatusOK, gin.H{"task_id": c.Param("id"), "stages": items})
 }
@@ -682,12 +692,39 @@ func (a *App) getWorkspaceRaw(c *gin.Context) {
 	c.File(full)
 }
 
+// normalizeVoltage canonicalizes a requested GF180MCU corner to "3v3"/"5v0".
+// An unrecognized value yields "", meaning "inherit the deploy-wide default".
+func normalizeVoltage(v string) string {
+	switch strings.ToLower(strings.TrimSpace(v)) {
+	case "5v0", "5.0v", "5v", "5":
+		return "5v0"
+	case "3v3", "3.3v", "3v", "3.3":
+		return "3v3"
+	default:
+		return ""
+	}
+}
+
+// taskVoltage resolves the corner a task hardens at: its own stored selection
+// wins, and only tasks predating the per-task field fall back to the
+// deploy-wide GF180_VOLTAGE env var.
+func taskVoltage(stored string) string {
+	if v := normalizeVoltage(stored); v != "" {
+		return v
+	}
+	if normalizeVoltage(os.Getenv("GF180_VOLTAGE")) == "5v0" {
+		return "5v0"
+	}
+	return "3v3"
+}
+
 // pdkLabel renders the task's PDK/library including the operating voltage the
-// hardening flow actually uses for GF180MCU (GF180_VOLTAGE, default 3.3V).
-func pdkLabel(pdkID, scl string) string {
+// hardening flow actually uses for GF180MCU. The voltage is per-task, so two
+// tasks in one deployment can legitimately show different corners.
+func pdkLabel(pdkID, scl, voltage string) string {
 	label := fmt.Sprintf("%s / %s", pdkID, scl)
 	if strings.HasPrefix(pdkID, "gf180mcu") {
-		if os.Getenv("GF180_VOLTAGE") == "5v0" {
+		if taskVoltage(voltage) == "5v0" {
 			label += " @ 5.0V"
 		} else {
 			label += " @ 3.3V"
@@ -897,12 +934,78 @@ func (a *App) getSignoffStatus(c *gin.Context) {
 	})
 }
 
+// approveStage releases a human gate — or, when the reviewer says the output is
+// WRONG (decision "reject"), sends the stage back for rework carrying their
+// comment as the correction. The golden-model gate depends on both directions:
+// "is this output correct?" is only a real question if "no" does something.
 func (a *App) approveStage(c *gin.Context) {
-	if err := a.Orch.ApproveStage(c.Request.Context(), c.Param("id"), c.Param("stage")); err != nil {
+	var req struct {
+		Decision string `json:"decision"`
+		Comment  string `json:"comment"`
+	}
+	_ = c.ShouldBindJSON(&req) // body is optional; absent body = approve
+	taskID, stageName := c.Param("id"), c.Param("stage")
+
+	if strings.EqualFold(strings.TrimSpace(req.Decision), "reject") {
+		if err := a.Orch.RejectStage(c.Request.Context(), taskID, stageName, req.Comment); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"status": "rejected", "stage": strings.ToUpper(stageName)})
+		return
+	}
+	if err := a.Orch.ApproveStage(c.Request.Context(), taskID, stageName); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"status": "recorded"})
+	c.JSON(http.StatusOK, gin.H{"status": "recorded", "stage": strings.ToUpper(stageName)})
+}
+
+// getGoldenReview serves everything the golden-model review dialog renders: the
+// manifest GOLDEN_GEN wrote (IP list, test results, preview outputs), the
+// human-readable report, and whether the gate is actually open. Reading it from
+// disk keeps the popup honest — it shows what the model produced, not what the
+// agent claimed.
+func (a *App) getGoldenReview(c *gin.Context) {
+	taskID := c.Param("id")
+	workspace := a.Orch.TaskWorkspace(taskID)
+
+	summary := map[string]any{}
+	if data, err := os.ReadFile(filepath.Join(workspace, "golden", "golden_summary.json")); err == nil {
+		_ = json.Unmarshal(data, &summary)
+	}
+
+	var stages []models.Stage
+	_ = a.DB.WithContext(c.Request.Context()).Where("task_id = ? AND name = ?", taskID, "GOLDEN_GEN").Find(&stages).Error
+	status := ""
+	if len(stages) > 0 {
+		status = string(stages[0].Status)
+	}
+
+	report := ""
+	if data, err := os.ReadFile(filepath.Join(workspace, "golden", "golden_report.md")); err == nil {
+		if len(data) > 200<<10 {
+			data = data[:200<<10]
+		}
+		report = string(data)
+	}
+	testLog := ""
+	if data, err := os.ReadFile(filepath.Join(workspace, "golden", "test_log.txt")); err == nil {
+		if len(data) > 64<<10 {
+			data = data[len(data)-(64<<10):]
+		}
+		testLog = string(data)
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"stage":            "GOLDEN_GEN",
+		"status":           status,
+		"awaitingApproval": models.StageStatus(status) == models.StageStatusAwaitingApproval,
+		"available":        len(summary) > 0,
+		"summary":          summary,
+		"report":           report,
+		"testLog":          testLog,
+	})
 }
 
 func (a *App) createWaiver(c *gin.Context) {

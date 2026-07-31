@@ -88,20 +88,28 @@ def create_app(
 
     @app.get("/agent/models")
     def list_models():
-        """List models available on the configured LLM provider (Ollama),
-        including cloud/local flags and whether vision (image upload) works."""
+        """List models available on the configured LLM provider — Ollama
+        (installed models, local/cloud flags) — including whether vision (image
+        upload) works, so the UI picker offers the models that can actually run
+        this task."""
         provider = os.getenv("LLM_PROVIDER", "mock").strip().lower() or "mock"
-        default_model = os.getenv("OLLAMA_MODEL", "").strip()
         models: List[str] = []
         detail: List[Dict[str, Any]] = []
         vision = False
+        default_model = ""
+        try:
+            from llm import current_model, model_supports_vision
+
+            default_model = current_model()
+            vision = model_supports_vision()
+        except Exception:
+            default_model = os.getenv("OLLAMA_MODEL", "").strip()
         if provider == "ollama":
             try:
-                from llm import list_ollama_models, model_supports_vision
+                from llm import list_ollama_models
 
                 detail = list_ollama_models()
                 models = [m["name"] for m in detail]
-                vision = model_supports_vision()
             except Exception:
                 models, detail = [], []
         return {
