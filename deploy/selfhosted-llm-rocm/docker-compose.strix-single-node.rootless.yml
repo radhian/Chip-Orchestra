@@ -1,15 +1,20 @@
 # Strix Halo SINGLE-NODE rootless override.
 # Use this override when running the whole stack in one Podman Compose project:
-#   podman-compose --env-file strix-core.rootless.env \
-#     -f docker-compose.r9700-core.yml \
-#     -f docker-compose.strix-full.yml \
-#     -f docker-compose.strix-single-node.rootless.yml \
-#     up -d --build
 #
-# It keeps the Strix Halo rootless GPU access fix and changes agent-service to
-# use the in-project mysql/redis service names instead of the old two-node R9700
-# LAN host path. This avoids unnecessary host networking when everything runs on
-# 172.16.1.10.
+#   Default (external llama-swap on 172.16.1.10:10000):
+#     podman-compose --env-file strix-core.rootless.env \
+#       -f docker-compose.r9700-core.yml \
+#       -f docker-compose.strix-full.yml \
+#       -f docker-compose.strix-single-node.rootless.yml \
+#       up -d --build
+#
+#   Self-hosted GLM (only after pre-downloading the model):
+#     ./scripts/download_glm_model.sh strix-core.rootless.env
+#     podman-compose --env-file strix-core.rootless.env \
+#       -f docker-compose.r9700-core.yml \
+#       -f docker-compose.strix-full.yml \
+#       -f docker-compose.strix-single-node.rootless.yml \
+#       --profile selfhosted-glm up -d --build
 #
 # --- Networking / DNS notes ---
 # podman-compose sometimes fails to resolve compose service names (e.g. the
@@ -20,17 +25,8 @@
 #      podman-compose always creates ONE network (and DNS) shared by all
 #      containers regardless of which -f file they came from.
 #   2. `extra_hosts` fallback using `host-gateway`. If aardvark-dns still is
-#      unavailable, the service names resolve to the Podman host (172.16.1.10)
-#      and reach the published ports (mysql/redis/glm host bind is 0.0.0.0).
-#      This works because r9700-core.yml already exposes mysql:3306 and
-#      redis:6379 on the host and docker-compose.strix-full.yml exposes GLM
-#      at ${LLM_HOST_PORT:-10001} on the host.
-#      NOTE: because the container-network path is preferred, `mysql` and
-#      `redis` are addressed on their in-container 3306/6379 defaults. The
-#      host-gateway fallback also reaches them on the same numbers since the
-#      host publishes `${MYSQL_PORT:-3306}` / `${REDIS_PORT:-6379}` on 0.0.0.0.
-#      The glm-server host-gateway fallback uses ${LLM_HOST_PORT:-10001} — see
-#      the OPENAI_BASE_URL_FALLBACK note in strix-core.rootless.env.
+#      unavailable, `mysql`/`redis` service names resolve to the Podman host,
+#      which already publishes 3306/6379 on 0.0.0.0.
 services:
   mysql:
     networks:
@@ -71,18 +67,30 @@ services:
     environment:
       DATABASE_URL: mysql+pymysql://${MYSQL_USER:-chip}:${MYSQL_PASSWORD:-chip}@mysql:3306/${MYSQL_DATABASE:-chip_orchestra}
       REDIS_URL: redis://redis:6379/0
+      # LLM backend selection is driven purely by env (strix-core.rootless.env):
+      #   OPENAI_BASE_URL  → external llama-swap by default, or GLM in-project
+      #                      (http://glm-server:10000/v1) when using the
+      #                      --profile selfhosted-glm path.
+      #   OPENAI_MODEL     → model id served by that endpoint (e.g. Laguna-S-2.1).
+      # Falls back to the strix-full.yml defaults if the env file leaves them unset.
+      OPENAI_BASE_URL: ${OPENAI_BASE_URL:-http://172.16.1.10:10000/v1}
+      OPENAI_MODEL: ${OPENAI_MODEL:-Laguna-S-2.1}
     networks:
       - chip-orchestra
     extra_hosts:
       - "mysql:host-gateway"
       - "redis:host-gateway"
-      - "glm-server:host-gateway"
-    depends_on:
+    # depends_on is intentionally scoped to mysql/redis only. The glm-server
+    # service is profile-gated (`selfhosted-glm`); when the profile is not
+    # active, agent-service must not wait on it. Podman-compose profile-aware
+    # depends_on handling varies by version, so we override it here to be
+    # explicit and version-safe. When you DO opt in to the selfhosted-glm
+    # profile, re-add the glm-server dependency by using
+    # docker-compose.strix-full.yml on its own or by scripting a wait-loop.
+    depends_on: !override
       mysql:
         condition: service_healthy
       redis:
-        condition: service_healthy
-      glm-server:
         condition: service_healthy
 
 networks:
