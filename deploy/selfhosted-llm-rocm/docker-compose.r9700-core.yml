@@ -93,6 +93,7 @@ services:
       KLAYOUT_BIN: ${KLAYOUT_BIN:-klayout}
       DOT_PATH: ${DOT_PATH:-dot}
       PDK: ${PDK:-gf180mcuD}
+      PDK_VERSION: ${PDK_VERSION:-120b0bd69c745825a0b8b76f364043a1cd08bb6a}
       GF180_VOLTAGE: ${GF180_VOLTAGE:-3v3}
       PDK_ROOT: ${PDK_ROOT:-/opt/pdk}
       EDA_JOB_TIMEOUT_SIM: ${EDA_JOB_TIMEOUT_SIM:-600}
