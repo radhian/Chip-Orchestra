@@ -20,7 +20,9 @@ for svc in eda-service orchestrator-service agent-service; do
   podman exec "$c" sh -lc '
     echo "--- /etc/resolv.conf"; cat /etc/resolv.conf || true
     echo "--- hosts"; getent hosts github.com || true; getent hosts google.com || true
-    echo "--- HTTP probe"; python3 - <<PY
+    echo "--- HTTP probe"
+    if command -v python3 >/dev/null 2>&1; then
+      python3 - <<PY
 import urllib.request
 for url in ("https://github.com", "https://google.com"):
     try:
@@ -29,6 +31,15 @@ for url in ("https://github.com", "https://google.com"):
     except Exception as e:
         print(url, type(e).__name__, e)
 PY
+    elif command -v wget >/dev/null 2>&1; then
+      wget -S --spider -T 8 https://github.com 2>&1 | sed -n "1,12p" || true
+      wget -S --spider -T 8 https://google.com 2>&1 | sed -n "1,12p" || true
+    elif command -v curl >/dev/null 2>&1; then
+      curl -I --max-time 8 https://github.com || true
+      curl -I --max-time 8 https://google.com || true
+    else
+      echo "No python3/wget/curl available; host lookup above is the DNS signal."
+    fi
   '
   echo
 done

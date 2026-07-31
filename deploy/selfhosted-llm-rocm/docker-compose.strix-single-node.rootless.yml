@@ -56,6 +56,11 @@ services:
     dns:
       - ${CONTAINER_DNS_1:-1.1.1.1}
       - ${CONTAINER_DNS_2:-8.8.8.8}
+    # podman-compose/rootless netavark can ignore Compose `dns:` and still
+    # generate /etc/resolv.conf with only 10.89.x.1. Bind-mount a known-good
+    # resolver file as the hard fallback.
+    volumes:
+      - ${CONTAINER_RESOLV_CONF:-./container-resolv.conf}:/etc/resolv.conf:ro
     environment:
       # Rootless Podman DNS (netavark/aardvark-dns) can intermittently fail to
       # resolve service names from one container to another. Use the host-published
@@ -74,6 +79,8 @@ services:
     dns:
       - ${CONTAINER_DNS_1:-1.1.1.1}
       - ${CONTAINER_DNS_2:-8.8.8.8}
+    volumes:
+      - ${CONTAINER_RESOLV_CONF:-./container-resolv.conf}:/etc/resolv.conf:ro
     extra_hosts:
       - "mysql:host-gateway"
       - "redis:host-gateway"
@@ -86,6 +93,8 @@ services:
     dns:
       - ${CONTAINER_DNS_1:-1.1.1.1}
       - ${CONTAINER_DNS_2:-8.8.8.8}
+    volumes:
+      - ${CONTAINER_RESOLV_CONF:-./container-resolv.conf}:/etc/resolv.conf:ro
     environment:
       # LLM backend is driven by strix-core.rootless.env. The default in
       # strix-agent.yml is the external llama-swap, but we set it explicitly
