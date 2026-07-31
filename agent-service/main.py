@@ -93,6 +93,7 @@ def create_app(
         upload) works, so the UI picker offers the models that can actually run
         this task."""
         provider = os.getenv("LLM_PROVIDER", "mock").strip().lower() or "mock"
+        default_model = os.getenv("OPENAI_MODEL" if provider in {"openai", "glm", "zhipu", "zhipuai", "openai-compatible"} else "OLLAMA_MODEL", "").strip()
         models: List[str] = []
         detail: List[Dict[str, Any]] = []
         vision = False
@@ -109,6 +110,14 @@ def create_app(
                 from llm import list_ollama_models
 
                 detail = list_ollama_models()
+                models = [m["name"] for m in detail]
+            except Exception:
+                models, detail = [], []
+        elif provider in {"openai", "glm", "zhipu", "zhipuai", "openai-compatible"}:
+            try:
+                from llm import list_openai_compatible_models
+
+                detail = list_openai_compatible_models()
                 models = [m["name"] for m in detail]
             except Exception:
                 models, detail = [], []
