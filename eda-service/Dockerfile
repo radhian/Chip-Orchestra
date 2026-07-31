@@ -5,7 +5,7 @@
 # PINNED BY DIGEST (2026-06-22 build): the extraction below depends on this
 # image's exact /foss/tools layout — bump deliberately, then re-verify
 # `openroad -version`, `magic -dnull`, and `netgen -batch` in the built image.
-FROM --platform=linux/amd64 hpretl/iic-osic-tools@sha256:7371bae55da486f492cc270ea6137c4fcf3b11971de7a4506a74f62be143537a AS openroad-dist
+FROM --platform=linux/amd64 docker.io/hpretl/iic-osic-tools@sha256:7371bae55da486f492cc270ea6137c4fcf3b11971de7a4506a74f62be143537a AS openroad-dist
 USER root
 RUN mkdir -p /orpkg/syslibs \
     && cp -r /foss/tools/openroad-librelane /orpkg/openroad \
@@ -37,7 +37,7 @@ RUN mkdir -p /orpkg/syslibs \
     && sed -i 's|/foss/tools/magic|/opt/orpkg/magic|g' /orpkg/magic/bin/magic \
     && sed -i 's|/foss/tools/netgen|/opt/orpkg/netgen|g' /orpkg/netgen/bin/netgen
 
-FROM python:3.12-slim
+FROM docker.io/library/python:3.12-slim
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 

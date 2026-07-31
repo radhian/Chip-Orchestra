@@ -1,4 +1,4 @@
-FROM python:3.12-slim
+FROM docker.io/library/python:3.12-slim
 
 # iverilog is bundled so the deep agents' compile-check-on-write loop can
 # verify generated RTL (iverilog -tnull) without a round-trip to eda-service.
