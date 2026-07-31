@@ -149,11 +149,11 @@ curl -fsS http://172.16.1.10:8001/agent/models
 
 ### 6a. Strix Halo rootless (no sudo)
 
-Same idea as §5a, plus one extra: this node runs the GLM server on the GPU, and
-rootless GPU passthrough needs `group_add: [keep-groups]` instead of the rootful
-`video`/`render` group names (under rootless those names resolve to mapped GIDs
-that don't grant access to the host `/dev/dri` render node). That delta lives in
-`docker-compose.strix-full.rootless.yml`, which you layer on top of the base file.
+Same idea as §5a, plus one extra: this node runs the GLM server on the GPU.
+Under rootless Podman, the safest way to preserve access to the host `/dev/dri`
+render node is `group_add: [keep-groups]` (so the container keeps your real host
+supplementary groups). That delta lives in `docker-compose.strix-full.rootless.yml`,
+which you layer on top of the base file.
 You must be in the host `render` (and usually `video`) group first:
 
 ```bash
@@ -165,8 +165,9 @@ Then:
 ```bash
 cd Chip-Orchestra/deploy/selfhosted-llm-rocm
 cp strix-agent.rootless.env.example strix-agent.rootless.env
-# edit WORKSPACE_HOST_PATH and MODEL_DIR to absolute $HOME paths, plus secrets
-MODEL_DIR=/home/$USER/chip-orchestra/models ./scripts/prepare_host.sh   # no sudo: makes workspace + model dir
+# edit secrets; optionally adjust WORKSPACE_HOST_PATH / MODEL_DIR to absolute $HOME paths
+# (or keep the /home/YOUR_USER placeholders — prepare_host.sh will auto-patch them)
+./scripts/prepare_host.sh strix-agent.rootless.env   # no sudo: makes workspace + model dir
 
 podman-compose --env-file strix-agent.rootless.env \
   -f docker-compose.strix-full.yml -f docker-compose.strix-full.rootless.yml up -d --build
