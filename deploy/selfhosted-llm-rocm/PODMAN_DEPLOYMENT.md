@@ -88,6 +88,40 @@ curl -fsS http://172.16.1.36:8080/health
 curl -fsS http://172.16.1.36:8002/health
 ```
 
+### 5a. R9700 core rootless (no sudo)
+
+If you have no `sudo` on the host, run everything as your user. Two things must
+change, both captured in `r9700-core.rootless.env.example`:
+
+1. **Bind `0.0.0.0`, not the LAN IP.** Rootless Podman cannot bind a fixed
+   non-loopback host IP, so `MYSQL_BIND_HOST`/`REDIS_BIND_HOST`/`EDA_BIND_HOST`
+   are set to `0.0.0.0`. Ports are still reachable on `172.16.1.36` from other
+   nodes; all ports here are >1024 so no privileged-port sysctl is needed.
+2. **Workspace under `$HOME`, not `/srv`.** You can't create `/srv/...` without
+   root. `prepare_host.sh` (run without sudo) makes `~/chip-orchestra/workspaces`
+   for you; set the same absolute path as `WORKSPACE_HOST_PATH` in the env file
+   (env-file values are not shell-expanded, so write the full path, not `$HOME`).
+
+```bash
+cd Chip-Orchestra/deploy/selfhosted-llm-rocm
+./scripts/prepare_host.sh                      # no sudo: creates ~/chip-orchestra/workspaces
+cp r9700-core.rootless.env.example r9700-core.rootless.env
+# edit WORKSPACE_HOST_PATH to the absolute path prepare_host.sh printed, plus secrets
+
+podman-compose --env-file r9700-core.rootless.env -f docker-compose.r9700-core.yml up -d --build
+
+curl -fsS http://172.16.1.36:8080/health
+curl -fsS http://172.16.1.36:8002/health
+```
+
+If you still hit `rootless netns: ... permission denied`, it is usually a stale
+rootless state or a missing subuid range: run `podman system migrate`, confirm
+`newuidmap` exists (`uidmap` package), and check that `/etc/subuid` and
+`/etc/subgid` contain a range for your user (an admin adds it once with
+`sudo usermod --add-subuids 100000-165535 --add-subgids 100000-165535 $USER`).
+The `uidmap` package and the one-time subuid line are the only steps that ever
+need an admin; everything else is fully unprivileged.
+
 ## 6. Strix Halo agent with Podman
 
 On Strix Halo:
@@ -103,6 +137,40 @@ sudo podman-compose --env-file strix-agent.env -f docker-compose.strix-agent.yml
 curl -fsS http://172.16.1.10:8001/health
 curl -fsS http://172.16.1.10:8001/agent/models
 ```
+
+### 6a. Strix Halo rootless (no sudo)
+
+Same idea as §5a, plus one extra: this node runs the GLM server on the GPU, and
+rootless GPU passthrough needs `group_add: [keep-groups]` instead of the rootful
+`video`/`render` group names (under rootless those names resolve to mapped GIDs
+that don't grant access to the host `/dev/dri` render node). That delta lives in
+`docker-compose.strix-full.rootless.yml`, which you layer on top of the base file.
+You must be in the host `render` (and usually `video`) group first:
+
+```bash
+id -nG | tr ' ' '\n' | grep -E 'render|video'   # must list render (and video)
+```
+
+Then:
+
+```bash
+cd Chip-Orchestra/deploy/selfhosted-llm-rocm
+cp strix-agent.rootless.env.example strix-agent.rootless.env
+# edit WORKSPACE_HOST_PATH and MODEL_DIR to absolute $HOME paths, plus secrets
+MODEL_DIR=/home/$USER/chip-orchestra/models ./scripts/prepare_host.sh   # no sudo: makes workspace + model dir
+
+podman-compose --env-file strix-agent.rootless.env \
+  -f docker-compose.strix-full.yml -f docker-compose.strix-full.rootless.yml up -d --build
+
+curl -fsS http://172.16.1.10:8001/health
+curl -fsS http://172.16.1.10:8001/agent/models
+curl -fsS http://172.16.1.10:10000/v1/models      # GLM server
+```
+
+If `rocminfo`/GLM can't see the GPU rootless, it is almost always group
+membership: confirm `render` is in `id -nG`; if you were just added, log out and
+back in (or `newgrp render`) so the new group takes effect. The subuid/`uidmap`
+note from §5a applies here too.
 
 ## 7. Validate cross-node flow
 
