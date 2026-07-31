@@ -1,10 +1,10 @@
 # Strix Halo SINGLE-NODE rootless override.
-# Use this override when running the whole stack in one Podman Compose project:
 #
-#   Default (external llama-swap on 172.16.1.10:10000):
+# Composition:
+#   Default (external llama-swap at 172.16.1.10:10000):
 #     podman-compose --env-file strix-core.rootless.env \
 #       -f docker-compose.r9700-core.yml \
-#       -f docker-compose.strix-full.yml \
+#       -f docker-compose.strix-agent.yml \
 #       -f docker-compose.strix-single-node.rootless.yml \
 #       up -d --build
 #
@@ -12,21 +12,30 @@
 #     ./scripts/download_glm_model.sh strix-core.rootless.env
 #     podman-compose --env-file strix-core.rootless.env \
 #       -f docker-compose.r9700-core.yml \
-#       -f docker-compose.strix-full.yml \
+#       -f docker-compose.strix-agent.yml \
+#       -f docker-compose.strix-glm.yml \
+#       -f docker-compose.strix-glm.rootless.yml \
 #       -f docker-compose.strix-single-node.rootless.yml \
-#       --profile selfhosted-glm up -d --build
+#       up -d --build
+#     # and set OPENAI_BASE_URL=http://glm-server:10000/v1 / OPENAI_MODEL=<self-hosted id>
 #
 # --- Networking / DNS notes ---
-# podman-compose sometimes fails to resolve compose service names (e.g. the
-# eda-service "Temporary failure in name resolution" for `mysql`) when the
-# rootless netavark + aardvark-dns pipeline is not set up. Two things below make
-# this robust:
+# podman-compose sometimes fails to resolve compose service names
+# ("Temporary failure in name resolution" for `mysql`) when the rootless
+# netavark + aardvark-dns pipeline is not set up. Two things below make this
+# robust:
 #   1. An explicit shared network `chip-orchestra` all services join, so
 #      podman-compose always creates ONE network (and DNS) shared by all
 #      containers regardless of which -f file they came from.
-#   2. `extra_hosts` fallback using `host-gateway`. If aardvark-dns still is
+#   2. `extra_hosts` fallback using `host-gateway`. If aardvark-dns is still
 #      unavailable, `mysql`/`redis` service names resolve to the Podman host,
 #      which already publishes 3306/6379 on 0.0.0.0.
+#
+# --- Compose-spec compatibility ---
+# This file avoids the `!override` YAML tag and the `profiles:` keyword —
+# neither is reliably supported by podman-compose. Service inclusion is
+# controlled by which -f files are passed, and merged lists are kept small so
+# concat-merge does not misbehave.
 services:
   mysql:
     networks:
@@ -54,25 +63,13 @@ services:
     networks:
       - chip-orchestra
 
-  glm-server:
-    # Compose normally appends sequences from multiple -f files. Podman rejects
-    # keep-groups when video/render are also present, so this must replace the
-    # base Strix group_add list rather than merge with it.
-    group_add: !override
-      - keep-groups
-    networks:
-      - chip-orchestra
-
   agent-service:
     environment:
+      # LLM backend is driven by strix-core.rootless.env. The default in
+      # strix-agent.yml is the external llama-swap, but we set it explicitly
+      # here so the single-node topology is self-describing.
       DATABASE_URL: mysql+pymysql://${MYSQL_USER:-chip}:${MYSQL_PASSWORD:-chip}@mysql:3306/${MYSQL_DATABASE:-chip_orchestra}
       REDIS_URL: redis://redis:6379/0
-      # LLM backend selection is driven purely by env (strix-core.rootless.env):
-      #   OPENAI_BASE_URL  → external llama-swap by default, or GLM in-project
-      #                      (http://glm-server:10000/v1) when using the
-      #                      --profile selfhosted-glm path.
-      #   OPENAI_MODEL     → model id served by that endpoint (e.g. Laguna-S-2.1).
-      # Falls back to the strix-full.yml defaults if the env file leaves them unset.
       OPENAI_BASE_URL: ${OPENAI_BASE_URL:-http://172.16.1.10:10000/v1}
       OPENAI_MODEL: ${OPENAI_MODEL:-Laguna-S-2.1}
     networks:
@@ -80,14 +77,7 @@ services:
     extra_hosts:
       - "mysql:host-gateway"
       - "redis:host-gateway"
-    # depends_on is intentionally scoped to mysql/redis only. The glm-server
-    # service is profile-gated (`selfhosted-glm`); when the profile is not
-    # active, agent-service must not wait on it. Podman-compose profile-aware
-    # depends_on handling varies by version, so we override it here to be
-    # explicit and version-safe. When you DO opt in to the selfhosted-glm
-    # profile, re-add the glm-server dependency by using
-    # docker-compose.strix-full.yml on its own or by scripting a wait-loop.
-    depends_on: !override
+    depends_on:
       mysql:
         condition: service_healthy
       redis:

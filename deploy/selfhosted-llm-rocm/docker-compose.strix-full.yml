@@ -12,17 +12,13 @@
 # R9700 via docker-compose.r9700-core.yml.
 services:
   glm-server:
-    # Opt-in via `--profile selfhosted-glm` (or COMPOSE_PROFILES=selfhosted-glm).
-    # By default we run against an EXTERNAL OpenAI-compatible endpoint (e.g. the
-    # llama-swap already listening on 172.16.1.10:10000). Bring up self-hosted
-    # GLM only after pre-downloading the model:
-    #   ./scripts/download_glm_model.sh strix-core.rootless.env
-    #   podman-compose --env-file strix-core.rootless.env \
-    #     -f docker-compose.r9700-core.yml \
-    #     -f docker-compose.strix-full.yml \
-    #     -f docker-compose.strix-single-node.rootless.yml \
-    #     --profile selfhosted-glm up -d --build
-    profiles: ["selfhosted-glm"]
+    # NOTE: For single-node rootless deployments, prefer the split files
+    # docker-compose.strix-agent.yml + docker-compose.strix-glm.yml (+
+    # docker-compose.strix-glm.rootless.yml). podman-compose does not reliably
+    # honor `profiles:` or the `!override` YAML tag, so combining agent-service
+    # and glm-server in the same file makes it hard to opt out of self-hosting.
+    # This file is kept for the two-node rootful path documented in
+    # AMD_DISTRIBUTED_ARCHITECTURE.md.
     image: ${LLAMA_IMAGE:-ghcr.io/ggml-org/llama.cpp:server-rocm}
     container_name: glm-strixhalo
     restart: unless-stopped
