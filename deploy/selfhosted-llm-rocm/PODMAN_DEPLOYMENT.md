@@ -104,15 +104,24 @@ change, both captured in `r9700-core.rootless.env.example`:
 
 ```bash
 cd Chip-Orchestra/deploy/selfhosted-llm-rocm
-./scripts/prepare_host.sh                      # no sudo: creates ~/chip-orchestra/workspaces
 cp r9700-core.rootless.env.example r9700-core.rootless.env
-# edit WORKSPACE_HOST_PATH to the absolute path prepare_host.sh printed, plus secrets
+# edit WORKSPACE_HOST_PATH to an absolute $HOME path, plus secrets
 
-podman-compose --env-file r9700-core.rootless.env -f docker-compose.r9700-core.yml up -d --build
+# One-shot: creates the workspace dir FROM the env file, then brings the stack up.
+./scripts/podman_up.sh r9700-core.rootless.env -f docker-compose.r9700-core.yml
 
 curl -fsS http://172.16.1.36:8080/health
 curl -fsS http://172.16.1.36:8002/health
 ```
+
+> Doing it in two steps instead? Always pass the env file to `prepare_host.sh`
+> so it creates the *exact* path compose will mount (no drift), then bring it up:
+> ```bash
+> ./scripts/prepare_host.sh r9700-core.rootless.env
+> podman-compose --env-file r9700-core.rootless.env -f docker-compose.r9700-core.yml up -d --build
+> ```
+> The `statfs .../workspaces: no such file or directory` error means this prep
+> step was skipped or created a different path than `WORKSPACE_HOST_PATH`.
 
 If you still hit `rootless netns: ... permission denied`, it is usually a stale
 rootless state or a missing subuid range: run `podman system migrate`, confirm
