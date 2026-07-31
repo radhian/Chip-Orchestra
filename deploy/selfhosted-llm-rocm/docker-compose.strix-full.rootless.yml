@@ -11,6 +11,9 @@
 # render (and usually video) group on the host: `id -nG | tr ' ' '\n' | grep -E 'render|video'`.
 services:
   glm-server:
-    group_add:
+    # Compose normally appends sequences from multiple -f files. Podman rejects
+    # keep-groups when video/render are also present, so this must replace the
+    # base Strix group_add list rather than merge with it.
+    group_add: !override
       - keep-groups
 
