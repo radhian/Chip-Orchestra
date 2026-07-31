@@ -14,7 +14,3 @@ services:
     group_add:
       - keep-groups
 
-  # Map the container user to your host user so artifacts written to the shared
-  # workspace are owned by you (matters when the workspace is shared with R9700).
-  agent-service:
-    userns_mode: keep-id

@@ -33,6 +33,23 @@ else
   ENV_HINT="r9700-core.rootless.env"
 fi
 
+_patch_env_kv() {
+  local env_file="$1" key="$2" value="$3"
+  local tmp
+  tmp="$(mktemp)"
+  awk -v k="$key" -v v="$value" '
+    BEGIN{done=0}
+    $0 ~ "^[[:space:]]*"k"=" {
+      print k"="v
+      done=1
+      next
+    }
+    {print}
+    END{ if(done==0) print k"="v }
+  ' "${env_file}" >"${tmp}"
+  mv "${tmp}" "${env_file}"
+}
+
 # The env file is the source of truth: read the exact paths compose will mount.
 if [[ -n "${ENV_FILE}" ]]; then
   if [[ ! -f "${ENV_FILE}" ]]; then
@@ -40,6 +57,27 @@ if [[ -n "${ENV_FILE}" ]]; then
     exit 1
   fi
   ENV_HINT="${ENV_FILE}"
+
+  # Rootless footgun guard: if the env file was copied from an example with a
+  # placeholder (/home/YOUR_USER/...) or a different user's HOME, Podman will fail
+  # with "statfs ... no such file or directory". Auto-patch to the current $HOME.
+  if [[ "${MODE}" == "rootless" ]]; then
+    _desired_wp="${HOME}/chip-orchestra/workspaces"
+    _desired_md="${HOME}/chip-orchestra/models"
+
+    _raw_wp="$(grep -E '^[[:space:]]*WORKSPACE_HOST_PATH=' "${ENV_FILE}" | tail -1 | cut -d= -f2- | tr -d '"'"'"'' )"
+    if [[ -n "${_raw_wp}" ]] && [[ "${_raw_wp}" != "${_desired_wp}" ]] && [[ "${_raw_wp}" == *"/chip-orchestra/workspaces"* ]] && [[ "${_raw_wp}" == /home/* ]]; then
+      echo "==> Patching WORKSPACE_HOST_PATH in ${ENV_FILE} to: ${_desired_wp}"
+      _patch_env_kv "${ENV_FILE}" "WORKSPACE_HOST_PATH" "${_desired_wp}"
+    fi
+
+    _raw_md="$(grep -E '^[[:space:]]*MODEL_DIR=' "${ENV_FILE}" | tail -1 | cut -d= -f2- | tr -d '"'"'"'' )"
+    if [[ -n "${_raw_md}" ]] && [[ "${_raw_md}" != "${_desired_md}" ]] && [[ "${_raw_md}" == *"/chip-orchestra/models"* ]] && [[ "${_raw_md}" == /home/* ]]; then
+      echo "==> Patching MODEL_DIR in ${ENV_FILE} to: ${_desired_md}"
+      _patch_env_kv "${ENV_FILE}" "MODEL_DIR" "${_desired_md}"
+    fi
+  fi
+
   _wp="$(grep -E '^[[:space:]]*WORKSPACE_HOST_PATH=' "${ENV_FILE}" | tail -1 | cut -d= -f2- | tr -d '"'"'"'' )"
   _md="$(grep -E '^[[:space:]]*MODEL_DIR=' "${ENV_FILE}" | tail -1 | cut -d= -f2- | tr -d '"'"'"'' )"
   [[ -n "${_wp}" ]] && WORKSPACE_HOST_PATH="${_wp}"
