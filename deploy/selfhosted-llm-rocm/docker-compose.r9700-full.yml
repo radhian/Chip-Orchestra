@@ -76,8 +76,7 @@ services:
 
   orchestrator-service:
     build:
-      context: ../..
-      dockerfile: orchestrator-service/Dockerfile
+      context: ../../orchestrator-service
     restart: unless-stopped
     environment:
       PORT: 8080
@@ -117,8 +116,7 @@ services:
   eda-service:
     platform: linux/amd64
     build:
-      context: ../..
-      dockerfile: eda-service/Dockerfile
+      context: ../../eda-service
       args:
         PDK_ROOT: ${PDK_ROOT:-/opt/pdk}
     restart: unless-stopped

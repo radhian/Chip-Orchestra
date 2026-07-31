@@ -3,8 +3,7 @@
 services:
   agent-service:
     build:
-      context: ../..
-      dockerfile: agent-service/Dockerfile
+      context: ../../agent-service
     restart: unless-stopped
     environment:
       DATABASE_URL: mysql+pymysql://${MYSQL_USER:-chip}:${MYSQL_PASSWORD:-chip}@${R9700_HOST:-172.16.1.36}:${MYSQL_PORT:-3306}/${MYSQL_DATABASE:-chip_orchestra}
