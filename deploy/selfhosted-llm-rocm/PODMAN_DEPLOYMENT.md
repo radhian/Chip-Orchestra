@@ -133,3 +133,42 @@ sudo podman volume rm <volume-name>
 ## 10. Gotchas specific to Podman
 
 The most common issues are: forgetting `:z`/`:Z` on SELinux hosts so the workspace is unreadable; using rootless Podman and then failing to bind `172.16.1.36:3306`; and stale `host.docker.internal` on old Podman — use `host.containers.internal` if `host-gateway` is unsupported. If `podman-compose` build fails on the multi-stage images, build images first with `podman build` and set `pull_policy: never`, or use `podman compose` (the provider shim) which tracks Docker Compose behavior more closely.
+
+## 11. Short-name / registries.conf build errors
+
+If a build fails with:
+
+```
+Error: creating build container: short-name "hpretl/iic-osic-tools@sha256:..."
+did not resolve to an alias and no unqualified-search registries are defined
+in "/etc/containers/registries.conf"
+```
+
+Podman (unlike Docker) refuses to guess the registry for an unqualified image
+name. There are two fixes; this repo already applies the first one.
+
+**Fix A — fully-qualified images (already done in this branch).** Every
+`FROM` line in `eda-service`, `orchestrator-service`, `agent-service` and
+`frontend` Dockerfiles is pinned to `docker.io/...` (official images use the
+`docker.io/library/...` path). This removes any dependence on host registry
+config, so the build works on a clean Podman install. Nothing to do.
+
+**Fix B — registries.conf (only needed for other/unpinned images).** The
+common reason the `echo ... | sudo tee -a` fix "does not work" is a TOML
+gotcha: `registries.conf` usually ends with one or more `[[registry]]` table
+blocks, and appending to the *bottom* of the file puts the key *inside* the
+last table, where it is ignored. The key must sit at the very **top**, before
+any `[[registry]]` header:
+
+```bash
+# put it at the top, not the bottom
+sudo sed -i '1i unqualified-search-registries = ["docker.io"]' /etc/containers/registries.conf
+# also check drop-ins don't override it
+grep -R "unqualified-search-registries\|short-name-mode" /etc/containers/registries.conf.d/ 2>/dev/null
+```
+
+Then verify Podman parsed it (any error here means the file is malformed):
+
+```bash
+podman info --format '{{.Registries}}'
+```
