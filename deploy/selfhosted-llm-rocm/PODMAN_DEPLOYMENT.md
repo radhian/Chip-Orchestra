@@ -37,14 +37,40 @@ There are four things to handle that differ from the Docker path:
 
 ## 4. Prepare the shared workspace
 
-On both R9700 and Strix Halo, mount the same network filesystem at the same path:
+Podman (unlike Docker) does **not** auto-create bind-mount source directories, so
+a missing `/srv/chip-orchestra/workspaces` fails the run with
+`statfs /srv/chip-orchestra/workspaces: no such file or directory`. Create it
+first. Use the helper (run as root — it also handles SELinux labels):
+
+```bash
+sudo ./scripts/prepare_host.sh
+# or point it at your shared storage mount:
+sudo WORKSPACE_HOST_PATH=/mnt/nfs/chip-orchestra/workspaces ./scripts/prepare_host.sh
+```
+
+Or do it manually on both R9700 and Strix Halo, mounting the same network
+filesystem at the same path:
 
 ```bash
 sudo mkdir -p /srv/chip-orchestra/workspaces
+sudo chmod 0777 /srv/chip-orchestra/workspaces
 # then mount your NFS/shared storage here on both hosts
 ```
 
 Verify both nodes can write and read the same file before continuing.
+
+> **Rootless will fail here.** The compose binds services to the fixed LAN IP
+> (`172.16.1.36:3306`, `:6379`, `:8002`). Rootless Podman cannot bind a specific
+> non-loopback host IP and errors with `bind: cannot assign requested address`
+> plus `rootless netns: ... permission denied`. Run the whole stack with rootful
+> Podman (`sudo`). If you truly must stay rootless, set the bind hosts to
+> `0.0.0.0` in your env (`MYSQL_BIND_HOST=0.0.0.0 REDIS_BIND_HOST=0.0.0.0
+> EDA_BIND_HOST=0.0.0.0`) — but rootful is the supported path.
+>
+> **Rootless → rootful storage gotcha.** Images you built earlier as a rootless
+> user live in `~/.local/share/containers` and are invisible to rootful Podman
+> (`/var/lib/containers`). The first `sudo podman-compose ... up -d --build`
+> rebuilds them under root storage — that is expected, not a bug.
 
 ## 5. R9700 core with Podman
 
