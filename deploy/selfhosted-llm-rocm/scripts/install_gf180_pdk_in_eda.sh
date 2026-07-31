@@ -39,13 +39,10 @@ podman exec "$CONTAINER" bash -lc '
   PDK="${PDK:-gf180mcuD}"
   echo "PDK_ROOT=$PDK_ROOT"
   echo "PDK=$PDK"
+  echo "PDK_VERSION=${PDK_VERSION:-unset}"
   find "$PDK_ROOT" -maxdepth 3 -type d | sort | sed -n "1,120p"
   test -f "$PDK_ROOT/$PDK/libs.tech/openlane/config.tcl"
   test -d "$PDK_ROOT/$PDK/libs.ref"
-  python3 - <<PY
-from librelane.common import get_pdk_hash
-print("LibreLane pinned gf180mcu hash:", get_pdk_hash("gf180mcu"))
-PY
 '
 
 echo "[pdk] OK: $CONTAINER can see gf180mcuD under PDK_ROOT. Retry the PNR stage."

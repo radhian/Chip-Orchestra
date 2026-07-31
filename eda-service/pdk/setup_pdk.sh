@@ -10,6 +10,10 @@ set -euo pipefail
 
 PDK_ROOT="${PDK_ROOT:-/opt/pdk}"
 PDK="${PDK:-gf180mcuD}"
+# LibreLane's pinned open_pdks commit can point at a PDK build that is not
+# published in Volare for gf180mcu. Use a known published gf180mcu build by
+# default, but allow deployments to override it.
+PDK_VERSION="${PDK_VERSION:-120b0bd69c745825a0b8b76f364043a1cd08bb6a}"
 REQUIRED="${PDK_SETUP_REQUIRED:-1}"
 
 case "$PDK" in
@@ -44,12 +48,12 @@ if [ -d "$PDK_ROOT/$PDK" ]; then
   echo "[setup_pdk] Found $PDK_ROOT/$PDK, but required LibreLane files are missing. Re-running setup."
 fi
 
-# The PDK build must match LibreLane's pinned open_pdks revision. Volare uses
-# PDK families (gf180mcu/sky130), while LibreLane config uses variants
-# (gf180mcuD/sky130A).
-HASH="$(python3 -c "from librelane.common import get_pdk_hash; print(get_pdk_hash('$FAMILY'))" 2>/dev/null || true)"
+# Volare uses PDK families (gf180mcu/sky130), while LibreLane config uses
+# variants (gf180mcuD/sky130A). PDK_VERSION must be a version that exists in
+# `volare ls-remote --pdk "$FAMILY"`.
+HASH="$PDK_VERSION"
 if [ -z "$HASH" ]; then
-  warn_or_fail "could not resolve LibreLane's pinned PDK hash for family '$FAMILY'."
+  warn_or_fail "PDK_VERSION is empty for family '$FAMILY'."
   exit $?
 fi
 
