@@ -116,5 +116,9 @@ services:
 
 networks:
   chip-orchestra:
-    name: chip-orchestra
-    driver: bridge
+    # External no-DNS Podman network created by scripts/create_nodns_network.sh.
+    # This avoids aardvark-dns entirely on rootless hosts where the DNS helper
+    # gets wedged and cannot bind 10.89.x.1:53. Service-to-service paths use
+    # host-gateway aliases and host-published ports instead of Podman DNS.
+    name: ${PODMAN_NETWORK_NAME:-chip-orchestra-nodns}
+    external: true
