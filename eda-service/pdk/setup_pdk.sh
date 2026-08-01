@@ -13,7 +13,7 @@ PDK="${PDK:-gf180mcuD}"
 # LibreLane's pinned open_pdks commit can point at a PDK build that is not
 # published in Volare for gf180mcu. Use a known published gf180mcu build by
 # default, but allow deployments to override it.
-PDK_VERSION="${PDK_VERSION:-120b0bd69c745825a0b8b76f364043a1cd08bb6a}"
+PDK_VERSION="${PDK_VERSION:-c6d73a35f524070e85faff4a6a9eef49553ebc2b}"
 REQUIRED="${PDK_SETUP_REQUIRED:-1}"
 
 case "$PDK" in
