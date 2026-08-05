@@ -1,0 +1,18 @@
+# ----- ------ ----- ----- ------ ----- ----- ------ -----
+# Chipathon 2026: Project configuration
+# LICENSE: Apache License Version 2.0
+# http://www.apache.org/licenses/
+# ----- ------ ----- ----- ------ ----- ----- ------ -----
+
+# Data will be pulled from the main branch of the repo.
+# Please be sure that the main branch contains the data you want to submit.
+
+# ======================================================
+# Project metadata (used for documentation / review)
+# ======================================================
+project:
+  title: "NanoCGRA 3x3"
+  team: "Chip Orchestra"
+  discord: "rads"
+  description: "A compact 3x3 coarse-grained reconfigurable array with 32-byte SRAM and a UART-only interface, implemented in GF180MCU."
+  lvs_config: "output/nanocgra_lite_3x3_opt/lvs_config.json"
