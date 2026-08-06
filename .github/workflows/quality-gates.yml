@@ -19,6 +19,9 @@ on:
       - 'README.md'
       - 'docs/**'
 
+permissions:
+  contents: read
+
 jobs:
   rtl-eda-quality-gates:
     runs-on: ubuntu-latest
