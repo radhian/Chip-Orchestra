@@ -1,0 +1,61 @@
+name: RTL/EDA Quality Gates
+
+on:
+  pull_request:
+    paths:
+      - 'output/**/*.v'
+      - 'output/**/*.vh'
+      - 'ci/quality-gates/**'
+      - '.github/workflows/quality-gates.yml'
+      - 'README.md'
+      - 'docs/**'
+  push:
+    branches: [master]
+    paths:
+      - 'output/**/*.v'
+      - 'output/**/*.vh'
+      - 'ci/quality-gates/**'
+      - '.github/workflows/quality-gates.yml'
+      - 'README.md'
+      - 'docs/**'
+
+jobs:
+  rtl-eda-quality-gates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install lint tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y verilator iverilog
+
+      - name: Run RTL lint + style gate
+        run: |
+          python3 ci/quality-gates/scripts/run_lint_and_style.py \
+            --config ci/quality-gates/config/quality-gates.json \
+            --reports-dir ci/quality-gates/reports
+
+      - name: Run CDC/reset heuristic gate
+        run: |
+          python3 ci/quality-gates/scripts/run_cdc_reset_heuristics.py \
+            --config ci/quality-gates/config/quality-gates.json \
+            --reports-dir ci/quality-gates/reports
+
+      - name: Generate standardized QoR summary
+        if: ${{ always() }}
+        run: |
+          python3 ci/quality-gates/scripts/generate_qor_summary.py \
+            --config ci/quality-gates/config/quality-gates.json \
+            --reports-dir ci/quality-gates/reports
+
+      - name: Upload quality gate artifacts
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: rtl-eda-quality-gates
+          path: |
+            ci/quality-gates/reports/*.json
+            ci/quality-gates/reports/*.md

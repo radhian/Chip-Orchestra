@@ -590,6 +590,7 @@ The workspace `raw`/`export` endpoints stream files as attachments and accept a 
 | `docs/architecture_v2.md` | Microservice architecture (current) |
 | `docs/development.md` | Local development workflow |
 | `docs/test-plan.md` | Testing strategy |
+| `docs/quality-gates.md` | RTL/EDA CI quality gates (lint, CDC/reset heuristic, QoR summary) |
 | `docs/api/operator-service.md` | Orchestrator API |
 | `docs/api/agent-service.md` | Agent API |
 | `docs/api/eda-service.md` | EDA API |
