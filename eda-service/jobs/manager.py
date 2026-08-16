@@ -13,6 +13,7 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column, sess
 
 from runner import CommandRunner, default_runner
 from toolchain import run_gl_sim, run_harden, run_lint, run_mock_toolchain, run_padring, run_render, run_simulation, run_sta
+from toolchain.harden_runner import design_clock_period_ns
 from toolchain.reports import BaseReport, SignoffReport
 from workspace import resolve_workspace
 
@@ -84,10 +85,17 @@ def run_stage(
         except Exception:  # noqa: BLE001
             top = ""
     clock_port = str(opts.get("clock_port") or "clk")
+    # An explicit request wins; otherwise take the period the DESIGN specifies
+    # (rtl/params.vh `define CLK_FREQ, or the golden contract). Falling straight
+    # to 10 ns hardened a 50 MHz design at 100 MHz — hours of OpenROAD chasing
+    # timing that was never required, and a UART divisor describing a baud rate
+    # the chip would not actually produce.
     try:
-        clock_period = float(opts.get("clock_period") or 10.0)
+        clock_period = float(opts.get("clock_period") or 0.0)
     except (TypeError, ValueError):
-        clock_period = 10.0
+        clock_period = 0.0
+    if clock_period <= 0:
+        clock_period = design_clock_period_ns(workspace) or 10.0
     stage_opts = opts.get("stage_options") or {}
 
     if stage == "SIM":
@@ -249,26 +257,45 @@ class EDAJobManager:
             except OSError:  # pragma: no cover - defensive path
                 pass
 
+            # A stage that recorded hard errors did NOT do its job. Every value a
+            # runner writes to report.errors is fatal — "hardening timeout",
+            # "no GDS produced", "chip output != golden output", "compile failed";
+            # advisory notes go to report.warnings instead. Reporting those as
+            # COMPLETED let the flow march past a stage that produced nothing, so
+            # a run could reach EXPORT carrying no GDS at all. The report is
+            # already persisted above, so the reason stays visible either way.
+            stage_errors = [str(e).strip() for e in (report_dict.get("errors") or [])
+                            if str(e).strip()]
+            status = "FAILED" if stage_errors else "COMPLETED"
+            detail = "; ".join(stage_errors)
+
             with self.Session() as session:
                 row = session.get(EDAJob, job_id)
                 if row is None:
                     return
-                row.status = "COMPLETED"
+                row.status = status
                 row.progress = 100
                 row.report_json = json.dumps(report_dict)
                 row.artifact_index = json.dumps(artifact_index)
+                if stage_errors:
+                    row.error = detail
                 session.commit()
             for artifact in artifact_index:
                 await self.append_log(job_id, f"Artifact: {artifact.get('path', '?')} ({artifact.get('kind', 'file')})")
-            await self.append_log(job_id, f"{stage} stage completed")
-            await self._publish(job_id, {
+            await self.append_log(
+                job_id,
+                f"{stage} stage failed: {detail}" if stage_errors else f"{stage} stage completed")
+            payload = {
                 "job_id": job_id,
-                "status": "COMPLETED",
+                "status": status,
                 "progress": 100,
                 "stage": stage,
                 "report": report_dict,
                 "artifacts": artifact_index,
-            })
+            }
+            if stage_errors:
+                payload["error"] = detail
+            await self._publish(job_id, payload)
         except Exception as exc:  # pragma: no cover - defensive path
             with self.Session() as session:
                 row = session.get(EDAJob, job_id)

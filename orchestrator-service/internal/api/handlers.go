@@ -153,6 +153,7 @@ func (a *App) RegisterRoutes(router *gin.Engine) {
 		api.POST("/tasks/:id/workspace/propose-patch", a.proposePatch)
 		api.GET("/tasks/:id/signoff/status", a.getSignoffStatus)
 		api.GET("/tasks/:id/golden/review", a.getGoldenReview)
+		api.GET("/tasks/:id/sim/review", a.getSimReview)
 		api.POST("/tasks/:id/approvals/:stage", a.approveStage)
 		api.POST("/tasks/:id/waivers", a.createWaiver)
 		api.POST("/tasks/:id/export-bundle", a.exportBundle)
@@ -1005,6 +1006,70 @@ func (a *App) getGoldenReview(c *gin.Context) {
 		"summary":          summary,
 		"report":           report,
 		"testLog":          testLog,
+	})
+}
+
+// getSimReview serves what the SIM review dialog renders: the structured sim
+// report, the testbench console, and the desired-vs-actual images. SIM is the
+// last point where the design is cheap to change — everything after it spends
+// hours hardening whatever the RTL already does — so the reviewer confirms the
+// CHIP's output matches the golden model's before the flow commits. Read from
+// disk, like the golden gate, so the popup shows results rather than claims.
+func (a *App) getSimReview(c *gin.Context) {
+	taskID := c.Param("id")
+	workspace := a.Orch.TaskWorkspace(taskID)
+
+	report := map[string]any{}
+	if data, err := os.ReadFile(filepath.Join(workspace, "reports", "sim_report.json")); err == nil {
+		_ = json.Unmarshal(data, &report)
+	}
+
+	var stages []models.Stage
+	_ = a.DB.WithContext(c.Request.Context()).Where("task_id = ? AND name = ?", taskID, "SIM").Find(&stages).Error
+	status := ""
+	if len(stages) > 0 {
+		status = string(stages[0].Status)
+	}
+
+	simLog := ""
+	if data, err := os.ReadFile(filepath.Join(workspace, "logs", "sim.log")); err == nil {
+		if len(data) > 64<<10 {
+			data = data[len(data)-(64<<10):]
+		}
+		simLog = string(data)
+	}
+
+	// Only offer a preview that actually exists — a broken <img> in a tape-out
+	// gate reads as "the tool failed" even when the run was fine.
+	previews := []gin.H{}
+	for _, p := range []struct{ path, label, role string }{
+		{"waves/chip_input.png", "Chip input — what drives the design", "input"},
+		{"waves/golden_output.png", "DESIRED output — computed by the Python golden model", "golden"},
+		{"waves/chip_output.png", "CHIP output — computed by the RTL", "chip"},
+		{"waves/waveform.png", "Waveform", "waveform"},
+	} {
+		if _, err := os.Stat(filepath.Join(workspace, filepath.FromSlash(p.path))); err == nil {
+			previews = append(previews, gin.H{"path": p.path, "label": p.label, "role": p.role})
+		}
+	}
+
+	goldenMatch, hasMatch := false, false
+	if metrics, ok := report["metrics"].(map[string]any); ok {
+		if v, ok := metrics["golden_match"].(bool); ok {
+			goldenMatch, hasMatch = v, true
+		}
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"stage":            "SIM",
+		"status":           status,
+		"awaitingApproval": models.StageStatus(status) == models.StageStatusAwaitingApproval,
+		"available":        len(report) > 0,
+		"report":           report,
+		"simLog":           simLog,
+		"previews":         previews,
+		"goldenMatch":      goldenMatch,
+		"hasGoldenMatch":   hasMatch,
 	})
 }
 

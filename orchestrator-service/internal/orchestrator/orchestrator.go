@@ -77,7 +77,13 @@ func NewService(db *gorm.DB, redisClient *redis.Client, agent *dispatcher.Client
 			// actual generated module interface instead of only the plan;
 			// independently generated RTL+TB tend to drift and fail SIM.
 			{Name: "TB_GEN", DependsOn: []string{"RTL_GEN"}, Kind: "agent"},
-			{Name: "SIM", DependsOn: []string{"RTL_GEN", "TB_GEN"}, Kind: "eda"},
+			// SIM is the last point where the design is still cheap to change:
+			// everything after it (synthesis, PnR, signoff) spends hours turning
+			// whatever the RTL does into silicon. It is human-gated for the same
+			// reason GOLDEN_GEN is — the reviewer confirms the CHIP's computed
+			// output matches the golden model's desired output before the flow
+			// commits to hardening it.
+			{Name: "SIM", DependsOn: []string{"RTL_GEN", "TB_GEN"}, Kind: "eda", Gated: true, RequiresApproval: true},
 			// LINT runs only AFTER the simulation passes — a design that doesn't
 			// even simulate correctly has no business being style-checked yet
 			// (GarudaChip order: generate → tb → simulate → lint → harden).
@@ -507,17 +513,55 @@ func (s *Service) pollEDARun(ctx context.Context, taskID, stageID, jobID string)
 			stage.CompletedAt = &now
 			attempt.Status = models.StageStatusSucceeded
 			attempt.CompletedAt = &now
+			// HUMAN GATE, same contract as the agent path: the job finished, but
+			// the flow does not advance until a reviewer accepts it. Honouring
+			// RequiresApproval only on the agent path silently ignored the flag
+			// on every `eda` stage — SIM among them, which is the last point
+			// where the design is still cheap to change.
+			edaDef := s.definition(stage.Name)
+			if edaDef.RequiresApproval {
+				stage.Status = models.StageStatusAwaitingApproval
+			}
 			payload, _ := json.Marshal(status.Report)
 			attempt.Result = string(payload)
 			_ = s.db.WithContext(ctx).Save(&attempt).Error
 			_ = s.db.WithContext(ctx).Save(&stage).Error
 			s.recordEDAOutputs(ctx, taskID, stage.Name, status.Report)
-			_ = s.publishEvent(ctx, taskID, map[string]any{"type": "artifact.created", "task_id": taskID, "stage": stage.Name, "status": stage.Status, "progress": 100, "timestamp": now.Format(time.RFC3339)})
+			event := map[string]any{"type": "artifact.created", "task_id": taskID, "stage": stage.Name, "status": stage.Status, "progress": 100, "timestamp": now.Format(time.RFC3339)}
+			if edaDef.RequiresApproval {
+				event["type"] = "stage.updated"
+				event["title"] = fmt.Sprintf("%s needs your review", stage.Name)
+				event["detail"] = "The chip has been simulated against the approved golden model. Check the desired-vs-actual output in the review dialog: approve it to start hardening, or reject it with a correction."
+				event["tone"] = "warning"
+				if img := s.stageImage(taskID, stage.Name); img != "" {
+					event["image"] = img
+				}
+			}
+			_ = s.publishEvent(ctx, taskID, event)
 			_ = s.evaluateTask(ctx, taskID)
 			return
 		case "FAILED":
 			if isMissingSlangFailure(status.Error + "\n" + s.librelaneLogTail(taskID)) {
 				s.failStage(ctx, &stage, &attempt, missingSlangFailureMessage())
+				return
+			}
+			// A SIM whose testbench FAILED is a design defect the repair loop
+			// exists to fix, not an infrastructure fault. The loop used to hang
+			// off the COMPLETED branch only, because eda-service reported a
+			// failing testbench as a COMPLETED job; now that a job with
+			// report.errors is correctly FAILED, that routing has to live here
+			// too or the design never gets a repair round at all.
+			if stage.Name == "SIM" && simRunFailed(status) {
+				repairKey := fmt.Sprintf("task:%s:sim_auto_repairs", taskID)
+				rounds, _ := s.redis.Incr(ctx, repairKey).Result()
+				if int(rounds) <= simRepairRounds() {
+					s.repairAndRetrySim(ctx, taskID, &stage, &attempt, status.Report, int(rounds))
+					return
+				}
+				s.failStage(ctx, &stage, &attempt, fmt.Sprintf(
+					"self-checking testbench STILL FAILING after %d auto-repair rounds — see logs/sim.log "+
+						"and logs/rtl_repair_deep_agent.md; a manual Retry re-arms the loop "+
+						"(SIM_AUTO_REPAIR_ROUNDS to raise the budget)", simRepairRounds()))
 				return
 			}
 			s.failStage(ctx, &stage, &attempt, status.Error)
@@ -777,6 +821,29 @@ func isTransientErr(err error) bool {
 
 // simTestbenchFailed reads the SIM report's verdict: the self-checking
 // testbench printed FAILED / $fatal / a mismatch (metrics.passed == false).
+// simRunFailed reports whether a FAILED SIM job failed because the DESIGN is
+// wrong (self-checking testbench, golden mismatch, simulation timeout) rather
+// than because the toolchain could not run. The former is repairable; the
+// latter is not, and must surface as-is.
+func simRunFailed(status *edaclient.JobStatusResponse) bool {
+	blob := strings.ToLower(status.Error)
+	if errs, ok := status.Report["errors"].([]any); ok {
+		for _, e := range errs {
+			if s, ok := e.(string); ok {
+				blob += " " + strings.ToLower(s)
+			}
+		}
+	}
+	for _, marker := range []string{
+		"testbench failed", "chip output != golden", "timeout", "no verdict",
+	} {
+		if strings.Contains(blob, marker) {
+			return true
+		}
+	}
+	return false
+}
+
 func simTestbenchFailed(report map[string]any) bool {
 	metrics, _ := report["metrics"].(map[string]any)
 	if metrics == nil {

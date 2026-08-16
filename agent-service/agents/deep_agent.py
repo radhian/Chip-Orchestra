@@ -487,7 +487,7 @@ def build_deep_agent(base_dir: str | Path, model=None, temperature: float = 0.2)
 
 def build_step_agent(base_dir: str | Path, extra_tools=None, instructions: str | None = None,
                      temperature: float = 0.2, model=None, on_clean_write=None,
-                     subagents=None):
+                     subagents=None, exclude_tools=None):
     """A deep agent for ONE pipeline stage ("every agent is a deep agent"). Every node
     gets: planning (`write_todos`), real file tools (slice-read + grep), the RLM
     `llm_query` delegation primitive, the built-in `task` sub-agent tool, PLUS whatever
@@ -501,6 +501,15 @@ def build_step_agent(base_dir: str | Path, extra_tools=None, instructions: str |
              + list(make_rlm_tools(temperature))
              + list(make_python_tools(base_dir))
              + list(extra_tools or []))
+    # WITHHOLDING a tool is the only reliable way to stop the model using it.
+    # A pass told in plain words "do NOT open the existing file, write from
+    # scratch" read it anyway — 2 reads, then 6, then 12, and never once
+    # called write_file_disk, because reading is always the safer-looking next
+    # move. Take the read tools away and the only action left is the one the
+    # pass exists to perform.
+    if exclude_tools:
+        drop = {str(n) for n in exclude_tools}
+        tools = [t for t in tools if getattr(t, "name", "") not in drop]
     return create_deep_agent(
         tools=tools,
         instructions=instructions or INSTRUCTIONS,
@@ -550,7 +559,7 @@ def _is_provider_failure(exc: BaseException) -> bool:
 def run_step_agent(base_dir: str | Path, goal: str, extra_tools=None,
                    instructions: str | None = None, temperature: float = 0.2,
                    model=None, on_clean_write=None, recursion_limit: int = 60,
-                   log_name: str = "deep_agent") -> str:
+                   log_name: str = "deep_agent", exclude_tools=None) -> str:
     """Build + run a per-stage deep agent (planning + file + web + memory tools),
     logging every tool/task call to `logs/<log_name>.md` in the workspace. Returns
     the agent's final assistant text — service-side analog of GarudaChip's
@@ -563,7 +572,7 @@ def run_step_agent(base_dir: str | Path, goal: str, extra_tools=None,
     base = Path(base_dir).resolve()
     agent = build_step_agent(base, extra_tools=extra_tools, instructions=instructions,
                              temperature=temperature, model=model,
-                             on_clean_write=on_clean_write)
+                             on_clean_write=on_clean_write, exclude_tools=exclude_tools)
     log_path = base / "logs" / f"{log_name}.md"
     log_path.parent.mkdir(parents=True, exist_ok=True)
     log_lines: List[str] = [f"# Deep agent transcript — {log_name}", "", f"GOAL:\n{goal}", ""]

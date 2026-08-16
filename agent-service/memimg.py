@@ -60,7 +60,13 @@ def infer_size(workspace: Path, count: int, max_val: int) -> int:
     if marker.is_file():
         try:
             n = int(marker.read_text().strip())
-            if n > 0:
+            # The marker describes the INPUT grid. An OUTPUT dump is a different
+            # shape whenever the kernel shrinks the frame — a 3x3 Sobel over
+            # 32x32 with no padding yields 30x30 — and forcing those 900 values
+            # into a 32x32 grid shears every row 2 pixels further left, turning
+            # the edge map into a diagonal smear. Trust the marker only when the
+            # value count actually fits it.
+            if n > 0 and count in (n * n, 3 * n * n):
                 return n
         except (OSError, ValueError):
             pass

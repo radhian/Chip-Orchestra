@@ -9,6 +9,7 @@ import type {
   ListTasksParams,
   RunbookEvent,
   SignoffStatus,
+  SimReview,
   TaskDetail,
   TaskStage,
   TaskSummary,
@@ -291,4 +292,10 @@ export function connectTaskEvents(taskId: string, handlers: { onMessage: (event:
   }
 
   return socket
+}
+
+/** The SIM review payload: chip-vs-golden outputs, the testbench console and
+ *  whether the gate is open, for the human check before hardening starts. */
+export async function getSimReview(id: string): Promise<SimReview> {
+  return requestJson<SimReview>(`/api/v1/tasks/${id}/sim/review`)
 }

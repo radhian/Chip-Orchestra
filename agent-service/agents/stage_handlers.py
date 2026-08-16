@@ -26,6 +26,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import time
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -146,7 +147,7 @@ def _apply_model(sc: StageContext) -> None:
 
 
 def _run_deep(sc: StageContext, goal: str, log_name: str, on_clean_write=None,
-              recursion_limit: int = 60) -> str:
+              recursion_limit: int = 60, exclude_tools=None) -> str:
     """Run one stage's deep agent (file + web + memory + python tools).
 
     A DeepAgentProviderError is re-raised with the provider and model named: the
@@ -155,14 +156,40 @@ def _run_deep(sc: StageContext, goal: str, log_name: str, on_clean_write=None,
     from research import make_step_tools
     from .deep_agent import DeepAgentProviderError, run_step_agent
     _apply_model(sc)
+
+    def _transcript_is_empty() -> bool:
+        """A run that produced no assistant text and no tool call at all.
+
+        Under transient provider rate-limiting the graph returns immediately
+        with only the input state — no error, no messages. The stage then
+        carries on as if the pass had run and simply decided to change nothing,
+        which is how the frame-buffer rewrite silently no-opped twice."""
+        if sc.workspace is None:
+            return False
+        p = sc.workspace / "logs" / f"{log_name}.md"
+        try:
+            body = p.read_text(errors="replace")
+        except OSError:
+            return False
+        return "**tool call:**" not in body and "**assistant:**" not in body
+
     try:
-        return run_step_agent(
-            sc.workspace, goal,
-            extra_tools=make_step_tools(sc.workspace),
-            on_clean_write=on_clean_write,
-            recursion_limit=recursion_limit,
-            log_name=log_name,
-        )
+        attempts = max(1, int(os.getenv("DEEP_EMPTY_RETRIES", "3")))
+        result = ""
+        for attempt in range(attempts):
+            result = run_step_agent(
+                sc.workspace, goal,
+                extra_tools=make_step_tools(sc.workspace),
+                on_clean_write=on_clean_write,
+                recursion_limit=recursion_limit,
+                log_name=log_name,
+                exclude_tools=exclude_tools,
+            )
+            if not _transcript_is_empty():
+                return result
+            if attempt < attempts - 1:
+                time.sleep(min(20 * (attempt + 1), 60))
+        return result
     except DeepAgentProviderError as e:
         from llm import current_model, get_provider
         raise RuntimeError(
@@ -282,10 +309,52 @@ def _golden_summary(sc: StageContext) -> Dict[str, Any]:
     return data if isinstance(data, dict) else {}
 
 
+_HEADER_TIERS = ("header", "include", "package")
+_HEADER_SUFFIXES = (".vh", ".svh")
+
+
+def _is_header_ip(ip: Dict[str, Any]) -> bool:
+    """True when a contract entry describes an INCLUDE FILE — shared `define /
+    parameter macros — rather than a synthesizable module.
+
+    GOLDEN_GEN lists `rtl/params.vh` in the module table whenever several IPs
+    must agree on constants (a UART makes this near-certain: CLK_FREQ,
+    BAUD_RATE and BIT_TICKS are shared by baud_gen, uart_rx, uart_tx and the
+    controller). A header declares no module, so holding it to the
+    "every contracted name must be declared as a module" rule deadlocks
+    RTL_GEN against the contract's own Rule 3 ("shared macros in
+    rtl/params.vh, included via `include`) — unsatisfiable by construction,
+    and every retry replays it.
+
+    Judged by the DECLARED file suffix, not by an empty port list: an agent
+    that lazily omits `ports` for a real module must still answer to the gate.
+    """
+    if str(ip.get("tier", "")).strip().lower() in _HEADER_TIERS:
+        return True
+    return Path(str(ip.get("file", ""))).suffix.lower() in _HEADER_SUFFIXES
+
+
 def _golden_ips(sc: StageContext) -> List[Dict[str, Any]]:
-    """The IP blocks the golden model defines: [{name, file, role, tier, ports}]."""
+    """The IP blocks the golden model defines: [{name, file, role, tier, ports}].
+
+    Include files are excluded — every caller (the RTL_GEN contract gate,
+    _golden_ips_without_rtl, TB_GEN's per-IP testbench list) treats an entry
+    here as a module that must be declared and driven. Headers are surfaced
+    separately by _golden_headers so they still get written."""
     ips = _golden_summary(sc).get("ips")
-    return [ip for ip in ips if isinstance(ip, dict) and ip.get("name")] if isinstance(ips, list) else []
+    if not isinstance(ips, list):
+        return []
+    return [ip for ip in ips
+            if isinstance(ip, dict) and ip.get("name") and not _is_header_ip(ip)]
+
+
+def _golden_headers(sc: StageContext) -> List[Dict[str, Any]]:
+    """The contract's include files — written and `include`d, never instantiated."""
+    ips = _golden_summary(sc).get("ips")
+    if not isinstance(ips, list):
+        return []
+    return [ip for ip in ips
+            if isinstance(ip, dict) and ip.get("name") and _is_header_ip(ip)]
 
 
 def _golden_vector_modules(sc: StageContext) -> List[str]:
@@ -316,6 +385,14 @@ def _golden_note(sc: StageContext) -> str:
         for ip in ips[:24]:
             lines.append(f"  - {ip.get('name')} [{ip.get('tier', 'ip')}] — {ip.get('role', '')}"
                          + (f" · ports: {ip.get('ports')}" if ip.get("ports") else ""))
+    headers = _golden_headers(sc)
+    if headers:
+        lines.append("The contract's INCLUDE FILES — write each one and `` `include `` it from "
+                     "the modules that need it. These hold shared macros/parameters and declare "
+                     "NO module, so do not instantiate them and do not write a testbench for "
+                     "them: "
+                     + ", ".join(str(h.get("file") or f"rtl/{h.get('name')}.vh")
+                                 for h in headers[:8]))
     if vec:
         lines.append("Per-module GOLDEN TEST VECTORS (input → expected output, computed by the "
                      "Python model) live in: "
@@ -324,6 +401,143 @@ def _golden_note(sc: StageContext) -> str:
                  "reproduce them BIT-EXACTLY. If the golden model looks wrong, say so instead "
                  "of silently diverging from it.\n")
     return "\n".join(lines)
+
+
+_SERIAL_IO_RE = re.compile(r"\b(uart|rs-?232|spi|i2c|serial|usb|tx/rx|8n1|baud)\b", re.I)
+_WINDOW_OP_RE = re.compile(
+    r"\b(sobel|prewitt|laplac\w*|gauss\w*|blur|sharpen|edge[- ]detect\w*|convolution|conv2d?|"
+    r"kernel|filter|erosion|dilation|median|3x3|5x5|window\w*|stencil)\b", re.I)
+
+
+def _serial_io_design(sc: StageContext) -> bool:
+    """Does this chip actually have a SERIAL data interface?
+
+    The user's one-line brief is the wrong place to decide this. "nano cgra 3x3
+    sobel accelerator v2" names no interface at all, yet PLAN gave it a UART —
+    so the architecture rule below, and the frame-buffer gate that enforces it,
+    both stayed switched off for the whole run. That design shipped
+    `frame [0:1023]` and `out_buf [0:1023]`: 16,384 flip-flops, 92% of every
+    register in the netlist, hardened to a 7.56 mm2 die whose compute is a few
+    hundred gates.
+
+    So look at what the design IS — the planned IP list and the RTL on disk —
+    not only at what the user typed."""
+    # Identifiers, not prose: `\buart\b` does NOT match "uart_rx", because `_`
+    # is a word character and kills the boundary. Split on non-alphanumerics
+    # first so module and file names match the same vocabulary the brief does.
+    def hit(text: str) -> bool:
+        return bool(_SERIAL_IO_RE.search(re.sub(r"[^A-Za-z0-9]+", " ", text)))
+
+    if _SERIAL_IO_RE.search(sc.design_brief or ""):
+        return True
+    try:
+        for ip in _golden_ips(sc):
+            if hit(f"{ip.get('name', '')} {ip.get('role', '')}"):
+                return True
+    except Exception:  # noqa: BLE001 — contract not written yet (PLAN runs before GOLDEN)
+        pass
+    workspace = getattr(sc, "workspace", None)
+    if workspace is not None:
+        try:
+            if any(hit(p.stem) for p in (workspace / "rtl").glob("*.v")):
+                return True
+        except OSError:
+            pass
+    return False
+
+
+def _streaming_io_note(sc: StageContext) -> str:
+    """Architecture directive for a chip whose data interface is SERIAL.
+
+    A UART hands over one byte at a time, so the natural — and only sane —
+    architecture is a streaming pipeline whose on-chip storage is sized to the
+    OPERATOR's working set, not to the dataset. Left unsaid, the model reaches
+    for the obvious software shape (load whole frame → compute → dump whole
+    frame) and buries two frames in flip-flops: one build came out at 15,671
+    DFFs / 5.18 mm2 with ~75% of the die spent on image storage, for a design
+    whose compute is a few hundred gates.
+
+    This is deliberately stated as an ARCHITECTURE rule rather than left to the
+    user's prompt: picking UART for I/O is a user-level choice, knowing what it
+    implies for buffering is ours."""
+    brief = sc.design_brief or ""
+    if not _serial_io_design(sc):
+        return ""
+    lines = [
+        "\nSERIAL I/O => STREAM, DO NOT BUFFER THE DATASET (architecture rule).",
+        "The chip's data interface is SERIAL (UART/SPI/I2C): values arrive and leave ONE BYTE "
+        "AT A TIME, in order. Size on-chip storage to the OPERATOR's working set, never to the "
+        "whole dataset:",
+    ]
+    if _WINDOW_OP_RE.search(brief):
+        lines.append(
+            "  - A KxK sliding-window operator needs K LINE BUFFERS of one row each, plus the "
+            "KxK window registers. For a 3x3 kernel over a 32-wide image that is 3 x 32 B = "
+            "96 B = 768 bits TOTAL — not the WxH frame. Build the window from the line buffers "
+            "as each new pixel shifts in.")
+    if _WINDOW_OP_RE.search(brief):
+        lines.append(
+            "  - STORAGE BUDGET for a KxK window over W-wide data: (K-1) LINE BUFFERS of W "
+            "bytes, plus KxK window registers. A 3x3 kernel over 32-wide rows is 2 x 32 B = "
+            "512 bits + 9 x 8 = 72 bits. You need K-1 line buffers, NOT K: the last row is "
+            "the arriving pixel itself, which never gets stored.")
+    lines += [
+        "  - Emit each result on the serial port AS SOON AS IT IS COMPUTED. There is no output "
+        "frame buffer.",
+        "  - AREA TARGET: the finished die must be UNDER 500 x 500 um (0.25 mm2). That is "
+        "~700 flip-flops and a few thousand cells for a small streaming operator. If your "
+        "module list implies more than about 2000 flip-flops, the architecture is wrong — "
+        "find the array that holds more than one row. For scale: one 1024-byte frame in "
+        "flip-flops is 8192 DFFs (~0.5 mm2) and blows the whole budget on its own, twice "
+        "over.",
+        "  - Registers cost ~64 um2 each in this PDK: a 1024-byte frame held in flip-flops is "
+        "8192 DFFs (~0.5 mm2). Holding input AND output frames is what turned a design whose "
+        "compute is a few hundred gates into a 5.18 mm2 die. Adding a UART to a small "
+        "accelerator should add a small amount of area, not multiply it.",
+        "  - If a design genuinely needs random access to a large buffer, instantiate a real "
+        "SRAM macro — never a `reg [W:0] mem [0:N]` array of thousands of entries.",
+        "  - Fixed small kernel weights are SHIFTS AND ADDS, not multipliers: Sobel's "
+        "coefficients are 0, +/-1, +/-2, so 2*p is p<<1 and a 3x3 pass is a handful of "
+        "adders. Do not infer 8x8 multipliers for weights that are powers of two.",
+        "  - Every buffer you DO declare must be genuinely read out through a module port. An "
+        "array nothing observable depends on is deleted by synthesis, and the hardened chip "
+        "then contains no accelerator at all (one build declared 16,456 bits of memory and "
+        "synthesized to 91 flip-flops, then passed every downstream check).",
+    ]
+    return "\n".join(lines) + "\n"
+
+
+def _achieved_clock_note(sc: StageContext) -> str:
+    """What the SILICON closes at, when hardening has already told us.
+
+    The design declares a clock up front, but only hardening knows what is
+    achievable; a 50 MHz design that closes at 13.9 MHz still carries
+    BIT_TICKS = CLK_FREQ/BAUD computed for 50 MHz, so the UART would transmit
+    at ~32k baud instead of 115200. Feed the real number back so the timing
+    constants are DERIVED from it instead of the flow dead-ending on the
+    mismatch."""
+    if sc.workspace is None:
+        return ""
+    p = sc.workspace / "context" / "achieved_clock.json"
+    if not p.is_file():
+        return ""
+    try:
+        data = json.loads(p.read_text(errors="replace"))
+        period = float(data.get("clock_period_ns") or 0)
+        hz = int(data.get("clock_hz") or 0)
+    except Exception:  # noqa: BLE001
+        return ""
+    if not (period > 0 and hz > 0):
+        return ""
+    return (
+        f"\nACHIEVED CLOCK (from hardening — this is what the silicon actually closes at): "
+        f"{period} ns = {round(hz / 1e6, 3)} MHz ({hz} Hz).\n"
+        f"Set CLK_FREQ = {hz} and DERIVE every timing-dependent constant from it — a UART "
+        f"divisor is BIT_TICKS = CLK_FREQ / BAUD, so recompute it (do not keep a value that "
+        f"was computed for a different frequency; that is a chip whose serial link runs at "
+        f"the wrong baud rate). Cycle counts, timeouts and any 'wait N cycles' constant get "
+        f"the same treatment. The FUNCTION does not change — only the constants that depend "
+        f"on clock frequency.\n")
 
 
 def _rtl_hierarchy(workspace: Path) -> Dict[str, Any]:
@@ -449,6 +663,8 @@ def run_plan(sc: StageContext) -> AgentResult:
             f"You are the GRAND PLANNER for this chip design task: {sc.design_brief}\n"
             + _digest_note(sc)
             + _anchor_note(sc)
+            + _streaming_io_note(sc)
+            + _achieved_clock_note(sc)
             + (f"\nWEB UNDERSTANDING (from research):\n{research_summary}\n" if research_summary else "")
             + "\nWrite TWO files with write_file_disk:\n"
               "1. `plans/execution_plan.md` — the ordered plan: research/references used, the "
@@ -621,7 +837,17 @@ def _render_golden_previews(sc: StageContext) -> List[str]:
     for name in ("golden_output.mem", "chip_input.mem"):
         mem = waves / name
         png = mem.with_suffix(".png")
-        if mem.is_file() and (not png.is_file() or png.stat().st_mtime < mem.stat().st_mtime):
+        if not mem.is_file():
+            continue
+        # golden_output.png is FRAMEWORK-owned. SIM re-renders it from the same
+        # .mem, so the reviewer at the gate and the reader of the SIM comparison
+        # panel have to see the identical picture. An agent that saves its own
+        # matplotlib composite there (a titled input-vs-output figure) wins the
+        # mtime check below, and SIM then silently replaces it with the plain
+        # render — the same data shown two different ways, which reads as the
+        # golden model having changed. Re-render it unconditionally.
+        stale = not png.is_file() or png.stat().st_mtime < mem.stat().st_mtime
+        if name == "golden_output.mem" or stale:
             if render_mem_image(mem, png, workspace=sc.workspace):
                 rendered.append(f"waves/{png.name}")
     # The canonical stimulus lives in rtl/*.mem; render the input alongside the
@@ -685,6 +911,13 @@ def _write_golden_summary(sc: StageContext, tests: Dict[str, Any]) -> Dict[str, 
     summary = _golden_summary(sc)
     hierarchy_ips = summary.get("ips") if isinstance(summary.get("ips"), list) else []
     ips = [ip for ip in hierarchy_ips if isinstance(ip, dict) and ip.get("name")]
+    # Record an include file as tier "header" rather than "ip". The distinction
+    # is what stops the downstream stages from demanding `module params` for a
+    # file of `define macros; persisting it here means the popup, the report and
+    # every later read agree on it instead of re-deriving it from the suffix.
+    for ip in ips:
+        if _is_header_ip(ip):
+            ip["tier"] = "header"
     models = []
     vectors = _golden_vector_modules(sc)
     if sc.workspace is not None:
@@ -719,6 +952,40 @@ def _write_golden_summary(sc: StageContext, tests: Dict[str, Any]) -> Dict[str, 
     return merged
 
 
+def _golden_test_failures(sc: StageContext, limit: int = 12) -> str:
+    """The ACTUAL failing assertions from golden/test_log.txt.
+
+    Telling a repair pass "9 tests FAIL — see golden/test_log.txt" leaves it to
+    go and read the file, which it often does not do; the pass then rewrites
+    something unrelated and the same 9 tests fail again. Paste the failures in.
+    """
+    if sc.workspace is None:
+        return ""
+    log = sc.workspace / "golden" / "test_log.txt"
+    if not log.is_file():
+        return ""
+    try:
+        text = log.read_text(errors="replace")
+    except OSError:
+        return ""
+    named = [ln.strip() for ln in text.splitlines() if ln.startswith("FAILED ")]
+    asserts = [ln.strip() for ln in text.splitlines()
+               if ln.lstrip().startswith("E ") and "assert" in ln]
+    out: List[str] = []
+    if named:
+        out.append("FAILING TESTS:\n  " + "\n  ".join(named[:limit]))
+    if asserts:
+        out.append("ASSERTION DETAIL:\n  " + "\n  ".join(asserts[:limit]))
+    return ("\n" + "\n".join(out) + "\n") if out else ""
+
+
+def _golden_repair_rounds() -> int:
+    try:
+        return max(1, int(os.getenv("GOLDEN_REPAIR_ROUNDS", "6")))
+    except ValueError:
+        return 6
+
+
 def _golden_gaps(sc: StageContext, tests: Dict[str, Any], needs_output: bool) -> List[str]:
     """Deterministic completeness check — what the golden deliverable is still
     missing. Asking the agent nicely is not enough; these are the artifacts the
@@ -744,6 +1011,21 @@ def _golden_gaps(sc: StageContext, tests: Dict[str, Any], needs_output: bool) ->
     elif not tests.get("passed"):
         gaps.append("the test suite ran but asserted nothing — write tests that CHECK computed "
                     "values against independently known-correct results.")
+    # The gate SHOWS waves/golden_output.mem as "this is what the chip must
+    # produce". Repair rounds rewrite the MODEL, but nothing rewrites the dump —
+    # so a freshly-green model gets presented with the BROKEN model's picture.
+    # One run reached the gate with 838 of 900 pixels stale, its first pixel
+    # still 62 where the repaired model computes 68: the exact mismatch the
+    # repair had just fixed, shown to the reviewer as ground truth.
+    dump = ws / "waves" / "golden_output.mem"
+    if models and dump.is_file():
+        if dump.stat().st_mtime < max(p.stat().st_mtime for p in models):
+            gaps.append(
+                "waves/golden_output.mem is OLDER than golden/model/ — it was dumped by a "
+                "pre-repair version of the model, so the approval gate would show the reviewer "
+                "a picture the current model does not produce. Re-run the toplevel model on "
+                "context/chip_input_grid.json and rewrite waves/golden_output.mem (one 8-bit "
+                "hex value per line, row-major) from its CURRENT output.")
     if not _golden_vector_modules(sc):
         gaps.append("golden/vectors/<module>.json — no test vectors were exported. Each file is "
                     '{"module":..., "ports":{"inputs":[[name,width]],"outputs":[[name,width]]}, '
@@ -759,6 +1041,31 @@ def _golden_gaps(sc: StageContext, tests: Dict[str, Any], needs_output: bool) ->
     if not (ws / _GOLDEN_SUMMARY_REL).is_file():
         gaps.append(f"{_GOLDEN_SUMMARY_REL} — the manifest the review popup renders: "
                     '{"top":..., "ips":[{"name","file","tier","role","ports"}], "notes":...}')
+    else:
+        # TIERS ARE STRUCTURE, not decoration: RTL_GEN's completeness gate uses
+        # them to tell leaf IPs from the integrators and the chip top. A manifest
+        # where every module is "ip" and the top is absent leaves that gate with
+        # nothing to enforce, and the reviewer with a flat list.
+        ips = _golden_summary(sc).get("ips")
+        ips = [i for i in ips if isinstance(i, dict) and i.get("name")] if isinstance(ips, list) else []
+        if ips:
+            tiers = [str(i.get("tier", "")).strip().lower() for i in ips]
+            if "top" not in tiers:
+                gaps.append(
+                    f"{_GOLDEN_SUMMARY_REL} — no module is tagged `\"tier\": \"top\"`. Exactly "
+                    "one entry must be the CHIP TOP, the integrators that wire IPs together "
+                    'must be `"subtop"`, and only leaf blocks are `"ip"`. Same tiers in '
+                    f"{_GOLDEN_CONTRACT_REL}.")
+            elif "subtop" not in tiers and len(ips) > 3:
+                gaps.append(
+                    f"{_GOLDEN_SUMMARY_REL} — every block is `ip` with no `subtop` between them "
+                    "and the top. Tag the module(s) that INTEGRATE the leaf IPs (datapath/core, "
+                    'bus, controller subsystem) as `"subtop"`.')
+            if sum(1 for i in ips if str(i.get("role") or "").strip()) < len(ips):
+                gaps.append(
+                    f"{_GOLDEN_SUMMARY_REL} — every entry needs a one-line `role`; the review "
+                    "popup and the build contract show it, and blank roles tell the reviewer "
+                    "nothing about what each block does.")
     if not (ws / _GOLDEN_MATH_REL).is_file():
         gaps.append(f"{_GOLDEN_MATH_REL} — the per-module explanation + governing equations "
                     'the IEEE report renders: {"algorithm":{"summary","equations":[latex]}, '
@@ -889,6 +1196,8 @@ def run_golden_gen(sc: StageContext) -> AgentResult:
             "matplotlib / torch as needed).\n"
             + _digest_note(sc)
             + _anchor_note(sc)
+            + _streaming_io_note(sc)
+            + _achieved_clock_note(sc)
             + input_note +
             "\nDELIVERABLES (write each with write_file_disk):\n"
             "1. `golden/model/<ip>.py` — ONE file per IP BLOCK of the architecture, mirroring "
@@ -958,14 +1267,36 @@ def run_golden_gen(sc: StageContext) -> AgentResult:
         tests = _run_golden_tests(sc)
         _render_golden_previews(sc)
         gaps = _golden_gaps(sc, tests, needs_output)
-        for _pass in range(3):
+        for _pass in range(_golden_repair_rounds()):
             if not gaps:
                 break
             _run_deep(
                 sc,
                 "Your GOLDEN MODEL is INCOMPLETE. The flow cannot continue until these are "
                 f"fixed (design: {sc.design_brief}):\n- " + "\n- ".join(gaps)
-                + "\nFix exactly these, keep everything that already works, re-run "
+                + _golden_test_failures(sc)
+                + "\nFix the MODEL so these assertions hold — do NOT weaken, skip or delete a "
+                  "test to make it pass. Read the failing test and the module it exercises "
+                  "before editing.\n"
+                  "FIRST decide WHICH SIDE is wrong, because a test can be wrong in two "
+                  "different ways and only one of them is about numbers:\n"
+                  "  (a) the EXPECTED VALUE is wrong — keep the harness, correct the value, "
+                  "and show the arithmetic that proves it.\n"
+                  "  (b) the test HARNESS is wrong — it drives or samples the model "
+                  "incorrectly, so NO correct implementation could ever pass. Fix the harness "
+                  "and KEEP the assertion's intent. Typical harness bugs: sampling a "
+                  "multi-cycle signal once per CLOCK and then indexing the samples as if they "
+                  "were one-per-BIT or one-per-TRANSACTION; running the loop for fewer cycles "
+                  "than the operation needs; pulsing a request for one cycle when the model "
+                  "only accepts it on an enable/tick. For a serial line at CLK/BAUD = D clocks "
+                  "per bit, bit k must be sampled around clock k*D + D//2 and the frame needs "
+                  "at least (bits+2)*D cycles — reading bits[0..9] off consecutive clocks "
+                  "samples the START bit ten times and can never pass.\n"
+                  "State which of (a)/(b) applies and why before you edit. If the MODEL is the "
+                  "wrong side, fix the model: a request pulse (tx_start, write-enable, valid) "
+                  "must be LATCHED when it arrives, not sampled only on a baud/enable tick, or "
+                  "it is dropped on all but 1-in-D cycles.\n"
+                  "Keep everything that already works, re-run "
                   "`python -m pytest golden/tests -q` yourself, and reply 'done'.",
                 f"golden_gen_deep_agent_fix{_pass + 1}", recursion_limit=60)
             tests = _run_golden_tests(sc)
@@ -985,6 +1316,23 @@ def run_golden_gen(sc: StageContext) -> AgentResult:
                 "suite never ran, so there is nothing for a human to approve. The deep-agent "
                 f"transcripts in `logs/golden_gen_deep_agent*.md` hold the cause. Outstanding "
                 f"gaps: {'; '.join(gaps) if gaps else 'none recorded'}."
+            )
+
+        # The gate asks a human "is this output correct?". A model that fails its
+        # OWN tests cannot answer that question: RTL_GEN would faithfully build
+        # hardware reproducing the wrong numbers, and SIM would then pass,
+        # because SIM checks the RTL against this same broken reference. Fail
+        # the stage instead of parking in AWAITING_APPROVAL — a manual Retry
+        # re-arms the repair budget (GOLDEN_REPAIR_ROUNDS raises it).
+        if tests.get("ran") and tests.get("failed"):
+            raise RuntimeError(
+                f"GOLDEN_GEN is not green: {tests.get('failed')} of "
+                f"{tests.get('total', 0)} golden tests still FAIL after "
+                f"{_golden_repair_rounds()} repair round(s). The golden model is the "
+                "definition of correct for RTL_GEN, TB_GEN and SIM, so a failing model "
+                "cannot be handed to a human gate."
+                + _golden_test_failures(sc)
+                + " Transcripts: logs/golden_gen_deep_agent*.md; full log: golden/test_log.txt."
             )
 
         summary = _write_golden_summary(sc, tests)
@@ -1148,6 +1496,45 @@ def _rtl_structure_gaps(sc: StageContext, status: Dict[str, Any]) -> List[str]:
     if sc.workspace is None:
         return []
     gaps: List[str] = []
+    # FRAME BUFFERS in a streaming design. The architecture rule that says "a
+    # serial interface means K line buffers, not the W*H dataset" is advice the
+    # generator can ignore — and did: it wrote `frame [0:N*N-1]` and
+    # `out_buf [0:1023]` behind parameters, 18,248 bits total, WORSE than the
+    # frame-buffered design it replaced. 70,577 instances over 6 mm2 then made
+    # the critical path 3-5 ns per wire hop and timing closed at 13.9 MHz
+    # instead of 50. Make the rule a gate.
+    if _streaming_io_note(sc):
+        try:
+            from verilog_check import frame_buffer_violations
+            big = frame_buffer_violations(sc.workspace / "rtl")
+        except Exception:  # noqa: BLE001
+            big = []
+        if big:
+            gaps.append(
+                "FRAME BUFFERS in a STREAMING design — these arrays hold the whole dataset, "
+                "not the operator's working set:\n  - " + "\n  - ".join(big)
+                + "\nA K-tap sliding-window operator fed by a serial port needs K LINE "
+                  "BUFFERS of ONE ROW each (3 rows x 32 B = 96 B), and emits each result on "
+                  "the serial port as it is computed — there is no input frame store and no "
+                  "output frame store. Remove these arrays and stream through the line "
+                  "buffers instead; keep every module's ports unchanged.")
+    # MULTI-DRIVER: legal to simulate, impossible to synthesise. Caught here it
+    # costs one repair round; caught by yosys it costs a 50-minute hardening run
+    # that ends in a floorplan error naming nothing that is wrong, after SIM has
+    # already signed the design off as correct.
+    try:
+        from verilog_check import multi_driver_regs
+        conflicts = multi_driver_regs(sc.workspace / "rtl")
+    except Exception:  # noqa: BLE001
+        conflicts = []
+    if conflicts:
+        gaps.append(
+            "MULTIPLE DRIVERS — a register may be assigned from exactly ONE always block. "
+            "These have more:\n  - " + "\n  - ".join(conflicts)
+            + "\nSimulation will NOT catch this (iverilog lets the last nonblocking assignment "
+              "win) but synthesis cannot build it and deletes the logic. Give each signal one "
+              "owning block; if another block needs to affect it, have that block drive a "
+              "request/strobe wire which the OWNER reads and acts on.")
     if status.get("systemverilog"):
         gaps.append("these files are SystemVerilog — the hardening flow's yosys cannot read "
                     "them. Rewrite each as plain Verilog-2001 with a `.v` name "
@@ -1210,8 +1597,12 @@ def _assert_contract_satisfied(sc: StageContext, status: Dict[str, Any],
     golden_ips = _golden_ips(sc)
     if not golden_ips:
         return
-    unmet = [g for g in struct if "no RTL module implements them" in g
-             or "SUB-TOPLEVEL" in g or "ONE MODULE PER FILE" in g]
+    # Every structural gap is FATAL. This was an allowlist of three substrings,
+    # so any check added later was collected, shown to the repair loop, and then
+    # silently dropped at the gate — the frame-buffer check fired correctly and
+    # RTL_GEN still reported SUCCEEDED with two 8192-bit frame stores on disk.
+    # A gap that should only warn must be filtered where it is RAISED, not here.
+    unmet = list(struct)
     if not unmet and not miss:
         return
     contracted = ", ".join(str(ip.get("name", "?")) for ip in golden_ips)
@@ -1274,6 +1665,8 @@ def run_rtl_gen(sc: StageContext) -> AgentResult:
             + _digest_note(sc)
             + func_note
             + notes
+            + _streaming_io_note(sc)
+            + _achieved_clock_note(sc)
             + _anchor_note(sc)
             + "Write each file with write_file_disk; a shared header (`rtl/params.vh`) holds "
               "common `define/parameters and `rtl/<name>.mem` holds data. EVERY write of a .v "
@@ -1360,6 +1753,117 @@ def run_rtl_gen(sc: StageContext) -> AgentResult:
                    f"planned-missing={miss or 'none'}, ips={hierarchy.get('ips')}, "
                    f"subtops={hierarchy.get('subtops')}, top={hierarchy.get('top')}, "
                    f"structure-gaps={struct or 'none'}")
+
+        # LAST RESORT — ONE FOCUSED PASS PER MISSING MODULE.
+        #
+        # A single pass told to write 13 files reads the whole golden model
+        # first and dies with the budget spent: 43 `read_file_disk` calls and
+        # ZERO writes in the observed failure, repeated across every repair
+        # pass, leaving rtl/ empty. Telling it to stop reading does not work —
+        # that instruction was already in the repair prompt. Bounding the job
+        # does: one module, one small budget, nothing else to read.
+        # Two sweeps: a module whose golden model is long can spend the whole
+        # budget on the read (window_gen read 91 lines and never reached its
+        # write), so anything still absent gets a second, larger attempt.
+        for _sweep, _limit in ((0, 50), (1, 80)):
+            still_missing = _golden_ips_without_rtl(sc)
+            if not still_missing:
+                break
+            by_name = {str(ip.get("name", "")): ip for ip in _golden_ips(sc)}
+            for name in still_missing[:16]:
+                ip = by_name.get(name, {})
+                ports = ip.get("ports")
+                _run_deep(
+                    sc,
+                    f"Write EXACTLY ONE file and then stop: `rtl/{name}.v`.\n"
+                    f"Module `{name}` — {ip.get('role', '')}\n"
+                    + (f"Ports (name, dir, width): {ports}\n" if ports else "")
+                    + f"Tier: {ip.get('tier', 'ip')}. Design: {sc.design_brief}\n"
+                      "It must be complete, synthesizable Verilog-2001 implementing this "
+                      "block of the approved golden model, with EXACTLY the ports above so "
+                      "the rest of the design connects to it.\n"
+                    + (_streaming_io_note(sc) and
+                       "NO FRAME STORES: this is a streaming design. Do NOT declare any array "
+                       "of 256 or more entries — a K-tap window operator keeps (K-1) line "
+                       "buffers of one row plus the KxK window registers and passes each "
+                       "result straight on. A module with a frame store is rejected by the "
+                       "stage gate.\n") +
+                      "WRITE FIRST: call write_file_disk with the full module text before "
+                      "reading anything. The ports above are the interface; you already know "
+                      "what this block does. If you truly need one exact width, read a SLICE "
+                      f"(read_file_disk golden/model/{name}.py with max_lines=40) — never the "
+                      "whole file, never the tests, never another module. A pass that ends "
+                      "without a write has failed. Reply 'done' after the write.\n" + PITFALLS,
+                    f"rtl_gen_module_{_slug(name)}"
+                    + ("" if _sweep == 0 else f"_retry{_sweep}"),
+                    recursion_limit=_limit)
+            status = _rtl_status(sc.workspace)
+            miss = _missing(status)
+            struct = _rtl_structure_gaps(sc, status)
+            _log_state(sc, "generate:per-module",
+                       f"sweep {_sweep + 1} (limit {_limit}) wrote={status['files']}; "
+                       f"still-missing={_golden_ips_without_rtl(sc) or 'none'}")
+
+        # FRAME BUFFERS — DELETE the offending module, then REGENERATE it.
+        #
+        # Asking the agent to REWRITE a module in place does not work: told to
+        # drop the frame store it read the old body instead (2 reads, then 6,
+        # then 12, never a write), and withholding the read tools just made it
+        # reason about the missing tools. Generation, by contrast, is the path
+        # that already works — the per-module sweep above wrote all 13 modules
+        # from the contract. So make the offender MISSING and let that same
+        # generator produce it fresh against the streaming contract.
+        try:
+            from verilog_check import frame_buffer_violations
+            offenders = {v.split(":")[0].strip()
+                         for v in frame_buffer_violations(sc.workspace / "rtl")}
+        except Exception:  # noqa: BLE001
+            offenders = set()
+        if offenders:
+            removed = []
+            for fname in sorted(offenders)[:6]:
+                victim = sc.workspace / "rtl" / fname
+                try:
+                    if victim.is_file():
+                        victim.unlink()
+                        removed.append(fname)
+                except OSError:
+                    continue
+            _log_state(sc, "generate:deframe",
+                       f"deleted frame-buffered module(s) {removed} for regeneration")
+            by_name = {str(ip.get("name", "")): ip for ip in _golden_ips(sc)}
+            for _sweep, _limit in ((0, 60), (1, 100)):
+                gone = _golden_ips_without_rtl(sc)
+                if not gone:
+                    break
+                for name in gone[:6]:
+                    ip = by_name.get(name, {})
+                    ports = ip.get("ports")
+                    _run_deep(
+                        sc,
+                        f"Write EXACTLY ONE file and then stop: `rtl/{name}.v`.\n"
+                        f"Module `{name}` — {ip.get('role', '')}\n"
+                        + (f"Ports (name, dir, width): {ports}\n" if ports else "")
+                        + f"Tier: {ip.get('tier', 'ip')}. Design: {sc.design_brief}\n"
+                          "STREAMING DESIGN — this module must NOT hold the whole dataset. A "
+                          "3x3 window operator over 32-wide rows keeps (K-1) LINE BUFFERS of "
+                          "one row (2 x 32 B = 512 bits) plus the 3x3 window registers, and "
+                          "passes each result straight on as it is computed. Do NOT declare "
+                          "any array of 256 or more entries — no frame store, no output "
+                          "buffer; such a module is rejected.\n"
+                          "WRITE FIRST: call write_file_disk with the full module text before "
+                          "reading anything. The ports above are the interface; you already "
+                          "know what this block does. A pass that ends without a write has "
+                          "failed. Reply 'done' after the write.\n" + PITFALLS,
+                        f"rtl_gen_regen_{_slug(name)}"
+                        + ("" if _sweep == 0 else f"_retry{_sweep}"),
+                        recursion_limit=_limit)
+                status = _rtl_status(sc.workspace)
+                miss = _missing(status)
+                struct = _rtl_structure_gaps(sc, status)
+                _log_state(sc, "generate:deframe",
+                           f"regen sweep {_sweep + 1}: wrote={status['files']}; "
+                           f"gaps={struct or 'none'}")
 
         # The golden contract is a CONTRACT, not a hint: the user approved that
         # module decomposition at the GOLDEN_GEN gate, and TB_GEN generates one
@@ -1498,6 +2002,54 @@ def run_rtl_gen(sc: StageContext) -> AgentResult:
 # --------------------------------------------------------------------------- #
 # RTL_REPAIR — deep-agent corrector (web fix search + lessons), loop fallback
 # --------------------------------------------------------------------------- #
+# PROCESS conditions, not RTL defects. Feeding these to the repair agent is
+# worse than useless: "the RTL CHANGED after SIM verified it" is resolved by
+# RE-RUNNING SIM, and asking the agent to fix it makes it edit working RTL,
+# which changes the fingerprint again and re-triggers the same error — an
+# endless repair/harden loop that looks like "it always fails".
+_NON_RTL_SYNTH_ERROR_RE = re.compile(
+    r"no GDS produced"
+    r"|RTL CHANGED after SIM"
+    r"|librelane not available"
+    r"|hardening timeout"
+    r"|no RTL modules found"
+    r"|no synthesizable RTL files",
+    re.I)
+
+
+def _repair_regression_pass(sc: StageContext, top: str) -> None:
+    """Re-check the ARCHITECTURE rules after a repair rewrote the RTL.
+
+    The frame-buffer gate ran only at RTL_GEN, so a repair could quietly undo
+    it: fixing a serial off-by-one, the agent added `result_q [0:255]` to
+    nano_controller — 2048 flip-flops, ~40% of the design's cell area — to
+    absorb a backlog it had measured at ~90 entries. Correct logic, and exactly
+    the output buffer the streaming rule forbids. A stage that may rewrite any
+    file has to re-run the gates that constrain those files."""
+    if sc.workspace is None:
+        return
+    gaps = _rtl_structure_gaps(sc, _rtl_status(sc.workspace))
+    if not gaps:
+        return
+    _log_state(sc, "repair:regression", f"{len(gaps)} architecture violation(s) reintroduced")
+    _run_deep(
+        sc,
+        "Your repair FIXED the reported problem but REINTRODUCED an architecture violation "
+        f"(design: {sc.design_brief}; top `{top}`):\n- " + "\n- ".join(gaps)
+        + "\nRemove the violation WITHOUT losing the fix you just made.\n"
+          "If you added a queue/buffer to absorb a rate mismatch, the streaming answer is "
+          "BACKPRESSURE, not depth: stall the producer while the consumer is busy (a `ready`/"
+          "`full` signal the producer honours) and keep only the few entries actually needed "
+          "in flight. Sizing a FIFO to the whole backlog spends flip-flops — and die area — on "
+          "storage the architecture is meant to avoid.\n"
+          "Keep every module's PORTS unchanged, then re-verify: run_python `import subprocess; "
+          "print(subprocess.run(['sh','-c','iverilog -g2012 -o work/re.vvp -Irtl -s "
+        + f"{top}_tb" + " rtl/*.v tb/" + f"{top}_tb" + ".* && vvp work/re.vvp'], "
+          "capture_output=True, text=True).stdout[-3000:])` and CHECK it still prints TEST "
+          "PASSED. Reply 'done' only after your own re-run passes.",
+        "rtl_repair_regression", recursion_limit=60)
+
+
 def run_rtl_repair(sc: StageContext) -> AgentResult:
     """Conditional stage: re-run the compile-repair loop on existing RTL."""
     agent = "RTLAuthor"
@@ -1518,6 +2070,46 @@ def run_rtl_repair(sc: StageContext) -> AgentResult:
                                         sim_log_path.read_text(errors="replace"), re.I) is not None
                           and not re.search(r"TEST\s+PASSED",
                                             sim_log_path.read_text(errors="replace"), re.I)))
+        # SYNTHESIS-FAILURE repair. RTL_REPAIR only ever engaged on a SIM
+        # failure, so a design that simulates perfectly and cannot be
+        # SYNTHESISED had no repair route at all: `uart_tx.baud_cnt` was driven
+        # from two always blocks, iverilog let the last assignment win (SIM
+        # passed 900/900), yosys collapsed the netlist to a single tie cell, and
+        # the run bounced between RTL_REPAIR doing nothing and SYNTH failing.
+        # A synth report carrying an RTL-level cause is repairable evidence too.
+        synth_errors: List[str] = []
+        if not sim_failed:
+            synth_report = sc.workspace / "reports" / "synth_report.json"
+            if synth_report.is_file():
+                try:
+                    synth_errors = [str(e) for e in
+                                    json.loads(synth_report.read_text(errors="replace")).get("errors", [])
+                                    if not _NON_RTL_SYNTH_ERROR_RE.search(str(e))]
+                except Exception:  # noqa: BLE001
+                    synth_errors = []
+        if not status["broken"] and not sim_failed and synth_errors:
+            goal = (
+                f"The design SIMULATES correctly but FAILS SYNTHESIS (design: {sc.design_brief}; "
+                f"top `{top}`). Simulation passing does NOT mean the RTL is buildable — "
+                "iverilog tolerates constructs that synthesis cannot implement.\n"
+                "SYNTHESIS ERRORS:\n- " + "\n- ".join(synth_errors[:6]) + "\n"
+                + _golden_note(sc) +
+                "\nFix the RTL so it synthesises, WITHOUT changing behaviour:\n"
+                "1. read_file_disk the named module(s) and find the construct the error "
+                "describes (a register assigned from two always blocks is the classic one: "
+                "give it EXACTLY ONE owning block and have the other block drive a "
+                "request/strobe wire that the owner reads);\n"
+                "2. keep the module PORTS and the observable behaviour identical — the golden "
+                "model and the passing testbench define correct, so do not redesign;\n"
+                "3. re-verify yourself before finishing: run_python `import subprocess; "
+                "print(subprocess.run(['sh','-c','iverilog -g2012 -o work/re.vvp -Irtl -s "
+                + f"{top}_tb" + " rtl/*.v tb/" + f"{top}_tb" + ".* && vvp work/re.vvp'], "
+                "capture_output=True, text=True).stdout[-3000:])` and CHECK it still prints "
+                "TEST PASSED. A fix that breaks simulation is not a fix.\n"
+                "Reply 'done' only after your own re-run passes.\n" + PITFALLS
+            )
+            _run_deep(sc, goal, "rtl_repair_deep_agent", recursion_limit=90)
+            status = _rtl_status(sc.workspace)
         if not status["broken"] and sim_failed and sim_log_path.is_file():
             sim_tail = sim_log_path.read_text(errors="replace")[-2000:]
             canonical_note = ""
@@ -1568,6 +2160,8 @@ def run_rtl_repair(sc: StageContext) -> AgentResult:
             )
             _run_deep(sc, goal, "rtl_repair_deep_agent", recursion_limit=90)
             status = _rtl_status(sc.workspace)
+            _repair_regression_pass(sc, top)
+            status = _rtl_status(sc.workspace)
             files = _files_from_disk(sc.workspace, ["rtl", "tb"])
             note = (f"# RTL Repair (simulation failure) — {top}\n\n"
                     f"- Debugged the failing testbench run; files now: {', '.join(status['files'])}\n"
@@ -1612,6 +2206,8 @@ def run_rtl_repair(sc: StageContext) -> AgentResult:
                 "capture_output=True, text=True).stdout[-3000:])` and CHECK it prints TEST "
                 "PASSED. Reply 'done' only after your own re-run passes.\n" + PITFALLS)
             _run_deep(sc, goal, "rtl_repair_deep_agent", recursion_limit=90)
+            status = _rtl_status(sc.workspace)
+            _repair_regression_pass(sc, top)
             status = _rtl_status(sc.workspace)
             files = _files_from_disk(sc.workspace, ["rtl", "tb"])
             note = (f"# RTL Repair (hardening/explicit) — {top}\n\n"
@@ -1752,6 +2348,13 @@ def run_rtl_repair(sc: StageContext) -> AgentResult:
 # --------------------------------------------------------------------------- #
 # TB_GEN — deep-agent testbench author, templated fallback
 # --------------------------------------------------------------------------- #
+def _tb_repair_rounds() -> int:
+    try:
+        return max(1, int(os.getenv("TB_REPAIR_ROUNDS", "5")))
+    except ValueError:
+        return 5
+
+
 def run_tb_gen(sc: StageContext) -> AgentResult:
     """TB_GEN — one self-checking Verilog-2001 testbench PER MODULE.
 
@@ -1793,9 +2396,20 @@ def run_tb_gen(sc: StageContext) -> AgentResult:
         contract_units = [str(ip.get("name", "")) for ip in _golden_ips(sc)
                           if str(ip.get("tier", "")).lower() in ("ip", "subtop")
                           and str(ip.get("name", ""))]
+        # A vector file only names a unit when that unit is a real module. The
+        # top's vectors are often filed under the FILE stem (golden/vectors/
+        # top.json for module `nano_cgra_sobel_top`), so the `m != top` guard
+        # alone lets the toplevel back in under a name nothing declares — and
+        # the agent then rewrites the working chip-level tb as a unit tb for a
+        # module that does not exist. Contract units are still added
+        # unconditionally, so a stub rtl/ cannot vacuously satisfy coverage.
+        known = ({m.lower() for m in hierarchy.get("modules", {})}
+                 | {c.lower() for c in contract_units})
+        vector_units = [m for m in vector_modules
+                        if m != top and m.lower() in known]
         unit_modules: List[str] = []
         for m in (contract_units
-                  + [m for m in vector_modules if m != top]
+                  + vector_units
                   + [m for m in hierarchy.get("ips", [])]
                   + [m for m in hierarchy.get("subtops", [])]):
             if m and m != top and m not in unit_modules:
@@ -1860,6 +2474,17 @@ def run_tb_gen(sc: StageContext) -> AgentResult:
             "stimulus, CHECK the outputs against the golden model's expected values "
             "($fatal/$error on mismatch, $display \"TEST PASSED\" on success), dump waves with "
             "$dumpfile(\"design.vcd\") + $dumpvars, and end with $finish.\n"
+            "KEEP THE SIMULATION CHEAP — a tb that is merely correct can still be unrunnable. "
+            "One chip-level run wrote a 5.7 GB design.vcd and the OOM killer took the whole EDA "
+            "service down mid-stage:\n"
+            "  - Do NOT simulate real serial baud timing. CLK/BAUD is ~434 clocks PER BIT, so "
+            "one 32x32 frame is ~8 MILLION cycles. Override the divider for simulation (a "
+            "`localparam BAUD_DIV = 8` in the tb, or a small value driven into the DUT) — the "
+            "framing logic is exercised identically at 1/50th the cost.\n"
+            "  - Scope the dump: `$dumpvars(1, <tb>)` or name the handful of signals you need. "
+            "`$dumpvars(0, <tb>)` dumps the ENTIRE hierarchy every cycle.\n"
+            "  - Size the watchdog to the real transfer (bytes x 10 x BAUD_DIV plus margin), "
+            "not `repeat (100000000)`.\n"
             + unit_note
             + infer_note
             + "VERIFIABILITY IS THE CONTRACT: every checked value must come from the approved "
@@ -1884,7 +2509,7 @@ def run_tb_gen(sc: StageContext) -> AgentResult:
         tb_dir = sc.workspace / "tb"
         tb_path = sc.workspace / tb_rel
         needs_output = bool(data_images) or any(f.endswith(".mem") for f in status["files"])
-        for _fix in range(3):
+        for _fix in range(_tb_repair_rounds()):
             missing: List[str] = []
             if not tb_path.is_file():
                 # A `.sv` main tb from an older run: ask for the `.v` rewrite.
@@ -1901,14 +2526,38 @@ def run_tb_gen(sc: StageContext) -> AgentResult:
                     "these modules have NO unit testbench — write tb/<module>_tb.v for each, "
                     "with expected values from golden/vectors/<module>.json (or computed by "
                     f"running golden/model/<module>.py): {', '.join(uncovered)}")
+            # ELABORATION, not just existence. write_file_disk checks a testbench
+            # with `-i` (ignore missing submodules), which never elaborates the DUT
+            # instantiation — so a tb naming ports the DUT does not have is written
+            # "clean" and only fails at SIM ("port `data_i' is not a port of dut").
+            # Catch it here, in the stage that wrote it.
+            try:
+                from verilog_check import elaborate_tb
+                for _tb in ([tb_path] if tb_path.is_file() else []) + \
+                        [tb_dir / f"{m}_tb.v" for m in unit_modules][:12]:
+                    err = elaborate_tb(_tb, sc.workspace / "rtl")
+                    if err:
+                        missing.append(
+                            f"`tb/{_tb.name}` does not ELABORATE against the RTL. Fix these "
+                            "exact errors — the DUT's real port names are in "
+                            "context/golden_contract.md and in the module header itself; "
+                            f"read the module and match them:\n{err}")
+            except Exception:  # noqa: BLE001 - a checker fault must not fail the stage
+                pass
             stray = sorted(p.name for p in tb_dir.glob("*.sv")) if tb_dir.is_dir() else []
             if stray:
                 missing.append("these testbenches are SystemVerilog — rewrite each as plain "
                                "Verilog-2001 `.v` and delete the `.sv`: " + ", ".join(stray))
             if tb_path.is_file():
                 tb_text = tb_path.read_text(errors="replace")
-                if "$dumpfile" not in tb_text:
-                    missing.append('waveform dump in the main tb: $dumpfile("design.vcd"); '
+                # The NAME matters: sim_runner collects waves/design.vcd, so a tb
+                # dumping to its own filename produced "no design.vcd produced"
+                # and a run with no waveform, while this check saw a $dumpfile
+                # and passed.
+                if not re.search(r'\$dumpfile\s*\(\s*"(\./)?(waves/)?design\.vcd"', tb_text):
+                    missing.append('waveform dump in the main tb must use EXACTLY this file '
+                                   'name — SIM collects waves/design.vcd and nothing else: '
+                                   '$dumpfile("design.vcd"); '
                                    f"$dumpvars(0, {top}_tb);")
                 if needs_output and "$writememh" not in tb_text:
                     missing.append('chip-output dump in the main tb: '
@@ -1917,6 +2566,29 @@ def run_tb_gen(sc: StageContext) -> AgentResult:
                     missing.append("REMOVE the testbench's $writememh of waves/golden_output.mem "
                                    "— the desired output comes from the approved Python golden "
                                    "model, never from the testbench")
+            # PORTS ONLY for the chip-level tb. A testbench that pokes
+            # `u_top.u_ram.in_mem[i]` verifies something silicon cannot do: the
+            # pins are never exercised, synthesis sees nothing observable
+            # depending on that memory and deletes it. One design did exactly
+            # this — SIM green, 16,384 declared bits down to 92 flip-flops, an
+            # empty chip through to EXPORT.
+            if tb_path.is_file():
+                try:
+                    from verilog_check import hierarchical_dut_access
+                    poking = hierarchical_dut_access(tb_path.read_text(errors="replace"))
+                except Exception:  # noqa: BLE001
+                    poking = []
+                if poking:
+                    missing.append(
+                        f"`{tb_rel}` reaches INSIDE the DUT instead of using its ports:\n  - "
+                        + "\n  - ".join(poking)
+                        + "\nThe chip-level testbench must drive ONLY the top module's input "
+                          "ports and check ONLY its output ports — that is all the silicon "
+                          "has. Feed the stimulus in the way the real chip receives it (e.g. "
+                          "serialise it into the UART rx pin) and collect the result the way "
+                          "the real chip emits it. Anything a testbench can only do by "
+                          "hierarchical reference is not verification: synthesis deletes "
+                          "logic no PORT depends on, and the chip ships empty.")
             weak = [p.name for p in sorted(tb_dir.glob("*_tb.v"))
                     if not re.search(r"\$fatal|\$error|\$stop", p.read_text(errors="replace"))] \
                 if tb_dir.is_dir() else []
@@ -1938,6 +2610,19 @@ def run_tb_gen(sc: StageContext) -> AgentResult:
                       + "\n- ".join(missing) + "\nReply 'done' when they are all satisfied.",
                       f"tb_gen_deep_agent_deliverables{_fix + 1}",
                       recursion_limit=min(45 + 18 * len(missing), 200))
+
+        # The repair loop is not advice. Every item above is something SIM or a
+        # later stage actually requires, and running the loop out then reporting
+        # SUCCEEDED is how a testbench that dumps to the wrong VCD name — asked
+        # for three times, ignored three times — reached SIM and produced a run
+        # with no waveform. Fail where the gap is.
+        if missing:
+            raise RuntimeError(
+                f"TB_GEN did not produce a usable testbench set after "
+                f"{_tb_repair_rounds()} repair round(s). Still outstanding:\n- "
+                + "\n- ".join(missing)
+                + "\nTranscripts: logs/tb_gen_deep_agent*.md."
+            )
 
         if tb_path.is_file():
             clean = True

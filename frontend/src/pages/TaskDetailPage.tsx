@@ -36,6 +36,7 @@ import {
   workspaceRawUrl,
 } from '@/api/tasks'
 import { GoldenReviewDialog } from '@/components/app/GoldenReviewDialog'
+import { SimReviewDialog } from '@/components/app/SimReviewDialog'
 import { EmptyState, ErrorState, LoadingState, MetricCard, SummaryRow } from '@/components/app/shared'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -69,6 +70,14 @@ function isImagePath(path: string): boolean {
 
 function isBinaryPath(path: string): boolean {
   return BINARY_EXT.test(path)
+}
+
+/** Keep the PREVIOUS reference when a background refresh returned identical data,
+ *  so React skips the re-render instead of rebuilding every derived memo and list
+ *  row. Comparing ~50 KB of JSON costs ~1 ms; re-rendering 460 file chips costs
+ *  far more, and it happened every 2.5 s for the whole length of a run. */
+function keepIfSame<T>(current: T, next: T): T {
+  return JSON.stringify(current) === JSON.stringify(next) ? current : next
 }
 
 /** Event time in the USER'S timezone (the server's bare "15:04" string is
@@ -113,6 +122,8 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
   const [retryingStage, setRetryingStage] = useState<string | null>(null)
   const [goldenDialogOpen, setGoldenDialogOpen] = useState(false)
   const [goldenDismissed, setGoldenDismissed] = useState(false)
+  const [simDialogOpen, setSimDialogOpen] = useState(false)
+  const [simDismissed, setSimDismissed] = useState(false)
 
   // Background refreshes (live WebSocket events) must NOT swap the page to a
   // spinner, clear action feedback, or reset the file selection — doing so on
@@ -141,12 +152,16 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
       ])
 
       const mergedTask = { ...task, stages: stageList }
-      setDetail(mergedTask)
-      setEvents(taskEvents)
-      setArtifacts(taskArtifacts)
-      setDiagnoses(taskDiagnosis)
-      setFiles(workspaceFiles)
-      setSignoff(signoffStatus)
+      // Reference-stable updates. A background refresh every ~2.5 s used to hand
+      // React a brand-new `files` array (~460 entries) even when nothing changed,
+      // so every derived useMemo recomputed and the whole file browser + event log
+      // re-rendered — that churn is what made the page lag during an active run.
+      setDetail((current) => keepIfSame(current, mergedTask))
+      setEvents((current) => keepIfSame(current, taskEvents))
+      setArtifacts((current) => keepIfSame(current, taskArtifacts))
+      setDiagnoses((current) => keepIfSame(current, taskDiagnosis))
+      setFiles((current) => keepIfSame(current, workspaceFiles))
+      setSignoff((current) => keepIfSame(current, signoffStatus))
 
       // Live activity: the log that explains what the CURRENT stage is doing —
       // deep-agent transcripts for LLM stages, tool logs for EDA stages
@@ -385,6 +400,37 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
     }
   }, [goldenDismissed, goldenGate])
 
+  // SIM gate — the last point where the design is cheap to change. Everything
+  // after it spends hours hardening whatever the RTL already does, so the run
+  // stops and asks whether the chip's output matches the golden model's.
+  const simGate = useMemo(
+    () => (detail?.stages ?? []).find((stage) => stage.key === 'sim' && stage.pendingApproval),
+    [detail?.stages],
+  )
+
+  useEffect(() => {
+    if (simGate && !simDismissed) {
+      setSimDialogOpen(true)
+    }
+    if (!simGate) {
+      setSimDismissed(false)
+      setSimDialogOpen(false)
+    }
+  }, [simDismissed, simGate])
+
+  async function handleRejectSim(comment: string) {
+    if (!taskId) {
+      return
+    }
+    setActionError(null)
+    await submitStageApproval(taskId, 'sim', {
+      decision: 'reject',
+      comment: comment || 'The simulated chip output is not correct.',
+    })
+    setActionMessage('Correction sent — the design is being reworked.')
+    setRefreshKey((value) => value + 1)
+  }
+
   async function handleRejectGolden(comment: string) {
     if (!taskId) {
       return
@@ -593,7 +639,11 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
             </div>
           </CardHeader>
           <CardContent className='space-y-5'>
-            <div className='grid gap-3 md:grid-cols-5'>
+            {/* Column count must follow the CONTAINER, not the viewport: this card
+                sits in an `xl:grid-cols-2` row, so `md:grid-cols-5` gave each metric
+                ~100px and shattered words mid-letter ("SYNT H", "47 linked output s").
+                auto-fit tracks wrap to fewer columns when the container is narrow. */}
+            <div className='grid gap-3 [grid-template-columns:repeat(auto-fit,minmax(11rem,1fr))]'>
               <MetricCard label='Current stage' value={detail.currentStage} icon={Wrench} />
               <MetricCard label='ETA' value={detail.etaLabel} icon={Clock3} />
               <MetricCard label='Owner' value={detail.ownerName} icon={Bot} />
@@ -609,7 +659,7 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
                 </Badge>
               </div>
 
-              <div className='mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5'>
+              <div className='mt-5 grid gap-3 [grid-template-columns:repeat(auto-fit,minmax(9rem,1fr))]'>
                 {detail.stages.map((stage) => (
                   <div key={stage.key} className='min-w-0 rounded-2xl bg-white p-3 shadow-sm ring-1 ring-slate-100'>
                     <div className='flex items-center justify-between gap-2'>
@@ -1309,6 +1359,20 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
         }}
         onApprove={() => handleApproveGate('golden_gen')}
         onReject={handleRejectGolden}
+        refreshKey={refreshKey}
+      />
+
+      <SimReviewDialog
+        taskId={taskId}
+        open={simDialogOpen}
+        onOpenChange={(next) => {
+          setSimDialogOpen(next)
+          if (!next) {
+            setSimDismissed(true)
+          }
+        }}
+        onApprove={() => handleApproveGate('sim')}
+        onReject={handleRejectSim}
         refreshKey={refreshKey}
       />
     </div>

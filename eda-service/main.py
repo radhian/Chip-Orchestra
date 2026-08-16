@@ -40,7 +40,11 @@ class CreateEDAJobRequest(BaseModel):
         return {
             "top_module": self.top_module or meta.get("top_module") or meta.get("top") or "",
             "clock_port": self.clock_port or meta.get("clock_port") or "clk",
-            "clock_period": self.clock_period if self.clock_period is not None else meta.get("clock_period", 10.0),
+            # 0.0 means UNSPECIFIED, not 100 MHz. Substituting a 10 ns default
+            # here hid the caller's silence from the job runner, which can read
+            # the period the design itself declares (rtl/params.vh CLK_FREQ);
+            # a 50 MHz design was being hardened at 100 MHz because of this line.
+            "clock_period": self.clock_period if self.clock_period is not None else meta.get("clock_period", 0.0),
             "stage_options": self.stage_options or meta.get("stage_options") or {},
             "spec": self.spec,
             "metadata": meta,

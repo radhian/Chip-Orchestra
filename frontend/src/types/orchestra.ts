@@ -245,3 +245,34 @@ export interface ExportBundleResponse {
   artifactId: string
   status: string
 }
+
+export interface SimPreview {
+  path: string
+  label: string
+  /** 'input' | 'golden' (desired) | 'chip' (actual) | 'waveform' */
+  role: string
+}
+
+export interface SimReport {
+  summary?: string
+  errors?: string[]
+  warnings?: string[]
+  metrics?: Record<string, unknown>
+  artifacts?: Array<{ path?: string; kind?: string }>
+}
+
+/** Payload behind the SIM review dialog: what the CHIP computed versus what the
+ *  golden model said it should, plus the testbench console. SIM is the last
+ *  cheap place to change the design — everything after it hardens whatever the
+ *  RTL already does. */
+export interface SimReview {
+  stage: string
+  status: string
+  awaitingApproval: boolean
+  available: boolean
+  report: SimReport
+  simLog: string
+  previews: SimPreview[]
+  goldenMatch: boolean
+  hasGoldenMatch: boolean
+}

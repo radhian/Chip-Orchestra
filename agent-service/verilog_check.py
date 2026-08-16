@@ -931,3 +931,250 @@ def needs_slang(rtl_dir: Path) -> bool:
         if _UNPACKED_PORT_RE.search(t) or _SV_HINT_RE.search(t):
             return True
     return False
+
+
+def elaborate_tb(tb_path: Path, rtl_dir: Path, timeout: int = 120) -> str:
+    """ELABORATE one testbench against the REAL RTL. '' when it elaborates.
+
+    The write-time check (:func:`check_file`) passes ``-i`` so a module can be
+    written before its submodules exist. That also means iverilog never
+    elaborates the DUT instantiation, so a testbench naming ports the DUT does
+    not have compiles clean at write time and only fails later, at SIM:
+
+        error: port ``data_i'' is not a port of dut.
+
+    Elaborating here — the same thing SIM does — puts that error in front of the
+    stage that caused it, while the testbench is still cheap to fix.
+    """
+    tb_path, rtl_dir = Path(tb_path), Path(rtl_dir)
+    if not tb_path.is_file() or not rtl_dir.is_dir():
+        return ""
+    srcs = sorted(rtl_dir.glob("*.v")) + sorted(rtl_dir.glob("*.sv"))
+    if not srcs:
+        return ""
+    cmd = ["iverilog", "-g2012", "-t", "null", f"-I{rtl_dir}", "-s", tb_path.stem,
+           *[str(p) for p in srcs], str(tb_path)]
+    try:
+        proc = subprocess.run(cmd, capture_output=True, text=True,
+                              errors="replace", timeout=timeout)
+    except FileNotFoundError:
+        return ""                      # no iverilog — don't block the stage
+    except subprocess.TimeoutExpired:
+        return "(elaboration timed out)"
+    if proc.returncode == 0:
+        return ""
+    out = (proc.stderr or proc.stdout or "").strip()
+    lines = [ln.replace(str(tb_path.parent) + "/", "").replace(str(rtl_dir) + "/", "")
+             for ln in out.splitlines() if ln.strip()]
+    return "\n".join(lines[:12])[:1500]
+
+
+_SB_DEFINE_RE = re.compile(r"`define\s+(\w+)\s+([0-9][0-9a-fA-F_']*)")
+_SB_PARAM_RE = re.compile(
+    r"\b(?:parameter|localparam)\s+(?:integer\s+)?(\w+)\s*=\s*([0-9][0-9a-fA-F_']*)")
+# Verilog sized literal: <width>'<base><digits>. A plain int() of the raw text
+# reads the WIDTH and throws the value away — `define BAUD_DIV 32'd434 became
+# 32, and `define ADDR 8'h80 became 8. Every such macro resolved to a small
+# wrong number, so an array bounded by one was under-counted and the
+# frame-buffer gate under-reported it: the same false-negative class as the
+# backtick bug in _sb_eval.
+_SB_SIZED_RE = re.compile(r"^(?:\d+)?'[sS]?([bodhBODH])([0-9a-fA-F_]+)$")
+_SB_BASE = {"b": 2, "o": 8, "d": 10, "h": 16}
+
+
+def _sb_int(raw: str):
+    """Verilog integer literal -> int, or None if it is not a plain constant."""
+    text = raw.strip()
+    m = _SB_SIZED_RE.match(text)
+    try:
+        if m:
+            return int(m.group(2).replace("_", ""), _SB_BASE[m.group(1).lower()])
+        return int(text.replace("_", ""))
+    except ValueError:
+        return None
+
+_SB_PARAM_MACRO_RE = re.compile(r"\b(?:parameter|localparam)\s+(?:integer\s+)?(\w+)\s*=\s*`(\w+)")
+_SB_ARRAY_RE = re.compile(
+    r"\breg\s*(?:\[\s*([^\]]+?)\s*:\s*([^\]]+?)\s*\])?\s*(\w+)\s*"
+    r"\[\s*([^\]]+?)\s*:\s*([^\]]+?)\s*\]\s*;")
+
+
+def _sb_eval(expr: str, params: dict):
+    # A macro REFERENCE carries its backtick into the bound: `reg [7:0] mem
+    # [0:`LINE_BUF_W-1]`. Substituting the name alone leaves "`32-1", which the
+    # digits-and-operators guard below then rejects, so the array is dropped and
+    # frame_buffer_violations reports a clean design. `define/`MACRO is this
+    # codebase's own idiom (params.vh), so that blind spot covered nearly every
+    # array it writes — a `reg [7:0] frame [0:`IMG_PIXELS-1]` would pass the
+    # gate untouched. Strip the tick first; a macro and a parameter of the same
+    # name resolve identically.
+    e = expr.strip().replace("`", "")
+    for name, val in params.items():
+        e = re.sub(rf"\b{re.escape(name)}\b", str(val), e)
+    if not re.fullmatch(r"[0-9+\-*() ]+", e or "x"):
+        return None
+    try:
+        return int(eval(e, {"__builtins__": {}}, {}))  # noqa: S307 - digits/operators only
+    except Exception:  # noqa: BLE001
+        return None
+
+
+_MD_MODULE_RE = re.compile(r"\bmodule\s+(\w+)\b(.*?)\bendmodule\b", re.S)
+_MD_ALWAYS_RE = re.compile(r"\balways\b", re.I)
+_MD_TOKEN_RE = re.compile(r"\bbegin\b|\bend\b")
+# `x <= v;` / `x = v;` / `x[i] <= v;` — the driven NAME is what matters.
+_MD_LHS_RE = re.compile(r"(?:^|[;)]|\bbegin\b|\belse\b)\s*([A-Za-z_]\w*)\s*(?:\[[^\]]*\])?\s*<?=(?!=)")
+
+
+def _md_always_bodies(body: str) -> List[str]:
+    """Split a module body into the text of each `always` block."""
+    out: List[str] = []
+    for m in _MD_ALWAYS_RE.finditer(body):
+        rest = body[m.end():]
+        first = _MD_TOKEN_RE.search(rest)
+        if not first or first.group(0) != "begin":
+            # `always @(x) y <= z;` — a single statement.
+            semi = rest.find(";")
+            out.append(rest[:semi + 1] if semi != -1 else rest[:200])
+            continue
+        depth, pos = 0, first.start()
+        for tok in _MD_TOKEN_RE.finditer(rest):
+            depth += 1 if tok.group(0) == "begin" else -1
+            if depth == 0:
+                pos = tok.end()
+                break
+        else:
+            pos = len(rest)
+        out.append(rest[first.end():pos])
+    return out
+
+
+def multi_driver_regs(rtl_dir: Path) -> List[str]:
+    """Registers assigned from MORE THAN ONE `always` block, per module.
+
+    This is legal to SIMULATE and impossible to SYNTHESISE, which makes it the
+    worst kind of defect to catch late: iverilog lets the last nonblocking
+    assignment win, so SIM passed 900/900 against the golden model, while yosys
+    reported one conflict per bit, ERROR_ON_SYNTH_CHECKS was off, and the
+    netlist collapsed to a single tie cell. The run then died 50 minutes later
+    inside OpenROAD with "[PDN-0185] Insufficient width (4.48 um) to add
+    straps" — a floorplan message naming nothing that was actually wrong.
+    Catch it on the RTL, before a testbench ever runs."""
+    rtl_dir = Path(rtl_dir)
+    if not rtl_dir.is_dir():
+        return []
+    bad: List[str] = []
+    for p in sorted(rtl_dir.glob("*.v")) + sorted(rtl_dir.glob("*.sv")):
+        try:
+            text = _strip_comments(p.read_text(errors="replace"))
+        except OSError:
+            continue
+        for mod in _MD_MODULE_RE.finditer(text):
+            name, body = mod.group(1), mod.group(2)
+            owners: dict = {}
+            for idx, blk in enumerate(_md_always_bodies(body)):
+                for sig in {m.group(1) for m in _MD_LHS_RE.finditer(blk)}:
+                    owners.setdefault(sig, set()).add(idx)
+            for sig, blocks in sorted(owners.items()):
+                if len(blocks) > 1:
+                    bad.append(f"{p.name}: `{name}.{sig}` is assigned from "
+                               f"{len(blocks)} different always blocks")
+    return bad
+
+
+def memory_arrays(rtl_dir: Path) -> List[Tuple[str, str, int, int]]:
+    """Every `reg [W] name [depth]` the RTL declares → (file, name, depth, bits).
+
+    Depth bounds are usually PARAMETERISED — `[0:N*N-1]` with
+    `localparam N = \\`IMG_N;` and `\\`define IMG_N 32` in a shared header — so a
+    numeric-only scan reads a 32x32 frame buffer as zero and the design looks
+    tiny while synthesis emits 14,017 flip-flops. Resolve macros, parameters and
+    simple arithmetic."""
+    rtl_dir = Path(rtl_dir)
+    if not rtl_dir.is_dir():
+        return []
+    macros: dict = {}
+    for h in sorted(rtl_dir.glob("*.vh")) + sorted(rtl_dir.glob("*.svh")):
+        try:
+            text = h.read_text(errors="replace")
+        except OSError:
+            continue
+        # Per-macro, not per-file: one unparseable `define used to abort the
+        # whole header and silently drop every macro after it.
+        for m in _SB_DEFINE_RE.finditer(text):
+            val = _sb_int(m.group(2))
+            if val is not None:
+                macros[m.group(1)] = val
+    out: List[Tuple[str, str, int, int]] = []
+    for p in sorted(rtl_dir.glob("*.v")) + sorted(rtl_dir.glob("*.sv")):
+        try:
+            text = _strip_comments(p.read_text(errors="replace"))
+        except OSError:
+            continue
+        params = dict(macros)
+        params.update({m.group(1): v for m in _SB_PARAM_RE.finditer(text)
+                       if (v := _sb_int(m.group(2))) is not None})
+        for m in _SB_PARAM_MACRO_RE.finditer(text):
+            if m.group(2) in macros:
+                params[m.group(1)] = macros[m.group(2)]
+        for msb, lsb, name, hi, lo in _SB_ARRAY_RE.findall(text):
+            if msb:
+                a, b = _sb_eval(msb, params), _sb_eval(lsb, params)
+                width = abs(a - b) + 1 if a is not None and b is not None else None
+            else:
+                width = 1
+            a, b = _sb_eval(hi, params), _sb_eval(lo, params)
+            depth = abs(a - b) + 1 if a is not None and b is not None else None
+            if width and depth and depth > 1:
+                out.append((p.name, name, depth, width * depth))
+    return out
+
+
+def frame_buffer_violations(rtl_dir: Path, max_depth: int = 256) -> List[str]:
+    """Arrays big enough to be a whole FRAME rather than a streaming window.
+
+    A serial interface hands over one byte at a time, so a K-tap operator needs
+    K rows in flight — not the W*H dataset. An array of 1024 entries in such a
+    design is a frame buffer wearing a parameter as a disguise, and it costs
+    ~8192 flip-flops (~0.5 mm2 here) plus the routing that makes timing
+    unclosable."""
+    bad = []
+    for fname, name, depth, bits in memory_arrays(rtl_dir):
+        if depth >= max_depth:
+            bad.append(f"{fname}: `{name}` holds {depth} entries ({bits} bits)")
+    return bad
+
+
+_HIER_POKE_RE = re.compile(
+    r"\b(\w+)\s*\.\s*(\w+)\s*\.\s*(\w+)\s*(\[[^\]]*\])?\s*(?:=|<=)")
+# `force` may sit mid-statement (`initial force u_ctrl.sig = 5;`), so anchoring
+# it to the line start missed the real cases.
+_FORCE_RE = re.compile(r"\b(force|release)\s+\w+\s*\.\s*\w+")
+
+
+def hierarchical_dut_access(tb_text: str) -> List[str]:
+    """Places a testbench reaches INSIDE the DUT instead of using its ports.
+
+    A chip-level testbench that writes `u_top.u_ram.in_mem[i] = ...` and reads
+    `u_top.u_ram.out_mem[i]` verifies something silicon cannot do: the pins are
+    never exercised, so synthesis sees nothing observable depending on that
+    memory and deletes it. One design did exactly this — SIM passed, 16,384
+    declared bits synthesized to 92 flip-flops, and an empty 200x200 um chip
+    reached EXPORT. Drive the DUT through its PORTS or the result is not
+    verification."""
+    hits: List[str] = []
+    body = _strip_comments(tb_text)
+    for m in _HIER_POKE_RE.finditer(body):
+        hits.append(f"writes `{m.group(1)}.{m.group(2)}.{m.group(3)}{m.group(4) or ''}` "
+                    "— drive the DUT's input ports instead")
+    for m in _FORCE_RE.finditer(body):
+        hits.append(f"`{m.group(0).strip()}…` forces an internal signal — use the ports")
+    # De-duplicate on the signal path so one array doesn't produce 30 findings.
+    seen, out = set(), []
+    for h in hits:
+        key = h.split("`")[1] if "`" in h else h
+        key = re.sub(r"\[[^\]]*\]", "[]", key)
+        if key not in seen:
+            seen.add(key)
+            out.append(h)
+    return out[:8]

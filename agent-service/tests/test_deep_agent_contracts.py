@@ -17,7 +17,11 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from agents.deep_agent import _is_provider_failure, make_fs_tools
-from agents.stage_handlers import _assert_contract_satisfied
+from agents.stage_handlers import (
+    _assert_contract_satisfied,
+    _golden_headers,
+    _golden_ips,
+)
 
 
 def _write_tool(base: Path):
@@ -159,8 +163,88 @@ def test_a_satisfied_contract_passes(tmp_path: Path) -> None:
                                miss=[], struct=[])
 
 
+# --------------------------------------------------------------------------- #
+# An include file is not a module. A UART design shares CLK_FREQ/BAUD_RATE via
+# rtl/params.vh, and the contract lists it in the module table — but a file of
+# `define macros declares no module, so demanding one deadlocks RTL_GEN against
+# the contract's own "shared macros live in params.vh" rule.
+# --------------------------------------------------------------------------- #
+def _summary_workspace(tmp_path: Path, ips) -> Path:
+    (tmp_path / "golden").mkdir(parents=True, exist_ok=True)
+    (tmp_path / "golden" / "golden_summary.json").write_text(
+        json.dumps({"top": "sobel_top", "ips": ips})
+    )
+    return tmp_path
+
+
+def test_an_include_file_is_not_a_contracted_module(tmp_path: Path) -> None:
+    ws = _summary_workspace(tmp_path, [
+        {"name": "params", "file": "rtl/params.vh", "tier": "ip", "ports": []},
+        {"name": "uart_rx", "file": "rtl/uart_rx.v", "tier": "ip"},
+    ])
+
+    assert [ip["name"] for ip in _golden_ips(_Ctx(ws))] == ["uart_rx"]
+    assert [h["name"] for h in _golden_headers(_Ctx(ws))] == ["params"]
+
+
+def test_a_contract_whose_only_gap_is_a_header_does_not_fail_the_stage(
+    tmp_path: Path,
+) -> None:
+    # params.vh is on disk and `include`d; every real module is implemented.
+    # This is the run that retried six times and could never have passed.
+    ws = _summary_workspace(tmp_path, [
+        {"name": "params", "file": "rtl/params.vh", "tier": "ip", "ports": []},
+        {"name": "uart_rx", "file": "rtl/uart_rx.v", "tier": "ip"},
+        {"name": "sobel_top", "file": "rtl/top.v", "tier": "top"},
+    ])
+
+    _assert_contract_satisfied(
+        _Ctx(ws), {"files": ["uart_rx.v", "top.v"]}, miss=[], struct=[])
+
+
+def test_a_header_tier_entry_is_excluded_regardless_of_suffix(tmp_path: Path) -> None:
+    ws = _summary_workspace(tmp_path, [
+        {"name": "defs", "file": "rtl/defs.svh", "tier": "ip"},
+        {"name": "cfg", "tier": "header"},
+        {"name": "pe", "file": "rtl/pe.v", "tier": "ip"},
+    ])
+
+    assert [ip["name"] for ip in _golden_ips(_Ctx(ws))] == ["pe"]
+
+
+def test_a_module_missing_its_ports_is_still_held_to_the_contract(tmp_path: Path) -> None:
+    # An agent that lazily omits `ports` must not thereby escape the gate —
+    # the header test is the declared file suffix, not an empty port list.
+    ws = _summary_workspace(tmp_path, [
+        {"name": "pe", "file": "rtl/pe.v", "tier": "ip", "ports": []},
+    ])
+
+    assert [ip["name"] for ip in _golden_ips(_Ctx(ws))] == ["pe"]
+
+
 def test_a_run_without_a_golden_contract_is_not_gated(tmp_path: Path) -> None:
     # No GOLDEN_GEN (no provider, or a pre-GOLDEN_GEN task): keep the old
     # best-effort behaviour rather than failing every legacy run.
     _assert_contract_satisfied(_Ctx(tmp_path), {"files": ["design.v"]},
                                miss=["pe.v"], struct=["the whole design is ONE file."])
+
+
+def test_any_structural_violation_fails_the_stage(tmp_path: Path) -> None:
+    """The gate used to match three hardcoded substrings, so every check added
+    afterwards was silently non-fatal: the frame-buffer check fired and RTL_GEN
+    still reported SUCCEEDED with two 8192-bit frame stores on disk."""
+    ws = _contract_workspace(tmp_path, [("pe", "ip"), ("sobel_top", "top")])
+    struct = ["FRAME BUFFERS in a STREAMING design — these arrays hold the whole "
+              "dataset:\n  - window_gen.v: `frame` holds 1024 entries (8192 bits)"]
+
+    with pytest.raises(RuntimeError) as excinfo:
+        _assert_contract_satisfied(_Ctx(ws), {"files": ["pe.v", "sobel_top.v"]},
+                                   miss=[], struct=struct)
+
+    assert "FRAME BUFFERS" in str(excinfo.value)
+
+
+def test_a_clean_structure_still_passes(tmp_path: Path) -> None:
+    ws = _contract_workspace(tmp_path, [("pe", "ip"), ("sobel_top", "top")])
+    _assert_contract_satisfied(_Ctx(ws), {"files": ["pe.v", "sobel_top.v"]},
+                               miss=[], struct=[])
