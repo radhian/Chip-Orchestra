@@ -34,6 +34,43 @@ def _metrics_table(metrics: Dict) -> str:
     return "\n".join(rows)
 
 
+def _hw_sw_lines(ctx: ReportContext) -> list:
+    """The hardware/software co-verification section, or nothing when the stage
+    has not run — the report must never claim a verification that did not
+    happen."""
+    report = getattr(ctx, "hw_sw", {}) or {}
+    if not report or not report.get("completed"):
+        return []
+    iface = report.get("interface") or {}
+    metrics = report.get("metrics") or {}
+    source = report.get("input") or {}
+    verdict = ("✅ chip output matches the reference model"
+               if metrics.get("checked") and metrics.get("match")
+               else f"⚠️ {metrics.get('mismatches', 0)} mismatching value(s)"
+               if metrics.get("checked") else "⚠️ no reference for this input — reviewed by hand")
+    lines = [
+        "## Hardware/Software Co-Verification",
+        "",
+        "Simulation checks the RTL against the reference on the stimulus compiled into the",
+        "design. This stage checks the finished part the way software uses it: a host driver",
+        "encodes a user-supplied file into the chip's own wire format, an interface bench",
+        "replays it against the unmodified DUT, and the driver decodes the reply.",
+        "",
+        f"- **Interface:** {iface.get('description', 'n/a')}",
+        f"- **Host driver:** `{iface.get('driver', 'n/a')}`",
+        f"- **Interface bench:** `{iface.get('testbench', 'n/a')}` ({iface.get('testbench_origin', 'generated')})",
+        f"- **Input:** `{source.get('name', 'n/a')}` "
+        f"({source.get('bytes_in', '?')} bytes sent, {metrics.get('bytes_received', '?')} returned)",
+        f"- **Reference entry point:** `{metrics.get('golden_source', 'n/a')}`",
+        f"- **Verdict:** {verdict}",
+        "",
+    ]
+    previews = [p for p in (report.get("previews") or []) if isinstance(p, str)]
+    if previews:
+        lines += [f"- Evidence: {', '.join(f'`{p}`' for p in previews)}", ""]
+    return lines
+
+
 def render_final_report(ctx: ReportContext) -> str:
     signoff_state = "✅ tapeout ready" if ctx.tapeout_ready else "⚠️ not tapeout ready"
     failed = ctx.signoff.get("failed") if isinstance(ctx.signoff, dict) else None
@@ -65,6 +102,9 @@ def render_final_report(ctx: ReportContext) -> str:
         f"- Waveform produced: `{sim.get('waveform')}`",
         f"- Waveforms: {', '.join(f'`{w}`' for w in ctx.wave_files) or '_none_'}",
         "",
+    ]
+    lines += _hw_sw_lines(ctx)
+    lines += [
         "## Physical Results",
         "",
         _metrics_table(ctx.metrics),

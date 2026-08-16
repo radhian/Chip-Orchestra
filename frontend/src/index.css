@@ -68,10 +68,33 @@
 .dark .text-rose-600 { color: #fb7185 !important; }
 .dark .text-sky-600 { color: #38bdf8 !important; }
 
+/* The -800 text shades are what status banners use for their strongest text
+ * (emerald "passing", rose "failing", amber "warning"). Untranslated they stay
+ * near-black on the dark tinted panel above — legible in light mode, almost
+ * invisible in dark. Map them to the same bright accents as their -700 kin. */
+.dark .text-emerald-800 { color: #6ee7b7 !important; }
+.dark .text-rose-800 { color: #fda4af !important; }
+.dark .text-amber-800 { color: #fcd34d !important; }
+.dark .text-violet-800 { color: #c4b5fd !important; }
+.dark .text-sky-800 { color: #7dd3fc !important; }
+.dark .text-blue-900 { color: #bfdbfe !important; }
+.dark .text-slate-950, .dark .text-black { color: #e2e8f0 !important; }
+
+.dark .bg-amber-50 { background-color: #3a2e12 !important; }
+.dark .bg-violet-50 { background-color: #241c42 !important; }
+.dark .bg-sky-50 { background-color: #0e2740 !important; }
+
 .dark .border-slate-200 { border-color: #24324a !important; }
 .dark .border-slate-100 { border-color: #1d2a40 !important; }
 .dark .border-blue-100 { border-color: #27407a !important; }
 .dark .border-emerald-100 { border-color: #14532d !important; }
+/* Accent borders on status panels and tier badges — a light -200 border reads
+ * as a bright halo against a dark panel, so darken them to match the fill. */
+.dark .border-emerald-200 { border-color: #1c6b4d !important; }
+.dark .border-rose-200 { border-color: #7a2d42 !important; }
+.dark .border-amber-200 { border-color: #6b4f16 !important; }
+.dark .border-violet-200 { border-color: #453a7a !important; }
+.dark .border-sky-200 { border-color: #1f4f70 !important; }
 .dark .ring-slate-200 { --tw-ring-color: #24324a !important; }
 
 .dark .shadow-xl, .dark .shadow-lg, .dark .shadow-sm { --tw-shadow-color: rgba(0,0,0,0.6); }

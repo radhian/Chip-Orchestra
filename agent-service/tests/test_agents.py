@@ -18,9 +18,9 @@ from agents.graph import DeepAgentGraph
     ("stage", "expected_agent", "expected_next", "expected_file"),
     [
         ("SPEC_INGEST", "SpecInterpreter", "Review the structured plan and advance to PLAN.", "spec/design_brief.md"),
-        ("PLAN", "FlowAssistant", "Advance to RTL_GEN and generate the design sources.", "plans/execution_plan.md"),
-        ("RTL_GEN", "RTLAuthor", "Validate generated RTL and queue verification stages.", "rtl/generated_top.sv"),
-        ("TB_GEN", "Verifier", "Review verification notes and move into the next scheduled EDA stage.", "tb/generated_top_tb.sv"),
+        ("PLAN", "FlowAssistant", "Advance to GOLDEN_GEN and build the Python golden model.", "plans/execution_plan.md"),
+        ("RTL_GEN", "RTLAuthor", "Validate generated RTL and queue verification stages.", "rtl/generated_top.v"),
+        ("TB_GEN", "Verifier", "Review verification notes and move into the next scheduled EDA stage.", "tb/generated_top_tb.v"),
         ("LINT", "Diagnoser", "Confirm orchestrator approval and continue the remaining DAG.", "reports/lint_notes.md"),
     ],
 )

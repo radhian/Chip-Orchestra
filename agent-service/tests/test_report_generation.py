@@ -86,3 +86,116 @@ def test_generate_pdf_includes_padring_section(tmp_path: Path) -> None:
     assert out.stat().st_size > 0
     assert "PADRING" in ctx.stage_reports
     assert ctx.metrics["pads_total_io"] == 69
+
+
+# --------------------------------------------------------------------------- #
+# HW/SW co-verification chapter + discovered references
+# --------------------------------------------------------------------------- #
+HW_SW_REPORT = {
+    "stage": "HW_SW_VERIFY",
+    "completed": True,
+    "summary": "The chip processed road.png and returned what the model computes.",
+    "input": {"path": "hwsw/input/road.png", "name": "road.png",
+              "bytes_in": 1024, "bytes_out": 900},
+    "interface": {
+        "kind": "serial",
+        "description": "Interface is BIT-SERIAL (UART-style) on data_i/data_o.",
+        "clock": "clk", "reset": "rst_async_n",
+        "data_in": ["data_i"], "data_out": ["data_o"],
+        "constants": {"CLK_FREQ": 50000000, "BAUD_RATE": 115200, "BAUD_DIV": 434, "DATA_W": 8},
+        "driver": "sw/hwsw/host_driver.py",
+        "testbench": "tb/hwsw/alu_hwsw_tb.v",
+        "testbench_origin": "derived from tb/alu_tb.v",
+    },
+    "metrics": {"match": True, "checked": True, "bytes_sent": 1024, "bytes_received": 900,
+                "bytes_expected": 900, "mismatches": 0, "max_abs_diff": 0,
+                "golden_source": "golden/model/top.py::sobel_stream"},
+    "previews": ["hwsw/input_preview.png", "hwsw/chip_output.png"],
+    "errors": [],
+}
+
+
+def test_hw_sw_metrics_stay_out_of_the_implementation_metrics(tmp_path: Path) -> None:
+    """Byte counts describe a transfer, not the silicon. Merging them into the
+    shared metrics dict would put "mismatches" next to die area."""
+    _seed_workspace(tmp_path)
+    (tmp_path / "reports/hw_sw_verify_report.json").write_text(json.dumps(HW_SW_REPORT))
+    (tmp_path / "reports/pnr_report.json").write_text(
+        json.dumps({"stage": "PNR", "metrics": {"die_area_um2": 246939}}))
+
+    ctx = collect_evidence("task-1", tmp_path, {"task_name": "alu"})
+
+    assert ctx.hw_sw["metrics"]["bytes_received"] == 900
+    assert ctx.metrics.get("die_area_um2") == 246939
+    assert "bytes_received" not in ctx.metrics and "mismatches" not in ctx.metrics
+
+
+def test_latex_gains_a_hardware_software_chapter(tmp_path: Path) -> None:
+    from reporting.latex_report import generate_latex
+
+    _seed_workspace(tmp_path)
+    (tmp_path / "reports/hw_sw_verify_report.json").write_text(json.dumps(HW_SW_REPORT))
+    ctx = collect_evidence("task-1", tmp_path, {"task_name": "alu"})
+    tex = generate_latex(ctx, ["hwsw/input_preview.png", "hwsw/chip_output.png"])
+
+    assert "\\section{Hardware/Software Co-Verification}" in tex
+    assert "\\label{sec:hwsw}" in tex
+    assert "host\\_\\allowbreak{}driver" in tex          # the software half is named
+    assert "hwsw/chip_output.png" in tex                 # and its result is shown
+    assert "sobel\\_\\allowbreak{}stream" in tex         # the reference it was checked against
+    assert "Verdict & match" in tex
+    # The introduction must point at the new section rather than skip over it.
+    assert "Section~\\ref{sec:hwsw}" in tex
+
+
+def test_no_hardware_software_chapter_when_the_stage_did_not_run(tmp_path: Path) -> None:
+    """A report must never describe a verification that did not happen."""
+    from reporting.latex_report import generate_latex
+
+    _seed_workspace(tmp_path)
+    ctx = collect_evidence("task-1", tmp_path, {"task_name": "alu"})
+    assert "Hardware/Software Co-Verification" not in generate_latex(ctx, [])
+
+    # Nor when the stage ran but failed to complete.
+    (tmp_path / "reports/hw_sw_verify_report.json").write_text(
+        json.dumps({**HW_SW_REPORT, "completed": False, "errors": ["co-simulation timed out"]}))
+    ctx = collect_evidence("task-1", tmp_path, {"task_name": "alu"})
+    assert "Hardware/Software Co-Verification" not in generate_latex(ctx, [])
+
+
+def test_markdown_report_carries_the_same_chapter(tmp_path: Path) -> None:
+    _seed_workspace(tmp_path)
+    (tmp_path / "reports/hw_sw_verify_report.json").write_text(json.dumps(HW_SW_REPORT))
+    ctx = collect_evidence("task-1", tmp_path, {"task_name": "alu"})
+
+    body = generate_reports(ctx)[FINAL_REPORT_PATH]
+    assert "## Hardware/Software Co-Verification" in body
+    assert "sw/hwsw/host_driver.py" in body
+    assert "road.png" in body
+
+
+def test_discovered_references_are_cited_and_listed(tmp_path: Path) -> None:
+    from reporting.latex_report import generate_latex
+
+    _seed_workspace(tmp_path)
+    (tmp_path / "exports").mkdir(parents=True, exist_ok=True)
+    (tmp_path / "exports/related_work.json").write_text(json.dumps({
+        "summary": "Sobel accelerators are well studied.",
+        "references": [
+            {"authors": "R. Gonzalez and R. Woods", "title": "Digital Image Processing",
+             "venue": "Pearson, 2018", "url": "https://example.org/dip",
+             "relation": "the standard reference for the operator this chip implements"},
+            # No title -> not citable, must be dropped rather than printed empty.
+            {"authors": "Anon", "relation": "unusable"},
+        ],
+    }))
+    ctx = collect_evidence("task-1", tmp_path, {"task_name": "alu"})
+    tex = generate_latex(ctx, [])
+
+    assert "\\section{Related Work}" in tex
+    assert "\\cite{r1}" in tex
+    assert "\\bibitem{r1}" in tex
+    assert "\\url{https://example.org/dip}" in tex
+    assert "\\bibitem{r2}" not in tex, "an entry with no title is not a reference"
+    # The toolchain citations must survive alongside the discovered ones.
+    assert "\\bibitem{b1}" in tex and "\\bibitem{b4}" in tex

@@ -116,8 +116,12 @@ RUN for b in openroad sta; do \
 # LibreLane / OpenLane (Python orchestrator) + Volare (PDK manager) + render libs.
 # librelane is the maintained fork; openlane is the fallback. gdspy + matplotlib
 # power the GDS/waveform/metrics PNG renders.
-RUN pip install --no-cache-dir librelane || pip install --no-cache-dir openlane \
-    && pip install --no-cache-dir volare matplotlib pyosys gdspy \
+# PIN the hardening toolchain. Unpinned, a rebuild silently swapped in a newer
+# pyosys whose yosys had dropped `abc -fast`, and every SYNTH died at technology
+# mapping ("Unknown option") on a design that had hardened fine hours earlier.
+# librelane 3.0.7 needs pyosys >= ~0.60 for Pass.call and <= 0.66 for abc -fast.
+RUN pip install --no-cache-dir 'librelane==3.0.7' || pip install --no-cache-dir openlane \
+    && pip install --no-cache-dir volare matplotlib 'pyosys==0.66' gdspy \
     && mkdir -p "${PDK_ROOT}"
 
 WORKDIR /app

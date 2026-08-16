@@ -40,7 +40,9 @@ export function ErrorState({
       <CardContent className='space-y-4 p-6'>
         <div>
           <h3 className='text-lg font-semibold text-rose-700'>{title}</h3>
-          <p className='mt-2 text-sm leading-6 text-rose-700/80'>{detail}</p>
+          {/* Not the /80 variant: opacity-modified colours are separate classes
+              the dark-mode remap in index.css cannot reach. */}
+          <p className='mt-2 text-sm leading-6 text-rose-700'>{detail}</p>
         </div>
         {onRetry ? (
           <button

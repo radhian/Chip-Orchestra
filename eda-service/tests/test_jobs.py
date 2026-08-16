@@ -62,7 +62,9 @@ async def test_job_endpoint_crud_handlers() -> None:
         stage_options={
             "top_module": "",
             "clock_port": "clk",
-            "clock_period": 10.0,
+            # 0.0 == unspecified: the job runner then takes the period the
+            # design itself declares, rather than assuming 100 MHz.
+            "clock_period": 0.0,
             "stage_options": {},
             "spec": "run sim",
             "metadata": {},

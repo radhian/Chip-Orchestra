@@ -71,6 +71,9 @@ type Task struct {
 	TemplateID   string     `gorm:"size:255" json:"template_id"`
 	PDKID        string     `gorm:"size:128" json:"pdk_id"`
 	StdcellLibID string     `gorm:"size:128" json:"stdcell_lib_id"`
+	// Voltage is the GF180MCU operating corner ("3v3"/"5v0"). Empty means
+	// "fall back to the deploy-wide GF180_VOLTAGE" for pre-existing tasks.
+	Voltage      string     `gorm:"size:16" json:"voltage"`
 	Padring      string     `gorm:"size:64" json:"padring"`
 	LLMModel     string     `gorm:"size:128" json:"llm_model,omitempty"`
 	ReviewGates  string     `gorm:"type:text" json:"review_gates"`

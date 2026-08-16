@@ -66,6 +66,7 @@ type createTaskBody struct {
 		PDKID        string `json:"pdk_id"`
 		StdcellLibID string `json:"stdcell_lib_id"`
 		Padring      string `json:"padring"`
+		Voltage      string `json:"voltage"`
 	} `json:"design_context"`
 	LLMModel    string           `json:"llm_model"`
 	Attachments []taskAttachment `json:"attachments"`
@@ -83,6 +84,7 @@ type createTaskRequest struct {
 	PDKID        string            `json:"pdk_id"`
 	StdcellLibID string            `json:"stdcell_lib_id"`
 	Padring      string            `json:"padring"`
+	Voltage      string            `json:"voltage"`
 	LLMModel     string            `json:"llm_model"`
 	ReviewGates  []string          `json:"review_gates"`
 	OwnerID      string            `json:"owner_id"`
@@ -150,6 +152,10 @@ func (a *App) RegisterRoutes(router *gin.Engine) {
 		api.POST("/tasks/:id/workspace/upload", a.uploadWorkspaceFile)
 		api.POST("/tasks/:id/workspace/propose-patch", a.proposePatch)
 		api.GET("/tasks/:id/signoff/status", a.getSignoffStatus)
+		api.GET("/tasks/:id/golden/review", a.getGoldenReview)
+		api.GET("/tasks/:id/sim/review", a.getSimReview)
+		api.GET("/tasks/:id/hwsw/review", a.getHwSwReview)
+		api.POST("/tasks/:id/hwsw/input", a.uploadHwSwInput)
 		api.POST("/tasks/:id/approvals/:stage", a.approveStage)
 		api.POST("/tasks/:id/waivers", a.createWaiver)
 		api.POST("/tasks/:id/export-bundle", a.exportBundle)
@@ -257,6 +263,7 @@ func (a *App) createTask(c *gin.Context) {
 			PDKID:        body.DesignContext.PDKID,
 			StdcellLibID: body.DesignContext.StdcellLibID,
 			Padring:      body.DesignContext.Padring,
+			Voltage:      body.DesignContext.Voltage,
 			LLMModel:     body.LLMModel,
 			ReviewGates:  []string{"BEFORE_SIGNOFF"},
 			Attachments:  body.Attachments,
@@ -290,6 +297,7 @@ func (a *App) createTask(c *gin.Context) {
 		PDKID:        defaultString(req.PDKID, "sky130"),
 		StdcellLibID: defaultString(req.StdcellLibID, "sky130_fd_sc_hd"),
 		Padring:      defaultString(req.Padring, "none"),
+		Voltage:      normalizeVoltage(req.Voltage),
 		LLMModel:     req.LLMModel,
 		ReviewGates:  strings.Join(req.ReviewGates, ","),
 		OwnerID:      req.OwnerID,
@@ -435,7 +443,7 @@ func (a *App) getTask(c *gin.Context) {
 		StatusLabel:          strings.Title(strings.ToLower(string(task.Status))),
 		Tone:                 statusTone(task.Status),
 		RepoName:             defaultString(task.RepoSource, task.TemplateID),
-		PDKLabel:             pdkLabel(task.PDKID, task.StdcellLibID),
+		PDKLabel:             pdkLabel(task.PDKID, task.StdcellLibID, task.Voltage),
 		Padring:              task.Padring,
 		ReviewGateLabel:      reviewGateLabel(task.ReviewGates),
 		RuntimeLabel:         "Orchestrator Service + Agent Service + EDA Service",
@@ -483,6 +491,10 @@ func (a *App) patchTask(c *gin.Context) {
 }
 
 func (a *App) getStages(c *gin.Context) {
+	// Backfill stages the task predates (the DAG gains stages over time) and
+	// resync dependency edges before reading, so an existing run shows — and can
+	// be retried from — the current pipeline rather than the one it was born with.
+	_ = a.Orch.EnsureStages(c.Request.Context(), c.Param("id"))
 	var stages []models.Stage
 	if err := a.DB.WithContext(c.Request.Context()).Where("task_id = ?", c.Param("id")).Order("sort_order asc").Find(&stages).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -494,13 +506,21 @@ func (a *App) getStages(c *gin.Context) {
 		if stage.DependsOn != "" {
 			dependsOn = strings.Split(stage.DependsOn, ",")
 		}
-		items = append(items, gin.H{"stage_id": stage.ID, "name": stage.Name, "status": stage.Status, "depends_on": dependsOn, "retry_count": stage.RetryCount, "started_at": stage.StartedAt})
+		// pending_approval must ride along: the task detail page rebuilds its
+		// stage list from THIS endpoint, so a gate omitted here is a gate the
+		// UI can never show (the review prompt simply never appeared).
+		items = append(items, gin.H{"stage_id": stage.ID, "name": stage.Name, "status": stage.Status,
+			"depends_on": dependsOn, "retry_count": stage.RetryCount, "started_at": stage.StartedAt,
+			"pending_approval": stage.Status == models.StageStatusAwaitingApproval})
 	}
 	c.JSON(http.StatusOK, gin.H{"task_id": c.Param("id"), "stages": items})
 }
 
 func (a *App) retryStage(c *gin.Context) {
 	stageName := strings.ToUpper(c.Param("stage"))
+	// Retrying a stage the task predates has to work too — align the row set
+	// with the current DAG first, otherwise the lookup finds nothing.
+	_ = a.Orch.EnsureStages(c.Request.Context(), c.Param("id"))
 	// A MANUAL retry re-arms the SIM auto-repair budget (the automatic loop
 	// must never reset its own counter).
 	a.Orch.ResetSimRepairBudget(c.Request.Context(), c.Param("id"))
@@ -682,12 +702,39 @@ func (a *App) getWorkspaceRaw(c *gin.Context) {
 	c.File(full)
 }
 
+// normalizeVoltage canonicalizes a requested GF180MCU corner to "3v3"/"5v0".
+// An unrecognized value yields "", meaning "inherit the deploy-wide default".
+func normalizeVoltage(v string) string {
+	switch strings.ToLower(strings.TrimSpace(v)) {
+	case "5v0", "5.0v", "5v", "5":
+		return "5v0"
+	case "3v3", "3.3v", "3v", "3.3":
+		return "3v3"
+	default:
+		return ""
+	}
+}
+
+// taskVoltage resolves the corner a task hardens at: its own stored selection
+// wins, and only tasks predating the per-task field fall back to the
+// deploy-wide GF180_VOLTAGE env var.
+func taskVoltage(stored string) string {
+	if v := normalizeVoltage(stored); v != "" {
+		return v
+	}
+	if normalizeVoltage(os.Getenv("GF180_VOLTAGE")) == "5v0" {
+		return "5v0"
+	}
+	return "3v3"
+}
+
 // pdkLabel renders the task's PDK/library including the operating voltage the
-// hardening flow actually uses for GF180MCU (GF180_VOLTAGE, default 3.3V).
-func pdkLabel(pdkID, scl string) string {
+// hardening flow actually uses for GF180MCU. The voltage is per-task, so two
+// tasks in one deployment can legitimately show different corners.
+func pdkLabel(pdkID, scl, voltage string) string {
 	label := fmt.Sprintf("%s / %s", pdkID, scl)
 	if strings.HasPrefix(pdkID, "gf180mcu") {
-		if os.Getenv("GF180_VOLTAGE") == "5v0" {
+		if taskVoltage(voltage) == "5v0" {
 			label += " @ 5.0V"
 		} else {
 			label += " @ 3.3V"
@@ -897,12 +944,311 @@ func (a *App) getSignoffStatus(c *gin.Context) {
 	})
 }
 
+// approveStage releases a human gate — or, when the reviewer says the output is
+// WRONG (decision "reject"), sends the stage back for rework carrying their
+// comment as the correction. The golden-model gate depends on both directions:
+// "is this output correct?" is only a real question if "no" does something.
 func (a *App) approveStage(c *gin.Context) {
-	if err := a.Orch.ApproveStage(c.Request.Context(), c.Param("id"), c.Param("stage")); err != nil {
+	var req struct {
+		Decision string `json:"decision"`
+		Comment  string `json:"comment"`
+	}
+	_ = c.ShouldBindJSON(&req) // body is optional; absent body = approve
+	taskID, stageName := c.Param("id"), c.Param("stage")
+
+	if strings.EqualFold(strings.TrimSpace(req.Decision), "reject") {
+		if err := a.Orch.RejectStage(c.Request.Context(), taskID, stageName, req.Comment); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"status": "rejected", "stage": strings.ToUpper(stageName)})
+		return
+	}
+	if err := a.Orch.ApproveStage(c.Request.Context(), taskID, stageName); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"status": "recorded"})
+	c.JSON(http.StatusOK, gin.H{"status": "recorded", "stage": strings.ToUpper(stageName)})
+}
+
+// getGoldenReview serves everything the golden-model review dialog renders: the
+// manifest GOLDEN_GEN wrote (IP list, test results, preview outputs), the
+// human-readable report, and whether the gate is actually open. Reading it from
+// disk keeps the popup honest — it shows what the model produced, not what the
+// agent claimed.
+func (a *App) getGoldenReview(c *gin.Context) {
+	taskID := c.Param("id")
+	workspace := a.Orch.TaskWorkspace(taskID)
+
+	summary := map[string]any{}
+	if data, err := os.ReadFile(filepath.Join(workspace, "golden", "golden_summary.json")); err == nil {
+		_ = json.Unmarshal(data, &summary)
+	}
+
+	var stages []models.Stage
+	_ = a.DB.WithContext(c.Request.Context()).Where("task_id = ? AND name = ?", taskID, "GOLDEN_GEN").Find(&stages).Error
+	status := ""
+	if len(stages) > 0 {
+		status = string(stages[0].Status)
+	}
+
+	report := ""
+	if data, err := os.ReadFile(filepath.Join(workspace, "golden", "golden_report.md")); err == nil {
+		if len(data) > 200<<10 {
+			data = data[:200<<10]
+		}
+		report = string(data)
+	}
+	testLog := ""
+	if data, err := os.ReadFile(filepath.Join(workspace, "golden", "test_log.txt")); err == nil {
+		if len(data) > 64<<10 {
+			data = data[len(data)-(64<<10):]
+		}
+		testLog = string(data)
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"stage":            "GOLDEN_GEN",
+		"status":           status,
+		"awaitingApproval": models.StageStatus(status) == models.StageStatusAwaitingApproval,
+		"available":        len(summary) > 0,
+		"summary":          summary,
+		"report":           report,
+		"testLog":          testLog,
+	})
+}
+
+// getSimReview serves what the SIM review dialog renders: the structured sim
+// report, the testbench console, and the desired-vs-actual images. SIM is the
+// last point where the design is cheap to change — everything after it spends
+// hours hardening whatever the RTL already does — so the reviewer confirms the
+// CHIP's output matches the golden model's before the flow commits. Read from
+// disk, like the golden gate, so the popup shows results rather than claims.
+func (a *App) getSimReview(c *gin.Context) {
+	taskID := c.Param("id")
+	workspace := a.Orch.TaskWorkspace(taskID)
+
+	report := map[string]any{}
+	if data, err := os.ReadFile(filepath.Join(workspace, "reports", "sim_report.json")); err == nil {
+		_ = json.Unmarshal(data, &report)
+	}
+
+	var stages []models.Stage
+	_ = a.DB.WithContext(c.Request.Context()).Where("task_id = ? AND name = ?", taskID, "SIM").Find(&stages).Error
+	status := ""
+	if len(stages) > 0 {
+		status = string(stages[0].Status)
+	}
+
+	simLog := ""
+	if data, err := os.ReadFile(filepath.Join(workspace, "logs", "sim.log")); err == nil {
+		if len(data) > 64<<10 {
+			data = data[len(data)-(64<<10):]
+		}
+		simLog = string(data)
+	}
+
+	// Only offer a preview that actually exists — a broken <img> in a tape-out
+	// gate reads as "the tool failed" even when the run was fine.
+	previews := []gin.H{}
+	for _, p := range []struct{ path, label, role string }{
+		{"waves/chip_input.png", "Chip input — what drives the design", "input"},
+		{"waves/golden_output.png", "DESIRED output — computed by the Python golden model", "golden"},
+		{"waves/chip_output.png", "CHIP output — computed by the RTL", "chip"},
+		{"waves/waveform.png", "Waveform", "waveform"},
+	} {
+		if _, err := os.Stat(filepath.Join(workspace, filepath.FromSlash(p.path))); err == nil {
+			previews = append(previews, gin.H{"path": p.path, "label": p.label, "role": p.role})
+		}
+	}
+
+	goldenMatch, hasMatch := false, false
+	if metrics, ok := report["metrics"].(map[string]any); ok {
+		if v, ok := metrics["golden_match"].(bool); ok {
+			goldenMatch, hasMatch = v, true
+		}
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"stage":            "SIM",
+		"status":           status,
+		"awaitingApproval": models.StageStatus(status) == models.StageStatusAwaitingApproval,
+		"available":        len(report) > 0,
+		"report":           report,
+		"simLog":           simLog,
+		"previews":         previews,
+		"goldenMatch":      goldenMatch,
+		"hasGoldenMatch":   hasMatch,
+	})
+}
+
+// getHwSwReview serves what the HW/SW verification dialog renders: the report
+// the stage wrote, the co-simulation console, the decoded input/expected/actual
+// pictures, and the two generated interface files (the Python host driver and
+// the Verilog interface bench) so the reviewer can read the software AND the
+// hardware that produced the result. Read from disk, like the other gates.
+func (a *App) getHwSwReview(c *gin.Context) {
+	taskID := c.Param("id")
+	workspace := a.Orch.TaskWorkspace(taskID)
+
+	report := map[string]any{}
+	if data, err := os.ReadFile(filepath.Join(workspace, "reports", "hw_sw_verify_report.json")); err == nil {
+		_ = json.Unmarshal(data, &report)
+	}
+
+	var stages []models.Stage
+	_ = a.DB.WithContext(c.Request.Context()).Where("task_id = ? AND name = ?", taskID, "HW_SW_VERIFY").Find(&stages).Error
+	status := ""
+	if len(stages) > 0 {
+		status = string(stages[0].Status)
+	}
+
+	readTail := func(rel string, limit int) string {
+		data, err := os.ReadFile(filepath.Join(workspace, filepath.FromSlash(rel)))
+		if err != nil {
+			return ""
+		}
+		if len(data) > limit {
+			data = data[len(data)-limit:]
+		}
+		return string(data)
+	}
+	readHead := func(rel string, limit int) string {
+		data, err := os.ReadFile(filepath.Join(workspace, filepath.FromSlash(rel)))
+		if err != nil {
+			return ""
+		}
+		if len(data) > limit {
+			data = data[:limit]
+		}
+		return string(data)
+	}
+
+	// Only offer previews that exist — a broken <img> in a verification gate
+	// reads as "the tool failed" even when the run was fine.
+	previews := []gin.H{}
+	for _, p := range []struct{ path, label, role string }{
+		{"hwsw/input_preview.png", "INPUT — what the host driver encoded and sent to the chip", "input"},
+		{"hwsw/expected_output.png", "EXPECTED — what the Python golden model computes for this input", "golden"},
+		{"hwsw/chip_output.png", "CHIP — decoded from the bytes the RTL actually sent back", "chip"},
+		{"hwsw/waveform.png", "Interface waveform", "waveform"},
+	} {
+		if _, err := os.Stat(filepath.Join(workspace, filepath.FromSlash(p.path))); err == nil {
+			previews = append(previews, gin.H{"path": p.path, "label": p.label, "role": p.role})
+		}
+	}
+
+	// The generated bridge itself: whatever the stage recorded in the report,
+	// falling back to the conventional paths so the panel is never empty.
+	sources := []gin.H{}
+	seen := map[string]bool{}
+	addSource := func(rel, label string) {
+		rel = strings.TrimSpace(rel)
+		if rel == "" || seen[rel] || strings.Contains(rel, "..") || filepath.IsAbs(rel) {
+			return
+		}
+		body := readHead(rel, 120<<10)
+		if body == "" {
+			return
+		}
+		seen[rel] = true
+		sources = append(sources, gin.H{"path": rel, "label": label, "content": body})
+	}
+	if iface, ok := report["interface"].(map[string]any); ok {
+		if v, ok := iface["driver"].(string); ok {
+			addSource(v, "Python host driver (software side)")
+		}
+		if v, ok := iface["testbench"].(string); ok {
+			addSource(v, "Verilog interface bench (hardware side)")
+		}
+	}
+	addSource("sw/hwsw/host_driver.py", "Python host driver (software side)")
+	if entries, err := os.ReadDir(filepath.Join(workspace, "tb", "hwsw")); err == nil {
+		for _, entry := range entries {
+			if !entry.IsDir() && strings.HasSuffix(entry.Name(), ".v") {
+				addSource("tb/hwsw/"+entry.Name(), "Verilog interface bench (hardware side)")
+			}
+		}
+	}
+
+	match, hasMatch := false, false
+	if metrics, ok := report["metrics"].(map[string]any); ok {
+		if v, ok := metrics["match"].(bool); ok {
+			match, hasMatch = v, true
+		}
+	}
+
+	inputName := ""
+	if v, ok := report["input"].(map[string]any); ok {
+		inputName, _ = v["name"].(string)
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"stage":            "HW_SW_VERIFY",
+		"status":           status,
+		"awaitingApproval": models.StageStatus(status) == models.StageStatusAwaitingApproval,
+		"available":        len(report) > 0,
+		"report":           report,
+		"consoleLog":       readTail("logs/hw_sw_verify.log", 64<<10),
+		"previews":         previews,
+		"sources":          sources,
+		"inputName":        inputName,
+		"match":            match,
+		"hasMatch":         hasMatch,
+	})
+}
+
+// uploadHwSwInput stores the file the reviewer wants the chip to process and
+// re-runs HW_SW_VERIFY against it. Upload and re-run are ONE call on purpose:
+// the gate's question is "is this output correct for MY input", so an upload
+// that did not actually drive the hardware would leave the dialog showing the
+// previous run's answer next to the new file's name.
+func (a *App) uploadHwSwInput(c *gin.Context) {
+	taskID := c.Param("id")
+	file, err := c.FormFile("file")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "multipart 'file' field required"})
+		return
+	}
+	name := unsafeFilenameChars.ReplaceAllString(filepath.Base(file.Filename), "_")
+	if name == "" || name == "." {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid filename"})
+		return
+	}
+	if file.Size > 32<<20 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "input exceeds the 32 MB limit"})
+		return
+	}
+	dir := filepath.Join(a.Orch.TaskWorkspace(taskID), "hwsw", "input")
+	if err := os.MkdirAll(dir, 0o755); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	if err := c.SaveUploadedFile(file, filepath.Join(dir, name)); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	rel := "hwsw/input/" + name
+	// The stage reads this marker rather than guessing from mtimes, so a
+	// re-upload of an OLDER file still becomes the active input.
+	if err := os.WriteFile(filepath.Join(a.Orch.TaskWorkspace(taskID), "hwsw", "active_input.txt"),
+		[]byte(rel+"\n"), 0o644); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	_ = a.Redis.HSet(c.Request.Context(), fmt.Sprintf("task:%s:workspace:index", taskID), rel, "hw/sw verification input").Err()
+
+	rerun := c.DefaultQuery("rerun", "1") != "0"
+	if !rerun {
+		c.JSON(http.StatusOK, gin.H{"path": rel, "status": "stored"})
+		return
+	}
+	_ = a.Orch.EnsureStages(c.Request.Context(), taskID)
+	if err := a.Orch.RetryStage(c.Request.Context(), taskID, "HW_SW_VERIFY"); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error(), "path": rel})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"path": rel, "status": "queued", "stage": "HW_SW_VERIFY"})
 }
 
 func (a *App) createWaiver(c *gin.Context) {

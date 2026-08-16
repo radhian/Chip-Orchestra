@@ -29,6 +29,12 @@ type StageDefinition struct {
 	DependsOn []string
 	Kind      string
 	Gated     bool
+	// RequiresApproval holds the stage in AWAITING_APPROVAL after it SUCCEEDS,
+	// so a human decides whether the flow continues. Dependents stay blocked
+	// until ApproveStage releases it; RejectStage re-runs the stage with the
+	// reviewer's correction. (Distinct from Gated, which only labels the
+	// review-gate copy shown in the UI.)
+	RequiresApproval bool
 }
 
 type Service struct {
@@ -58,16 +64,42 @@ func NewService(db *gorm.DB, redisClient *redis.Client, agent *dispatcher.Client
 		stageDefs: []StageDefinition{
 			{Name: "SPEC_INGEST", Kind: "agent"},
 			{Name: "PLAN", DependsOn: []string{"SPEC_INGEST"}, Kind: "agent"},
-			{Name: "RTL_GEN", DependsOn: []string{"PLAN"}, Kind: "agent"},
+			// GOLDEN_GEN builds the EXECUTABLE PYTHON REFERENCE before any RTL
+			// exists: a model per IP + sub-toplevel + toplevel, a test suite for
+			// every one of them, exported per-module vectors, and a rendered
+			// preview of the result. It is human-gated (RequiresApproval): the
+			// user confirms the golden output is what they wanted, and only then
+			// does RTL_GEN start — generating hardware against an unreviewed
+			// reference just moves the disagreement to signoff.
+			{Name: "GOLDEN_GEN", DependsOn: []string{"PLAN"}, Kind: "agent", Gated: true, RequiresApproval: true},
+			{Name: "RTL_GEN", DependsOn: []string{"GOLDEN_GEN"}, Kind: "agent"},
 			// TB_GEN waits for RTL_GEN so the testbench is written against the
 			// actual generated module interface instead of only the plan;
 			// independently generated RTL+TB tend to drift and fail SIM.
 			{Name: "TB_GEN", DependsOn: []string{"RTL_GEN"}, Kind: "agent"},
-			{Name: "SIM", DependsOn: []string{"RTL_GEN", "TB_GEN"}, Kind: "eda"},
+			// SIM is the last point where the design is still cheap to change:
+			// everything after it (synthesis, PnR, signoff) spends hours turning
+			// whatever the RTL does into silicon. It is human-gated for the same
+			// reason GOLDEN_GEN is — the reviewer confirms the CHIP's computed
+			// output matches the golden model's desired output before the flow
+			// commits to hardening it.
+			{Name: "SIM", DependsOn: []string{"RTL_GEN", "TB_GEN"}, Kind: "eda", Gated: true, RequiresApproval: true},
+			// HW_SW_VERIFY drives the chip the way REAL SOFTWARE will: a Python
+			// host driver encodes a user-supplied input (an image, a data file)
+			// into the exact wire format the top-level RTL speaks (UART frames,
+			// a parallel handshake, …), a generated Verilog interface bench
+			// replays those bits against the DUT, and the driver decodes the
+			// chip's response back into an artifact a human can look at. SIM
+			// proves the RTL matches the golden model on the CANONICAL input;
+			// this proves the whole hardware/software stack works on an input
+			// the user chose. Human-gated for the same reason SIM is — it sits
+			// before hardening, where the design is still cheap to change.
+			{Name: "HW_SW_VERIFY", DependsOn: []string{"SIM"}, Kind: "agent", Gated: true, RequiresApproval: true},
 			// LINT runs only AFTER the simulation passes — a design that doesn't
 			// even simulate correctly has no business being style-checked yet
-			// (GarudaChip order: generate → tb → simulate → lint → harden).
-			{Name: "LINT", DependsOn: []string{"SIM"}, Kind: "eda"},
+			// (GarudaChip order: generate → tb → simulate → hw/sw verify → lint
+			// → harden).
+			{Name: "LINT", DependsOn: []string{"HW_SW_VERIFY"}, Kind: "eda"},
 			{Name: "RTL_REPAIR", DependsOn: []string{"SIM", "LINT"}, Kind: "agent"},
 			{Name: "SYNTH", DependsOn: []string{"RTL_REPAIR"}, Kind: "eda", Gated: true},
 			{Name: "PNR", DependsOn: []string{"SYNTH"}, Kind: "eda"},
@@ -333,10 +365,25 @@ func (s *Service) dispatchStage(ctx context.Context, taskID, stageID string) {
 		stage.Status = models.StageStatusSucceeded
 		stage.Progress = 100
 		stage.CompletedAt = &nowDone
+		// HUMAN GATE: the work is done, but the flow does not advance until the
+		// reviewer accepts it. Dependents require SUCCEEDED/RELEASED, so parking
+		// the stage in AWAITING_APPROVAL blocks them without failing anything.
+		if def.RequiresApproval {
+			stage.Status = models.StageStatusAwaitingApproval
+		}
 		_ = s.db.WithContext(ctx).Save(&attempt).Error
 		_ = s.db.WithContext(ctx).Save(&stage).Error
 		s.recordAgentOutputs(ctx, taskID, stage.Name, resp)
-		_ = s.publishEvent(ctx, taskID, map[string]any{"type": "stage.updated", "task_id": taskID, "stage": stage.Name, "status": stage.Status, "progress": 100, "timestamp": nowDone.Format(time.RFC3339)})
+		event := map[string]any{"type": "stage.updated", "task_id": taskID, "stage": stage.Name, "status": stage.Status, "progress": 100, "timestamp": nowDone.Format(time.RFC3339)}
+		if def.RequiresApproval {
+			event["title"] = fmt.Sprintf("%s needs your review", stage.Name)
+			event["detail"] = reviewGateDetail(stage.Name)
+			event["tone"] = "warning"
+			if img := s.stageImage(taskID, stage.Name); img != "" {
+				event["image"] = img
+			}
+		}
+		_ = s.publishEvent(ctx, taskID, event)
 		_ = s.evaluateTask(ctx, taskID)
 		return
 	}
@@ -358,6 +405,7 @@ func (s *Service) dispatchStage(ctx context.Context, taskID, stageID string) {
 			"pdk_id":         task.PDKID,
 			"stdcell_lib_id": task.StdcellLibID,
 			"padring":        task.Padring,
+			"voltage":        task.Voltage,
 		},
 	})
 	if err != nil {
@@ -433,7 +481,7 @@ func (s *Service) pollEDARun(ctx context.Context, taskID, stageID, jobID string)
 				if s.hasChipInput(taskID) {
 					if _, err := os.Stat(filepath.Join(s.taskWorkspace(taskID), "waves", "golden_output.mem")); err != nil {
 						s.failStage(ctx, &stage, &attempt,
-							"no golden_output.mem — the Python golden model's desired output is required to verify the chip; retry TB_GEN")
+							"no golden_output.mem — the Python golden model's desired output is required to verify the chip; retry GOLDEN_GEN to regenerate it (it is a GOLDEN_GEN deliverable)")
 						return
 					}
 				}
@@ -477,17 +525,55 @@ func (s *Service) pollEDARun(ctx context.Context, taskID, stageID, jobID string)
 			stage.CompletedAt = &now
 			attempt.Status = models.StageStatusSucceeded
 			attempt.CompletedAt = &now
+			// HUMAN GATE, same contract as the agent path: the job finished, but
+			// the flow does not advance until a reviewer accepts it. Honouring
+			// RequiresApproval only on the agent path silently ignored the flag
+			// on every `eda` stage — SIM among them, which is the last point
+			// where the design is still cheap to change.
+			edaDef := s.definition(stage.Name)
+			if edaDef.RequiresApproval {
+				stage.Status = models.StageStatusAwaitingApproval
+			}
 			payload, _ := json.Marshal(status.Report)
 			attempt.Result = string(payload)
 			_ = s.db.WithContext(ctx).Save(&attempt).Error
 			_ = s.db.WithContext(ctx).Save(&stage).Error
 			s.recordEDAOutputs(ctx, taskID, stage.Name, status.Report)
-			_ = s.publishEvent(ctx, taskID, map[string]any{"type": "artifact.created", "task_id": taskID, "stage": stage.Name, "status": stage.Status, "progress": 100, "timestamp": now.Format(time.RFC3339)})
+			event := map[string]any{"type": "artifact.created", "task_id": taskID, "stage": stage.Name, "status": stage.Status, "progress": 100, "timestamp": now.Format(time.RFC3339)}
+			if edaDef.RequiresApproval {
+				event["type"] = "stage.updated"
+				event["title"] = fmt.Sprintf("%s needs your review", stage.Name)
+				event["detail"] = reviewGateDetail(stage.Name)
+				event["tone"] = "warning"
+				if img := s.stageImage(taskID, stage.Name); img != "" {
+					event["image"] = img
+				}
+			}
+			_ = s.publishEvent(ctx, taskID, event)
 			_ = s.evaluateTask(ctx, taskID)
 			return
 		case "FAILED":
 			if isMissingSlangFailure(status.Error + "\n" + s.librelaneLogTail(taskID)) {
 				s.failStage(ctx, &stage, &attempt, missingSlangFailureMessage())
+				return
+			}
+			// A SIM whose testbench FAILED is a design defect the repair loop
+			// exists to fix, not an infrastructure fault. The loop used to hang
+			// off the COMPLETED branch only, because eda-service reported a
+			// failing testbench as a COMPLETED job; now that a job with
+			// report.errors is correctly FAILED, that routing has to live here
+			// too or the design never gets a repair round at all.
+			if stage.Name == "SIM" && simRunFailed(status) {
+				repairKey := fmt.Sprintf("task:%s:sim_auto_repairs", taskID)
+				rounds, _ := s.redis.Incr(ctx, repairKey).Result()
+				if int(rounds) <= simRepairRounds() {
+					s.repairAndRetrySim(ctx, taskID, &stage, &attempt, status.Report, int(rounds))
+					return
+				}
+				s.failStage(ctx, &stage, &attempt, fmt.Sprintf(
+					"self-checking testbench STILL FAILING after %d auto-repair rounds — see logs/sim.log "+
+						"and logs/rtl_repair_deep_agent.md; a manual Retry re-arms the loop "+
+						"(SIM_AUTO_REPAIR_ROUNDS to raise the budget)", simRepairRounds()))
 				return
 			}
 			s.failStage(ctx, &stage, &attempt, status.Error)
@@ -540,7 +626,127 @@ func (s *Service) ApproveStage(ctx context.Context, taskID, stageName string) er
 	if err := s.db.WithContext(ctx).Save(&stage).Error; err != nil {
 		return err
 	}
+	// A fresh approval must not carry an old rejection's correction into the
+	// next run of the stage.
+	_ = s.redis.Del(ctx, reviewFeedbackKey(taskID, stage.Name)).Err()
+	_ = s.publishEvent(ctx, taskID, map[string]any{
+		"type": "stage.updated", "task_id": taskID, "stage": stage.Name,
+		"status": string(models.StageStatusReleased), "progress": 100,
+		"title":  fmt.Sprintf("%s approved", stage.Name),
+		"detail": "The reviewer accepted this stage's output — the flow continues.",
+		"tone":   "success", "timestamp": time.Now().UTC().Format(time.RFC3339),
+	})
 	return s.evaluateTask(ctx, taskID)
+}
+
+// reviewGateCopy says WHAT each human gate is actually asking. Every gate used
+// to print the golden-model wording ("the golden model is built and its tests
+// pass") regardless of which stage parked, so a reviewer at the SIM or HW/SW
+// gate was told to approve something the stage had not done.
+var reviewGateCopy = map[string]string{
+	"GOLDEN_GEN": "The golden model is built and its tests pass. Check the output shown in the review dialog: approve it to start RTL generation, or reject it with a correction and the model is rebuilt.",
+	"SIM":        "The chip has been simulated against the approved golden model. Check the desired-vs-actual output in the review dialog: approve it to start hardening, or reject it with a correction.",
+	"HW_SW_VERIFY": "The chip was driven end-to-end through its real host interface: the Python driver encoded your input, the interface testbench replayed it against the RTL, and the driver decoded what came back. " +
+		"Check the decoded output in the review dialog — upload a different input to re-verify, approve it to continue to hardening, or reject it with a correction.",
+}
+
+func reviewGateDetail(stageName string) string {
+	if copy, ok := reviewGateCopy[strings.ToUpper(stageName)]; ok {
+		return copy
+	}
+	return "This stage finished and is waiting for your review — inspect its output in the review dialog, then approve or reject it."
+}
+
+// EnsureStages backfills stage rows a task is missing because it was created
+// before the stage existed in the DAG, and resyncs every row's dependency list
+// and ordering with the current definitions. Without it, adding a stage to the
+// pipeline would only ever affect NEW tasks — an existing run could never be
+// re-verified through it. Idempotent, and a no-op for an up-to-date task.
+func (s *Service) EnsureStages(ctx context.Context, taskID string) error {
+	var stages []models.Stage
+	if err := s.db.WithContext(ctx).Where("task_id = ?", taskID).Find(&stages).Error; err != nil {
+		return err
+	}
+	if len(stages) == 0 {
+		return nil // not a real task (or its stages were never created) — nothing to align
+	}
+	existing := make(map[string]*models.Stage, len(stages))
+	for i := range stages {
+		existing[stages[i].Name] = &stages[i]
+	}
+	for idx, def := range s.stageDefs {
+		dependsOn := strings.Join(def.DependsOn, ",")
+		stage, ok := existing[def.Name]
+		if !ok {
+			if err := s.db.WithContext(ctx).Create(&models.Stage{
+				ID:        uuid.NewString(),
+				TaskID:    taskID,
+				Name:      def.Name,
+				Status:    models.StageStatusNotStarted,
+				DependsOn: dependsOn,
+				SortOrder: idx,
+			}).Error; err != nil {
+				return err
+			}
+			continue
+		}
+		if stage.DependsOn == dependsOn && stage.SortOrder == idx {
+			continue
+		}
+		if err := s.db.WithContext(ctx).Model(&models.Stage{}).Where("id = ?", stage.ID).
+			Updates(map[string]any{"depends_on": dependsOn, "sort_order": idx}).Error; err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// reviewFeedbackKey holds the reviewer's correction for a rejected stage until
+// its next dispatch, where it is appended to the agent prompt.
+func reviewFeedbackKey(taskID, stageName string) string {
+	return fmt.Sprintf("task:%s:review_feedback:%s", taskID, strings.ToUpper(stageName))
+}
+
+// RejectStage records WHY the reviewer rejected a stage's output and re-runs the
+// stage (plus its dependents) so the agent can correct it. Used by the
+// GOLDEN_GEN gate: "the output is wrong" has to send the golden model back for
+// rework, not simply stall the task.
+func (s *Service) RejectStage(ctx context.Context, taskID, stageName, comment string) error {
+	stageName = strings.ToUpper(stageName)
+	var stage models.Stage
+	if err := s.db.WithContext(ctx).Where("task_id = ? AND name = ?", taskID, stageName).First(&stage).Error; err != nil {
+		return err
+	}
+	comment = strings.TrimSpace(comment)
+	if comment == "" {
+		comment = "The reviewer rejected this output as incorrect but gave no detail — re-examine the result against the design brief, find what is wrong, and fix it."
+	}
+	if err := s.redis.Set(ctx, reviewFeedbackKey(taskID, stageName), comment, 7*24*time.Hour).Err(); err != nil {
+		return err
+	}
+	_ = s.publishEvent(ctx, taskID, map[string]any{
+		"type": "stage.updated", "task_id": taskID, "stage": stageName,
+		"status": string(models.StageStatusQueued), "progress": 0,
+		"title":  fmt.Sprintf("%s rejected — reworking", stageName),
+		"detail": "Reviewer feedback: " + comment,
+		"tone":   "warning", "timestamp": time.Now().UTC().Format(time.RFC3339),
+	})
+	return s.RetryStage(ctx, taskID, stageName)
+}
+
+// reviewFeedback returns the pending reviewer correction for a stage ("" when
+// none), consumed by buildInvokeRequest on the re-run. Tolerates a nil Redis
+// client: buildInvokeRequest is also called from contexts wired without one,
+// and feedback is an enhancement to the prompt, never a prerequisite for it.
+func (s *Service) reviewFeedback(ctx context.Context, taskID, stageName string) string {
+	if s == nil || s.redis == nil {
+		return ""
+	}
+	value, err := s.redis.Get(ctx, reviewFeedbackKey(taskID, stageName)).Result()
+	if err != nil {
+		return ""
+	}
+	return strings.TrimSpace(value)
 }
 
 func (s *Service) taskWorkspace(taskID string) string {
@@ -608,6 +814,7 @@ func (s *Service) buildInvokeRequest(taskID string, task models.Task, stageName,
 			"current_stage":  task.CurrentStage,
 			"pdk_id":         task.PDKID,
 			"stdcell_lib_id": task.StdcellLibID,
+			"voltage":        task.Voltage,
 			"llm_model":      task.LLMModel,
 			"design_brief":   task.DesignBrief,
 			"workspace_root": workspace,
@@ -615,6 +822,14 @@ func (s *Service) buildInvokeRequest(taskID string, task models.Task, stageName,
 	}
 	if stageName == "SIGNOFF" || stageName == "EXPORT" {
 		req.EDAReports = s.edaReportPaths()
+	}
+	// A rejected human gate re-runs the stage: carry the reviewer's correction
+	// into the prompt, otherwise the agent rebuilds the same rejected output.
+	if feedback := s.reviewFeedback(context.Background(), taskID, stageName); feedback != "" {
+		req.Prompt = req.Prompt + "\n\nTHE REVIEWER REJECTED YOUR PREVIOUS OUTPUT FOR THIS STAGE. " +
+			"Their correction is authoritative — address it specifically, do not simply " +
+			"regenerate the same result:\n" + feedback
+		req.Context["review_feedback"] = feedback
 	}
 	return req
 }
@@ -680,6 +895,29 @@ func isTransientErr(err error) bool {
 
 // simTestbenchFailed reads the SIM report's verdict: the self-checking
 // testbench printed FAILED / $fatal / a mismatch (metrics.passed == false).
+// simRunFailed reports whether a FAILED SIM job failed because the DESIGN is
+// wrong (self-checking testbench, golden mismatch, simulation timeout) rather
+// than because the toolchain could not run. The former is repairable; the
+// latter is not, and must surface as-is.
+func simRunFailed(status *edaclient.JobStatusResponse) bool {
+	blob := strings.ToLower(status.Error)
+	if errs, ok := status.Report["errors"].([]any); ok {
+		for _, e := range errs {
+			if s, ok := e.(string); ok {
+				blob += " " + strings.ToLower(s)
+			}
+		}
+	}
+	for _, marker := range []string{
+		"testbench failed", "chip output != golden", "timeout", "no verdict",
+	} {
+		if strings.Contains(blob, marker) {
+			return true
+		}
+	}
+	return false
+}
+
 func simTestbenchFailed(report map[string]any) bool {
 	metrics, _ := report["metrics"].(map[string]any)
 	if metrics == nil {
@@ -877,8 +1115,28 @@ func (s *Service) stageImage(taskID, stageName string) string {
 	switch stageName {
 	case "SPEC_INGEST", "PLAN":
 		return scan("context/uploads")
+	case "GOLDEN_GEN":
+		// The rendered golden result is the thing the reviewer has to look at.
+		for _, candidate := range []string{"waves/golden_output.png", "waves/chip_input.png"} {
+			if _, err := os.Stat(filepath.Join(s.taskWorkspace(taskID), filepath.FromSlash(candidate))); err == nil {
+				return candidate
+			}
+		}
+		if img := scan("golden/outputs"); img != "" {
+			return img
+		}
+		return scan("waves")
 	case "SIM", "GL_SIM":
 		return scan("waves")
+	case "HW_SW_VERIFY":
+		// The decoded chip response is the thing the reviewer has to look at.
+		for _, candidate := range []string{"hwsw/chip_output.png", "hwsw/expected_output.png",
+			"hwsw/input_preview.png"} {
+			if _, err := os.Stat(filepath.Join(s.taskWorkspace(taskID), filepath.FromSlash(candidate))); err == nil {
+				return candidate
+			}
+		}
+		return scan("hwsw")
 	case "RENDER", "DRC_LVS", "SIGNOFF", "EXPORT":
 		if img := scan("gds"); img != "" {
 			return img
@@ -955,22 +1213,24 @@ func (s *Service) recordEDAOutputs(ctx context.Context, taskID, stageName string
 // stageActivity says WHAT is being done in a stage, so the execution log
 // narrates the run instead of showing bare status flips.
 var stageActivity = map[string]string{
-	"SPEC_INGEST": "SpecInterpreter is decomposing the design brief and digesting attached images/PDFs (vision).",
-	"PLAN":        "FlowAssistant deep agent is researching references online and writing the execution plan + build contract.",
-	"RTL_GEN":     "RTLAuthor deep agent is generating the RTL modules (compile-checked on every write) — live transcript: logs/rtl_gen_deep_agent.md.",
-	"RTL_REPAIR":  "RTLAuthor deep agent is repairing compile errors (web fix search + remembered lessons) — live transcript: logs/rtl_repair_deep_agent.md.",
-	"TB_GEN":      "Verifier deep agent is writing self-checking testbenches — live transcript: logs/tb_gen_deep_agent.md.",
-	"SIM":         "EDA service is compiling and simulating the design with the generated testbench (iverilog/vvp).",
-	"LINT":        "EDA service is linting the RTL.",
-	"SYNTH":       "EDA service is synthesizing the design (yosys via LibreLane).",
-	"PNR":         "EDA service is running place & route.",
-	"STA":         "EDA service is running static timing analysis.",
-	"GL_SIM":      "EDA service is running gate-level simulation.",
-	"RENDER":      "EDA service is rendering the GDS layout image.",
-	"DRC_LVS":     "EDA service is running DRC/LVS checks.",
-	"PADRING":     "EDA service is assembling the GF180 chip-level I/O pad ring (GDS/LEF/DEF/SVG deliverables).",
-	"SIGNOFF":     "FlowAssistant is assembling the signoff summary from the EDA evidence.",
-	"EXPORT":      "FlowAssistant is assembling the final report, runbook and PDF.",
+	"SPEC_INGEST":  "SpecInterpreter is decomposing the design brief and digesting attached images/PDFs (vision).",
+	"PLAN":         "FlowAssistant deep agent is researching references online and writing the execution plan + build contract.",
+	"GOLDEN_GEN":   "GoldenModeler deep agent is building the Python golden model — one model per IP, sub-toplevel and toplevel, a test suite for each, exported vectors and a rendered output for your review — live transcript: logs/golden_gen_deep_agent.md.",
+	"RTL_GEN":      "RTLAuthor deep agent is generating the Verilog IP / sub-toplevel / toplevel modules against the approved golden model (compile-checked on every write) — live transcript: logs/rtl_gen_deep_agent.md.",
+	"RTL_REPAIR":   "RTLAuthor deep agent is repairing compile errors (web fix search + remembered lessons) — live transcript: logs/rtl_repair_deep_agent.md.",
+	"TB_GEN":       "Verifier deep agent is writing one self-checking Verilog testbench per IP, sub-toplevel and toplevel from the golden vectors — live transcript: logs/tb_gen_deep_agent.md.",
+	"SIM":          "EDA service is compiling and simulating the design with the generated testbench (iverilog/vvp).",
+	"HW_SW_VERIFY": "Verifier deep agent is building the hardware/software bridge — a Python host driver that speaks the chip's real interface (sw/hwsw/host_driver.py) plus a Verilog interface bench (tb/hwsw/) — then encoding your input, replaying it against the RTL and decoding what the chip sends back.",
+	"LINT":         "EDA service is linting the RTL.",
+	"SYNTH":        "EDA service is synthesizing the design (yosys via LibreLane).",
+	"PNR":          "EDA service is running place & route.",
+	"STA":          "EDA service is running static timing analysis.",
+	"GL_SIM":       "EDA service is running gate-level simulation.",
+	"RENDER":       "EDA service is rendering the GDS layout image.",
+	"DRC_LVS":      "EDA service is running DRC/LVS checks.",
+	"PADRING":      "EDA service is assembling the GF180 chip-level I/O pad ring (GDS/LEF/DEF/SVG deliverables).",
+	"SIGNOFF":      "FlowAssistant is assembling the signoff summary from the EDA evidence.",
+	"EXPORT":       "FlowAssistant is assembling the final report, runbook and PDF.",
 }
 
 // publishEvent enriches every event with the display fields the runbook needs

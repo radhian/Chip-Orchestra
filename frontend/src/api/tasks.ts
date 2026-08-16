@@ -5,9 +5,12 @@ import type {
   CreateTaskInput,
   DiagnosisItem,
   ExportBundleResponse,
+  GoldenReview,
+  HwSwReview,
   ListTasksParams,
   RunbookEvent,
   SignoffStatus,
+  SimReview,
   TaskDetail,
   TaskStage,
   TaskSummary,
@@ -89,6 +92,10 @@ function mapStageStatus(status: string): TaskStage['status'] {
       return 'active'
     case 'FAILED':
       return 'failed'
+    case 'AWAITING_APPROVAL':
+      // Waiting on a human, not on the machine — the timeline shows it as the
+      // stage in play so the run doesn't look stalled.
+      return 'active'
     default:
       return 'queued'
   }
@@ -179,12 +186,18 @@ export async function updateTask(id: string, payload: { description?: string; st
 }
 
 export async function getTaskStages(id: string): Promise<TaskStage[]> {
-  const response = await requestJson<{ stages?: Array<{ name: string; status: string; retry_count?: number }> }>(`/api/v1/tasks/${id}/stages`)
+  const response = await requestJson<{
+    stages?: Array<{ name: string; status: string; retry_count?: number; pending_approval?: boolean }>
+  }>(`/api/v1/tasks/${id}/stages`)
   return (response.stages ?? []).map((stage) => ({
     key: stage.name.toLowerCase(),
     label: stage.name.replace(/_/g, ' '),
     status: mapStageStatus(stage.status),
     retryCount: Number(stage.retry_count ?? 0),
+    // The detail page replaces the task's stage list with this one, so an
+    // awaiting-approval stage has to carry its gate flag through here or the
+    // review prompt never renders.
+    pendingApproval: Boolean(stage.pending_approval) || stage.status === 'AWAITING_APPROVAL',
   }))
 }
 
@@ -222,6 +235,12 @@ export async function proposeWorkspacePatch(id: string, payload: { instruction: 
 
 export async function getSignoffStatus(id: string): Promise<SignoffStatus> {
   return requestJson<SignoffStatus>(`/api/v1/tasks/${id}/signoff/status`)
+}
+
+/** The golden-model review payload (GOLDEN_GEN): IP models, test results and the
+ *  rendered outputs the user approves before RTL generation starts. */
+export async function getGoldenReview(id: string): Promise<GoldenReview> {
+  return requestJson<GoldenReview>(`/api/v1/tasks/${id}/golden/review`)
 }
 
 export async function uploadWorkspaceFile(id: string, file: File): Promise<{ path: string }> {
@@ -274,4 +293,36 @@ export function connectTaskEvents(taskId: string, handlers: { onMessage: (event:
   }
 
   return socket
+}
+
+/** The SIM review payload: chip-vs-golden outputs, the testbench console and
+ *  whether the gate is open, for the human check before hardening starts. */
+export async function getSimReview(id: string): Promise<SimReview> {
+  return requestJson<SimReview>(`/api/v1/tasks/${id}/sim/review`)
+}
+
+/** The HW/SW verification payload: what the chip returned when the generated
+ *  host driver sent it a real input over the chip's real interface, plus the
+ *  generated driver + interface bench sources. */
+export async function getHwSwReview(id: string): Promise<HwSwReview> {
+  return requestJson<HwSwReview>(`/api/v1/tasks/${id}/hwsw/review`)
+}
+
+/** Upload the file the chip should process and re-run HW_SW_VERIFY on it.
+ *  Upload and re-run are one call: an upload that did not drive the hardware
+ *  would leave the dialog showing the PREVIOUS run's picture under the new
+ *  file's name. */
+export async function uploadHwSwInput(id: string, file: File): Promise<{ path: string; status: string }> {
+  const body = new FormData()
+  body.append('file', file)
+  const headers = new Headers()
+  const token = getStoredToken()
+  if (token) {
+    headers.set('Authorization', `Bearer ${token}`)
+  }
+  const response = await fetch(`${API_BASE_URL}/api/v1/tasks/${id}/hwsw/input`, { method: 'POST', body, headers })
+  if (!response.ok) {
+    throw new Error(await parseError(response))
+  }
+  return response.json() as Promise<{ path: string; status: string }>
 }

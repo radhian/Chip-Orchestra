@@ -51,7 +51,16 @@ def _find_netlist(chip: Path) -> Optional[str]:
     return None
 
 
-def _find_cell_models() -> List[str]:
+_CELL_LIB_RE = re.compile(r"\b([a-z0-9]+_fd_sc_[a-z0-9]+)__", re.I)
+
+
+def _find_cell_models(netlist: str = "") -> List[str]:
+    """Behavioural models for the cells the NETLIST actually instantiates.
+
+    Handing iverilog every library under libs.ref/ ships two standard-cell
+    families at once (mcu7t5v0 AND mcu9t5v0), whose primitives.v files declare
+    the same modules — elaboration then failed with "Unknown module type" for
+    cells that were, in fact, defined. Pick the one library the netlist names."""
     root = hr._pdk_root()
     pdk = hr._pdk()
     patterns = [
@@ -59,11 +68,25 @@ def _find_cell_models() -> List[str]:
         os.path.join(root, "**", "cells", "**", "*.v"),
         os.path.join(root, "**", "*sc*", "verilog", "*.v"),
     ]
+    hits: List[str] = []
     for pat in patterns:
         hits = sorted(glob.glob(pat, recursive=True))
         if hits:
-            return hits
-    return []
+            break
+    if not hits:
+        return []
+    used = ""
+    try:
+        if netlist:
+            m = _CELL_LIB_RE.search(Path(netlist).read_text(errors="replace"))
+            used = m.group(1) if m else ""
+    except OSError:
+        used = ""
+    if not used:
+        return hits
+    # Keep the matching standard-cell library plus any non-standard-cell model
+    # (IO pads, SRAM macros) the design may also instantiate.
+    return [h for h in hits if (used in h) or ("_fd_sc_" not in h)]
 
 
 def run_gl_sim(
@@ -91,7 +114,18 @@ def run_gl_sim(
     chip = workspace / "exports" / "harden" / "chip"
     netlist = _find_netlist(chip)
     tbs = sorted(glob.glob(str(tb_dir / "*.sv")) + glob.glob(str(tb_dir / "*.v")))
-    cells = _find_cell_models()
+    # ONLY the chip-level testbench. Compiling every tb in tb/ drags the per-IP
+    # unit benches in too: they `include "params.vh"` (unresolvable from the
+    # workspace root without -I rtl) and each declares its own root, so the
+    # elaboration failed before it ever reached the netlist.
+    chip_tbs = [t for t in tbs if Path(t).stem in (f"{top}_tb", f"tb_{top}")]
+    if chip_tbs:
+        dropped = [Path(t).name for t in tbs if t not in chip_tbs]
+        tbs = chip_tbs
+        if dropped:
+            lines.append(f"gate-level sim uses the CHIP testbench only "
+                         f"({Path(chip_tbs[0]).name}); unit benches excluded: {', '.join(dropped)}")
+    cells = _find_cell_models(netlist)
 
     if not netlist:
         report.summary = "Gate-level sim skipped: no synthesized netlist found."
@@ -106,8 +140,10 @@ def run_gl_sim(
 
     out_img = waves_dir / f"gl_{top}"
     sources = [netlist, *tbs, *cells]
+    # -I rtl: the testbench `include "params.vh"`, which lives in rtl/ — without
+    # it the include fails and elaboration dies before reaching the netlist.
     compile_cmd = [_iverilog(), "-g2012", "-DFUNCTIONAL", "-DUNIT_DELAY=#1",
-                   "-o", str(out_img), *sources]
+                   "-I", str(rtl_dir), "-o", str(out_img), *sources]
     lines.append("$ iverilog -g2012 -DFUNCTIONAL (netlist + cells + tb)")
     cres = runner.run(compile_cmd, cwd=workspace, timeout=_gl_timeout())
     lines += [ln.rstrip() for ln in ((cres.stdout or "") + "\n" + (cres.stderr or "")).splitlines() if ln.strip()]
@@ -139,12 +175,23 @@ def run_gl_sim(
         report.waveform = True
         report.netlist = os.path.relpath(netlist, workspace)
         register_artifact(artifacts, path=f"waves/gl_{top}.vcd", kind="waveform", stage=stage, base=workspace)
-        try:
-            wave = vcd.to_wave_json(dest_vcd.read_text(errors="replace"))
-            report.metrics["waveform_signals"] = len(wave.get("signals", []))
-            report.metrics["waveform_tmax"] = wave.get("tmax", 0)
-        except Exception:  # noqa: BLE001
-            pass
+        # Same guard as SIM: read_text() on a multi-GB dump is what OOM-killed
+        # the whole eda-service mid-stage. A gate-level trace is BIGGER than the
+        # RTL one (every cell instance is a scope), so this path is the more
+        # likely of the two to blow up. The verdict comes from stdout, not the
+        # waveform, so skipping the parse costs only the metrics.
+        from .sim_runner import _vcd_too_big
+        oversized = _vcd_too_big(dest_vcd.stat().st_size)
+        if oversized:
+            lines.append(oversized)
+            report.warnings.append(oversized)
+        else:
+            try:
+                wave = vcd.to_wave_json(dest_vcd.read_text(errors="replace"))
+                report.metrics["waveform_signals"] = len(wave.get("signals", []))
+                report.metrics["waveform_tmax"] = wave.get("tmax", 0)
+            except Exception:  # noqa: BLE001
+                pass
 
     report.summary = (
         f"Gate-level sim: compiled={report.compiled}, "

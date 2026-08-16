@@ -35,6 +35,7 @@ function App() {
         <Route path='/tasks/:id' element={<TaskDetailPage tab='runbook' />} />
         <Route path='/tasks/:id/rtl' element={<TaskDetailPage tab='rtl' />} />
         <Route path='/tasks/:id/sim' element={<TaskDetailPage tab='sim' />} />
+        <Route path='/tasks/:id/hwsw' element={<TaskDetailPage tab='hwsw' />} />
         <Route path='/tasks/:id/signoff' element={<TaskDetailPage tab='signoff' />} />
         <Route path='/settings' element={<SettingsPage />} />
       </Route>

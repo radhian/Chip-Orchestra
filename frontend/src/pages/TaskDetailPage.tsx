@@ -7,6 +7,7 @@ import {
   CheckCircle2,
   Clock3,
   FileCode2,
+  FlaskConical,
   ListChecks,
   PackageCheck,
   PlayCircle,
@@ -19,6 +20,7 @@ import {
 
 import {
   connectTaskEvents,
+  getHwSwReview,
   getSignoffStatus,
   getTask,
   getTaskArtifacts,
@@ -34,6 +36,9 @@ import {
   workspaceExportUrl,
   workspaceRawUrl,
 } from '@/api/tasks'
+import { GoldenReviewDialog } from '@/components/app/GoldenReviewDialog'
+import { HwSwReviewDialog } from '@/components/app/HwSwReviewDialog'
+import { SimReviewDialog } from '@/components/app/SimReviewDialog'
 import { EmptyState, ErrorState, LoadingState, MetricCard, SummaryRow } from '@/components/app/shared'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -41,7 +46,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
-import type { ArtifactItem, DiagnosisItem, RunbookEvent, SignoffStatus, TaskDetail, TaskStage, WorkspaceFileSummary } from '@/types/orchestra'
+import type {
+  ArtifactItem,
+  DiagnosisItem,
+  HwSwReview,
+  RunbookEvent,
+  SignoffStatus,
+  TaskDetail,
+  TaskStage,
+  WorkspaceFileSummary,
+} from '@/types/orchestra'
 
 const stageToneClass = {
   running: 'bg-indigo-100 text-indigo-700 border-indigo-200',
@@ -56,7 +70,7 @@ const eventToneClass = {
   warning: 'bg-amber-100 text-amber-700',
 } as const
 
-type DetailTab = 'runbook' | 'rtl' | 'sim' | 'signoff'
+type DetailTab = 'runbook' | 'rtl' | 'sim' | 'hwsw' | 'signoff'
 
 const IMAGE_EXT = /\.(png|jpe?g|webp|bmp|gif|svg)$/i
 const BINARY_EXT = /\.(gds|gds2|oas|pdf|vcd|fst|zip|gz|tar|bin|lef|def|spef|db|lib)$/i
@@ -67,6 +81,14 @@ function isImagePath(path: string): boolean {
 
 function isBinaryPath(path: string): boolean {
   return BINARY_EXT.test(path)
+}
+
+/** Keep the PREVIOUS reference when a background refresh returned identical data,
+ *  so React skips the re-render instead of rebuilding every derived memo and list
+ *  row. Comparing ~50 KB of JSON costs ~1 ms; re-rendering 460 file chips costs
+ *  far more, and it happened every 2.5 s for the whole length of a run. */
+function keepIfSame<T>(current: T, next: T): T {
+  return JSON.stringify(current) === JSON.stringify(next) ? current : next
 }
 
 /** Event time in the USER'S timezone (the server's bare "15:04" string is
@@ -109,6 +131,13 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
   const [liveConnected, setLiveConnected] = useState(false)
   const [refreshKey, setRefreshKey] = useState(0)
   const [retryingStage, setRetryingStage] = useState<string | null>(null)
+  const [goldenDialogOpen, setGoldenDialogOpen] = useState(false)
+  const [goldenDismissed, setGoldenDismissed] = useState(false)
+  const [simDialogOpen, setSimDialogOpen] = useState(false)
+  const [simDismissed, setSimDismissed] = useState(false)
+  const [hwswDialogOpen, setHwswDialogOpen] = useState(false)
+  const [hwswDismissed, setHwswDismissed] = useState(false)
+  const [hwswReview, setHwswReview] = useState<HwSwReview | null>(null)
 
   // Background refreshes (live WebSocket events) must NOT swap the page to a
   // spinner, clear action feedback, or reset the file selection — doing so on
@@ -137,12 +166,16 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
       ])
 
       const mergedTask = { ...task, stages: stageList }
-      setDetail(mergedTask)
-      setEvents(taskEvents)
-      setArtifacts(taskArtifacts)
-      setDiagnoses(taskDiagnosis)
-      setFiles(workspaceFiles)
-      setSignoff(signoffStatus)
+      // Reference-stable updates. A background refresh every ~2.5 s used to hand
+      // React a brand-new `files` array (~460 entries) even when nothing changed,
+      // so every derived useMemo recomputed and the whole file browser + event log
+      // re-rendered — that churn is what made the page lag during an active run.
+      setDetail((current) => keepIfSame(current, mergedTask))
+      setEvents((current) => keepIfSame(current, taskEvents))
+      setArtifacts((current) => keepIfSame(current, taskArtifacts))
+      setDiagnoses((current) => keepIfSame(current, taskDiagnosis))
+      setFiles((current) => keepIfSame(current, workspaceFiles))
+      setSignoff((current) => keepIfSame(current, signoffStatus))
 
       // Live activity: the log that explains what the CURRENT stage is doing —
       // deep-agent transcripts for LLM stages, tool logs for EDA stages
@@ -153,10 +186,12 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
       const stageLogCandidates: Record<string, string[]> = {
         SPEC_INGEST: ['context/uploads_digest.md'],
         PLAN: ['logs/plan_deep_agent.md'],
+        GOLDEN_GEN: ['logs/golden_gen_deep_agent.md', 'golden/golden_report.md'],
         RTL_GEN: ['logs/rtl_gen_deep_agent.md'],
         RTL_REPAIR: ['logs/rtl_repair_deep_agent.md'],
         TB_GEN: ['logs/tb_gen_deep_agent.md'],
         SIM: ['logs/sim.log'],
+        HW_SW_VERIFY: ['logs/hw_sw_verify.log', 'logs/hw_sw_verify_deep_agent.md'],
         LINT: ['logs/lint.log'],
         SYNTH: ['logs/librelane.log'],
         PNR: ['logs/librelane.log'],
@@ -202,6 +237,19 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
         try {
           const reportFile = await getWorkspaceFile(taskId, 'reports/sim_report.json')
           setSimReport(JSON.parse(reportFile.content) as Record<string, unknown>)
+        } catch {
+          // best-effort
+        }
+      }
+
+      // HW/SW verification evidence feeds both its own tab and the gate dialog.
+      // Served pre-assembled by the API (previews that exist, driver + bench
+      // sources, console) so the tab does not have to rediscover them from the
+      // flat file list.
+      if (paths.has('reports/hw_sw_verify_report.json')) {
+        try {
+          const hwsw = await getHwSwReview(taskId)
+          setHwswReview((current) => keepIfSame(current, hwsw))
         } catch {
           // best-effort
         }
@@ -359,6 +407,103 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
     }
   }
 
+  // GOLDEN_GEN gate — the Python reference model is the definition of correct
+  // for every later stage, so the run stops and asks whether its output is what
+  // the user wanted. "No" is a real answer: it sends the model back for rework
+  // with the reviewer's note instead of stalling the task.
+  const goldenGate = useMemo(
+    () => (detail?.stages ?? []).find((stage) => stage.key === 'golden_gen' && stage.pendingApproval),
+    [detail?.stages],
+  )
+
+  // Pop the review dialog as soon as the gate opens; a manual close is
+  // remembered so live refreshes don't reopen it on top of the user.
+  useEffect(() => {
+    if (goldenGate && !goldenDismissed) {
+      setGoldenDialogOpen(true)
+    }
+    if (!goldenGate) {
+      setGoldenDismissed(false)
+      setGoldenDialogOpen(false)
+    }
+  }, [goldenDismissed, goldenGate])
+
+  // SIM gate — the last point where the design is cheap to change. Everything
+  // after it spends hours hardening whatever the RTL already does, so the run
+  // stops and asks whether the chip's output matches the golden model's.
+  const simGate = useMemo(
+    () => (detail?.stages ?? []).find((stage) => stage.key === 'sim' && stage.pendingApproval),
+    [detail?.stages],
+  )
+
+  useEffect(() => {
+    if (simGate && !simDismissed) {
+      setSimDialogOpen(true)
+    }
+    if (!simGate) {
+      setSimDismissed(false)
+      setSimDialogOpen(false)
+    }
+  }, [simDismissed, simGate])
+
+  // HW/SW verification gate — the chip has been driven through its real host
+  // interface with a real input. This is the last gate before hardening, and
+  // the only one that asks about the whole hardware+software stack rather than
+  // about the RTL alone.
+  const hwswGate = useMemo(
+    () => (detail?.stages ?? []).find((stage) => stage.key === 'hw_sw_verify' && stage.pendingApproval),
+    [detail?.stages],
+  )
+
+  useEffect(() => {
+    if (hwswGate && !hwswDismissed) {
+      setHwswDialogOpen(true)
+    }
+    if (!hwswGate) {
+      setHwswDismissed(false)
+      setHwswDialogOpen(false)
+    }
+  }, [hwswDismissed, hwswGate])
+
+  async function handleRejectHwSw(comment: string) {
+    if (!taskId) {
+      return
+    }
+    setActionError(null)
+    await submitStageApproval(taskId, 'hw_sw_verify', {
+      decision: 'reject',
+      comment: comment || 'The chip returned the wrong result for this input.',
+    })
+    setActionMessage('Correction sent — the agents are debugging the chip against your input.')
+    setRefreshKey((value) => value + 1)
+  }
+
+  async function handleRejectSim(comment: string) {
+    if (!taskId) {
+      return
+    }
+    setActionError(null)
+    await submitStageApproval(taskId, 'sim', {
+      decision: 'reject',
+      comment: comment || 'The simulated chip output is not correct.',
+    })
+    setActionMessage('Correction sent — the design is being reworked.')
+    setRefreshKey((value) => value + 1)
+  }
+
+  async function handleRejectGolden(comment: string) {
+    if (!taskId) {
+      return
+    }
+    setActionError(null)
+    await submitStageApproval(taskId, 'golden_gen', {
+      decision: 'reject',
+      comment: comment || 'The golden model output is not correct.',
+    })
+    setActionMessage('Correction sent — the golden model is being rebuilt.')
+    setRefreshKey((value) => value + 1)
+  }
+
   // Diagnoses accumulate per stage — the LATEST one describes the current
   // state of the run (showing [0] left a stale SPEC_INGEST note on screen).
   const latestDiagnosis = useMemo(() => (diagnoses.length ? diagnoses[diagnoses.length - 1] : undefined), [diagnoses])
@@ -378,7 +523,7 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
       list.push(file)
       groups.set(folder, list)
     }
-    const order = ['rtl', 'tb', 'waves', 'gds', 'reports', 'spec', 'plans', 'context', 'sw', 'logs', 'exports', '(root)']
+    const order = ['golden', 'rtl', 'tb', 'waves', 'gds', 'reports', 'spec', 'plans', 'context', 'sw', 'logs', 'exports', '(root)']
     return [...groups.entries()].sort(([a], [b]) => {
       const ia = order.indexOf(a) === -1 ? order.length : order.indexOf(a)
       const ib = order.indexOf(b) === -1 ? order.length : order.indexOf(b)
@@ -554,7 +699,11 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
             </div>
           </CardHeader>
           <CardContent className='space-y-5'>
-            <div className='grid gap-3 md:grid-cols-5'>
+            {/* Column count must follow the CONTAINER, not the viewport: this card
+                sits in an `xl:grid-cols-2` row, so `md:grid-cols-5` gave each metric
+                ~100px and shattered words mid-letter ("SYNT H", "47 linked output s").
+                auto-fit tracks wrap to fewer columns when the container is narrow. */}
+            <div className='grid gap-3 [grid-template-columns:repeat(auto-fit,minmax(11rem,1fr))]'>
               <MetricCard label='Current stage' value={detail.currentStage} icon={Wrench} />
               <MetricCard label='ETA' value={detail.etaLabel} icon={Clock3} />
               <MetricCard label='Owner' value={detail.ownerName} icon={Bot} />
@@ -570,7 +719,7 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
                 </Badge>
               </div>
 
-              <div className='mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5'>
+              <div className='mt-5 grid gap-3 [grid-template-columns:repeat(auto-fit,minmax(9rem,1fr))]'>
                 {detail.stages.map((stage) => (
                   <div key={stage.key} className='min-w-0 rounded-2xl bg-white p-3 shadow-sm ring-1 ring-slate-100'>
                     <div className='flex items-center justify-between gap-2'>
@@ -623,7 +772,11 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
                     <AlertCircle className='h-4 w-4' />
                     <p className='font-semibold'>{latestDiagnosis.title}</p>
                   </div>
-                  <p className='mt-3 text-sm leading-6 text-amber-800/80'>{latestDiagnosis.detail}</p>
+                  {/* Amber carries the WARNING signal in the icon and title; the
+                      body is long-form prose, so it reads in neutral high-
+                      contrast text. Amber-on-amber was legible as a colour cue
+                      but poor as something to actually read. */}
+                  <p className='mt-3 text-sm leading-6 text-slate-800'>{latestDiagnosis.detail}</p>
                 </div>
                 <div className='space-y-3 rounded-2xl border border-slate-200 p-4'>
                   <SummaryRow icon={Bot} title='Suggested by' value={latestDiagnosis.suggestedBy} />
@@ -648,15 +801,43 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
                   <div className='space-y-3'>
                     <p className='text-sm leading-6 text-slate-500'>
                       <span className='font-semibold text-amber-600'>{situation.stage.label} is waiting for your review.</span>{' '}
-                      Inspect the artifacts and reports, then release the gate.
+                      {situation.stage.key === 'golden_gen'
+                        ? 'The Python golden model is built and tested — confirm its output is what you wanted before the RTL is generated from it.'
+                        : situation.stage.key === 'hw_sw_verify'
+                          ? 'The chip was driven through its real host interface with your input — confirm what it sent back is correct, or upload a different input and verify again.'
+                          : 'Inspect the artifacts and reports, then release the gate.'}
                     </p>
-                    <Button
-                      onClick={() => void handleApproveGate((situation.stage as TaskStage).key)}
-                      className='h-12 w-full rounded-2xl bg-slate-900 hover:bg-slate-800'
-                    >
-                      <ShieldCheck className='mr-2 h-4 w-4' />
-                      Approve {situation.stage.label} gate
-                    </Button>
+                    {situation.stage.key === 'golden_gen' ? (
+                      <Button
+                        onClick={() => {
+                          setGoldenDismissed(false)
+                          setGoldenDialogOpen(true)
+                        }}
+                        className='h-12 w-full rounded-2xl bg-amber-600 hover:bg-amber-700'
+                      >
+                        <FlaskConical className='mr-2 h-4 w-4' />
+                        Review golden model output
+                      </Button>
+                    ) : situation.stage.key === 'hw_sw_verify' ? (
+                      <Button
+                        onClick={() => {
+                          setHwswDismissed(false)
+                          setHwswDialogOpen(true)
+                        }}
+                        className='h-12 w-full rounded-2xl bg-violet-600 hover:bg-violet-700'
+                      >
+                        <Cpu className='mr-2 h-4 w-4' />
+                        Review HW/SW verification
+                      </Button>
+                    ) : (
+                      <Button
+                        onClick={() => void handleApproveGate((situation.stage as TaskStage).key)}
+                        className='h-12 w-full rounded-2xl bg-slate-900 hover:bg-slate-800'
+                      >
+                        <ShieldCheck className='mr-2 h-4 w-4' />
+                        Approve {situation.stage.label} gate
+                      </Button>
+                    )}
                   </div>
                 ) : situation.kind === 'running' && situation.stage ? (
                   <div className='flex items-center gap-3 rounded-2xl border border-indigo-100 bg-indigo-50 p-4 text-sm leading-6 text-indigo-700'>
@@ -744,10 +925,11 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
         </Card>
       </div>
 
-      <div className='grid h-auto w-full grid-cols-4 rounded-2xl bg-slate-100 p-1'>
+      <div className='grid h-auto w-full grid-cols-5 rounded-2xl bg-slate-100 p-1'>
         <TabLink to={`/tasks/${taskId}`} label='Runbook' active={tab === 'runbook'} />
         <TabLink to={`/tasks/${taskId}/rtl`} label='RTL Workspace' active={tab === 'rtl'} />
         <TabLink to={`/tasks/${taskId}/sim`} label='Simulation' active={tab === 'sim'} />
+        <TabLink to={`/tasks/${taskId}/hwsw`} label='HW/SW Verification' active={tab === 'hwsw'} />
         <TabLink to={`/tasks/${taskId}/signoff`} label='Signoff & Delivery' active={tab === 'signoff'} />
       </div>
 
@@ -1102,6 +1284,233 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
         </div>
       ) : null}
 
+      {tab === 'hwsw' ? (
+        hwswReview?.available ? (
+          <div className='space-y-5'>
+            <div className='grid gap-5 xl:grid-cols-[1.6fr_1fr]'>
+              <Card className='rounded-3xl border-slate-200 shadow-none'>
+                <CardHeader>
+                  <CardTitle className='text-xl'>Chip response</CardTitle>
+                  <CardDescription>
+                    What came back when the host driver sent{' '}
+                    <span className='font-medium text-slate-700'>{hwswReview.report?.input?.name ?? 'the input'}</span>{' '}
+                    through the chip's real interface, next to what the Python golden model computes
+                    for the same input.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className='space-y-3'>
+                  {hwswReview.previews.filter((preview) => preview.role !== 'waveform').length ? (
+                    <div className='grid gap-3 sm:grid-cols-2'>
+                      {hwswReview.previews
+                        .filter((preview) => preview.role !== 'waveform')
+                        .map((preview) => (
+                          <a
+                            key={preview.path}
+                            href={workspaceRawUrl(taskId, preview.path)}
+                            target='_blank'
+                            rel='noreferrer'
+                            className='rounded-2xl border border-slate-200 bg-white p-3'
+                          >
+                            <p className='mb-2 text-xs font-semibold text-slate-600'>{preview.label}</p>
+                            <img
+                              src={workspaceRawUrl(taskId, preview.path)}
+                              alt={preview.label}
+                              className='mx-auto max-h-64 rounded-xl'
+                            />
+                            <p className='mt-2 truncate text-[11px] text-slate-400'>{preview.path}</p>
+                          </a>
+                        ))}
+                    </div>
+                  ) : (
+                    <EmptyState
+                      title='No decoded output yet'
+                      detail='The HW/SW verification stage renders hwsw/chip_output.png once the chip has answered.'
+                    />
+                  )}
+                </CardContent>
+              </Card>
+
+              <Card className='rounded-3xl border-slate-200 shadow-none'>
+                <CardHeader>
+                  <CardTitle className='text-xl'>Verdict</CardTitle>
+                  <CardDescription>Decoded chip bytes compared against the golden model.</CardDescription>
+                </CardHeader>
+                <CardContent className='space-y-4'>
+                  <div
+                    className={`flex items-center gap-3 rounded-2xl border p-4 ${
+                      hwswReview.hasMatch && hwswReview.match
+                        ? 'border-emerald-100 bg-emerald-50 text-emerald-700'
+                        : hwswReview.hasMatch
+                          ? 'border-rose-100 bg-rose-50 text-rose-700'
+                          : 'border-slate-200 bg-slate-50 text-slate-500'
+                    }`}
+                  >
+                    {hwswReview.hasMatch && hwswReview.match ? (
+                      <CheckCircle2 className='h-6 w-6' />
+                    ) : hwswReview.hasMatch ? (
+                      <XCircle className='h-6 w-6' />
+                    ) : (
+                      <Clock3 className='h-6 w-6' />
+                    )}
+                    <div>
+                      <p className='font-semibold'>
+                        {hwswReview.hasMatch && hwswReview.match
+                          ? 'CHIP OUTPUT MATCHES'
+                          : hwswReview.hasMatch
+                            ? 'CHIP OUTPUT DIFFERS'
+                            : 'Unchecked — your judgement'}
+                      </p>
+                      <p className='text-sm opacity-80'>{hwswReview.report?.summary}</p>
+                    </div>
+                  </div>
+                  {hwswReview.report?.interface?.description ? (
+                    <div className='rounded-2xl border border-slate-200 p-4'>
+                      <p className='text-xs uppercase tracking-widest text-slate-400'>Detected interface</p>
+                      <p className='mt-2 text-sm leading-6 text-slate-600'>
+                        {hwswReview.report.interface.description}
+                      </p>
+                    </div>
+                  ) : null}
+                  {hwswReview.report?.metrics && Object.keys(hwswReview.report.metrics).length ? (
+                    <div className='overflow-x-auto rounded-2xl border border-slate-200'>
+                      <table className='w-full text-left text-sm'>
+                        <tbody>
+                          {Object.entries(hwswReview.report.metrics).map(([key, value]) => (
+                            <tr key={key} className='border-b border-slate-100 last:border-0'>
+                              <td className='px-4 py-2.5 font-medium text-slate-700'>{key}</td>
+                              <td className='px-4 py-2.5 text-slate-600'>{value === null ? '—' : String(value)}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  ) : null}
+                  <Button
+                    onClick={() => {
+                      setHwswDismissed(false)
+                      setHwswDialogOpen(true)
+                    }}
+                    className='h-12 w-full rounded-2xl bg-violet-600 hover:bg-violet-700'
+                  >
+                    <Paperclip className='mr-2 h-4 w-4' />
+                    Upload an input & verify again
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+
+            <Card className='rounded-3xl border-slate-200 shadow-none'>
+              <CardHeader>
+                <CardTitle className='text-xl'>Interface waveform</CardTitle>
+                <CardDescription>
+                  Activity on the chip's data lines during the run, windowed so individual frames are
+                  readable (hwsw/hwsw.vcd).
+                </CardDescription>
+              </CardHeader>
+              <CardContent className='space-y-3'>
+                {hwswReview.previews.filter((preview) => preview.role === 'waveform').length ? (
+                  hwswReview.previews
+                    .filter((preview) => preview.role === 'waveform')
+                    .map((preview) => (
+                      <a key={preview.path} href={workspaceRawUrl(taskId, preview.path)} target='_blank' rel='noreferrer'>
+                        <img
+                          src={workspaceRawUrl(taskId, preview.path)}
+                          alt={preview.label}
+                          className='w-full rounded-2xl border border-slate-200 bg-white'
+                        />
+                      </a>
+                    ))
+                ) : (
+                  <EmptyState
+                    title='No interface waveform yet'
+                    detail='The stage renders hwsw/waveform.png from the interface dump once the co-simulation runs.'
+                  />
+                )}
+              </CardContent>
+            </Card>
+
+            <Card className='rounded-3xl border-slate-200 shadow-none'>
+              <CardHeader>
+                <CardTitle className='text-xl'>Generated interface code</CardTitle>
+                <CardDescription>
+                  The two halves of the bridge: the Python host driver that speaks to the chip, and
+                  the Verilog interface bench that carries its bytes onto the DUT's pins.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className='space-y-4'>
+                {hwswReview.sources.length ? (
+                  hwswReview.sources.map((source) => (
+                    <div key={source.path} className='overflow-hidden rounded-3xl border border-slate-200'>
+                      <div className='flex items-center gap-2 border-b border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600'>
+                        <FileCode2 className='h-4 w-4 shrink-0' />
+                        <span className='font-medium'>{source.label}</span>
+                        <code className='ml-auto min-w-0 truncate text-xs text-slate-400'>{source.path}</code>
+                      </div>
+                      <ScrollArea className='h-80 bg-slate-950'>
+                        <pre className='whitespace-pre p-4 text-xs leading-6 text-slate-300'>{source.content}</pre>
+                      </ScrollArea>
+                    </div>
+                  ))
+                ) : (
+                  <EmptyState
+                    title='No interface code yet'
+                    detail='sw/hwsw/host_driver.py and tb/hwsw/*_hwsw_tb.v appear once the stage has run.'
+                  />
+                )}
+              </CardContent>
+            </Card>
+
+            <Card className='rounded-3xl border-slate-200 shadow-none'>
+              <CardHeader>
+                <CardTitle className='text-xl'>Co-simulation console</CardTitle>
+                <CardDescription>
+                  Everything the run printed — encoding, compilation, the transfer itself and the
+                  decode (logs/hw_sw_verify.log).
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {hwswReview.consoleLog ? (
+                  <div className='overflow-hidden rounded-3xl border border-slate-200 bg-slate-950'>
+                    <ScrollArea className='h-72'>
+                      <pre className='whitespace-pre-wrap p-4 text-xs leading-6 text-slate-300'>
+                        {hwswReview.consoleLog}
+                      </pre>
+                    </ScrollArea>
+                  </div>
+                ) : (
+                  <EmptyState title='No console output yet' detail='logs/hw_sw_verify.log appears after the stage runs.' />
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        ) : (
+          <Card className='rounded-3xl border-slate-200 shadow-none'>
+            <CardHeader>
+              <CardTitle className='text-xl'>HW/SW verification has not run yet</CardTitle>
+              <CardDescription>
+                This stage drives the chip the way software will: a generated Python host driver
+                encodes an input you choose into the frames the top-level RTL speaks, a generated
+                Verilog interface bench replays them against the design, and the driver decodes what
+                comes back. It runs automatically after SIM is approved — or start it now by
+                uploading an input.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button
+                onClick={() => {
+                  setHwswDismissed(false)
+                  setHwswDialogOpen(true)
+                }}
+                className='h-12 rounded-2xl bg-violet-600 hover:bg-violet-700'
+              >
+                <Paperclip className='mr-2 h-4 w-4' />
+                Upload an input & verify
+              </Button>
+            </CardContent>
+          </Card>
+        )
+      ) : null}
+
       {tab === 'signoff' ? (
         signoff ? (
           <div className='space-y-5'>
@@ -1239,6 +1648,52 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
           <EmptyState title='No signoff status available' detail='The backend has not returned signoff data for this task yet.' />
         )
       ) : null}
+
+      <GoldenReviewDialog
+        taskId={taskId}
+        open={goldenDialogOpen}
+        onOpenChange={(next) => {
+          setGoldenDialogOpen(next)
+          if (!next) {
+            setGoldenDismissed(true)
+          }
+        }}
+        onApprove={() => handleApproveGate('golden_gen')}
+        onReject={handleRejectGolden}
+        refreshKey={refreshKey}
+      />
+
+      <SimReviewDialog
+        taskId={taskId}
+        open={simDialogOpen}
+        onOpenChange={(next) => {
+          setSimDialogOpen(next)
+          if (!next) {
+            setSimDismissed(true)
+          }
+        }}
+        onApprove={() => handleApproveGate('sim')}
+        onReject={handleRejectSim}
+        refreshKey={refreshKey}
+      />
+
+      <HwSwReviewDialog
+        taskId={taskId}
+        open={hwswDialogOpen}
+        onOpenChange={(next) => {
+          setHwswDialogOpen(next)
+          if (!next) {
+            setHwswDismissed(true)
+          }
+        }}
+        onApprove={() => handleApproveGate('hw_sw_verify')}
+        onReject={handleRejectHwSw}
+        onRerun={() => {
+          setActionMessage('Verification queued — the chip is being driven with your input.')
+          setRefreshKey((value) => value + 1)
+        }}
+        refreshKey={refreshKey}
+      />
     </div>
   )
 }

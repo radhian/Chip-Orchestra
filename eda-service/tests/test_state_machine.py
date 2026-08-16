@@ -70,3 +70,56 @@ async def test_process_job_transitions_from_queued_to_failed(tmp_path: Path) -> 
 
     logs = await redis_client.lrange("eda:job:job-2:logs", 0, -1)
     assert any("Job failed: toolchain exploded" in line for line in logs)
+
+
+@pytest.mark.asyncio
+async def test_a_stage_that_reported_errors_is_not_completed(tmp_path: Path) -> None:
+    """A runner that returns normally but recorded hard errors has NOT done its
+    job. Reporting COMPLETED let the flow march past a hardening run that timed
+    out and produced no GDS — the run could then reach EXPORT with no layout."""
+    redis_client = fakeredis.aioredis.FakeRedis(decode_responses=True)
+    manager = EDAJobManager(database_url=f"sqlite:///{tmp_path / 'eda-errs.db'}",
+                            redis_client=redis_client)
+    manager.create_tables()
+    manager.create_job(job_id="job-3", task_id="task-3", stage="SYNTH")
+
+    fake_report = SimReport(top="nano_cgra_sobel_top")
+    fake_report.summary = "LibreLane hardening did not produce a GDS."
+    fake_report.errors = ["hardening timeout", "no GDS produced"]
+
+    with patch("jobs.manager.asyncio.sleep", new=AsyncMock(side_effect=_fast_sleep)), patch(
+        "jobs.manager.run_stage", return_value=fake_report,
+    ):
+        await manager.process_job("job-3")
+
+    job = manager.get_job("job-3")
+    assert job is not None
+    assert job.status == "FAILED"
+    assert "hardening timeout" in job.error
+    # The report must still be persisted — that is where the reason lives.
+    assert "did not produce a GDS" in job.report_json
+
+    logs = await redis_client.lrange("eda:job:job-3:logs", 0, -1)
+    assert any("SYNTH stage failed" in line for line in logs)
+
+
+@pytest.mark.asyncio
+async def test_warnings_alone_do_not_fail_a_stage(tmp_path: Path) -> None:
+    redis_client = fakeredis.aioredis.FakeRedis(decode_responses=True)
+    manager = EDAJobManager(database_url=f"sqlite:///{tmp_path / 'eda-warn.db'}",
+                            redis_client=redis_client)
+    manager.create_tables()
+    manager.create_job(job_id="job-4", task_id="task-4", stage="SYNTH")
+
+    fake_report = SimReport(top="nano_cgra_sobel_top")
+    fake_report.summary = "hardened"
+    fake_report.warnings = ["requested top module ... is not declared in rtl/"]
+
+    with patch("jobs.manager.asyncio.sleep", new=AsyncMock(side_effect=_fast_sleep)), patch(
+        "jobs.manager.run_stage", return_value=fake_report,
+    ):
+        await manager.process_job("job-4")
+
+    job = manager.get_job("job-4")
+    assert job is not None
+    assert job.status == "COMPLETED"
