@@ -192,6 +192,65 @@ func TestApproveStageReleasesGateAndAdvancesDownstream(t *testing.T) {
 	assert.Equal(t, models.TaskStatusCompleted, task.Status)
 }
 
+// HW/SW verification sits BETWEEN simulation and hardening: it is the last
+// stage that can still change the design cheaply, so nothing downstream may run
+// until a human has accepted what the chip sent back.
+func TestHwSwVerifyGatesHardening(t *testing.T) {
+	h := newSchedulerHarness(t)
+	defer h.Close()
+
+	defs := map[string]StageDefinition{}
+	order := map[string]int{}
+	for i, def := range h.service.Definitions() {
+		defs[def.Name] = def
+		order[def.Name] = i
+	}
+
+	stage, ok := defs["HW_SW_VERIFY"]
+	require.True(t, ok, "HW_SW_VERIFY must be part of the pipeline")
+	assert.Equal(t, []string{"SIM"}, stage.DependsOn)
+	assert.True(t, stage.RequiresApproval, "the whole point of the stage is the human check")
+	assert.Equal(t, []string{"HW_SW_VERIFY"}, defs["LINT"].DependsOn,
+		"hardening must not start on a design whose hardware/software verification is unreviewed")
+	assert.Greater(t, order["HW_SW_VERIFY"], order["SIM"])
+	assert.Less(t, order["HW_SW_VERIFY"], order["SYNTH"])
+	assert.Contains(t, reviewGateDetail("HW_SW_VERIFY"), "host interface",
+		"each gate must describe what IT is asking, not the golden-model gate's question")
+}
+
+// A task created before a stage existed must still be able to run it — without
+// this, adding a stage to the DAG could only ever affect brand-new tasks.
+func TestEnsureStagesBackfillsAndRealignsExistingTasks(t *testing.T) {
+	h := newSchedulerHarness(t)
+	defer h.Close()
+
+	taskID := uuid.NewString()
+	h.seedTask(taskID, models.TaskStatusCompleted, "EXPORT")
+	h.seedStages(taskID,
+		stageSeed{Name: "SIM", Status: models.StageStatusReleased},
+		// Seeded with the OLD edge (LINT used to hang off SIM directly).
+		stageSeed{Name: "LINT", Status: models.StageStatusSucceeded, DependsOn: "SIM"},
+		stageSeed{Name: "EXPORT", Status: models.StageStatusSucceeded},
+	)
+
+	require.NoError(t, h.service.EnsureStages(context.Background(), taskID))
+
+	added := h.mustStage(taskID, "HW_SW_VERIFY")
+	assert.Equal(t, models.StageStatusNotStarted, added.Status)
+	assert.Equal(t, "SIM", added.DependsOn)
+	assert.Equal(t, "HW_SW_VERIFY", h.mustStage(taskID, "LINT").DependsOn,
+		"an existing stage's dependencies must be realigned with the current DAG")
+	// Ordering follows the definitions so the timeline reads in flow order.
+	assert.Less(t, h.mustStage(taskID, "SIM").SortOrder, added.SortOrder)
+	assert.Less(t, added.SortOrder, h.mustStage(taskID, "LINT").SortOrder)
+
+	// Idempotent: a second pass must not duplicate the row.
+	require.NoError(t, h.service.EnsureStages(context.Background(), taskID))
+	var rows []models.Stage
+	require.NoError(t, h.db.Where("task_id = ? AND name = ?", taskID, "HW_SW_VERIFY").Find(&rows).Error)
+	assert.Len(t, rows, 1)
+}
+
 type schedulerHarness struct {
 	t           *testing.T
 	db          *gorm.DB

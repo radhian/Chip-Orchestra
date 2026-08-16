@@ -84,10 +84,22 @@ func NewService(db *gorm.DB, redisClient *redis.Client, agent *dispatcher.Client
 			// output matches the golden model's desired output before the flow
 			// commits to hardening it.
 			{Name: "SIM", DependsOn: []string{"RTL_GEN", "TB_GEN"}, Kind: "eda", Gated: true, RequiresApproval: true},
+			// HW_SW_VERIFY drives the chip the way REAL SOFTWARE will: a Python
+			// host driver encodes a user-supplied input (an image, a data file)
+			// into the exact wire format the top-level RTL speaks (UART frames,
+			// a parallel handshake, …), a generated Verilog interface bench
+			// replays those bits against the DUT, and the driver decodes the
+			// chip's response back into an artifact a human can look at. SIM
+			// proves the RTL matches the golden model on the CANONICAL input;
+			// this proves the whole hardware/software stack works on an input
+			// the user chose. Human-gated for the same reason SIM is — it sits
+			// before hardening, where the design is still cheap to change.
+			{Name: "HW_SW_VERIFY", DependsOn: []string{"SIM"}, Kind: "agent", Gated: true, RequiresApproval: true},
 			// LINT runs only AFTER the simulation passes — a design that doesn't
 			// even simulate correctly has no business being style-checked yet
-			// (GarudaChip order: generate → tb → simulate → lint → harden).
-			{Name: "LINT", DependsOn: []string{"SIM"}, Kind: "eda"},
+			// (GarudaChip order: generate → tb → simulate → hw/sw verify → lint
+			// → harden).
+			{Name: "LINT", DependsOn: []string{"HW_SW_VERIFY"}, Kind: "eda"},
 			{Name: "RTL_REPAIR", DependsOn: []string{"SIM", "LINT"}, Kind: "agent"},
 			{Name: "SYNTH", DependsOn: []string{"RTL_REPAIR"}, Kind: "eda", Gated: true},
 			{Name: "PNR", DependsOn: []string{"SYNTH"}, Kind: "eda"},
@@ -365,7 +377,7 @@ func (s *Service) dispatchStage(ctx context.Context, taskID, stageID string) {
 		event := map[string]any{"type": "stage.updated", "task_id": taskID, "stage": stage.Name, "status": stage.Status, "progress": 100, "timestamp": nowDone.Format(time.RFC3339)}
 		if def.RequiresApproval {
 			event["title"] = fmt.Sprintf("%s needs your review", stage.Name)
-			event["detail"] = "The golden model is built and its tests pass. Check the output shown in the review dialog: approve it to start RTL generation, or reject it with a correction and the model is rebuilt."
+			event["detail"] = reviewGateDetail(stage.Name)
 			event["tone"] = "warning"
 			if img := s.stageImage(taskID, stage.Name); img != "" {
 				event["image"] = img
@@ -531,7 +543,7 @@ func (s *Service) pollEDARun(ctx context.Context, taskID, stageID, jobID string)
 			if edaDef.RequiresApproval {
 				event["type"] = "stage.updated"
 				event["title"] = fmt.Sprintf("%s needs your review", stage.Name)
-				event["detail"] = "The chip has been simulated against the approved golden model. Check the desired-vs-actual output in the review dialog: approve it to start hardening, or reject it with a correction."
+				event["detail"] = reviewGateDetail(stage.Name)
 				event["tone"] = "warning"
 				if img := s.stageImage(taskID, stage.Name); img != "" {
 					event["image"] = img
@@ -625,6 +637,68 @@ func (s *Service) ApproveStage(ctx context.Context, taskID, stageName string) er
 		"tone":   "success", "timestamp": time.Now().UTC().Format(time.RFC3339),
 	})
 	return s.evaluateTask(ctx, taskID)
+}
+
+// reviewGateCopy says WHAT each human gate is actually asking. Every gate used
+// to print the golden-model wording ("the golden model is built and its tests
+// pass") regardless of which stage parked, so a reviewer at the SIM or HW/SW
+// gate was told to approve something the stage had not done.
+var reviewGateCopy = map[string]string{
+	"GOLDEN_GEN": "The golden model is built and its tests pass. Check the output shown in the review dialog: approve it to start RTL generation, or reject it with a correction and the model is rebuilt.",
+	"SIM":        "The chip has been simulated against the approved golden model. Check the desired-vs-actual output in the review dialog: approve it to start hardening, or reject it with a correction.",
+	"HW_SW_VERIFY": "The chip was driven end-to-end through its real host interface: the Python driver encoded your input, the interface testbench replayed it against the RTL, and the driver decoded what came back. " +
+		"Check the decoded output in the review dialog — upload a different input to re-verify, approve it to continue to hardening, or reject it with a correction.",
+}
+
+func reviewGateDetail(stageName string) string {
+	if copy, ok := reviewGateCopy[strings.ToUpper(stageName)]; ok {
+		return copy
+	}
+	return "This stage finished and is waiting for your review — inspect its output in the review dialog, then approve or reject it."
+}
+
+// EnsureStages backfills stage rows a task is missing because it was created
+// before the stage existed in the DAG, and resyncs every row's dependency list
+// and ordering with the current definitions. Without it, adding a stage to the
+// pipeline would only ever affect NEW tasks — an existing run could never be
+// re-verified through it. Idempotent, and a no-op for an up-to-date task.
+func (s *Service) EnsureStages(ctx context.Context, taskID string) error {
+	var stages []models.Stage
+	if err := s.db.WithContext(ctx).Where("task_id = ?", taskID).Find(&stages).Error; err != nil {
+		return err
+	}
+	if len(stages) == 0 {
+		return nil // not a real task (or its stages were never created) — nothing to align
+	}
+	existing := make(map[string]*models.Stage, len(stages))
+	for i := range stages {
+		existing[stages[i].Name] = &stages[i]
+	}
+	for idx, def := range s.stageDefs {
+		dependsOn := strings.Join(def.DependsOn, ",")
+		stage, ok := existing[def.Name]
+		if !ok {
+			if err := s.db.WithContext(ctx).Create(&models.Stage{
+				ID:        uuid.NewString(),
+				TaskID:    taskID,
+				Name:      def.Name,
+				Status:    models.StageStatusNotStarted,
+				DependsOn: dependsOn,
+				SortOrder: idx,
+			}).Error; err != nil {
+				return err
+			}
+			continue
+		}
+		if stage.DependsOn == dependsOn && stage.SortOrder == idx {
+			continue
+		}
+		if err := s.db.WithContext(ctx).Model(&models.Stage{}).Where("id = ?", stage.ID).
+			Updates(map[string]any{"depends_on": dependsOn, "sort_order": idx}).Error; err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 // reviewFeedbackKey holds the reviewer's correction for a rejected stage until
@@ -1054,6 +1128,15 @@ func (s *Service) stageImage(taskID, stageName string) string {
 		return scan("waves")
 	case "SIM", "GL_SIM":
 		return scan("waves")
+	case "HW_SW_VERIFY":
+		// The decoded chip response is the thing the reviewer has to look at.
+		for _, candidate := range []string{"hwsw/chip_output.png", "hwsw/expected_output.png",
+			"hwsw/input_preview.png"} {
+			if _, err := os.Stat(filepath.Join(s.taskWorkspace(taskID), filepath.FromSlash(candidate))); err == nil {
+				return candidate
+			}
+		}
+		return scan("hwsw")
 	case "RENDER", "DRC_LVS", "SIGNOFF", "EXPORT":
 		if img := scan("gds"); img != "" {
 			return img
@@ -1130,23 +1213,24 @@ func (s *Service) recordEDAOutputs(ctx context.Context, taskID, stageName string
 // stageActivity says WHAT is being done in a stage, so the execution log
 // narrates the run instead of showing bare status flips.
 var stageActivity = map[string]string{
-	"SPEC_INGEST": "SpecInterpreter is decomposing the design brief and digesting attached images/PDFs (vision).",
-	"PLAN":        "FlowAssistant deep agent is researching references online and writing the execution plan + build contract.",
-	"GOLDEN_GEN":  "GoldenModeler deep agent is building the Python golden model — one model per IP, sub-toplevel and toplevel, a test suite for each, exported vectors and a rendered output for your review — live transcript: logs/golden_gen_deep_agent.md.",
-	"RTL_GEN":     "RTLAuthor deep agent is generating the Verilog IP / sub-toplevel / toplevel modules against the approved golden model (compile-checked on every write) — live transcript: logs/rtl_gen_deep_agent.md.",
-	"RTL_REPAIR":  "RTLAuthor deep agent is repairing compile errors (web fix search + remembered lessons) — live transcript: logs/rtl_repair_deep_agent.md.",
-	"TB_GEN":      "Verifier deep agent is writing one self-checking Verilog testbench per IP, sub-toplevel and toplevel from the golden vectors — live transcript: logs/tb_gen_deep_agent.md.",
-	"SIM":         "EDA service is compiling and simulating the design with the generated testbench (iverilog/vvp).",
-	"LINT":        "EDA service is linting the RTL.",
-	"SYNTH":       "EDA service is synthesizing the design (yosys via LibreLane).",
-	"PNR":         "EDA service is running place & route.",
-	"STA":         "EDA service is running static timing analysis.",
-	"GL_SIM":      "EDA service is running gate-level simulation.",
-	"RENDER":      "EDA service is rendering the GDS layout image.",
-	"DRC_LVS":     "EDA service is running DRC/LVS checks.",
-	"PADRING":     "EDA service is assembling the GF180 chip-level I/O pad ring (GDS/LEF/DEF/SVG deliverables).",
-	"SIGNOFF":     "FlowAssistant is assembling the signoff summary from the EDA evidence.",
-	"EXPORT":      "FlowAssistant is assembling the final report, runbook and PDF.",
+	"SPEC_INGEST":  "SpecInterpreter is decomposing the design brief and digesting attached images/PDFs (vision).",
+	"PLAN":         "FlowAssistant deep agent is researching references online and writing the execution plan + build contract.",
+	"GOLDEN_GEN":   "GoldenModeler deep agent is building the Python golden model — one model per IP, sub-toplevel and toplevel, a test suite for each, exported vectors and a rendered output for your review — live transcript: logs/golden_gen_deep_agent.md.",
+	"RTL_GEN":      "RTLAuthor deep agent is generating the Verilog IP / sub-toplevel / toplevel modules against the approved golden model (compile-checked on every write) — live transcript: logs/rtl_gen_deep_agent.md.",
+	"RTL_REPAIR":   "RTLAuthor deep agent is repairing compile errors (web fix search + remembered lessons) — live transcript: logs/rtl_repair_deep_agent.md.",
+	"TB_GEN":       "Verifier deep agent is writing one self-checking Verilog testbench per IP, sub-toplevel and toplevel from the golden vectors — live transcript: logs/tb_gen_deep_agent.md.",
+	"SIM":          "EDA service is compiling and simulating the design with the generated testbench (iverilog/vvp).",
+	"HW_SW_VERIFY": "Verifier deep agent is building the hardware/software bridge — a Python host driver that speaks the chip's real interface (sw/hwsw/host_driver.py) plus a Verilog interface bench (tb/hwsw/) — then encoding your input, replaying it against the RTL and decoding what the chip sends back.",
+	"LINT":         "EDA service is linting the RTL.",
+	"SYNTH":        "EDA service is synthesizing the design (yosys via LibreLane).",
+	"PNR":          "EDA service is running place & route.",
+	"STA":          "EDA service is running static timing analysis.",
+	"GL_SIM":       "EDA service is running gate-level simulation.",
+	"RENDER":       "EDA service is rendering the GDS layout image.",
+	"DRC_LVS":      "EDA service is running DRC/LVS checks.",
+	"PADRING":      "EDA service is assembling the GF180 chip-level I/O pad ring (GDS/LEF/DEF/SVG deliverables).",
+	"SIGNOFF":      "FlowAssistant is assembling the signoff summary from the EDA evidence.",
+	"EXPORT":       "FlowAssistant is assembling the final report, runbook and PDF.",
 }
 
 // publishEvent enriches every event with the display fields the runbook needs

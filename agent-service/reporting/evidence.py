@@ -47,6 +47,15 @@ class ReportContext:
     # golden/module_math.json: per-module purpose + governing equations (LaTeX
     # bodies) authored by the agent that wrote the golden model.
     module_math: Dict[str, Any] = field(default_factory=dict)
+    # reports/hw_sw_verify_report.json: the HW_SW_VERIFY run — which host
+    # interface was detected, which input was pushed through it, and what the
+    # chip sent back. Kept as its own field rather than read out of
+    # stage_reports so the report never has to guess at the schema.
+    hw_sw: Dict[str, Any] = field(default_factory=dict)
+    # exports/related_work.json: published work the EXPORT stage found and
+    # verified by web search, rendered as the paper's related-work section and
+    # appended to its bibliography.
+    related_work: Dict[str, Any] = field(default_factory=dict)
 
     def as_dict(self) -> Dict[str, Any]:
         from dataclasses import asdict
@@ -205,6 +214,12 @@ def collect_evidence(
             continue
         stage = str(data.get("stage", Path(rel).stem)).upper()
         ctx.stage_reports[stage] = data
+        if stage == "HW_SW_VERIFY":
+            # Its metrics describe a data transfer (bytes sent, mismatches),
+            # not the silicon, so they stay out of the shared metrics table
+            # that feeds the implementation-parameter reporting.
+            ctx.hw_sw = data
+            continue
         if data.get("metrics"):
             ctx.metrics.update({k: v for k, v in data["metrics"].items() if v is not None})
         if data.get("signoff"):
@@ -262,6 +277,12 @@ def collect_evidence(
     if cycles and isinstance(period, (int, float)) and period > 0:
         ctx.timing_profile["latency_us_at_clock"] = round(cycles * float(period) / 1000.0, 3)
         ctx.timing_profile["throughput_per_s"] = round(1e9 / (cycles * float(period)), 1)
+
+    try:
+        related = json.loads((workspace / "exports" / "related_work.json").read_text(errors="replace"))
+        ctx.related_work = related if isinstance(related, dict) else {}
+    except (OSError, json.JSONDecodeError):
+        ctx.related_work = {}
 
     ctx.dataflow = _dataflow_chain(ctx.golden, ctx.top_module)
 

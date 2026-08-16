@@ -20,6 +20,7 @@ STAGE_AGENTS = {
     "RTL_REPAIR": "RTLAuthor",
     "TB_GEN": "Verifier",
     "SIM": "Verifier",
+    "HW_SW_VERIFY": "Verifier",
     "LINT": "Diagnoser",
     "SYNTH": "Diagnoser",
     "PNR": "Diagnoser",

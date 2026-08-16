@@ -79,6 +79,18 @@ def _tex(text) -> str:
     return "".join(out)
 
 
+def _code(text) -> str:
+    """A monospaced identifier that is allowed to WRAP at its own separators.
+
+    ``\\texttt{rtl/nano_cgra_3x3_sobel_accelerator_v4.v}`` is one unbreakable
+    word 34 characters long. In a 95 pt table column it does not wrap — it runs
+    straight through the column rule and prints on top of the neighbouring cell,
+    which is what the module inventory table used to do. Inserting a break
+    opportunity after every separator lets TeX wrap it inside the cell."""
+    escaped = _tex(text)
+    return r"\texttt{" + re.sub(r"(\\_|/|\.|-)", r"\1\\allowbreak{}", escaped) + "}"
+
+
 def _fmt(v) -> str:
     if isinstance(v, bool):
         return "yes" if v else "no"
@@ -123,12 +135,21 @@ def _figure(path: str, caption: str, label: str) -> str:
 
 
 def _rule_table(caption: str, label: str, header: str, colspec: str, rows: List[str]) -> str:
+    """A ruled table sized in FRACTIONS OF THE COLUMN.
+
+    Column widths used to be absolute (``p{95pt}``); combined with tabcolsep and
+    the rules that adds up to more than the text measure on this class, so every
+    table hung a few points into the gutter before its contents even started
+    overflowing. ``\\footnotesize`` and ragged-right cells then keep long
+    identifiers inside their own cell."""
     body = "\n".join(r + r" \\" for r in rows)
     return (
         "\\begin{table}[!t]\n"
         f"\\caption{{{caption}}}\n"
         f"\\label{{{label}}}\n"
         "\\setlength{\\tabcolsep}{3pt}\n"
+        "\\footnotesize\n"
+        "\\centering\n"
         f"\\begin{{tabular}}{{{colspec}}}\n"
         "\\hline\n"
         f"{header} \\\\\n"
@@ -140,9 +161,208 @@ def _rule_table(caption: str, label: str, header: str, colspec: str, rows: List[
     )
 
 
-def generate_latex(ctx: ReportContext, workspace_files: List[str] | None = None) -> str:
+def _cols(*fractions: float) -> str:
+    """Ragged-right ``p`` columns whose widths are fractions of ``\\columnwidth``."""
+    spec = "|".join(r">{\raggedright\arraybackslash}p{" + f"{f:.3f}" + r"\columnwidth}"
+                    for f in fractions)
+    return "|" + spec + "|"
+
+
+def _bibitem(key: str, ref: dict) -> str:
+    """One IEEE-style bibliography entry from a discovered reference.
+
+    Only the fields the search actually produced are printed. An entry padded
+    out with a guessed volume or page range looks more authoritative and is
+    less true, which is the wrong trade in a bibliography."""
+    pieces = []
+    authors = str(ref.get("authors") or "").strip().rstrip(",")
+    if authors:
+        pieces.append(_tex(authors) + ",")
+    pieces.append("``" + _tex(str(ref.get("title")).strip().rstrip(".")) + ",''")
+    venue = str(ref.get("venue") or "").strip().rstrip(".")
+    if venue:
+        pieces.append("\\emph{" + _tex(venue) + "}.")
+    elif ref.get("year"):
+        pieces.append(_tex(ref["year"]) + ".")
+    url = str(ref.get("url") or "").strip()
+    # \url takes its argument almost verbatim: % and # still need escaping, and
+    # a brace or a space in there ends the argument early and derails the rest
+    # of the bibliography. A malformed URL is dropped rather than allowed to
+    # break the compile.
+    if url and not re.search(r"[{}\s\\]", url):
+        pieces.append("[Online]. Available: \\url{"
+                      + url.replace("%", r"\%").replace("#", r"\#") + "}")
+    return f"\\bibitem{{{key}}} " + " ".join(pieces) + "\n"
+
+
+def _hw_sw_section(ctx: ReportContext, has) -> str:
+    """The hardware/software co-verification chapter.
+
+    Simulation answers "does the RTL reproduce the reference on the input we
+    baked into the design?". That is necessary and not sufficient: it says
+    nothing about whether the finished part can be USED. This section documents
+    the run that answers the user's actual question — a host program encoded a
+    file of their choosing into the frames the top-level RTL speaks, an
+    interface bench replayed them against the unmodified DUT, and the host
+    decoded what came back. Returns '' when the stage has not run, so a report
+    never claims a verification that did not happen."""
+    report = getattr(ctx, "hw_sw", {}) or {}
+    if not report or not report.get("completed"):
+        return ""
+    iface = report.get("interface") or {}
+    metrics = report.get("metrics") or {}
+    source = report.get("input") or {}
+    checked = bool(metrics.get("checked"))
+    matched = bool(metrics.get("match"))
+
+    parts: List[str] = [
+        "\\section{Hardware/Software Co-Verification}\n\\label{sec:hwsw}\n"
+        "Section~\\ref{sec:verif} establishes that the RTL reproduces the golden model on "
+        "the canonical stimulus compiled into the design. That is a statement about the "
+        "datapath, not about the finished part: it exercises the device through a testbench "
+        "written for it, with the input already resident in memory. The question a user of "
+        "the chip asks is different --- given a file and the physical interface the device "
+        "actually exposes, does the correct result come back out?\n\n"
+        "This section documents the experiment that answers it. The top-level module's ports "
+        "are read directly from the RTL to determine how the part is addressed; a host "
+        "program encodes an arbitrary user-supplied file into exactly that wire format; a "
+        "generated interface bench replays the resulting bit stream against the "
+        "\\emph{unmodified} device under test at the real frame timing; and the host program "
+        "decodes the device's response and compares it, value for value, against what the "
+        "same Python reference model computes for the same input. Software and hardware are "
+        "therefore exercised as one system, on data that was never part of the design.\n\n"
+    ]
+
+    description = str(iface.get("description") or "").strip()
+    if description:
+        parts.append("\\subsection{Detected Host Interface}\n" + _tex(description) + "\n\n")
+
+    iface_rows = []
+    if iface.get("kind"):
+        iface_rows.append(f"Interface class & {_tex(str(iface['kind']).upper())}")
+    for label, key in (("Clock port", "clock"), ("Reset port", "reset")):
+        if iface.get(key):
+            iface_rows.append(f"{label} & {_code(iface[key])}")
+    for label, key in (("Payload in", "data_in"), ("Payload out", "data_out")):
+        pins = iface.get(key) or []
+        if pins:
+            iface_rows.append(f"{label} & " + ", ".join(_code(p) for p in pins))
+    for label, key in (("Clock frequency (Hz)", "CLK_FREQ"), ("Baud rate", "BAUD_RATE"),
+                       ("Clock cycles per bit", "BAUD_DIV"), ("Sample width (bits)", "DATA_W")):
+        value = (iface.get("constants") or {}).get(key)
+        if value is not None:
+            iface_rows.append(f"{label} & {_fmt(value)}")
+    if iface_rows:
+        parts.append(_rule_table(
+            "Host Interface Read From the Top-Level RTL", "tab:hwswiface",
+            "Property & Value", _cols(0.46, 0.44), iface_rows))
+
+    driver, bench = iface.get("driver"), iface.get("testbench")
+    if driver or bench:
+        parts.append("\\subsection{The Generated Bridge}\n")
+        provenance = str(iface.get("testbench_origin") or "")
+        parts.append(
+            "The software half is " + (_code(driver) if driver else "a generated host driver")
+            + ", which converts the user's file into the device's sample format and geometry, "
+            "runs the reference model on the identical input to obtain the expected response, "
+            "and reassembles the device's reply into a viewable result. The hardware half is "
+            + (_code(bench) if bench else "a generated interface bench")
+            + ", which instantiates the device under test unchanged and carries those bytes "
+            "onto its pins"
+            + (" --- it is derived from the top-level testbench that already passes "
+               "simulation, so the frame format and bit timing are the ones the device is "
+               "known to speak rather than a second interpretation of the specification"
+               if "derived from" in provenance else "")
+            + ". Neither half may modify the design: this stage measures the chip, it does "
+            "not repair it.\n\n")
+
+    parts.append("\\subsection{Result}\n")
+    name = source.get("name") or source.get("path")
+    if name:
+        parts.append(
+            "The input for the run reported here was " + _code(name) + ", supplied by the "
+            "reviewer and not present anywhere in the design. "
+            + (f"It was encoded into {_fmt(source['bytes_in'])} bytes on the wire"
+               if source.get("bytes_in") else "It was encoded onto the wire")
+            + (f", and the device returned {_fmt(metrics['bytes_received'])} bytes"
+               if metrics.get("bytes_received") is not None else ", and the device replied")
+            + ".\n\n")
+
+    if checked:
+        parts.append(
+            ("Every returned value matches the reference model, so the complete path --- host "
+             "encoding, serial transport, on-chip datapath, serial transport back and host "
+             "decoding --- is correct end to end for this input."
+             if matched else
+             f"{_fmt(metrics.get('mismatches', 0))} returned value(s) differ from the "
+             f"reference model (largest deviation {_fmt(metrics.get('max_abs_diff', 0))}), so "
+             "the system is NOT verified end to end on this input.") + "\n\n")
+    else:
+        parts.append(
+            "No reference output was available for this input, so the decoded response was "
+            "assessed by the reviewer rather than by an automatic comparison.\n\n")
+
+    result_rows = []
+    for label, key in (("Bytes sent to the device", "bytes_sent"),
+                       ("Bytes returned by the device", "bytes_received"),
+                       ("Bytes expected by the model", "bytes_expected"),
+                       ("Mismatching values", "mismatches"),
+                       ("Largest absolute deviation", "max_abs_diff")):
+        if metrics.get(key) is not None:
+            result_rows.append(f"{label} & {_fmt(metrics[key])}")
+    if metrics.get("golden_source"):
+        result_rows.append("Reference entry point & " + _code(metrics["golden_source"]))
+    result_rows.append("Verdict & " + ("match" if checked and matched
+                                       else "mismatch" if checked else "reviewed by hand"))
+    parts.append(_rule_table("Hardware/Software Co-Verification Results", "tab:hwsw",
+                             "Quantity & Value", _cols(0.52, 0.38), result_rows))
+
+    for rel, caption, label in (
+        ("hwsw/input_preview.png",
+         "User-supplied input as the host driver encoded it for the device.",
+         "fig:hwswin"),
+        ("hwsw/expected_output.png",
+         "Response the Python reference model computes for that input.",
+         "fig:hwswgold"),
+        ("hwsw/chip_output.png",
+         "Response decoded from the bytes the device actually returned over its own "
+         "interface; co-verification passes only when it equals "
+         "Fig.~\\ref{fig:hwswgold} value-for-value.",
+         "fig:hwswchip"),
+        ("hwsw/waveform.png",
+         "Activity on the device's data pins during the transfer, windowed so individual "
+         "frames are legible.",
+         "fig:hwswwave"),
+    ):
+        if has(rel):
+            parts.append(_figure(rel, caption, label))
+    return "".join(parts)
+
+
+def generate_latex(ctx: ReportContext, workspace_files: List[str] | None = None,
+                   workspace: Optional[Path] = None) -> str:
     files = workspace_files or []
     images = [f for f in files if _IMG_RE.search(f)]
+
+    # Block diagrams drawn from the RTL itself: the chip-level connection
+    # picture and one IP symbol per module. They are typeset into their own
+    # cropped PDF (see reporting.diagrams.compile_figures) and included here as
+    # vector pages, because loading TikZ inside the paper breaks the class's
+    # spot-colour blue. Best-effort — a report is still a report without them.
+    figures: dict = {"preamble": "", "top": "", "symbols": {}}
+    diagram_pages: dict = {}
+    include_page = None
+    if workspace is not None:
+        try:
+            from .diagrams import build_figures, compile_figures
+            from .diagrams import include_page as _include_page
+            figures = build_figures(Path(workspace) / "rtl", ctx.top_module or "")
+            diagram_pages = compile_figures(figures, Path(workspace) / "exports")
+            include_page = _include_page
+        except Exception:  # noqa: BLE001
+            figures, diagram_pages, include_page = {"top": "", "symbols": {}}, {}, None
+    symbols = {name: meta for name, meta in (figures.get("symbols") or {}).items()
+               if name in diagram_pages}
 
     def has(rel: str) -> bool:
         return rel in files or rel in images
@@ -201,7 +421,47 @@ def generate_latex(ctx: ReportContext, workspace_files: List[str] | None = None)
         "\\usepackage{graphicx}\n"
         "\\usepackage{textcomp}\n"
         "\\usepackage{booktabs}\n"
+        "\\usepackage{array}\n"
+        "\\usepackage{ragged2e}\n"
+        # url.sty (not \underline) so a reference URL BREAKS instead of running
+        # off the column — three of the four references in this bibliography
+        # used to print past the right margin.
+        "\\usepackage{url}\n"
+        "\\urlstyle{same}\n"
+        "\\Urlmuskip=0mu plus 1mu\\relax\n"
+        # NOTE: no tikz here on purpose. The block diagrams are compiled into
+        # exports/diagrams.pdf by reporting.diagrams and included as pages —
+        # loading TikZ (and therefore xcolor) in this document conflicts with
+        # the class's color+spotcolor blue and erases every blue heading.
         "\\graphicspath{{./}{../}}\n"
+        # Last-resort protection for the running text: prefer a slightly loose
+        # line to one that sticks into the gutter. Evidence text is full of
+        # long unbreakable identifiers, and the default tolerance simply lets
+        # them overhang.
+        "\\sloppy\n"
+        "\\emergencystretch=1.5em\n"
+        "\\hfuzz=0.5pt\n"
+        # The class's own \@makecaption reads \xfigwd, a length only its
+        # \Figure macro defines, and its long-caption branch sets the text in a
+        # single unbreakable tabular cell. A plain figure (which is what a TikZ
+        # diagram has to be) therefore raised "Undefined control sequence" and
+        # then printed a caption 505 pt wider than the page. This replacement
+        # keeps the IEEE Access look — blue bold "FIGURE n." head, the same
+        # caption fonts — and wraps inside the measure it is actually given, so
+        # it is correct in a one-column figure and in a two-column figure*.
+        "\\makeatletter\n"
+        "\\long\\def\\@makecaption#1#2{%\n"
+        "  \\ifx\\@captype\\@IEEEtablestring%\n"
+        "    \\begin{flushleft}\\vspace*{5pt}%\n"
+        "    {\\color{accessblue}\\tablecapheadfont #1. \\ }%\n"
+        "    {\\raggedright\\tablecapfont #2}%\n"
+        "    \\end{flushleft}\\@IEEEtablecaptionsepspace%\n"
+        "  \\else%\n"
+        "    \\@IEEEfigurecaptionsepspace%\n"
+        "    \\noindent\\parbox{\\hsize}{\\raggedright%\n"
+        "      {\\color{accessblue}\\figcapheadfont #1. \\ }\\figcapfont #2\\par}%\n"
+        "  \\fi}\n"
+        "\\makeatother\n"
         "\\def\\BibTeX{{\\rm B\\kern-.05em{\\sc i\\kern-.025em b}\\kern-.08em\n"
         "    T\\kern-.1667em\\lower.7ex\\hbox{E}\\kern-.125emX}}\n"
         "\\begin{document}\n"
@@ -230,6 +490,14 @@ def generate_latex(ctx: ReportContext, workspace_files: List[str] | None = None)
     )
 
     # ---------------------------------------------------------- introduction
+    # Published work the EXPORT stage found by web search. Only entries that
+    # carry a title survive: a bibliography entry with nothing to look up is
+    # worse than a shorter bibliography.
+    related = getattr(ctx, "related_work", {}) or {}
+    related_refs = [r for r in (related.get("references") or [])
+                    if isinstance(r, dict) and str(r.get("title") or "").strip()][:10]
+    related_keys = {id(r): f"r{i + 1}" for i, r in enumerate(related_refs)}
+
     parts.append(
         "\\section{Introduction}\n\\label{sec:introduction}\n"
         "\\PARstart{C}{hip} Orchestra executes the complete RTL-to-GDSII lifecycle as an "
@@ -243,9 +511,32 @@ def generate_latex(ctx: ReportContext, workspace_files: List[str] | None = None)
         f"The subject of this report was generated from the natural-language brief "
         f"``{brief}''. Section~\\ref{{sec:arch}} describes the generated architecture, "
         "Section~\\ref{sec:verif} the verification methodology and its evidence, "
-        "Section~\\ref{sec:impl} the physical implementation results, and "
+        "Section~\\ref{sec:hwsw} the hardware/software co-verification of the finished "
+        "interface, Section~\\ref{sec:impl} the physical implementation results, and "
         "Section~\\ref{sec:signoff} the sign-off status and known limitations.\n\n"
     )
+
+    # ---------------------------------------------------------- related work
+    if related_refs:
+        parts.append("\\section{Related Work}\n\\label{sec:related}\n")
+        if related.get("summary"):
+            parts.append(_tex(related["summary"]) + "\n\n")
+        # Provenance, stated rather than implied: these entries were located by
+        # automated literature search while the report was being assembled, not
+        # curated by a human. A reader deciding how much weight to give them is
+        # entitled to know which of the two it was.
+        parts.append(
+            "The references in this section were located by automated literature search "
+            "during report generation and are cited from the sources retrieved at that "
+            "time; readers should consult the originals before relying on any comparison "
+            "drawn here.\n\n")
+        for ref in related_refs:
+            relation = str(ref.get("relation") or "").strip()
+            if not relation:
+                continue
+            parts.append(
+                _tex(str(ref.get("title")).strip().rstrip(".")) + "~\\cite{"
+                + related_keys[id(ref)] + "}: " + _tex(relation.rstrip(".")) + ".\n\n")
 
     # ---------------------------------------------------------- architecture
     parts.append("\\section{System Architecture}\n\\label{sec:arch}\n")
@@ -264,11 +555,27 @@ def generate_latex(ctx: ReportContext, workspace_files: List[str] | None = None)
     golden_roles = {str(ip.get("name", "")).lower(): ip
                     for ip in ((ctx.golden or {}).get("ips") or [])
                     if isinstance(ip, dict) and ip.get("name")}
-    mod_rows = [f"\\texttt{{{_tex(f)}}} & {_role_for(f, ctx.top_module, golden_roles)}"
+    mod_rows = [f"{_code(f)} & {_role_for(f, ctx.top_module, golden_roles)}"
                 for f in ctx.rtl_files]
     parts.append(_rule_table("Module and Data-File Inventory", "tab:modules",
-                             "File & Role", "|p{95pt}|p{130pt}|", mod_rows))
-    if has("reports/schematic.png"):
+                             "File & Role", _cols(0.36, 0.54), mod_rows))
+
+    # The chip-level connection diagram, drawn from the instantiations in the
+    # top module. Two columns wide, because a connection diagram squeezed into
+    # one column is a picture of nothing.
+    if diagram_pages.get("__top__") and include_page:
+        parts.append(
+            "\\begin{figure*}[!t]\n\\centering\n"
+            + include_page(diagram_pages["__top__"], r"\textwidth") +
+            "\\caption{Top-level connection diagram of \\texttt{" + top + "}, generated from "
+            "the instantiations and net connectivity in the RTL. Rounded pins are the chip's "
+            "own I/O; each arrow runs from the block that drives a net to the blocks that read "
+            "it and is labelled with the net(s) it carries. Clock and reset reach every block "
+            "and are omitted for clarity.}\n"
+            "\\label{fig:toplevel}\n\\end{figure*}\n\n")
+        parts.append("Fig.~\\ref{fig:toplevel} shows how those modules are wired together at "
+                     "the chip level.\n\n")
+    elif has("reports/schematic.png"):
         parts.append(_figure("reports/schematic.png",
                              "Synthesized netlist structure (Yosys).", "fig:schematic"))
 
@@ -293,13 +600,13 @@ def generate_latex(ctx: ReportContext, workspace_files: List[str] | None = None)
         )
         if g_ips:
             tier_rows = [
-                f"\\texttt{{{_tex(ip.get('name', ''))}}} & {_tex(str(ip.get('tier', 'ip')).upper())}"
+                f"{_code(ip.get('name', ''))} & {_tex(str(ip.get('tier', 'ip')).upper())}"
                 f" & {_tex(ip.get('role', '') or 'Design block')}"
                 for ip in g_ips[:24]
             ]
             parts.append(_rule_table(
                 "Golden Model Block Decomposition (Implemented Module-for-Module in Verilog)",
-                "tab:golden", "Model & Tier & Role", "|p{78pt}|p{34pt}|p{110pt}|", tier_rows))
+                "tab:golden", "Model & Tier & Role", _cols(0.31, 0.15, 0.44), tier_rows))
         if g_tests:
             passed, total = g_tests.get("passed", 0), g_tests.get("total", 0)
             parts.append(
@@ -355,7 +662,14 @@ def generate_latex(ctx: ReportContext, workspace_files: List[str] | None = None)
     sim_rows = [f"{_tex(k)} & {_fmt(m[k])}" for k in sim_keys if k in m]
     if sim_rows:
         parts.append(_rule_table("Functional Verification Results (Simulation and Lint)",
-                                 "tab:verif", "Check & Result", "|p{110pt}|p{110pt}|", sim_rows))
+                                 "tab:verif", "Check & Result", _cols(0.44, 0.46), sim_rows))
+
+    # ------------------------------------------ hardware/software verification
+    # What the HW_SW_VERIFY stage actually did. Simulation proves the RTL
+    # reproduces the reference on the input that was baked into the design;
+    # this section is the evidence for the question a user actually asks, which
+    # is whether the finished part can be USED over its own interface.
+    parts.append(_hw_sw_section(ctx, has))
 
     # -------------------------------------- module descriptions + mathematics
     # Rendered from golden/module_math.json, authored by the agent that wrote
@@ -368,29 +682,80 @@ def generate_latex(ctx: ReportContext, workspace_files: List[str] | None = None)
     def _equations(items) -> str:
         """Equation bodies come from the agent as raw LaTeX and are NOT escaped.
         pdflatex runs without -halt-on-error, so a malformed one degrades to a
-        visible artifact in the PDF instead of taking the whole paper down."""
+        visible artifact in the PDF instead of taking the whole paper down.
+
+        Each body is set inside a shrink-to-fit box. Display math does NOT wrap:
+        an equation wider than the column silently prints over the neighbouring
+        column and off the page edge, which is what happened to every equation
+        here that stated two relations side by side. The box leaves equations
+        that already fit at full size and scales down only the ones that do not.
+        Multi-line environments are passed through untouched, since they must
+        stay at the top level of the display to align."""
         out = []
         for eq in (items or []):
             body = str(eq).strip()
-            if body:
+            if not body:
+                continue
+            if re.search(r"\\begin\{(align|split|gather|multline|eqnarray)", body):
                 out.append("\\begin{equation}\n" + body + "\n\\end{equation}\n")
+                continue
+            out.append(
+                "\\begin{equation}\n"
+                "\\resizebox{\\ifdim\\width>\\columnwidth\\columnwidth\\else\\width\\fi}{!}{$\\displaystyle\n"
+                + body + "\n$}\n\\end{equation}\n")
         return "".join(out)
 
-    if algo or mods:
+    def _symbol_figure(module: str) -> str:
+        """The IP symbol figure for one module, or '' when it has none."""
+        entry = symbols.get(module)
+        if not entry or not include_page or module not in diagram_pages:
+            return ""
+        safe = re.sub(r"[^A-Za-z0-9]", "", module) or "mod"
+        return ("\\begin{figure}[!t]\n\\centering\n" + include_page(diagram_pages[module]) +
+                "\\caption{Interface of \\texttt{" + _tex(module) + "} "
+                "(\\texttt{" + _tex(entry.get("file", "")) + "}): inputs enter on the left, "
+                "outputs leave on the right, bus widths as declared in the RTL.}\n"
+                "\\label{fig:sym" + safe + "}\n\\end{figure}\n\n")
+
+    if algo or mods or symbols:
         parts.append("\\section{Module Descriptions and Governing Equations}\n"
                      "\\label{sec:modules}\n")
+        if symbols:
+            parts.append(
+                "Every module is shown with its interface symbol --- ports, directions and bus "
+                "widths taken straight from the Verilog declaration --- alongside what it "
+                "computes.\n\n")
     if algo.get("summary"):
         parts.append(_tex(algo["summary"]) + "\n\n")
     if algo.get("equations"):
         parts.append(_equations(algo["equations"]))
+    documented = set()
     for mod in mods:
-        parts.append("\\subsection{" + _tex(mod["name"]) + "}\n")
+        name = str(mod["name"])
+        documented.add(name)
+        parts.append("\\subsection{" + _tex(name) + "}\n")
+        parts.append(_symbol_figure(name))
         if mod.get("purpose"):
             parts.append(_tex(mod["purpose"]) + "\n\n")
         if mod.get("io"):
             parts.append("\\textit{Interface:} " + _tex(mod["io"]) + "\n\n")
         if mod.get("equations"):
             parts.append(_equations(mod["equations"]))
+    # A module the mathematics document skipped still exists in the silicon, so
+    # it still gets its symbol and its port list — "every IP" means every IP.
+    for name in sorted(symbols):
+        if name in documented:
+            continue
+        parts.append("\\subsection{" + _tex(name) + "}\n")
+        parts.append(_symbol_figure(name))
+        entry = symbols[name]
+        ports = entry.get("ports") or []
+        inputs = [p["name"] for p in ports if p["dir"] == "input"]
+        outputs = [p["name"] for p in ports if p["dir"] != "input"]
+        parts.append(
+            "Implemented in " + _code(entry.get("file", "")) + ". \\textit{Interface:} "
+            + (", ".join(_code(n) for n in inputs) or "none") + " $\\rightarrow$ "
+            + (", ".join(_code(n) for n in outputs) or "none") + ".\n\n")
 
     # ------------------------------------------------ dataflow + cycle budget
     # "How many cycles does it take, and what path does the data take?" are the
@@ -410,11 +775,11 @@ def generate_latex(ctx: ReportContext, workspace_files: List[str] | None = None)
             "Table~\\ref{tab:dataflow}; the decomposition is the one approved at the "
             "golden-model gate, so the hardware partitioning and the reference "
             "implementation share a structure.\n\n")
-        rows = [f"{_tex(c['name'])} & {_tex((c['tier'] or 'ip').upper())} & "
+        rows = [f"{_code(c['name'])} & {_tex((c['tier'] or 'ip').upper())} & "
                 f"{_tex(c['role'] or '---')}" for c in chain]
         parts.append(_rule_table("Dataflow: Module Chain and Responsibilities",
                                  "tab:dataflow", "Module & Tier & Role",
-                                 "|p{78pt}|p{34pt}|p{108pt}|", rows))
+                                 _cols(0.31, 0.15, 0.44), rows))
 
     if profile:
         cycles = profile.get("clock_cycles")
@@ -436,7 +801,7 @@ def generate_latex(ctx: ReportContext, workspace_files: List[str] | None = None)
                     for key, lbl in labels if profile.get(key) is not None]
         if cyc_rows:
             parts.append(_rule_table("Measured Cycle Budget", "tab:cycles",
-                                     "Quantity & Value", "|p{130pt}|p{90pt}|", cyc_rows))
+                                     "Quantity & Value", _cols(0.52, 0.38), cyc_rows))
         samples = m.get("input_size")
         if cycles and isinstance(samples, (int, float)) and samples:
             total = float(samples) * float(samples)
@@ -467,7 +832,7 @@ def generate_latex(ctx: ReportContext, workspace_files: List[str] | None = None)
     impl_rows = [f"{_tex(k)} & {_fmt(m[k])}" for k in impl_keys if k in m]
     if impl_rows:
         parts.append(_rule_table("Implementation Parameters (LibreLane Metrics)",
-                                 "tab:impl", "Parameter & Value", "|p{110pt}|p{110pt}|", impl_rows))
+                                 "tab:impl", "Parameter & Value", _cols(0.44, 0.46), impl_rows))
     corner_rows = [f"{lbl} & {_fmt(m[k])}"
                    for k, lbl in (("setup_ws_tt_ns", "typical (tt, 25\\,\\textdegree C)"),
                                   ("setup_ws_ss_ns", "slow (ss, 125\\,\\textdegree C)"),
@@ -476,7 +841,7 @@ def generate_latex(ctx: ReportContext, workspace_files: List[str] | None = None)
     if corner_rows:
         parts.append(_rule_table("Setup Slack per PVT Corner (Nominal RC)",
                                  "tab:corners", "Corner & Setup WS (ns)",
-                                 "|p{110pt}|p{110pt}|", corner_rows))
+                                 _cols(0.44, 0.46), corner_rows))
     for rel, cap in (("gds/layout.png", "Routed GDSII layout (KLayout render)."),
                      ("reports/gds.png", "Routed GDSII layout (KLayout render).")):
         if has(rel):
@@ -518,16 +883,19 @@ def generate_latex(ctx: ReportContext, workspace_files: List[str] | None = None)
 
     # ------------------------------------------------------------ references
     parts.append(
+        # \url, not \underline: an underlined URL is one unbreakable word, and
+        # all four of these ran past the right margin of the reference column.
         "\\begin{thebibliography}{00}\n"
         "\\bibitem{b1} The OpenROAD Project. ``OpenROAD --- an open-source, autonomous "
-        "RTL-to-GDSII flow.'' [Online]. Available: \\underline{https://theopenroadproject.org}\n"
+        "RTL-to-GDSII flow.'' [Online]. Available: \\url{https://theopenroadproject.org}\n"
         "\\bibitem{b2} R. T. Edwards \\emph{et al.}, ``Magic VLSI layout tool.'' [Online]. "
-        "Available: \\underline{http://opencircuitdesign.com/magic}\n"
+        "Available: \\url{http://opencircuitdesign.com/magic}\n"
         "\\bibitem{b3} The LibreLane contributors. ``LibreLane: an open infrastructure for "
         "silicon implementation.'' [Online]. Available: "
-        "\\underline{https://github.com/librelane/librelane}\n"
+        "\\url{https://github.com/librelane/librelane}\n"
         "\\bibitem{b4} GlobalFoundries and Google. ``GF180MCU open-source process design "
-        "kit.'' [Online]. Available: \\underline{https://github.com/google/gf180mcu-pdk}\n"
+        "kit.'' [Online]. Available: \\url{https://github.com/google/gf180mcu-pdk}\n"
+        + "".join(_bibitem(related_keys[id(ref)], ref) for ref in related_refs) +
         "\\end{thebibliography}\n\n"
         "\\EOD\n\n"
         "\\end{document}\n"

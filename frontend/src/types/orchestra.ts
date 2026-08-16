@@ -276,3 +276,57 @@ export interface SimReview {
   goldenMatch: boolean
   hasGoldenMatch: boolean
 }
+
+/** One of the two generated halves of the hardware/software bridge — the Python
+ *  host driver or the Verilog interface bench — shown so the reviewer can read
+ *  the code that produced the result, not just the result. */
+export interface HwSwSource {
+  path: string
+  label: string
+  content: string
+}
+
+export interface HwSwInterface {
+  kind?: string
+  description?: string
+  clock?: string
+  reset?: string
+  data_in?: string[]
+  data_out?: string[]
+  baud_div?: number
+  constants?: Record<string, number>
+  driver?: string
+  testbench?: string
+  driver_origin?: string
+  testbench_origin?: string
+}
+
+export interface HwSwReport {
+  stage?: string
+  top?: string
+  summary?: string
+  completed?: boolean
+  input?: { path?: string; name?: string; bytes_in?: number; bytes_out?: number }
+  interface?: HwSwInterface
+  metrics?: Record<string, unknown>
+  first_mismatch?: { index?: number; chip?: number; expected?: number } | null
+  previews?: string[]
+  errors?: string[]
+}
+
+/** Payload behind the HW/SW verification dialog: what the chip returned when the
+ *  host driver sent it a real input over the chip's real interface, next to what
+ *  the golden model says it should have returned. */
+export interface HwSwReview {
+  stage: string
+  status: string
+  awaitingApproval: boolean
+  available: boolean
+  report: HwSwReport
+  consoleLog: string
+  previews: SimPreview[]
+  sources: HwSwSource[]
+  inputName: string
+  match: boolean
+  hasMatch: boolean
+}

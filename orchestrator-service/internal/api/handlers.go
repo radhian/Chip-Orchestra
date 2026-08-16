@@ -154,6 +154,8 @@ func (a *App) RegisterRoutes(router *gin.Engine) {
 		api.GET("/tasks/:id/signoff/status", a.getSignoffStatus)
 		api.GET("/tasks/:id/golden/review", a.getGoldenReview)
 		api.GET("/tasks/:id/sim/review", a.getSimReview)
+		api.GET("/tasks/:id/hwsw/review", a.getHwSwReview)
+		api.POST("/tasks/:id/hwsw/input", a.uploadHwSwInput)
 		api.POST("/tasks/:id/approvals/:stage", a.approveStage)
 		api.POST("/tasks/:id/waivers", a.createWaiver)
 		api.POST("/tasks/:id/export-bundle", a.exportBundle)
@@ -489,6 +491,10 @@ func (a *App) patchTask(c *gin.Context) {
 }
 
 func (a *App) getStages(c *gin.Context) {
+	// Backfill stages the task predates (the DAG gains stages over time) and
+	// resync dependency edges before reading, so an existing run shows — and can
+	// be retried from — the current pipeline rather than the one it was born with.
+	_ = a.Orch.EnsureStages(c.Request.Context(), c.Param("id"))
 	var stages []models.Stage
 	if err := a.DB.WithContext(c.Request.Context()).Where("task_id = ?", c.Param("id")).Order("sort_order asc").Find(&stages).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -512,6 +518,9 @@ func (a *App) getStages(c *gin.Context) {
 
 func (a *App) retryStage(c *gin.Context) {
 	stageName := strings.ToUpper(c.Param("stage"))
+	// Retrying a stage the task predates has to work too — align the row set
+	// with the current DAG first, otherwise the lookup finds nothing.
+	_ = a.Orch.EnsureStages(c.Request.Context(), c.Param("id"))
 	// A MANUAL retry re-arms the SIM auto-repair budget (the automatic loop
 	// must never reset its own counter).
 	a.Orch.ResetSimRepairBudget(c.Request.Context(), c.Param("id"))
@@ -1071,6 +1080,175 @@ func (a *App) getSimReview(c *gin.Context) {
 		"goldenMatch":      goldenMatch,
 		"hasGoldenMatch":   hasMatch,
 	})
+}
+
+// getHwSwReview serves what the HW/SW verification dialog renders: the report
+// the stage wrote, the co-simulation console, the decoded input/expected/actual
+// pictures, and the two generated interface files (the Python host driver and
+// the Verilog interface bench) so the reviewer can read the software AND the
+// hardware that produced the result. Read from disk, like the other gates.
+func (a *App) getHwSwReview(c *gin.Context) {
+	taskID := c.Param("id")
+	workspace := a.Orch.TaskWorkspace(taskID)
+
+	report := map[string]any{}
+	if data, err := os.ReadFile(filepath.Join(workspace, "reports", "hw_sw_verify_report.json")); err == nil {
+		_ = json.Unmarshal(data, &report)
+	}
+
+	var stages []models.Stage
+	_ = a.DB.WithContext(c.Request.Context()).Where("task_id = ? AND name = ?", taskID, "HW_SW_VERIFY").Find(&stages).Error
+	status := ""
+	if len(stages) > 0 {
+		status = string(stages[0].Status)
+	}
+
+	readTail := func(rel string, limit int) string {
+		data, err := os.ReadFile(filepath.Join(workspace, filepath.FromSlash(rel)))
+		if err != nil {
+			return ""
+		}
+		if len(data) > limit {
+			data = data[len(data)-limit:]
+		}
+		return string(data)
+	}
+	readHead := func(rel string, limit int) string {
+		data, err := os.ReadFile(filepath.Join(workspace, filepath.FromSlash(rel)))
+		if err != nil {
+			return ""
+		}
+		if len(data) > limit {
+			data = data[:limit]
+		}
+		return string(data)
+	}
+
+	// Only offer previews that exist — a broken <img> in a verification gate
+	// reads as "the tool failed" even when the run was fine.
+	previews := []gin.H{}
+	for _, p := range []struct{ path, label, role string }{
+		{"hwsw/input_preview.png", "INPUT — what the host driver encoded and sent to the chip", "input"},
+		{"hwsw/expected_output.png", "EXPECTED — what the Python golden model computes for this input", "golden"},
+		{"hwsw/chip_output.png", "CHIP — decoded from the bytes the RTL actually sent back", "chip"},
+		{"hwsw/waveform.png", "Interface waveform", "waveform"},
+	} {
+		if _, err := os.Stat(filepath.Join(workspace, filepath.FromSlash(p.path))); err == nil {
+			previews = append(previews, gin.H{"path": p.path, "label": p.label, "role": p.role})
+		}
+	}
+
+	// The generated bridge itself: whatever the stage recorded in the report,
+	// falling back to the conventional paths so the panel is never empty.
+	sources := []gin.H{}
+	seen := map[string]bool{}
+	addSource := func(rel, label string) {
+		rel = strings.TrimSpace(rel)
+		if rel == "" || seen[rel] || strings.Contains(rel, "..") || filepath.IsAbs(rel) {
+			return
+		}
+		body := readHead(rel, 120<<10)
+		if body == "" {
+			return
+		}
+		seen[rel] = true
+		sources = append(sources, gin.H{"path": rel, "label": label, "content": body})
+	}
+	if iface, ok := report["interface"].(map[string]any); ok {
+		if v, ok := iface["driver"].(string); ok {
+			addSource(v, "Python host driver (software side)")
+		}
+		if v, ok := iface["testbench"].(string); ok {
+			addSource(v, "Verilog interface bench (hardware side)")
+		}
+	}
+	addSource("sw/hwsw/host_driver.py", "Python host driver (software side)")
+	if entries, err := os.ReadDir(filepath.Join(workspace, "tb", "hwsw")); err == nil {
+		for _, entry := range entries {
+			if !entry.IsDir() && strings.HasSuffix(entry.Name(), ".v") {
+				addSource("tb/hwsw/"+entry.Name(), "Verilog interface bench (hardware side)")
+			}
+		}
+	}
+
+	match, hasMatch := false, false
+	if metrics, ok := report["metrics"].(map[string]any); ok {
+		if v, ok := metrics["match"].(bool); ok {
+			match, hasMatch = v, true
+		}
+	}
+
+	inputName := ""
+	if v, ok := report["input"].(map[string]any); ok {
+		inputName, _ = v["name"].(string)
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"stage":            "HW_SW_VERIFY",
+		"status":           status,
+		"awaitingApproval": models.StageStatus(status) == models.StageStatusAwaitingApproval,
+		"available":        len(report) > 0,
+		"report":           report,
+		"consoleLog":       readTail("logs/hw_sw_verify.log", 64<<10),
+		"previews":         previews,
+		"sources":          sources,
+		"inputName":        inputName,
+		"match":            match,
+		"hasMatch":         hasMatch,
+	})
+}
+
+// uploadHwSwInput stores the file the reviewer wants the chip to process and
+// re-runs HW_SW_VERIFY against it. Upload and re-run are ONE call on purpose:
+// the gate's question is "is this output correct for MY input", so an upload
+// that did not actually drive the hardware would leave the dialog showing the
+// previous run's answer next to the new file's name.
+func (a *App) uploadHwSwInput(c *gin.Context) {
+	taskID := c.Param("id")
+	file, err := c.FormFile("file")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "multipart 'file' field required"})
+		return
+	}
+	name := unsafeFilenameChars.ReplaceAllString(filepath.Base(file.Filename), "_")
+	if name == "" || name == "." {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid filename"})
+		return
+	}
+	if file.Size > 32<<20 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "input exceeds the 32 MB limit"})
+		return
+	}
+	dir := filepath.Join(a.Orch.TaskWorkspace(taskID), "hwsw", "input")
+	if err := os.MkdirAll(dir, 0o755); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	if err := c.SaveUploadedFile(file, filepath.Join(dir, name)); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	rel := "hwsw/input/" + name
+	// The stage reads this marker rather than guessing from mtimes, so a
+	// re-upload of an OLDER file still becomes the active input.
+	if err := os.WriteFile(filepath.Join(a.Orch.TaskWorkspace(taskID), "hwsw", "active_input.txt"),
+		[]byte(rel+"\n"), 0o644); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	_ = a.Redis.HSet(c.Request.Context(), fmt.Sprintf("task:%s:workspace:index", taskID), rel, "hw/sw verification input").Err()
+
+	rerun := c.DefaultQuery("rerun", "1") != "0"
+	if !rerun {
+		c.JSON(http.StatusOK, gin.H{"path": rel, "status": "stored"})
+		return
+	}
+	_ = a.Orch.EnsureStages(c.Request.Context(), taskID)
+	if err := a.Orch.RetryStage(c.Request.Context(), taskID, "HW_SW_VERIFY"); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error(), "path": rel})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"path": rel, "status": "queued", "stage": "HW_SW_VERIFY"})
 }
 
 func (a *App) createWaiver(c *gin.Context) {

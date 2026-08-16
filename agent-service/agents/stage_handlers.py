@@ -29,7 +29,7 @@ import re
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 from context import files as wsfiles
 from reporting import collect_evidence, generate_pdf, generate_reports
@@ -2702,6 +2702,363 @@ def run_tb_gen(sc: StageContext) -> AgentResult:
     )
 
 
+# --------------------------------------------------------------------------- #
+# HW_SW_VERIFY — drive the chip through its real host interface
+# --------------------------------------------------------------------------- #
+def _hwsw_repair_rounds() -> int:
+    try:
+        return max(0, int(os.getenv("HWSW_REPAIR_ROUNDS", "3")))
+    except ValueError:
+        return 3
+
+
+def _hwsw_top(sc: StageContext) -> str:
+    if sc.workspace is None:
+        return sc.top_module
+    try:
+        from verilog_check import pick_top
+        return pick_top(sc.workspace / "rtl") or sc.top_module
+    except Exception:  # noqa: BLE001
+        return sc.top_module
+
+
+def _hwsw_ensure_bridge(sc: StageContext, top: str, iface: Dict[str, Any],
+                        log: List[str]) -> Dict[str, str]:
+    """Make sure both halves of the bridge exist on disk, writing whatever is
+    missing. Returns the workspace-relative paths that are now in place.
+
+    Existing files are LEFT ALONE: a repair round (or the user) may have
+    improved them, and regenerating on every run would throw that away."""
+    from . import hwsw
+
+    ws = sc.workspace
+    paths = {"driver": hwsw.DRIVER_REL, "testbench": f"tb/hwsw/{top}_hwsw_tb.v",
+             "driver_origin": "existing", "testbench_origin": "existing"}
+
+    driver = ws / hwsw.DRIVER_REL
+    if not driver.is_file():
+        driver.parent.mkdir(parents=True, exist_ok=True)
+        driver.write_text(hwsw.fallback_driver_source(iface))
+        paths["driver_origin"] = "generated from the detected interface"
+        log.append(f"wrote {hwsw.DRIVER_REL} (host driver, generated from the top-level ports)")
+
+    tb = ws / paths["testbench"]
+    # Re-derive when the design's own top-level testbench is NEWER than ours:
+    # TB_GEN rewrites that file whenever the top-level interface changes, and a
+    # bench still driving the previous pinout would fail in a way that looks
+    # like a chip defect.
+    stale = False
+    if tb.is_file():
+        try:
+            reference = ws / "tb" / f"{top}_tb.v"
+            stale = reference.is_file() and reference.stat().st_mtime > tb.stat().st_mtime
+        except OSError:
+            stale = False
+    if not tb.is_file() or stale:
+        source, provenance = hwsw.derive_testbench(ws, top, iface)
+        if not source:
+            n_in = (iface.get("img_w") or 0) * (iface.get("img_h") or 0)
+            n_out = (iface.get("out_w") or 0) * (iface.get("out_h") or 0) or n_in
+            source = hwsw.fallback_tb_source(top, iface, n_in or 1, n_out or 1)
+            provenance = "written from the top-level ports (no reference testbench)"
+        tb.parent.mkdir(parents=True, exist_ok=True)
+        tb.write_text(source)
+        paths["testbench_origin"] = provenance
+        log.append(f"wrote {paths['testbench']} (interface bench, {provenance})")
+    return paths
+
+
+def _hwsw_verify_once(sc: StageContext, top: str, iface: Dict[str, Any],
+                      input_path: Path, paths: Dict[str, str],
+                      log: List[str]) -> Tuple[bool, str, Dict[str, Any]]:
+    """One encode → co-simulate → decode pass.
+
+    Returns ``(ok, failure_detail, results)``. ``ok`` is about the MACHINERY
+    having run, not about the answer being right: a chip that returns the wrong
+    picture is a successful verification run with a bad verdict, and that
+    distinction is what lets the human gate ask a real question."""
+    from . import hwsw
+
+    ws = sc.workspace
+    results: Dict[str, Any] = {}
+
+    rel_input = str(input_path.relative_to(ws)) if str(input_path).startswith(str(ws)) else str(input_path)
+    code, output = hwsw.run_driver(ws, ["encode", "--input", rel_input])
+    log.append(f"$ python3 {hwsw.DRIVER_REL} encode --input {rel_input}\n{output}")
+    if code != 0:
+        return False, f"the host driver could not encode {rel_input}:\n{output[-4000:]}", results
+    encode = _read_json(ws / hwsw.ENCODE_REL)
+    results["encode"] = encode
+    if not (ws / hwsw.STIMULUS_REL).is_file():
+        return False, f"the host driver reported success but wrote no {hwsw.STIMULUS_REL}", results
+
+    ok, sim_log = hwsw.run_cosim(ws, top, paths["testbench"])
+    log.append(sim_log)
+    if not ok:
+        return False, ("the interface co-simulation did not complete — see the console below:\n"
+                       + sim_log[-4000:]), results
+    if not (ws / hwsw.CHIP_MEM_REL).is_file():
+        return False, (f"the co-simulation ran but the chip returned nothing "
+                       f"({hwsw.CHIP_MEM_REL} was never written) — the interface bench must "
+                       f"$writememh every byte it captures from the DUT"), results
+
+    code, output = hwsw.run_driver(ws, ["decode"])
+    log.append(f"$ python3 {hwsw.DRIVER_REL} decode\n{output}")
+    if code != 0:
+        return False, f"the host driver could not decode the chip's response:\n{output[-4000:]}", results
+    results["verify"] = _read_json(ws / hwsw.VERIFY_REL)
+    return True, "", results
+
+
+def _read_json(path: Path) -> Dict[str, Any]:
+    try:
+        return json.loads(path.read_text(errors="replace"))
+    except Exception:  # noqa: BLE001
+        return {}
+
+
+def _hwsw_repair_goal(top: str, iface: Dict[str, Any],
+                      paths: Dict[str, str], detail: str, rel_input: str) -> str:
+    from . import hwsw
+
+    return (
+        f"The hardware/software verification run for `{top}` FAILED TO COMPLETE. Fix it.\n\n"
+        f"WHAT WENT WRONG:\n{detail}\n\n"
+        f"THE INTERFACE (read off the top-level RTL — this is ground truth):\n"
+        f"{hwsw.describe_interface(iface)}\n\n"
+        "THE TWO FILES YOU OWN — they are the software and hardware halves of one bridge, "
+        "and they must agree with each other and with the RTL:\n"
+        f"  1. `{paths['driver']}` — the Python HOST DRIVER. Command-line contract "
+        "(run from the workspace root, both subcommands are called by the flow):\n"
+        f"       python3 {paths['driver']} encode --input <file>\n"
+        f"         reads the user's file (image / .mem / raw bytes), converts it to the "
+        f"chip's sample format and geometry, writes `{hwsw.STIMULUS_REL}` as one hex byte "
+        f"per line, writes a viewable `hwsw/input_preview.png`, runs the APPROVED PYTHON "
+        f"GOLDEN MODEL under `golden/model/` on that same input to get the expected answer, "
+        f"writes it to `{hwsw.EXPECTED_MEM_REL}` + `hwsw/expected_output.png`, and writes "
+        f"`{hwsw.ENCODE_REL}` = {{\"bytes_in\": N, \"bytes_out\": M, ...}}.\n"
+        f"       python3 {paths['driver']} decode\n"
+        f"         reads `{hwsw.CHIP_MEM_REL}`, writes `hwsw/chip_output.png`, and writes "
+        f"`{hwsw.VERIFY_REL}` = {{\"match\": bool, \"bytes_received\": N, \"mismatches\": K, "
+        "\"first_mismatch\": {...}, \"max_abs_diff\": D}.\n"
+        f"  2. `{paths['testbench']}` — the Verilog INTERFACE BENCH. It instantiates "
+        f"`{top}` UNMODIFIED, reads `{hwsw.STIMULUS_REL}` with $readmemh, drives those "
+        "bytes onto the chip's real physical interface with the real frame timing, captures "
+        f"what the chip sends back, and $writememh-dumps it to `{hwsw.CHIP_MEM_REL}`. It "
+        f"dumps to `{hwsw.VCD_REL}` with $dumpvars(1, ...) only — a full-hierarchy dump of "
+        "this design is hundreds of megabytes. It must have a timeout watchdog that "
+        "$finish-es instead of hanging.\n\n"
+        "RULES:\n"
+        "  - Do NOT change anything under `rtl/`. The RTL passed simulation; this stage "
+        "verifies the interface around it.\n"
+        f"  - The reference for the physical protocol is the top-level testbench that "
+        f"already passes SIM (`tb/{top}_tb.v`) — read it with read_file_disk and match its "
+        "frame timing exactly instead of inventing your own.\n"
+        f"  - The golden model's entry points are in `golden/model/top.py` — read it and "
+        "call the real function; never re-implement the algorithm in the driver.\n"
+        f"  - The active input for this run is `{rel_input}`.\n"
+        "  - Use run_python to actually EXECUTE the driver's encode step and confirm it "
+        "writes the files before you finish.\n\n"
+        "Write the fixed file(s) with write_file_disk and reply 'done'."
+    )
+
+
+def _hwsw_reviewer_goal(top: str, feedback: str, verify: Dict[str, Any]) -> str:
+    from . import hwsw
+
+    return (
+        "THE REVIEWER REJECTED THE HARDWARE/SOFTWARE VERIFICATION RESULT. Their correction "
+        f"is authoritative:\n{feedback}\n\n"
+        f"Evidence on disk: `hwsw/input_preview.png` (what was sent), "
+        f"`hwsw/expected_output.png` (what the Python golden model says should come back), "
+        f"`hwsw/chip_output.png` (what the chip actually returned), the raw values in "
+        f"`{hwsw.STIMULUS_REL}` / `{hwsw.EXPECTED_MEM_REL}` / `{hwsw.CHIP_MEM_REL}`, the "
+        f"comparison in `{hwsw.VERIFY_REL}` ({json.dumps(verify)[:600]}), and the "
+        f"co-simulation console in `{hwsw.LOG_REL}`.\n\n"
+        "FIND THE DEFECT AND FIX IT AT ITS SOURCE. Decide which layer is wrong before you "
+        "change anything:\n"
+        f"  - If the CHIP computes the wrong values, the defect is in `rtl/` — fix the "
+        f"Verilog (every write is compile-checked). The design must keep passing its "
+        f"existing testbenches under `tb/`, so re-run the top-level one with run_python / "
+        f"iverilog before you finish.\n"
+        f"  - If the chip's values are right but the host driver mis-encodes the input or "
+        f"mis-renders the response, fix `{hwsw.DRIVER_REL}`.\n"
+        f"  - If the bytes are being lost or mis-framed on the wire, fix "
+        f"`tb/hwsw/{top}_hwsw_tb.v`.\n\n"
+        "Do not simply regenerate the same result — address the reviewer's correction "
+        "specifically. Reply 'done' when the fix is written."
+    )
+
+
+def run_hw_sw_verify(sc: StageContext) -> AgentResult:
+    """HW_SW_VERIFY — verify the chip the way software will actually use it.
+
+    SIM answers "does the RTL reproduce the golden model on the input we baked
+    in?". This answers the question a user actually has: "if I hand this chip MY
+    file over its real interface, do I get the right thing back?". A Python host
+    driver encodes the input into the chip's wire format, a generated Verilog
+    interface bench replays those bits against the unmodified DUT, and the driver
+    decodes the response — so the software and the hardware are exercised as one
+    system. The result is then put in front of a human, because the whole point
+    of the stage is that the answer is something a person can look at and judge.
+    """
+    agent = "Verifier"
+    from . import hwsw
+
+    if sc.workspace is None:
+        raise RuntimeError("HW_SW_VERIFY needs a task workspace to run the interface bridge in.")
+    ws = sc.workspace
+    top = _hwsw_top(sc)
+    iface = hwsw.detect_interface(ws, top)
+    log: List[str] = [f"# HW/SW verification — {top}", "", hwsw.describe_interface(iface), ""]
+
+    input_path = hwsw.resolve_input(ws)
+    if input_path is None:
+        raise RuntimeError(
+            "HW_SW_VERIFY has no input to send to the chip. Upload one from the review "
+            "dialog (any image, .mem or raw byte file) — the stage then encodes it, runs it "
+            "through the chip's interface and shows you what came back.")
+    rel_input = str(input_path.relative_to(ws)) if str(input_path).startswith(str(ws)) else str(input_path)
+    log.append(f"Input: {rel_input}")
+
+    # A rejected gate must DO something: the reviewer said the chip's answer was
+    # wrong, so the defect gets repaired before the run is repeated. Re-running
+    # the identical verification would hand them the identical picture.
+    feedback = str(sc.context.get("review_feedback") or "").strip()
+    paths = _hwsw_ensure_bridge(sc, top, iface, log)
+    if feedback and _deep_enabled(sc):
+        log.append(f"Reviewer rejected the previous result: {feedback}")
+        try:
+            # The PREVIOUS run's comparison is the evidence the reviewer was
+            # looking at; handing the repair agent an empty one would ask it to
+            # debug a mismatch it cannot see.
+            _run_deep(sc, _hwsw_reviewer_goal(top, feedback, _read_json(ws / hwsw.VERIFY_REL)),
+                      "hw_sw_verify_deep_agent", recursion_limit=80)
+        except Exception as exc:  # noqa: BLE001 — verification still has to run and report
+            log.append(f"(repair pass for the reviewer's correction did not complete: {exc})")
+
+    ok, detail, results = _hwsw_verify_once(sc, top, iface, input_path, paths, log)
+    rounds = _hwsw_repair_rounds()
+    attempt = 0
+    while not ok and attempt < rounds and _deep_enabled(sc):
+        attempt += 1
+        log.append(f"\n--- repair round {attempt}/{rounds}: {detail.splitlines()[0] if detail else ''}")
+        try:
+            _run_deep(sc, _hwsw_repair_goal(top, iface, paths, detail, rel_input),
+                      "hw_sw_verify_deep_agent", recursion_limit=80)
+        except Exception as exc:  # noqa: BLE001
+            log.append(f"(repair round {attempt} did not complete: {exc})")
+            break
+        ok, detail, results = _hwsw_verify_once(sc, top, iface, input_path, paths, log)
+
+    # Waveform + housekeeping happen either way: a failed run's activity trace is
+    # exactly what explains the failure.
+    if hwsw.render_waveform(ws / hwsw.VCD_REL, ws / "hwsw" / "waveform.png"):
+        log.append("rendered hwsw/waveform.png from the interface dump")
+    hwsw.trim_vcd(ws)
+
+    encode = results.get("encode") or {}
+    verify = results.get("verify") or {}
+    checked = bool(verify.get("checked"))
+    matched = bool(verify.get("match"))
+    previews = [rel for rel in ("hwsw/input_preview.png", "hwsw/expected_output.png",
+                                "hwsw/chip_output.png", "hwsw/waveform.png")
+                if (ws / rel).is_file()]
+
+    if ok:
+        if checked and matched:
+            summary = (f"The chip processed {rel_input} through its real "
+                       f"{iface.get('kind', 'host')} interface and returned exactly what the "
+                       f"golden model computes for that input "
+                       f"({verify.get('bytes_received', 0)} bytes, no mismatches).")
+        elif checked:
+            summary = (f"The chip processed {rel_input} end-to-end, but "
+                       f"{verify.get('mismatches', 0)} of {verify.get('bytes_expected', 0)} "
+                       f"returned bytes differ from the golden model "
+                       f"(largest difference {verify.get('max_abs_diff', 0)}).")
+        else:
+            summary = (f"The chip processed {rel_input} end-to-end and returned "
+                       f"{verify.get('bytes_received', 0)} bytes. No golden reference was "
+                       "available for this input, so the decoded output is for your eyes "
+                       "to judge.")
+    else:
+        summary = f"The hardware/software verification run did not complete: {detail}"
+
+    report = {
+        "stage": "HW_SW_VERIFY",
+        "top": top,
+        "summary": summary,
+        "completed": ok,
+        "input": {"path": rel_input, "name": Path(rel_input).name,
+                  "bytes_in": encode.get("bytes_in"), "bytes_out": encode.get("bytes_out")},
+        "interface": {
+            "kind": iface.get("kind"),
+            "description": hwsw.describe_interface(iface),
+            "clock": iface.get("clock"), "reset": iface.get("reset"),
+            "data_in": iface.get("data_in"), "data_out": iface.get("data_out"),
+            "baud_div": iface.get("baud_div"),
+            "constants": iface.get("constants"),
+            "driver": paths["driver"], "testbench": paths["testbench"],
+            "driver_origin": paths["driver_origin"],
+            "testbench_origin": paths["testbench_origin"],
+        },
+        "metrics": {
+            "match": matched, "checked": checked,
+            "bytes_sent": encode.get("bytes_in"),
+            "bytes_received": verify.get("bytes_received"),
+            "bytes_expected": verify.get("bytes_expected"),
+            "mismatches": verify.get("mismatches"),
+            "max_abs_diff": verify.get("max_abs_diff"),
+            "golden_source": encode.get("golden"),
+            "repair_rounds": attempt,
+        },
+        "first_mismatch": verify.get("first_mismatch"),
+        "previews": previews,
+        "errors": [] if ok else [detail],
+    }
+
+    files = {hwsw.LOG_REL: "\n".join(log)[-400_000:],
+             hwsw.REPORT_REL: json.dumps(report, indent=2)}
+    sc.persist(files)
+
+    if not ok:
+        # An honest stop. The log and the report are already on disk, so the
+        # failure is readable in the UI rather than only in this message.
+        raise RuntimeError(
+            f"HW/SW verification could not complete after {attempt} repair round(s): "
+            f"{detail.splitlines()[0] if detail else 'unknown failure'} "
+            f"— see {hwsw.LOG_REL}.")
+
+    artifacts = [
+        _artifact("artifact-hwsw-report", "hw_sw_verify_report.json", "REPORT", agent,
+                  hwsw.REPORT_REL),
+        _artifact("artifact-hwsw-driver", "host_driver.py", "SOFTWARE", agent, paths["driver"]),
+        _artifact("artifact-hwsw-tb", Path(paths["testbench"]).name, "TESTBENCH", agent,
+                  paths["testbench"]),
+    ]
+    for rel in previews:
+        artifacts.append(_artifact(f"artifact-hwsw-{Path(rel).stem}", Path(rel).name,
+                                   "IMAGE", agent, rel))
+
+    verdict = ("chip output MATCHES the golden model" if checked and matched
+               else f"{verify.get('mismatches', 0)} mismatching byte(s)" if checked
+               else "no golden reference for this input — human judgement required")
+    return AgentResult(
+        agent_name=agent,
+        summary=summary,
+        diagnostics=[_diag(sc.stage, agent, "Hardware/software verification",
+                           f"{hwsw.describe_interface(iface)} Result: {verdict}.")],
+        artifacts=artifacts,
+        workspace_files=files,
+        recommended_next=("Confirm the decoded output in the review dialog — upload a "
+                          "different input to re-verify, or approve to continue to hardening."),
+        structured_conclusion={"match": matched, "checked": checked,
+                               "input": rel_input, "interface": iface.get("kind"),
+                               "driver": paths["driver"], "testbench": paths["testbench"]},
+        artifact_refs=[hwsw.REPORT_REL, hwsw.LOG_REL, paths["driver"], paths["testbench"]],
+    )
+
+
 def run_signoff(sc: StageContext) -> AgentResult:
     agent = "FlowAssistant"
     ctx = collect_evidence(sc.task_id, sc.workspace, sc.context, sc.eda_reports, sc.reference_files) if sc.workspace else None
@@ -2766,7 +3123,7 @@ def _author_module_math(sc: StageContext) -> None:
         "fixed-point format and any saturation/rounding the code performs). NEVER state "
         "mathematics the code does not implement — if a module is pure control or storage, "
         "give it an empty \"equations\" list and describe its FSM/addressing instead. "
-        "Write the file with write_artifact and reply 'done'."
+        "Write the file with write_file_disk and reply 'done'."
     )
     try:
         _run_deep(sc, goal, "export_paper_deep_agent", recursion_limit=40)
@@ -2774,11 +3131,169 @@ def _author_module_math(sc: StageContext) -> None:
         pass
 
 
+_RELATED_WORK_REL = "exports/related_work.json"
+
+
+# Domains that actually host publications, and domains that never do. A general
+# web search for "sobel accelerator paper" comes back with a YouTube video, a
+# Telegram channel and a spin-the-wheel toy alongside the IEEE result; handing
+# those to the agent spends a page fetch each to learn they are worthless.
+_SCHOLARLY_HOSTS = (
+    "ieeexplore.ieee.org", "arxiv.org", "dl.acm.org", "link.springer.com",
+    "sciencedirect.com", "mdpi.com", "semanticscholar.org", "openreview.net",
+    "doi.org", "researchgate.net", "ijraset.com", "ijert.org", "hindawi.com",
+    "nature.com", "iopscience.iop.org", "eprint.iacr.org", "usenix.org",
+    "sigarch.org", "computer.org", "jstor.org", "citeseerx.ist.psu.edu",
+)
+_NON_SCHOLARLY_HOSTS = (
+    "youtube.com", "youtu.be", "t.me", "twitter.com", "x.com", "facebook.com",
+    "reddit.com", "pinterest.", "instagram.com", "tiktok.com", "slideshare.net",
+    "quora.com", "medium.com", "amazon.", "ebay.", "aliexpress.",
+)
+
+
+def _related_work_candidates(sc: StageContext, limit: int = 12) -> List[str]:
+    """Candidate reference URLs, gathered by the FRAMEWORK before the agent runs.
+
+    The agent's `search_web` returns a synthesized knowledge digest — "what a
+    Sobel accelerator is and how it is built" — not a result list, so an agent
+    asked to produce citations from it searches, gets prose, finds no URL to
+    cite, and searches again; the first run of this pass burned 54 tool calls
+    that way and wrote nothing. Handing it real URLs up front turns an open
+    hunt into a bounded reading task.
+
+    Sources: the links PLAN already collected for this design, then fresh
+    literature searches. Best-effort — an empty list simply means no
+    related-work section."""
+    scholarly: List[str] = []
+    other: List[str] = []
+
+    def add(url: str) -> None:
+        url = (url or "").strip()
+        if not url.startswith("http") or "github.com" in url:
+            return
+        if url in scholarly or url in other:
+            return
+        low = url.lower()
+        if any(host in low for host in _NON_SCHOLARLY_HOSTS):
+            return
+        (scholarly if any(host in low for host in _SCHOLARLY_HOSTS) else other).append(url)
+
+    if sc.workspace is not None:
+        sources = sc.workspace / "context" / "sources.md"
+        if sources.is_file():
+            try:
+                body = sources.read_text(errors="replace")
+                # Only the papers/articles half — a GitHub repository is not a
+                # citation, and PLAN lists both under one file.
+                papers = body.split("## Papers", 1)[-1] if "## Papers" in body else body
+                for match in re.finditer(r"https?://\S+", papers):
+                    add(match.group(0).rstrip(").,"))
+            except OSError:
+                pass
+
+    brief = (sc.design_brief or "").strip()[:120]
+    try:
+        from research import _web_search, web_research_enabled
+        if web_research_enabled() and brief:
+            for query, suffix in (
+                (brief, "hardware accelerator architecture ieeexplore arxiv paper"),
+                (brief, "FPGA ASIC implementation arxiv research paper"),
+                ("open source RTL to GDSII flow open PDK tapeout", "arxiv paper"),
+            ):
+                if len(scholarly) >= limit:
+                    break
+                try:
+                    for url in _web_search(query, n_github=0, n_other=8, suffix=suffix):
+                        add(url)
+                except Exception:  # noqa: BLE001
+                    continue
+    except Exception:  # noqa: BLE001
+        pass
+    # Publication hosts first; everything else only fills the remaining slots,
+    # so the agent spends its fetches where a citation might actually be.
+    return (scholarly + other)[:limit]
+
+
+def _author_related_work(sc: StageContext) -> None:
+    """Find the PUBLISHED work this design sits next to, and cite it.
+
+    A design report with no reference but its own toolchain reads as though the
+    problem had never been studied. EXPORT already has web research available,
+    so the paper's related-work section and bibliography are built from searches
+    the agent actually ran rather than from a list someone remembered.
+
+    Cached in ``exports/related_work.json``: the literature does not change
+    between two exports of the same design, and re-searching on every refresh
+    would spend a research pass to rewrite the same section."""
+    if sc.workspace is None or (sc.workspace / _RELATED_WORK_REL).is_file():
+        return
+    if not _deep_enabled(sc):
+        return
+    algorithm = ""
+    try:
+        math_doc = json.loads((sc.workspace / _GOLDEN_MATH_REL).read_text(errors="replace"))
+        algorithm = str((math_doc.get("algorithm") or {}).get("summary") or "")[:600]
+    except Exception:  # noqa: BLE001
+        pass
+    modules = ", ".join(sorted(_rtl_hierarchy(sc.workspace).get("modules", {}))) or "n/a"
+    candidates = _related_work_candidates(sc)
+    if not candidates:
+        return
+    goal = (
+        "Find the PUBLISHED WORK this chip should be compared against, and write it as the "
+        f"single JSON file `{_RELATED_WORK_REL}`.\n\n"
+        f"THE DESIGN: {sc.design_brief}\n"
+        f"WHAT IT COMPUTES: {algorithm or 'see golden/model/ and rtl/'}\n"
+        f"MODULES ON THE CHIP: {modules}\n\n"
+        "CANDIDATE SOURCES — these URLs were already retrieved for this design; they are "
+        "your starting point:\n" + "\n".join(f"  - {u}" for u in candidates) + "\n\n"
+        "METHOD:\n"
+        "  1. Call fetch_reference on the candidates that look relevant to the algorithm, "
+        "the datapath style, the host interface, or the open-source tapeout flow. The "
+        "fetched text is what you cite from — read the real title, authors and venue out "
+        "of it.\n"
+        "  2. Discard anything that turns out to be unrelated or is not a real publication "
+        "or primary project page.\n"
+        "  3. WRITE THE FILE as soon as you have 4 usable entries. Do not keep hunting for "
+        "a better bibliography — an incomplete related-work section is fine, an export that "
+        "never finishes is not.\n"
+        "  4. `search_web` returns a written summary of a topic, NOT a list of papers, so "
+        "it cannot give you a citation. Use it at most twice, only to understand a topic "
+        "well enough to describe how a fetched reference relates to this design.\n\n"
+        "SCHEMA: {\"summary\": \"3-5 sentences positioning THIS design against that work — "
+        "what has been done before, and what is different here (an AI-generated, "
+        "golden-model-gated implementation on an open PDK)\", \"references\": [{\"authors\": "
+        "\"A. Author and B. Author\", \"title\": \"Paper title\", \"venue\": \"Conference or "
+        "journal, year\", \"year\": \"2021\", \"url\": \"https://...\", \"relation\": \"one "
+        "sentence on how it relates to this design\"}]}\n\n"
+        "HARD RULES — this goes into a formal paper, so a fabricated citation is worse than "
+        "no citation:\n"
+        "  - EVERY entry must come from a page you ACTUALLY fetched. Put that exact URL in "
+        "\"url\". Never cite a candidate you did not open.\n"
+        "  - Never invent a DOI, a page range, or an author list you did not read. If you "
+        "only know the title and the venue, give those and leave the rest out.\n"
+        "  - If you cannot verify a claim about a paper, do not make it.\n"
+        "  - 4 to 8 references. Prefer peer-reviewed work; a well-known technical report or "
+        "an official project page is acceptable when it is the primary source.\n\n"
+        "Write the file with write_file_disk and reply 'done'."
+    )
+    try:
+        # Bounded tighter than the other research passes: every step here is a
+        # web round-trip, and EXPORT still has to collect evidence, render the
+        # paper and compile it inside the stage's dispatch timeout. A shorter
+        # bibliography beats an export that dies mid-search.
+        _run_deep(sc, goal, "export_related_work_deep_agent", recursion_limit=36)
+    except Exception:  # noqa: BLE001 - the paper is still worth producing without it
+        pass
+
+
 def run_export(sc: StageContext) -> AgentResult:
     agent = "FlowAssistant"
-    # Authored before evidence collection so the fresh file is picked up in the
-    # same run — otherwise the section would only appear on the NEXT export.
+    # Authored before evidence collection so the fresh files are picked up in
+    # the same run — otherwise the sections would only appear on the NEXT export.
     _author_module_math(sc)
+    _author_related_work(sc)
     if sc.workspace is not None:
         ctx = collect_evidence(sc.task_id, sc.workspace, sc.context, sc.eda_reports, sc.reference_files)
     else:
@@ -2795,7 +3310,7 @@ def run_export(sc: StageContext) -> AgentResult:
     try:
         from reporting.latex_report import compile_pdf, generate_latex, stage_template_assets
         workspace_files = wsfiles.list_files(sc.workspace) if sc.workspace else []
-        files["exports/final_report.tex"] = generate_latex(ctx, workspace_files)
+        files["exports/final_report.tex"] = generate_latex(ctx, workspace_files, sc.workspace)
         latex_rel = "exports/final_report.tex"
         if sc.workspace is not None:
             sc.persist({latex_rel: files[latex_rel]})
@@ -2886,6 +3401,7 @@ STAGE_HANDLERS = {
     "RTL_GEN": run_rtl_gen,
     "RTL_REPAIR": run_rtl_repair,
     "TB_GEN": run_tb_gen,
+    "HW_SW_VERIFY": run_hw_sw_verify,
     "SIGNOFF": run_signoff,
     "EXPORT": run_export,
 }
