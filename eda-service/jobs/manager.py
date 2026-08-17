@@ -14,7 +14,18 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column, sess
 from runner import CommandRunner, default_runner
 from toolchain import run_gl_sim, run_harden, run_lint, run_mock_toolchain, run_padring, run_render, run_simulation, run_sta
 from toolchain.harden_runner import design_clock_period_ns
-from toolchain.reports import BaseReport, SignoffReport
+from toolchain.librelane import (
+    ImplementationConfig,
+    apply_pad_ring,
+    collect_chip_artifacts,
+    extract_pad_placement_from_def,
+    implementation_from_mapping,
+    parse_librelane_stages,
+    extract_librelane_version,
+    run_chip_flow,
+    write_pad_placement_json,
+)
+from toolchain.reports import BaseReport, ChipPnrReport, SignoffReport
 from workspace import resolve_workspace
 
 COMPILE_EXT = (".v", ".sv")
@@ -112,12 +123,107 @@ def run_stage(
         return run_render(workspace, top, stage_opts, runner, stage=stage)
     if stage == "PADRING":
         return run_padring(workspace, top, stage_opts, runner, stage=stage)
+    if stage == "CHIP_PNR":
+        return _run_chip_pnr(workspace, top, stage_opts, runner)
     if stage == "SIGNOFF":
         return _signoff_report(task_id, stage)
     # Fallback for any other stage: reuse the mock toolchain shape.
     report = BaseReport(stage=stage)
     report.summary = f"Mock {stage} execution completed successfully."
     report.metrics = {"timing_slack_ns": 0.11, "power_mw": 12.4, "area_um2": 48123}
+    return report
+
+
+def _run_chip_pnr(
+    workspace: Path,
+    top: str,
+    stage_opts: Dict[str, Any],
+    runner: CommandRunner,
+) -> ChipPnrReport:
+    """Execute a LibreLane Chip flow with OpenROAD.PadRing."""
+    report = ChipPnrReport()
+    report.top = top or "chip_top"
+
+    # Parse implementation config from stage options
+    impl_cfg = implementation_from_mapping(stage_opts.get("implementation"))
+    report.flow = impl_cfg.flow
+    report.pdk = stage_opts.get("pdk", "gf180mcuD")
+
+    # Determine config path
+    config_path = workspace / stage_opts.get("config_path", "librelane/config.yaml")
+    if not config_path.is_file():
+        report.errors.append(f"LibreLane config not found: {config_path}")
+        report.summary = "Chip PNR failed: missing LibreLane configuration."
+        return report
+
+    use_docker = bool(stage_opts.get("use_docker", True))
+    docker_image = str(stage_opts.get("docker_image", ""))
+
+    try:
+        result = run_chip_flow(
+            workspace, config_path,
+            runner=runner, use_docker=use_docker,
+            docker_image=docker_image,
+        )
+        report.execution_mode = result.get("execution_mode", "")
+        report.docker_image = result.get("image", "")
+        log_text = result.get("log", "")
+        report.librelane_version = extract_librelane_version(log_text)
+        report.stages_observed = parse_librelane_stages(log_text)
+        report.pad_ring_verified = "OpenROAD.PadRing" in (report.stages_observed or [])
+
+        # Collect artifacts
+        artifacts_info = collect_chip_artifacts(workspace)
+        if artifacts_info.get("odb"):
+            report.odb = artifacts_info["odb"][0]
+        if artifacts_info.get("def"):
+            report.def_file = artifacts_info["def"][0]
+        if artifacts_info.get("gds"):
+            report.gds = artifacts_info["gds"][0]
+        if artifacts_info.get("state_out"):
+            report.state_out = artifacts_info["state_out"]
+
+        # Extract pad placement from DEF
+        if report.def_file:
+            def_path = Path(report.def_file)
+            if def_path.is_file():
+                placements = extract_pad_placement_from_def(def_path)
+                pp_path = workspace / "pad_placement.json"
+                write_pad_placement_json(placements, pp_path)
+                report.pad_placement = str(pp_path)
+                # Count pads by type (from master cell name)
+                for p in placements:
+                    master = p.get("master", "")
+                    if "asig" in master:
+                        report.pad_counts["analog"] = report.pad_counts.get("analog", 0) + 1
+                    elif "bi_" in master:
+                        report.pad_counts["bidirectional"] = report.pad_counts.get("bidirectional", 0) + 1
+                    elif "in_" in master:
+                        report.pad_counts["input"] = report.pad_counts.get("input", 0) + 1
+                    elif "dvdd" in master:
+                        report.pad_counts["power"] = report.pad_counts.get("power", 0) + 1
+                    elif "dvss" in master:
+                        report.pad_counts["ground"] = report.pad_counts.get("ground", 0) + 1
+                    elif "cor" in master:
+                        report.pad_counts["corner"] = report.pad_counts.get("corner", 0) + 1
+
+        report.metrics = {
+            "flow": report.flow,
+            "pdk": report.pdk,
+            "librelane_version": report.librelane_version,
+            "execution_mode": report.execution_mode,
+            "stages_observed": report.stages_observed,
+            "pad_ring_verified": report.pad_ring_verified,
+            "pad_counts": report.pad_counts,
+        }
+        report.summary = (
+            f"LibreLane Chip flow completed. "
+            f"Flow={report.flow}, PDK={report.pdk}, "
+            f"Stages: {', '.join(report.stages_observed)}."
+        )
+    except Exception as exc:
+        report.errors.append(str(exc))
+        report.summary = f"Chip PNR failed: {exc}"
     return report
 
 
