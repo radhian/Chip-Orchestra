@@ -61,3 +61,7 @@ coverage/
 #python
 *.pycHNH9
 *.pyc
+# quality gate generated artifacts
+__pycache__/
+ci/quality-gates/reports/*
+!ci/quality-gates/reports/.gitkeep
