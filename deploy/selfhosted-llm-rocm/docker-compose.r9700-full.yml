@@ -1,0 +1,168 @@
+# R9700 FULL stack: self-hosted GLM model server + core app, health-gated.
+# Brings up the llama.cpp-ROCm GLM server AND the app in one command on R9700.
+# agent-service still runs separately on Strix Halo (docker-compose.strix-agent.yml).
+#
+#   docker compose --env-file r9700-core.env -f docker-compose.r9700-full.yml up -d --build
+#
+# NOTE: R9700 is a 32GB RDNA4 card. Set GLM_MODEL_REPO / GLM_MODEL_FILE to a GGUF
+# that fits under ~30GB. Full flagship GLM-5.2 does NOT fit — see GLM_SELFHOST_AMD.md.
+services:
+  glm-server:
+    image: ${LLAMA_IMAGE:-ghcr.io/ggml-org/llama.cpp:server-rocm}
+    container_name: glm-r9700
+    restart: unless-stopped
+    devices:
+      - /dev/kfd
+      - /dev/dri
+    group_add:
+      - video
+      - render
+    ipc: host
+    security_opt:
+      - seccomp:unconfined
+    environment:
+      HF_HUB_ENABLE_HF_TRANSFER: "1"
+      HSA_OVERRIDE_GFX_VERSION: ${HSA_OVERRIDE_GFX_VERSION:-}
+    volumes:
+      - ${MODEL_DIR:-/data/models}:/models
+    ports:
+      - "${LLM_SERVE_PORT:-8005}:${LLM_SERVE_PORT:-8005}"
+    command: >
+      -hf ${GLM_MODEL_REPO:-unsloth/GLM-4-32B-0414-GGUF}:${GLM_MODEL_FILE:-GLM-4-32B-0414-Q4_K_M.gguf}
+      --model /models/${GLM_MODEL_FILE:-GLM-4-32B-0414-Q4_K_M.gguf}
+      --alias ${OPENAI_MODEL:-GLM-5.2}
+      --host 0.0.0.0 --port ${LLM_SERVE_PORT:-8005}
+      --n-gpu-layers ${NGL:-999}
+      --ctx-size ${LLM_CTX:-32768}
+      --jinja --flash-attn on
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:${LLM_SERVE_PORT:-8005}/v1/models >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 60
+      start_period: 1800s
+
+  mysql:
+    image: docker.io/library/mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-chip_orchestra}
+      MYSQL_USER: ${MYSQL_USER:-chip}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-chip}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-chiproot}
+    ports:
+      - "${MYSQL_BIND_HOST:-172.16.1.36}:${MYSQL_PORT:-3306}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -p${MYSQL_ROOT_PASSWORD:-chiproot}"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  redis:
+    image: docker.io/library/redis:7.2-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "${REDIS_BIND_HOST:-172.16.1.36}:${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  orchestrator-service:
+    build:
+      context: ../../orchestrator-service
+    restart: unless-stopped
+    environment:
+      PORT: 8080
+      MYSQL_DSN: ${MYSQL_USER:-chip}:${MYSQL_PASSWORD:-chip}@tcp(mysql:3306)/${MYSQL_DATABASE:-chip_orchestra}?charset=utf8mb4&parseTime=True&loc=UTC
+      REDIS_ADDR: redis:6379
+      JWT_SECRET: ${JWT_SECRET:-chip-orchestra-secret}
+      AGENT_SERVICE_URL: ${AGENT_SERVICE_URL:-http://172.16.1.10:8001}
+      EDA_SERVICE_URL: http://eda-service:8002
+      AGENT_INVOKE_TIMEOUT_SECONDS: ${AGENT_INVOKE_TIMEOUT_SECONDS:-1800}
+      SIM_AUTO_REPAIR_ROUNDS: ${SIM_AUTO_REPAIR_ROUNDS:-10}
+      HARDEN_AUTO_REPAIR_ROUNDS: ${HARDEN_AUTO_REPAIR_ROUNDS:-3}
+      GF180_VOLTAGE: ${GF180_VOLTAGE:-3v3}
+      DEFAULT_USERNAME: ${DEFAULT_USERNAME:-admin}
+      DEFAULT_FULL_NAME: ${DEFAULT_FULL_NAME:-Admin Admin}
+      DEFAULT_EMAIL: ${DEFAULT_EMAIL:-admin.local}
+      DEFAULT_PASSWORD: ${DEFAULT_PASSWORD:-chip-orchestra}
+      WORKSPACE_ROOT: ${WORKSPACE_ROOT:-/srv/chip-orchestra/workspaces}
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      eda-service:
+        condition: service_started
+      glm-server:
+        condition: service_healthy
+    ports:
+      - "${OPERATOR_PORT:-8080}:8080"
+    volumes:
+      - ${WORKSPACE_HOST_PATH:-/srv/chip-orchestra/workspaces}:${WORKSPACE_ROOT:-/srv/chip-orchestra/workspaces}${WORKSPACE_MOUNT_FLAG:-}
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/health >/dev/null 2>&1 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  eda-service:
+    platform: linux/amd64
+    build:
+      context: ../../eda-service
+      args:
+        PDK_ROOT: ${PDK_ROOT:-/opt/pdk}
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: mysql+pymysql://${MYSQL_USER:-chip}:${MYSQL_PASSWORD:-chip}@mysql:3306/${MYSQL_DATABASE:-chip_orchestra}
+      REDIS_URL: redis://redis:6379/0
+      WORKSPACE_ROOT: ${WORKSPACE_ROOT:-/srv/chip-orchestra/workspaces}
+      PDK: ${PDK:-gf180mcuD}
+      GF180_VOLTAGE: ${GF180_VOLTAGE:-3v3}
+      PDK_ROOT: ${PDK_ROOT:-/opt/pdk}
+      EDA_JOB_TIMEOUT_SIM: ${EDA_JOB_TIMEOUT_SIM:-600}
+      EDA_JOB_TIMEOUT_HARDEN: ${EDA_JOB_TIMEOUT_HARDEN:-3600}
+      EDA_JOB_TIMEOUT_STA: ${EDA_JOB_TIMEOUT_STA:-900}
+      EDA_JOB_TIMEOUT_GL_SIM: ${EDA_JOB_TIMEOUT_GL_SIM:-900}
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "${EDA_BIND_HOST:-172.16.1.36}:${EDA_PORT:-8002}:8002"
+    volumes:
+      - ${WORKSPACE_HOST_PATH:-/srv/chip-orchestra/workspaces}:${WORKSPACE_ROOT:-/srv/chip-orchestra/workspaces}${WORKSPACE_MOUNT_FLAG:-}
+      - pdk_data:${PDK_ROOT:-/opt/pdk}
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8002/health')\" || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  frontend:
+    build:
+      context: ../../frontend
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://172.16.1.36:8080}
+        VITE_USE_MOCKS: "false"
+    restart: unless-stopped
+    environment:
+      VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:8080}
+      VITE_USE_MOCKS: "false"
+      VITE_DEFAULT_USERNAME: ${DEFAULT_USERNAME:-admin}
+      VITE_DEFAULT_PASSWORD: ${DEFAULT_PASSWORD:-chip-orchestra}
+    ports:
+      - "${FRONTEND_PORT:-4173}:4173"
+
+volumes:
+  mysql_data:
+  redis_data:
+  pdk_data:

@@ -1,0 +1,137 @@
+# R9700 stack: state, orchestrator, EDA, and frontend.
+# agent-service runs separately on Strix Halo and is reached through AGENT_SERVICE_URL.
+services:
+  mysql:
+    image: docker.io/library/mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-chip_orchestra}
+      MYSQL_USER: ${MYSQL_USER:-chip}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-chip}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-chiproot}
+    ports:
+      - "${MYSQL_BIND_HOST:-172.16.1.36}:${MYSQL_PORT:-3306}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -p${MYSQL_ROOT_PASSWORD:-chiproot}"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  redis:
+    image: docker.io/library/redis:7.2-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "${REDIS_BIND_HOST:-172.16.1.36}:${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  orchestrator-service:
+    build:
+      context: ../../orchestrator-service
+    restart: unless-stopped
+    environment:
+      PORT: 8080
+      MYSQL_DSN: ${MYSQL_USER:-chip}:${MYSQL_PASSWORD:-chip}@tcp(mysql:3306)/${MYSQL_DATABASE:-chip_orchestra}?charset=utf8mb4&parseTime=True&loc=UTC
+      REDIS_ADDR: redis:6379
+      JWT_SECRET: ${JWT_SECRET:-chip-orchestra-secret}
+      AGENT_SERVICE_URL: ${AGENT_SERVICE_URL:-http://172.16.1.10:8001}
+      EDA_SERVICE_URL: ${EDA_SERVICE_URL:-http://eda-service:8002}
+      AGENT_INVOKE_TIMEOUT_SECONDS: ${AGENT_INVOKE_TIMEOUT_SECONDS:-1800}
+      SIM_AUTO_REPAIR_ROUNDS: ${SIM_AUTO_REPAIR_ROUNDS:-10}
+      HARDEN_AUTO_REPAIR_ROUNDS: ${HARDEN_AUTO_REPAIR_ROUNDS:-3}
+      GF180_VOLTAGE: ${GF180_VOLTAGE:-3v3}
+      DEFAULT_USERNAME: ${DEFAULT_USERNAME:-admin}
+      DEFAULT_FULL_NAME: ${DEFAULT_FULL_NAME:-Admin Admin}
+      DEFAULT_EMAIL: ${DEFAULT_EMAIL:-admin.local}
+      DEFAULT_PASSWORD: ${DEFAULT_PASSWORD:-chip-orchestra}
+      WORKSPACE_ROOT: ${WORKSPACE_ROOT:-/srv/chip-orchestra/workspaces}
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      eda-service:
+        condition: service_started
+    ports:
+      - "${OPERATOR_PORT:-8080}:8080"
+    volumes:
+      - ${WORKSPACE_HOST_PATH:-/srv/chip-orchestra/workspaces}:${WORKSPACE_ROOT:-/srv/chip-orchestra/workspaces}${WORKSPACE_MOUNT_FLAG:-}
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/health >/dev/null 2>&1 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  eda-service:
+    platform: linux/amd64
+    build:
+      context: ../../eda-service
+      args:
+        PDK_ROOT: ${PDK_ROOT:-/opt/pdk}
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: mysql+pymysql://${MYSQL_USER:-chip}:${MYSQL_PASSWORD:-chip}@mysql:3306/${MYSQL_DATABASE:-chip_orchestra}
+      REDIS_URL: redis://redis:6379/0
+      WORKSPACE_ROOT: ${WORKSPACE_ROOT:-/srv/chip-orchestra/workspaces}
+      IVERILOG_BIN: ${IVERILOG_BIN:-iverilog}
+      IVERILOG_PATH: ${IVERILOG_PATH:-}
+      VVP_BIN: ${VVP_BIN:-vvp}
+      VVP_PATH: ${VVP_PATH:-}
+      LIBRELANE_BIN: ${LIBRELANE_BIN:-librelane}
+      LIBRELANE_PATH: ${LIBRELANE_PATH:-}
+      YOSYS_BIN: ${YOSYS_BIN:-yosys}
+      STA_BIN: ${STA_BIN:-sta}
+      STA_PATH: ${STA_PATH:-}
+      KLAYOUT_BIN: ${KLAYOUT_BIN:-klayout}
+      DOT_PATH: ${DOT_PATH:-dot}
+      PDK: ${PDK:-gf180mcuD}
+      PDK_VERSION: ${PDK_VERSION:-c6d73a35f524070e85faff4a6a9eef49553ebc2b}
+      GF180_VOLTAGE: ${GF180_VOLTAGE:-3v3}
+      PDK_ROOT: ${PDK_ROOT:-/opt/pdk}
+      EDA_JOB_TIMEOUT_SIM: ${EDA_JOB_TIMEOUT_SIM:-600}
+      EDA_JOB_TIMEOUT_HARDEN: ${EDA_JOB_TIMEOUT_HARDEN:-3600}
+      EDA_JOB_TIMEOUT_STA: ${EDA_JOB_TIMEOUT_STA:-900}
+      EDA_JOB_TIMEOUT_GL_SIM: ${EDA_JOB_TIMEOUT_GL_SIM:-900}
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "${EDA_BIND_HOST:-172.16.1.36}:${EDA_PORT:-8002}:8002"
+    volumes:
+      - ${WORKSPACE_HOST_PATH:-/srv/chip-orchestra/workspaces}:${WORKSPACE_ROOT:-/srv/chip-orchestra/workspaces}
+      - pdk_data:${PDK_ROOT:-/opt/pdk}
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8002/health')\" || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  frontend:
+    build:
+      context: ../../frontend
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://172.16.1.36:8080}
+        VITE_USE_MOCKS: "false"
+    restart: unless-stopped
+    environment:
+      VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:8080}
+      VITE_USE_MOCKS: "false"
+      VITE_DEFAULT_USERNAME: ${DEFAULT_USERNAME:-admin}
+      VITE_DEFAULT_PASSWORD: ${DEFAULT_PASSWORD:-chip-orchestra}
+    ports:
+      - "${FRONTEND_PORT:-4173}:4173"
+
+volumes:
+  mysql_data:
+  redis_data:
+  pdk_data:

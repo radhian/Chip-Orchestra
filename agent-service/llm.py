@@ -93,15 +93,46 @@ def set_model(name) -> None:
 
 
 def current_model() -> str:
-    """The chat model in effect right now: the per-run override the UI picked if
-    set, else the active provider's .env default. Provider-aware, so a pick from
-    a non-Ollama provider is not dropped on the floor by reading OLLAMA_MODEL."""
-    if _MODEL_OVERRIDE:
-        return _MODEL_OVERRIDE
+    """The chat model in effect right now for the active provider."""
     provider = get_provider()
     if provider in ("openai", "glm", "zhipu", "zhipuai", "openai-compatible"):
-        return _env("OPENAI_MODEL", "LLM_MODEL", default="glm-4.6")
-    return os.getenv("OLLAMA_MODEL", "glm-5.2:cloud")
+        return _MODEL_OVERRIDE or _env("OPENAI_MODEL", "LLM_MODEL", default="glm-4.6")
+    if provider in ("google", "gemini"):
+        return _MODEL_OVERRIDE or _env("GOOGLE_MODEL", default="gemini-2.5-pro")
+    return _MODEL_OVERRIDE or os.getenv("OLLAMA_MODEL", "glm-5.2:cloud")
+
+
+def list_openai_compatible_models() -> "list[dict]":
+    """Models advertised by an OpenAI-compatible endpoint's /v1/models API."""
+    base = _env("OPENAI_BASE_URL", "LLM_BASE_URL", "OPENAI_API_BASE", default="").rstrip("/")
+    if not base:
+        return []
+    try:
+        import json as _json
+        import urllib.request
+
+        req = urllib.request.Request(f"{base}/models")
+        api_key = _env("OPENAI_API_KEY", "LLM_API_KEY", "ZHIPUAI_API_KEY", default="")
+        if api_key:
+            req.add_header("Authorization", f"Bearer {api_key}")
+        with urllib.request.urlopen(req, timeout=8) as r:  # noqa: S310
+            data = _json.loads(r.read().decode())
+    except Exception:  # noqa: BLE001 — endpoint down / not OpenAI-compatible
+        return []
+
+    out = []
+    for item in data.get("data", []):
+        model_id = item.get("id", "")
+        if not model_id:
+            continue
+        out.append({
+            "name": model_id,
+            "id": model_id,
+            "owned_by": item.get("owned_by", ""),
+            "created": item.get("created", 0),
+            "openai_compatible": True,
+        })
+    return sorted(out, key=lambda m: m["name"])
 
 
 def list_ollama_models() -> "list[dict]":
@@ -536,6 +567,7 @@ __all__ = [
     "current_model",
     "set_num_ctx",
     "list_ollama_models",
+    "list_openai_compatible_models",
     "is_cloud_model",
     "vision_model",
     "model_supports_vision",

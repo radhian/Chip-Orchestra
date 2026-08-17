@@ -1,0 +1,66 @@
+# Strix Halo agent-service ONLY (no self-hosted GLM in this file).
+# Use this compose file whenever agent-service talks to an EXTERNAL
+# OpenAI-compatible LLM endpoint (e.g. the llama-swap running at
+# 172.16.1.10:10000). The self-hosted GLM container is defined separately
+# in docker-compose.strix-glm.yml — include that ONLY when you want to
+# run the model locally.
+#
+# Why split?
+#   podman-compose does not reliably honor `profiles:` or the `!override`
+#   YAML tag, so making glm-server "opt-in" inside a single file is not
+#   version-safe. Splitting the two services into two files gives clean,
+#   explicit control by choosing which -f files to pass.
+#
+# Single-node with external llama-swap (default):
+#   podman-compose --env-file strix-core.rootless.env \
+#     -f docker-compose.r9700-core.yml \
+#     -f docker-compose.strix-agent.yml \
+#     -f docker-compose.strix-single-node.rootless.yml \
+#     up -d --build
+#
+# Single-node with self-hosted GLM (only after pre-downloading the model):
+#   ./scripts/download_glm_model.sh strix-core.rootless.env
+#   podman-compose --env-file strix-core.rootless.env \
+#     -f docker-compose.r9700-core.yml \
+#     -f docker-compose.strix-agent.yml \
+#     -f docker-compose.strix-glm.yml \
+#     -f docker-compose.strix-glm.rootless.yml \
+#     -f docker-compose.strix-single-node.rootless.yml \
+#     up -d --build
+services:
+  agent-service:
+    build:
+      context: ../../agent-service
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: mysql+pymysql://${MYSQL_USER:-chip}:${MYSQL_PASSWORD:-chip}@${R9700_HOST:-172.16.1.36}:${MYSQL_PORT:-3306}/${MYSQL_DATABASE:-chip_orchestra}
+      REDIS_URL: redis://${R9700_HOST:-172.16.1.36}:${REDIS_PORT:-6379}/0
+      DEFAULT_USERNAME: ${DEFAULT_USERNAME:-admin}
+      DEFAULT_FULL_NAME: ${DEFAULT_FULL_NAME:-Admin Admin}
+      WORKSPACE_ROOT: ${WORKSPACE_ROOT:-/srv/chip-orchestra/workspaces}
+      AGENT_ARTIFACT_ROOT: ${AGENT_ARTIFACT_ROOT:-/srv/chip-orchestra/workspaces}
+      LLM_PROVIDER: ${LLM_PROVIDER:-glm}
+      # By default reach an external OpenAI-compatible endpoint (llama-swap on
+      # the host). Override to http://glm-server:10000/v1 when using the
+      # self-hosted GLM path (strix-glm.yml).
+      OPENAI_BASE_URL: ${OPENAI_BASE_URL:-http://172.16.1.10:10000/v1}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-EMPTY}
+      OPENAI_MODEL: ${OPENAI_MODEL:-Laguna-S-2.1}
+      AGENT_DEEP_AGENTS: ${AGENT_DEEP_AGENTS:-1}
+      GARUDA_DEEP_BUDGET_S: ${GARUDA_DEEP_BUDGET_S:-2400}
+      GARUDA_PY_TIMEOUT_S: ${GARUDA_PY_TIMEOUT_S:-600}
+      AGENT_WEB_RESEARCH: ${AGENT_WEB_RESEARCH:-1}
+      GARUDA_RESEARCH_BUDGET_S: ${GARUDA_RESEARCH_BUDGET_S:-420}
+      GARUDA_CLONE_TIMEOUT_S: ${GARUDA_CLONE_TIMEOUT_S:-90}
+      MAX_REPAIR_ITERS: ${MAX_REPAIR_ITERS:-3}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "${AGENT_BIND_HOST:-172.16.1.10}:${AGENT_PORT:-8001}:8001"
+    volumes:
+      - ${WORKSPACE_HOST_PATH:-/srv/chip-orchestra/workspaces}:${WORKSPACE_ROOT:-/srv/chip-orchestra/workspaces}${WORKSPACE_MOUNT_FLAG:-}
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8001/health')\" || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12

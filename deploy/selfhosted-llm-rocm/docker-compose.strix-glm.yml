@@ -1,0 +1,49 @@
+# Strix Halo self-hosted GLM (llama.cpp-ROCm) model server ONLY.
+# Include this file ONLY when you want to run GLM locally on Strix Halo.
+# The agent-service (in docker-compose.strix-agent.yml) is decoupled so the
+# stack can also run against an external OpenAI-compatible endpoint without
+# this container ever starting.
+#
+# Rootless GPU note: this file declares the rootful defaults (group_add
+# video, render). For rootless Podman, ALSO include
+# docker-compose.strix-glm.rootless.yml — it replaces group_add with
+# `keep-groups` (which is not compatible with video/render at the CLI layer).
+services:
+  glm-server:
+    image: ${LLAMA_IMAGE:-ghcr.io/ggml-org/llama.cpp:server-rocm}
+    container_name: glm-strixhalo
+    restart: unless-stopped
+    devices:
+      - /dev/kfd
+      - /dev/dri
+    group_add:
+      - video
+      - render
+    ipc: host
+    security_opt:
+      - seccomp:unconfined
+    environment:
+      # gfx1151 (Strix Halo iGPU) is Preview in ROCm and needs this override.
+      HSA_OVERRIDE_GFX_VERSION: ${HSA_OVERRIDE_GFX_VERSION:-11.5.1}
+      HF_HUB_ENABLE_HF_TRANSFER: "1"
+    volumes:
+      - ${MODEL_DIR:-/data/models}:/models
+    ports:
+      # Exposed for host-side validation. Keep the container port stable for
+      # agent-service (OPENAI_BASE_URL=http://glm-server:10000/v1 by default),
+      # while allowing the host bind port to move if :10000 is already occupied.
+      - "${LLM_HOST_PORT:-10000}:${LLM_SERVE_PORT:-10000}"
+    command: >
+      -hf ${GLM_MODEL_REPO:-unsloth/GLM-4.5-Air-GGUF}:${GLM_MODEL_FILE:-Q4_K_M/GLM-4.5-Air-Q4_K_M-00001-of-00002.gguf}
+      --model /models/${GLM_MODEL_FILE:-Q4_K_M/GLM-4.5-Air-Q4_K_M-00001-of-00002.gguf}
+      --alias ${OPENAI_MODEL:-GLM-5.2}
+      --host 0.0.0.0 --port ${LLM_SERVE_PORT:-10000}
+      --n-gpu-layers ${NGL:-999}
+      --ctx-size ${LLM_CTX:-32768}
+      --jinja --flash-attn on
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:${LLM_SERVE_PORT:-10000}/v1/models >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 60
+      start_period: 1800s
