@@ -343,7 +343,7 @@ def _run_local(
     timeout: float,
 ) -> Dict[str, Any]:
     """Run LibreLane Chip flow via local binary."""
-    args = [executable, "--flow", "Chip", str(config_path)]
+    args = [executable, "--flow", "Chip", "--manual-pdk", str(config_path)]
     result = runner.run(args, cwd=workspace, timeout=timeout)
     if not result.ok:
         category = classify_failure(result.output, "LibreLane Chip flow")
@@ -382,7 +382,7 @@ def _run_docker(
         "-v", "chip-orchestra_pdk_data:/opt/pdk",
         "-w", "/work",
         image,
-        "librelane", "--flow", "Chip",
+        "librelane", "--flow", "Chip", "--manual-pdk",
         config_rel_str,
     ]
     result = runner.run(args, cwd=workspace, timeout=timeout)
@@ -429,11 +429,19 @@ def collect_chip_artifacts(run_dir: Path) -> Dict[str, Any]:
         except (json.JSONDecodeError, OSError):
             pass
 
-    # Scan for ODB, DEF, GDS files
+    # Scan for ODB, DEF, GDS files. LibreLane writes a copy of the final
+    # design views under ``final/``; those are the ones downstream consumers
+    # (e.g. pad-placement extraction) want, so sort them first — otherwise the
+    # alphabetically-first match is an early per-step DEF (e.g. floorplan,
+    # before OpenROAD.PadRing has placed any pads).
+    def _final_first(paths: List[Path]) -> List[str]:
+        ordered = sorted(paths, key=lambda p: (0 if "final" in p.parts else 1, str(p)))
+        return [str(p) for p in ordered]
+
     for ext, key in [("*.odb", "odb"), ("*.def", "def"), ("*.gds", "gds"), ("*.gds2", "gds")]:
-        found = sorted(run_dir.rglob(ext))
+        found = list(run_dir.rglob(ext))
         if found:
-            artifacts[key] = [str(f) for f in found]
+            artifacts[key] = _final_first(found)
 
     # LibreLane logs
     log_files = sorted(run_dir.rglob("*.log"))
@@ -461,10 +469,14 @@ def extract_pad_placement_from_def(def_path: Path) -> List[Dict[str, Any]]:
     text = def_path.read_text(encoding="utf-8", errors="ignore")
     placements: List[Dict[str, Any]] = []
 
+    # Database units per micron — read from the DEF rather than assumed, since
+    # PDKs differ (GF180 uses 2000, sky130 uses 1000). Falls back to 1000.
+    dbu_match = re.search(r"UNITS\s+DISTANCE\s+MICRONS\s+(\d+)", text)
+    dbu = float(dbu_match.group(1)) if dbu_match else 1000.0
+
     # Parse DIEAREA to determine dimensions
     die_match = re.search(r"DIEAREA\s+\(\s*(\d+)\s+(\d+)\s*\)\s+\(\s*(\d+)\s+(\d+)\s*\)", text)
     die_x_max, die_y_max = 0.0, 0.0
-    dbu = 1000.0  # default database units per micron
     if die_match:
         die_x_max = float(die_match.group(3)) / dbu
         die_y_max = float(die_match.group(4)) / dbu

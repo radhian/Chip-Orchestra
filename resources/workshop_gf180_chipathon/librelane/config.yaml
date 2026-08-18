@@ -1,7 +1,8 @@
 # GF180 Chipathon Workshop — LibreLane Chip flow configuration
 #
-# Golden test fixture: 60 analog + 20 bidirectional + 4 DVDD + 4 DVSS
-# + 2 input + 4 corner pads on a 2935 x 2935 µm die.
+# Golden test fixture (matches src/chip_top.sv exactly):
+#   30 analog + 20 bidirectional + 4 DVDD + 4 DVSS + 2 input = 60 I/O pads
+#   + 4 corner pads, distributed South 16 / East 12 / North 16 / West 16.
 #
 # This is the WORKSHOP-SPECIFIC configuration.  Generic Chip Orchestra
 # pad-ring configs are parameterized by the user's actual I/O requirements.
@@ -11,7 +12,7 @@ meta:
   version: 2
 
 DESIGN_NAME: chip_top
-DESIGN_IS_CORE: false
+PDN_MULTILAYER: false
 
 PDK: gf180mcuD
 STD_CELL_LIBRARY: gf180mcu_fd_sc_mcu7t5v0
@@ -19,21 +20,64 @@ STD_CELL_LIBRARY: gf180mcu_fd_sc_mcu7t5v0
 CLOCK_PORT: clk
 CLOCK_PERIOD: 100
 
-DIE_AREA: "0 0 2935 2935"
+# Die width chosen so LibreLane's default pad_cfg.tcl divisibility check passes
+# on every side: with uniform 75 µm pads + 355 µm corners, per-side spacing must
+# be an integer multiple of the 1 µm pad site.  2935 fails the 16-pad sides
+# (space_side = 62.5); 2936 yields integer spacing for both 16- and 12-pad sides.
+DIE_AREA: [0, 0, 2936, 2936]
 FP_SIZING: absolute
 
-PDN_CFG: "dir::librelane/pdn_cfg.tcl"
+PDN_CFG: "dir::pdn_cfg.tcl"
 
 VERILOG_FILES:
-  - "dir::src/chip_top.sv"
-  - "dir::src/chip_core.sv"
-  - "dir::src/slot_defines.svh"
+  - "dir::../src/chip_top.sv"
+  - "dir::../src/chip_core.sv"
+  - "dir::../src/slot_defines.svh"
+
+# gf180mcu_fd_io.v uses Verilog-1995 transistor-level primitives (rnmos/rpmos)
+# that Verilator rejects but Yosys handles fine. Strategy:
+#   - QUIT_ON_LINTER_ERRORS: false  → Verilator lint errors are non-fatal
+#   - VERILOG_FILES_BLACKBOX        → Yosys sees the pad cells as black boxes
+#     so it can elaborate chip_top without needing the transistor internals.
+QUIT_ON_LINTER_ERRORS: false
+
+VERILOG_FILES_BLACKBOX:
+  - "dir::../gf180mcu_fd_io_yosys.v"
 
 EXTRA_LEFS: []
-EXTRA_GDS_FILES: []
+EXTRA_GDS: []
 
-# Pad configuration (workshop-specific cell from GF180 PDK)
-PAD_CFG: "dir::librelane/slots/slot_workshop.yaml"
+# ---------------------------------------------------------------------------
+# GF180 I/O pad library for OpenROAD.PadRing
+# ---------------------------------------------------------------------------
+# LibreLane's default pad_cfg.tcl generator is used (PAD_CFG is intentionally
+# left UNSET — it is a Tcl script, not a YAML layout).  The gf180mcuD PDK ships
+# no LibreLane pad config, so every pad variable below is supplied here.
+#
+# The IO cell LEFs/GDS are NOT part of the PDK's std-cell LEF set, so they must
+# be loaded explicitly (pdk_dir:: resolves to $PDK_ROOT/gf180mcuD; the glob
+# expands to a file list).
+PAD_LEFS:
+  - "pdk_dir::libs.ref/gf180mcu_fd_io/lef/*.lef"
+PAD_GDS:
+  - "pdk_dir::libs.ref/gf180mcu_fd_io/gds/gf180mcu_fd_io.gds"
+
+# GF180 IO pad sites (GF_IO_Site / GF_COR_Site) are referenced by the cell LEFs
+# but never defined in any LEF, so they must be declared as fake sites.
+# Dimensions: IO cells are 75 x 350 µm (site tiles at the 1 µm filler grid);
+# corner cell gf180mcu_fd_io__cor is 355 x 355 µm.
+PAD_SITE_NAME: GF_IO_Site
+PAD_CORNER_SITE_NAME: GF_COR_Site
+PAD_FAKE_SITES:
+  GF_IO_Site: [1, 350]
+  GF_COR_Site: [355, 355]
+
+PAD_CORNER:
+  - gf180mcu_fd_io__cor
+PAD_FILLERS:
+  - gf180mcu_fd_io__fill10
+  - gf180mcu_fd_io__fill5
+  - gf180mcu_fd_io__fill1
 
 # Physical pad placement — per-side instance ordering
 # These are PHYSICAL INSTANCE NAMES matching the RTL (chip_top.sv)

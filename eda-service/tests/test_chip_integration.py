@@ -29,6 +29,7 @@ from toolchain.librelane import (
     parse_librelane_stages,
     run_chip_flow,
     write_pad_placement_json,
+    _find_librelane_bin,
     LIBRELANE_CIEL_CACHE_VOLUME,
 )
 
@@ -50,6 +51,11 @@ def _docker_available() -> bool:
         return False
 
 
+def _can_run() -> bool:
+    """Check if we have either native LibreLane or Docker."""
+    return bool(_find_librelane_bin() or _docker_available())
+
+
 @pytest.fixture
 def workshop_workspace(tmp_path: Path) -> Path:
     """Create a workspace from the workshop fixture."""
@@ -61,7 +67,7 @@ def workshop_workspace(tmp_path: Path) -> Path:
     return ws
 
 
-@pytest.mark.skipif(not _docker_available(), reason="Docker not available")
+@pytest.mark.skipif(not _can_run(), reason="Neither native LibreLane nor Docker is available")
 class TestRealLibreLaneChipFlow:
     """Real end-to-end test: Workshop → LibreLane → OpenROAD.PadRing → GF180."""
 
@@ -71,21 +77,23 @@ class TestRealLibreLaneChipFlow:
         assert config_path.is_file(), f"Config not found: {config_path}"
 
         runner = SubprocessCommandRunner()
+        has_native = bool(_find_librelane_bin())
         
-        # Pre-download the PDK using LibreLane's built-in volare tool
-        print("Downloading PDK...")
-        runner.run([
-            "docker", "run", "--rm",
-            "-e", "PDK_ROOT=/opt/pdk",
-            "-v", "chip-orchestra_pdk_data:/opt/pdk",
-            DOCKER_IMAGE,
-            "bash", "-c", "ciel enable --pdk-family gf180mcu --pdk-root /opt/pdk $(python3 -c \"from librelane.common import get_pdk_hash; print(get_pdk_hash('gf180mcu'))\")"
-        ], timeout=600)
+        if not has_native:
+            # Pre-download the PDK via Docker fallback
+            print("Downloading PDK via Docker fallback...")
+            runner.run([
+                "docker", "run", "--rm",
+                "-e", "PDK_ROOT=/opt/pdk",
+                "-v", "chip-orchestra_pdk_data:/opt/pdk",
+                DOCKER_IMAGE,
+                "bash", "-c", "ciel enable --pdk-family gf180mcu --pdk-root /opt/pdk $(python3 -c \"from librelane.common import get_pdk_hash; print(get_pdk_hash('gf180mcu'))\")"
+            ], timeout=600)
 
         result = run_chip_flow(
             workshop_workspace, config_path,
             runner=runner,
-            use_docker=True,
+            use_docker=not has_native,
             docker_image=DOCKER_IMAGE,
             timeout=7200,
         )
