@@ -929,6 +929,14 @@ func (a *App) getSignoffStatus(c *gin.Context) {
 		}
 	}
 
+	// Die <-> pad-ring pinout (which signal lands on which pad): the map a
+	// person needs to probe/bond the die, produced by the PADRING (LibreLane
+	// Chip flow) stage. Surfaced so the SIGNOFF view can render a bring-up table.
+	pinout := []map[string]any{}
+	if data, err := os.ReadFile(filepath.Join(workspace, filepath.FromSlash("padring/pinout.json"))); err == nil {
+		_ = json.Unmarshal(data, &pinout)
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"stateLabel":      ternary(signoffDone, "Approved", "Awaiting final approval"),
 		"message":         ternary(signoffDone, "Signoff is approved and the export bundle can be delivered.", "The task remains blocked on final signoff approval."),
@@ -941,6 +949,7 @@ func (a *App) getSignoffStatus(c *gin.Context) {
 		"gdsImage": gdsImage,
 		"gdsFiles": gdsFiles,
 		"metrics":  metrics,
+		"pinout":   pinout,
 	})
 }
 

@@ -19,11 +19,13 @@ from toolchain.librelane import (
     apply_pad_ring,
     collect_chip_artifacts,
     extract_pad_placement_from_def,
+    extract_pinout,
     implementation_from_mapping,
     parse_librelane_stages,
     extract_librelane_version,
     run_chip_flow,
     write_pad_placement_json,
+    write_pinout_json,
 )
 from toolchain.reports import BaseReport, ChipPnrReport, SignoffReport
 from workspace import resolve_workspace
@@ -122,6 +124,12 @@ def run_stage(
     if stage == "RENDER":
         return run_render(workspace, top, stage_opts, runner, stage=stage)
     if stage == "PADRING":
+        # Run the real LibreLane Chip flow (synthesis -> OpenROAD.PadRing ->
+        # route -> GDS, plus the die<->pad pinout) when the design ships a
+        # chip-level LibreLane config. Fall back to the legacy gdspy padring
+        # runner for designs that don't, so non-chip tasks are unaffected.
+        if (workspace / "librelane" / "config.yaml").is_file():
+            return _run_chip_pnr(workspace, top, stage_opts, runner)
         return run_padring(workspace, top, stage_opts, runner, stage=stage)
     if stage == "CHIP_PNR":
         return _run_chip_pnr(workspace, top, stage_opts, runner)
@@ -206,6 +214,16 @@ def _run_chip_pnr(
                         report.pad_counts["ground"] = report.pad_counts.get("ground", 0) + 1
                     elif "cor" in master:
                         report.pad_counts["corner"] = report.pad_counts.get("corner", 0) + 1
+
+                # Die <-> pad-ring pinout: which signal lands on which pad.
+                # This is the map used for chip bring-up / probing, surfaced in
+                # the SIGNOFF tab.
+                pinout = extract_pinout(def_path)
+                if pinout:
+                    po_path = workspace / "padring" / "pinout.json"
+                    write_pinout_json(pinout, po_path)
+                    report.pinout = str(po_path)
+                    report.pinout_entries = pinout
 
         report.metrics = {
             "flow": report.flow,

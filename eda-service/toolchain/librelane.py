@@ -545,6 +545,97 @@ def write_pad_placement_json(placements: List[Dict[str, Any]], output_path: Path
 
 
 # ---------------------------------------------------------------------------
+# Pinout extraction: which die signal connects to which pad (bring-up map)
+# ---------------------------------------------------------------------------
+
+# Nets/pins that are power/ground rather than signal I/O.
+_POWER_NETS = {"VDD", "VSS", "DVDD", "DVSS", "VNW", "VPW", "VGND", "VPWR"}
+
+# Logical direction inferred from the pad master cell name.
+_PAD_DIRECTION = (
+    ("in_s", "input"), ("in_c", "input"),
+    ("bi_", "bidirectional"),
+    ("asig", "analog"),
+    ("dvdd", "power"), ("dvss", "ground"),
+)
+
+
+def _pad_direction(master: str) -> str:
+    for key, direction in _PAD_DIRECTION:
+        if key in master:
+            return direction
+    return "signal"
+
+
+def extract_pinout(def_path: Path) -> List[Dict[str, Any]]:
+    """Map each top-level die signal to the pad it lands on.
+
+    Parses the DEF ``NETS`` section for nets that connect a chip-level ``PIN`` to
+    a pad-cell pin, e.g. ``- clk ( PIN clk ) ( pad_w_in_0 PAD ) ...`` means the
+    external ``clk`` port lands on pad ``pad_w_in_0``. Joins with pad placement
+    (:func:`extract_pad_placement_from_def`) so each entry carries the physical
+    side and (x, y) — the map a person needs to probe/bond the die.
+
+    Returns a list of dicts ``{signal, pad_instance, pad_pin, pad_master,
+    direction, side, x, y}`` ordered by side then signal. Power/ground nets are
+    excluded.
+    """
+    placements = extract_pad_placement_from_def(def_path)
+    by_inst = {p["instance"]: p for p in placements}
+
+    text = def_path.read_text(encoding="utf-8", errors="ignore")
+    # Pad-connected signal nets live in SPECIALNETS (e.g. clk/rst_n/dout wired to
+    # a pad PAD pin); NETS holds the internal core nets. Scan both so this works
+    # regardless of how a given flow classifies the top-level I/O nets.
+    entries: List[str] = []
+    for pat in (r"^SPECIALNETS\b.*?^END SPECIALNETS", r"^NETS\b.*?^END NETS"):
+        block = re.search(pat, text, re.S | re.M)
+        if block:
+            entries.extend(re.split(r"\n\s*-\s+", block.group(0))[1:])
+    if not entries:
+        return []
+
+    pinout: List[Dict[str, Any]] = []
+    # Connection tuples precede the first '+' (which introduces routing
+    # geometry), so only that head of each entry needs scanning.
+    for entry in entries:
+        head = entry.split("+", 1)[0]
+        tokens = head.split()
+        if not tokens:
+            continue
+        signal = tokens[0]
+        if signal in _POWER_NETS:
+            continue
+        tuples = re.findall(r"\(\s*(\S+)\s+(\S+)\s*\)", head)
+        # Only nets that reach a chip-level port are die I/O signals.
+        if not any(a == "PIN" for a, _ in tuples):
+            continue
+        for inst, pin in tuples:
+            if inst == "PIN" or pin in _POWER_NETS or inst not in by_inst:
+                continue
+            place = by_inst[inst]
+            master = place.get("master", "")
+            pinout.append({
+                "signal": signal,
+                "pad_instance": inst,
+                "pad_pin": pin,
+                "pad_master": master,
+                "direction": _pad_direction(master),
+                "side": place.get("side", ""),
+                "x": place.get("x"),
+                "y": place.get("y"),
+            })
+    pinout.sort(key=lambda e: (str(e.get("side")), str(e.get("signal"))))
+    return pinout
+
+
+def write_pinout_json(pinout: List[Dict[str, Any]], output_path: Path) -> None:
+    """Write die<->pad-ring pinout data as JSON."""
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(json.dumps(pinout, indent=2), encoding="utf-8")
+
+
+# ---------------------------------------------------------------------------
 # Observability: log parsing for Chip flow stage visibility
 # ---------------------------------------------------------------------------
 
@@ -591,6 +682,8 @@ __all__ = [
     "collect_chip_artifacts",
     "extract_pad_placement_from_def",
     "write_pad_placement_json",
+    "extract_pinout",
+    "write_pinout_json",
     "parse_librelane_stages",
     "extract_librelane_version",
     "LIBRELANE_DOCKER_IMAGE",

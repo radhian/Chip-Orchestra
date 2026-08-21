@@ -32,11 +32,13 @@ from toolchain.librelane import (
     collect_chip_artifacts,
     extract_librelane_version,
     extract_pad_placement_from_def,
+    extract_pinout,
     implementation_from_mapping,
     io_requirements_from_mapping,
     parse_librelane_stages,
     validate_pad_manifest,
     write_pad_placement_json,
+    write_pinout_json,
 )
 
 
@@ -350,6 +352,53 @@ END COMPONENTS
         assert out.is_file()
         loaded = json.loads(out.read_text())
         assert loaded[0]["instance"] == "pad_a"
+
+
+class TestPinout:
+    # DEF with the die + pad placement (COMPONENTS) and the top-level signal
+    # nets wired to pad PAD pins (SPECIALNETS) — GF180 uses dbu=2000.
+    DEF = """UNITS DISTANCE MICRONS 2000 ;
+DIEAREA ( 0 0 ) ( 5872000 5872000 ) ;
+COMPONENTS 3 ;
+- pad_w_in_0 gf180mcu_fd_io__in_s
+  + FIXED ( 0 3536000 ) N ;
+- pad_e_bi_0 gf180mcu_fd_io__bi_24t
+  + FIXED ( 5172000 914000 ) W ;
+- pad_s_analog_0 gf180mcu_fd_io__asig_5p0
+  + FIXED ( 836000 0 ) N ;
+END COMPONENTS
+SPECIALNETS 3 ;
+    - clk ( PIN clk ) ( pad_w_in_0 PAD ) + USE SIGNAL ;
+    - dout ( PIN dout ) ( pad_e_bi_0 PAD ) + USE SIGNAL ;
+    - VDD ( pad_w_in_0 VDD ) ( pad_e_bi_0 VDD ) + USE POWER ;
+END SPECIALNETS
+"""
+
+    def test_extract_pinout_maps_signal_to_pad(self, tmp_path: Path) -> None:
+        def_file = tmp_path / "chip.def"
+        def_file.write_text(self.DEF)
+        pinout = extract_pinout(def_file)
+        by_signal = {p["signal"]: p for p in pinout}
+        # Signal I/O nets are captured; the power net (VDD) is excluded.
+        assert set(by_signal) == {"clk", "dout"}
+        assert by_signal["clk"]["pad_instance"] == "pad_w_in_0"
+        assert by_signal["clk"]["direction"] == "input"
+        assert by_signal["clk"]["side"] == "west"
+        assert by_signal["dout"]["pad_instance"] == "pad_e_bi_0"
+        assert by_signal["dout"]["direction"] == "bidirectional"
+        assert by_signal["dout"]["side"] == "east"
+
+    def test_extract_pinout_empty_without_specialnets(self, tmp_path: Path) -> None:
+        def_file = tmp_path / "nonets.def"
+        def_file.write_text("UNITS DISTANCE MICRONS 2000 ;\nDIEAREA ( 0 0 ) ( 100 100 ) ;\n")
+        assert extract_pinout(def_file) == []
+
+    def test_write_pinout_json(self, tmp_path: Path) -> None:
+        pinout = [{"signal": "clk", "pad_instance": "pad_w_in_0", "side": "west"}]
+        out = tmp_path / "padring" / "pinout.json"
+        write_pinout_json(pinout, out)
+        assert out.is_file()
+        assert json.loads(out.read_text())[0]["signal"] == "clk"
 
 
 # -----------------------------------------------------------------------

@@ -140,11 +140,14 @@ class ChipPnrReport(BaseReport):
     gds: str = ""
     state_out: str = ""
     pad_placement: str = ""
+    pinout: str = ""  # path to padring/pinout.json
     # Observed stages
     stages_observed: List[str] = field(default_factory=list)
     # Pad ring verification
     pad_ring_verified: bool = False
     pad_counts: Dict[str, int] = field(default_factory=dict)
+    # Die <-> pad-ring signal map (which signal lands on which pad)
+    pinout_entries: List[Dict[str, Any]] = field(default_factory=list)
 
 
 # Physical (hardening) stages share the same underlying LibreLane run shape.
