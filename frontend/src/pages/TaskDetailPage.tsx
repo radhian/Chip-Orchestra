@@ -1584,6 +1584,52 @@ export function TaskDetailPage({ tab }: { tab: DetailTab }) {
               </div>
             ) : null}
 
+            {signoff.pinout && signoff.pinout.length ? (
+              <Card className='rounded-3xl border-slate-200 shadow-none'>
+                <CardHeader>
+                  <CardTitle className='text-xl'>Die ↔ pad-ring pinout</CardTitle>
+                  <CardDescription>
+                    Which top-level signal lands on which physical pad — the map for chip bring-up and probing. Extracted from the routed layout by the PADRING (LibreLane Chip) stage.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className='overflow-x-auto rounded-2xl border border-slate-200'>
+                    <table className='w-full text-left text-sm'>
+                      <thead>
+                        <tr className='border-b border-slate-200 bg-slate-50 text-xs uppercase tracking-wide text-slate-400'>
+                          <th className='px-4 py-3'>Signal</th>
+                          <th className='px-4 py-3'>Direction</th>
+                          <th className='px-4 py-3'>Pad instance</th>
+                          <th className='px-4 py-3'>Pad cell</th>
+                          <th className='px-4 py-3'>Side</th>
+                          <th className='px-4 py-3'>X / Y (µm)</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {signoff.pinout.map((pin) => (
+                          <tr key={`${pin.signal}-${pin.pad_instance}`} className='border-b border-slate-100 last:border-0'>
+                            <td className='px-4 py-2.5 font-semibold text-slate-800'>{pin.signal}</td>
+                            <td className='px-4 py-2.5 text-slate-600'>{pin.direction}</td>
+                            <td className='px-4 py-2.5 font-mono text-xs text-slate-600'>{pin.pad_instance}</td>
+                            <td className='px-4 py-2.5 font-mono text-xs text-slate-500'>{pin.pad_master}</td>
+                            <td className='px-4 py-2.5'>
+                              <span className='rounded-full bg-slate-100 px-2 py-0.5 text-xs uppercase tracking-wide text-slate-600'>{pin.side}</span>
+                            </td>
+                            <td className='px-4 py-2.5 text-slate-600'>
+                              {pin.x ?? '—'} / {pin.y ?? '—'}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <p className='mt-3 text-xs text-slate-400'>
+                    {signoff.pinout.length} connected signal pad(s). Spare/unconnected pads (analog, unused I/O, power) are omitted.
+                  </p>
+                </CardContent>
+              </Card>
+            ) : null}
+
             <div className='grid gap-5 xl:grid-cols-2'>
             <Card className='rounded-3xl border-slate-200 shadow-none'>
               <CardHeader>
