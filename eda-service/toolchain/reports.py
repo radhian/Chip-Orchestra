@@ -124,6 +124,32 @@ class PadringReport(BaseReport):
     skipped: bool = False
 
 
+@dataclass
+class ChipPnrReport(BaseReport):
+    """Report for a LibreLane Chip flow (includes OpenROAD.PadRing)."""
+    stage: str = "CHIP_PNR"
+    top: str = ""
+    flow: str = "Chip"
+    pdk: str = ""
+    librelane_version: str = ""
+    execution_mode: str = ""  # "local" or "docker"
+    docker_image: str = ""
+    # Output paths
+    odb: str = ""
+    def_file: str = ""
+    gds: str = ""
+    state_out: str = ""
+    pad_placement: str = ""
+    pinout: str = ""  # path to padring/pinout.json
+    # Observed stages
+    stages_observed: List[str] = field(default_factory=list)
+    # Pad ring verification
+    pad_ring_verified: bool = False
+    pad_counts: Dict[str, int] = field(default_factory=dict)
+    # Die <-> pad-ring signal map (which signal lands on which pad)
+    pinout_entries: List[Dict[str, Any]] = field(default_factory=list)
+
+
 # Physical (hardening) stages share the same underlying LibreLane run shape.
 HARDEN_REPORT_TYPES = {
     "SYNTH": SynthReport,

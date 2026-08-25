@@ -124,6 +124,18 @@ export interface SignoffChecklistItem {
   status?: 'done' | 'pending' | 'failed'
 }
 
+/** One die signal and the pad it lands on (die <-> pad-ring bring-up map). */
+export interface PinoutEntry {
+  signal: string
+  pad_instance: string
+  pad_pin: string
+  pad_master: string
+  direction: string
+  side: string
+  x: number | null
+  y: number | null
+}
+
 export interface SignoffStatus {
   stateLabel: string
   message: string
@@ -132,6 +144,7 @@ export interface SignoffStatus {
   gdsImage?: string
   gdsFiles?: string[]
   metrics?: Record<string, string | number | boolean | null>
+  pinout?: PinoutEntry[]
 }
 
 /** One thing the golden model produced that the reviewer should look at. */
