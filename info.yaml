@@ -11,8 +11,29 @@
 # Project metadata (used for documentation / review)
 # ======================================================
 project:
-  title: "NanoCGRA 3x3 with Sobel Accelerator Application"
+  title: "NanoCGRA 3x3 Sobel Accelerator"
   team: "Chip Orchestra"
   discord: "rads"
-  description: "A compact 3x3 coarse-grained reconfigurable array wired as a streaming Sobel edge-detection accelerator, with a 32-byte SRAM and a UART-only 4-pin interface (clk, rst_async_n, data_i, data_o). Streams a 32x32 grayscale image in over UART and returns a 30x30 Sobel magnitude image over UART, verified end-to-end against a Python golden model on the routed gate-level netlist. Successor to nanocgra_lite_3x3_opt with the layout-review blockers (LVS clean, antenna, density, multi-corner STA) closed. Implemented in GF180MCU."
+  description: "A compact 3x3 coarse-grained reconfigurable array wired as a streaming Sobel edge-detection accelerator on GF180MCU, with a 32-byte SRAM and a 4-pin UART-only interface (clk, rst_async_n, data_i, data_o). Streams a 32x32 grayscale image in and returns a 30x30 Sobel magnitude image out, verified end-to-end against a Python golden model on the routed gate-level netlist."
   lvs_config: "output/nanocgra_lite_3x3_with_application/lvs_config.json"
+
+# ======================================================
+# Pin list (must match the padring / info.yaml section
+# consumed by the Chipathon wrapper flow).
+#
+# Top module: nano_cgra_3x3_sobel_accelerator_v4
+# Signals   : clk, rst_async_n, data_i (UART RX), data_o (UART TX)
+# ======================================================
+pins:
+  - name: vss
+    io_type: ground              # first pin MUST be a ground connection
+  - name: clk
+    io_type: input_schmitt       # 50 MHz system clock; schmitt trigger for edge cleanliness
+  - name: rst_async_n
+    io_type: input_schmitt       # async, active-low reset; synchronised internally by reset_sync.v
+  - name: data_i
+    io_type: input_cmos          # UART RX, bit-serial at 115200 baud (434 clk / bit)
+  - name: data_o
+    io_type: bidirectional       # UART TX; configured as output at runtime
+  - name: vdd
+    io_type: power               # trailing power pin closes the I/O power rail
