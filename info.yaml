@@ -14,5 +14,26 @@ project:
   title: "NanoCGRA 3x3"
   team: "Chip Orchestra"
   discord: "rads"
-  description: "A compact 3x3 coarse-grained reconfigurable array with 32-byte SRAM and a UART-only interface, implemented in GF180MCU."
+  description: "A compact 3x3 coarse-grained reconfigurable array with a 32-byte SRAM and a 4-pin UART-only interface (clk, rst_n, uart_rx, uart_tx), implemented in GF180MCU. The internal UART bridge exposes an 8-bit MMIO command protocol for SRAM, PE configuration, operands, start/status control, and UART registers."
   lvs_config: "output/nanocgra_lite_3x3_opt/lvs_config.json"
+
+# ======================================================
+# Pin list (must match the padring / info.yaml section
+# consumed by the Chipathon wrapper flow).
+#
+# Top module: NanoCGRA_Lite
+# Signals   : clk, rst_n, uart_rx, uart_tx
+# ======================================================
+pins:
+  - name: vss
+    io_type: ground              # first pin MUST be a ground connection
+  - name: clk
+    io_type: input_schmitt       # system clock
+  - name: rst_n
+    io_type: input_schmitt       # active-low reset
+  - name: uart_rx
+    io_type: input_cmos          # UART RX into the internal uart_bridge
+  - name: uart_tx
+    io_type: bidirectional       # UART TX from the internal uart_bridge
+  - name: vdd
+    io_type: power               # trailing power pin closes the I/O power rail
