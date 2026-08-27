@@ -11,8 +11,8 @@
 # Project metadata (used for documentation / review)
 # ======================================================
 project:
-  title: "NanoCGRA 3x3"
+  title: "NanoCGRA 3x3 with Sobel Accelerator Application"
   team: "Chip Orchestra"
   discord: "rads"
-  description: "A compact 3x3 coarse-grained reconfigurable array with 32-byte SRAM and a UART-only interface, implemented in GF180MCU."
-  lvs_config: "output/nanocgra_lite_3x3_opt/lvs_config.json"
+  description: "A compact 3x3 coarse-grained reconfigurable array wired as a streaming Sobel edge-detection accelerator, with a 32-byte SRAM and a UART-only 4-pin interface (clk, rst_async_n, data_i, data_o). Streams a 32x32 grayscale image in over UART and returns a 30x30 Sobel magnitude image over UART, verified end-to-end against a Python golden model on the routed gate-level netlist. Successor to nanocgra_lite_3x3_opt with the layout-review blockers (LVS clean, antenna, density, multi-corner STA) closed. Implemented in GF180MCU."
+  lvs_config: "output/nanocgra_lite_3x3_with_application/lvs_config.json"
