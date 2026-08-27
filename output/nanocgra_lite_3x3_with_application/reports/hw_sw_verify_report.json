@@ -1,0 +1,58 @@
+{
+  "stage": "HW_SW_VERIFY",
+  "top": "nano_cgra_3x3_sobel_accelerator_v4",
+  "summary": "The chip processed hwsw/input/Screenshot_from_2026-08-01_05-48-03.png through its real serial interface and returned exactly what the golden model computes for that input (900 bytes, no mismatches).",
+  "completed": true,
+  "input": {
+    "path": "hwsw/input/Screenshot_from_2026-08-01_05-48-03.png",
+    "name": "Screenshot_from_2026-08-01_05-48-03.png",
+    "bytes_in": 1024,
+    "bytes_out": 900
+  },
+  "interface": {
+    "kind": "serial",
+    "description": "Top module `nano_cgra_3x3_sobel_accelerator_v4` ports: input clk, input rst_async_n, input data_i, output data_o. Interface is BIT-SERIAL (UART-style): payload enters on `data_i` and leaves on `data_o`, one bit per baud period of 434 clock cycles, 8 data bits per frame, LSB first, with a low start bit and a high stop bit. Data geometry: input 32x32, output 30x30 bytes.",
+    "clock": "clk",
+    "reset": "rst_async_n",
+    "data_in": [
+      "data_i"
+    ],
+    "data_out": [
+      "data_o"
+    ],
+    "baud_div": 434,
+    "constants": {
+      "BAUD_RATE": 115200,
+      "DATA_W": 8,
+      "IMG_W": 32,
+      "IMG_H": 32,
+      "OUT_W": 30,
+      "OUT_H": 30,
+      "BAUD_DIV": 434,
+      "CLK_FREQ": 50000000
+    },
+    "driver": "sw/hwsw/host_driver.py",
+    "testbench": "tb/hwsw/nano_cgra_3x3_sobel_accelerator_v4_hwsw_tb.v",
+    "driver_origin": "existing",
+    "testbench_origin": "existing"
+  },
+  "metrics": {
+    "match": true,
+    "checked": true,
+    "bytes_sent": 1024,
+    "bytes_received": 900,
+    "bytes_expected": 900,
+    "mismatches": 0,
+    "max_abs_diff": 0,
+    "golden_source": "golden/model/top.py::sobel_stream",
+    "repair_rounds": 0
+  },
+  "first_mismatch": null,
+  "previews": [
+    "hwsw/input_preview.png",
+    "hwsw/expected_output.png",
+    "hwsw/chip_output.png",
+    "hwsw/waveform.png"
+  ],
+  "errors": []
+}

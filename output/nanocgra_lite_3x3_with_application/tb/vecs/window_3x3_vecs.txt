@@ -1,0 +1,18 @@
+# module=window_3x3 kept=15/15
+# inputs=['clk', 'rst_n', 'shift_en', 'pixel_in', 'lb0_data', 'lb1_data', 'col_cnt', 'row_cnt']
+# outputs=['win', 'window_valid']
+{"i": 0, "in": {"clk": 1, "rst_n": 1, "shift_en": 1, "pixel_in": 0, "lb0_data": 0, "lb1_data": 0, "col_cnt": 0, "row_cnt": 0}, "exp": {"win": [0, 0, 0, 0, 0, 0, 0, 0, 0], "window_valid": 0}}
+{"i": 1, "in": {"clk": 1, "rst_n": 1, "shift_en": 1, "pixel_in": 1, "lb0_data": 0, "lb1_data": 0, "col_cnt": 1, "row_cnt": 0}, "exp": {"win": [0, 0, 0, 0, 0, 0, 0, 0, 0], "window_valid": 0}}
+{"i": 2, "in": {"clk": 1, "rst_n": 1, "shift_en": 1, "pixel_in": 2, "lb0_data": 0, "lb1_data": 0, "col_cnt": 2, "row_cnt": 0}, "exp": {"win": [0, 0, 0, 0, 0, 0, 0, 0, 0], "window_valid": 0}}
+{"i": 3, "in": {"clk": 1, "rst_n": 1, "shift_en": 1, "pixel_in": 10, "lb0_data": 0, "lb1_data": 0, "col_cnt": 0, "row_cnt": 1}, "exp": {"win": [0, 0, 0, 0, 0, 0, 0, 0, 0], "window_valid": 0}}
+{"i": 4, "in": {"clk": 1, "rst_n": 1, "shift_en": 1, "pixel_in": 11, "lb0_data": 0, "lb1_data": 1, "col_cnt": 1, "row_cnt": 1}, "exp": {"win": [0, 0, 0, 0, 0, 0, 0, 0, 0], "window_valid": 0}}
+{"i": 5, "in": {"clk": 1, "rst_n": 1, "shift_en": 1, "pixel_in": 12, "lb0_data": 0, "lb1_data": 2, "col_cnt": 2, "row_cnt": 1}, "exp": {"win": [0, 0, 0, 0, 0, 0, 0, 0, 0], "window_valid": 0}}
+{"i": 6, "in": {"clk": 1, "rst_n": 1, "shift_en": 1, "pixel_in": 20, "lb0_data": 0, "lb1_data": 10, "col_cnt": 0, "row_cnt": 2}, "exp": {"win": [0, 0, 0, 0, 0, 0, 0, 0, 0], "window_valid": 0}}
+{"i": 7, "in": {"clk": 1, "rst_n": 1, "shift_en": 1, "pixel_in": 21, "lb0_data": 1, "lb1_data": 11, "col_cnt": 1, "row_cnt": 2}, "exp": {"win": [0, 0, 0, 0, 0, 0, 0, 0, 0], "window_valid": 0}}
+{"i": 8, "in": {"clk": 1, "rst_n": 1, "shift_en": 1, "pixel_in": 22, "lb0_data": 2, "lb1_data": 12, "col_cnt": 2, "row_cnt": 2}, "exp": {"win": [0, 1, 2, 10, 11, 12, 20, 21, 22], "window_valid": 1}}
+{"i": 9, "in": {"clk": 1, "rst_n": 1, "shift_en": 1, "pixel_in": 0, "lb0_data": 0, "lb1_data": 0, "col_cnt": 0, "row_cnt": 0}, "exp": {"win": [0, 0, 0, 0, 0, 0, 0, 0, 0], "window_valid": 0}}
+{"i": 10, "in": {"clk": 1, "rst_n": 1, "shift_en": 1, "pixel_in": 1, "lb0_data": 0, "lb1_data": 0, "col_cnt": 1, "row_cnt": 0}, "exp": {"win": [0, 0, 0, 0, 0, 0, 0, 0, 0], "window_valid": 0}}
+{"i": 11, "in": {"clk": 1, "rst_n": 1, "shift_en": 1, "pixel_in": 2, "lb0_data": 0, "lb1_data": 0, "col_cnt": 2, "row_cnt": 0}, "exp": {"win": [0, 0, 0, 0, 0, 0, 0, 0, 0], "window_valid": 0}}
+{"i": 12, "in": {"clk": 1, "rst_n": 1, "shift_en": 1, "pixel_in": 10, "lb0_data": 0, "lb1_data": 0, "col_cnt": 0, "row_cnt": 1}, "exp": {"win": [0, 0, 0, 0, 0, 0, 0, 0, 0], "window_valid": 0}}
+{"i": 13, "in": {"clk": 1, "rst_n": 1, "shift_en": 1, "pixel_in": 11, "lb0_data": 0, "lb1_data": 1, "col_cnt": 1, "row_cnt": 1}, "exp": {"win": [0, 0, 0, 0, 0, 0, 0, 0, 0], "window_valid": 0}}
+{"i": 14, "in": {"clk": 1, "rst_n": 1, "shift_en": 1, "pixel_in": 12, "lb0_data": 0, "lb1_data": 2, "col_cnt": 2, "row_cnt": 1}, "exp": {"win": [0, 0, 0, 0, 0, 0, 0, 0, 0], "window_valid": 0}}

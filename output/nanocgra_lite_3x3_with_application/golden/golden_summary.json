@@ -1,0 +1,152 @@
+{
+  "top": "nano_cgra_3x3_sobel_accelerator_v4",
+  "design_brief": "nano cgra 3x3 for sobel filter accelerator, i uploaded 2 images, 1 for you to understand the architecture of nano cgra what i want but for input output use UART, see it properly, and 1 for the reference image you build the sobel filter accelerator, uses 32x32 of that image, make sure the cropped image shows the road.",
+  "ips": [
+    {
+      "name": "baud_gen",
+      "file": "golden/model/baud_gen.py",
+      "tier": "ip",
+      "role": ""
+    },
+    {
+      "name": "cgra_3x3",
+      "file": "golden/model/cgra_3x3.py",
+      "tier": "ip",
+      "role": ""
+    },
+    {
+      "name": "line_buffer",
+      "file": "golden/model/line_buffer.py",
+      "tier": "ip",
+      "role": ""
+    },
+    {
+      "name": "mmio_bus",
+      "file": "golden/model/mmio_bus.py",
+      "tier": "ip",
+      "role": ""
+    },
+    {
+      "name": "nano_controller",
+      "file": "golden/model/nano_controller.py",
+      "tier": "ip",
+      "role": ""
+    },
+    {
+      "name": "params",
+      "file": "golden/model/params.py",
+      "tier": "ip",
+      "role": ""
+    },
+    {
+      "name": "pe",
+      "file": "golden/model/pe.py",
+      "tier": "ip",
+      "role": ""
+    },
+    {
+      "name": "reset_sync",
+      "file": "golden/model/reset_sync.py",
+      "tier": "ip",
+      "role": ""
+    },
+    {
+      "name": "sobel_core",
+      "file": "golden/model/sobel_core.py",
+      "tier": "ip",
+      "role": ""
+    },
+    {
+      "name": "sram_32b",
+      "file": "golden/model/sram_32b.py",
+      "tier": "ip",
+      "role": ""
+    },
+    {
+      "name": "uart_rx",
+      "file": "golden/model/uart_rx.py",
+      "tier": "ip",
+      "role": ""
+    },
+    {
+      "name": "uart_tx",
+      "file": "golden/model/uart_tx.py",
+      "tier": "ip",
+      "role": ""
+    },
+    {
+      "name": "window_3x3",
+      "file": "golden/model/window_3x3.py",
+      "tier": "ip",
+      "role": ""
+    }
+  ],
+  "models": [
+    "golden/model/__init__.py",
+    "golden/model/baud_gen.py",
+    "golden/model/cgra_3x3.py",
+    "golden/model/line_buffer.py",
+    "golden/model/mmio_bus.py",
+    "golden/model/nano_controller.py",
+    "golden/model/params.py",
+    "golden/model/pe.py",
+    "golden/model/reset_sync.py",
+    "golden/model/sobel_core.py",
+    "golden/model/sram_32b.py",
+    "golden/model/top.py",
+    "golden/model/uart_rx.py",
+    "golden/model/uart_tx.py",
+    "golden/model/window_3x3.py"
+  ],
+  "vectors": [
+    "baud_gen",
+    "cgra_3x3",
+    "line_buffer",
+    "mmio_bus",
+    "nano_cgra_3x3_sobel_accelerator_v4",
+    "nano_controller",
+    "pe",
+    "reset_sync",
+    "sobel_core",
+    "sram_32b",
+    "uart_rx",
+    "uart_tx",
+    "window_3x3"
+  ],
+  "tests": {
+    "total": 52,
+    "passed": 52,
+    "failed": 0,
+    "ran": true,
+    "files": [
+      "golden/tests/test_baud_gen.py",
+      "golden/tests/test_cgra_3x3.py",
+      "golden/tests/test_line_buffer.py",
+      "golden/tests/test_mmio_bus.py",
+      "golden/tests/test_nano_controller.py",
+      "golden/tests/test_pe.py",
+      "golden/tests/test_reset_sync.py",
+      "golden/tests/test_sobel_core.py",
+      "golden/tests/test_sram_32b.py",
+      "golden/tests/test_top.py",
+      "golden/tests/test_uart_rx.py",
+      "golden/tests/test_uart_tx.py",
+      "golden/tests/test_window_3x3.py"
+    ]
+  },
+  "previews": [
+    {
+      "kind": "image",
+      "path": "waves/chip_input.png",
+      "label": "Chip input (as the model reads it)"
+    },
+    {
+      "kind": "image",
+      "path": "waves/golden_output.png",
+      "label": "Golden model output \u2014 the desired result"
+    }
+  ],
+  "notes": "",
+  "report": "golden/golden_report.md",
+  "contract": ""
+}

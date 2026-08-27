@@ -1,0 +1,6 @@
+{
+  "golden/tests/test_top.py::test_matches_reference_sobel": true,
+  "golden/tests/test_top.py::test_known_value": true,
+  "golden/tests/test_uart_tx.py::test_transmit_0x3C": true,
+  "golden/tests/test_uart_tx.py::test_transmit_0xFF": true
+}

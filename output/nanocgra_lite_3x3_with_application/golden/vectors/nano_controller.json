@@ -1,0 +1,269 @@
+{
+  "module": "nano_controller",
+  "ports": {
+    "inputs": [
+      [
+        "clk",
+        1
+      ],
+      [
+        "rst_n",
+        1
+      ],
+      [
+        "rx_byte",
+        8
+      ],
+      [
+        "rx_valid",
+        1
+      ],
+      [
+        "tx_done",
+        1
+      ],
+      [
+        "cgra_done",
+        1
+      ],
+      [
+        "sobel_out",
+        8
+      ]
+    ],
+    "outputs": [
+      [
+        "bus_addr",
+        8
+      ],
+      [
+        "bus_wr",
+        1
+      ],
+      [
+        "bus_rd",
+        1
+      ],
+      [
+        "bus_wdata",
+        8
+      ],
+      [
+        "pixel_in",
+        8
+      ],
+      [
+        "pixel_shift",
+        1
+      ],
+      [
+        "col_cnt",
+        6
+      ],
+      [
+        "row_cnt",
+        6
+      ],
+      [
+        "start_cgra",
+        1
+      ],
+      [
+        "tx_start",
+        1
+      ],
+      [
+        "tx_data",
+        8
+      ],
+      [
+        "status",
+        8
+      ]
+    ]
+  },
+  "vectors": [
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "rx_byte": 66,
+        "rx_valid": 1,
+        "tx_done": 0,
+        "cgra_done": 0,
+        "sobel_out": 0
+      },
+      "expected": {
+        "bus_addr": 0,
+        "bus_wr": 0,
+        "bus_rd": 0,
+        "bus_wdata": 0,
+        "pixel_in": 66,
+        "pixel_shift": 1,
+        "col_cnt": 1,
+        "row_cnt": 0,
+        "start_cgra": 0,
+        "tx_start": 0,
+        "tx_data": 0,
+        "status": 0,
+        "state": 1
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "rx_byte": 0,
+        "rx_valid": 1,
+        "tx_done": 0,
+        "cgra_done": 0,
+        "sobel_out": 0
+      },
+      "expected": {
+        "bus_addr": 0,
+        "bus_wr": 0,
+        "bus_rd": 0,
+        "bus_wdata": 0,
+        "pixel_in": 0,
+        "pixel_shift": 1,
+        "col_cnt": 2,
+        "row_cnt": 0,
+        "start_cgra": 0,
+        "tx_start": 0,
+        "tx_data": 0,
+        "status": 0,
+        "state": 1
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "rx_byte": 1,
+        "rx_valid": 1,
+        "tx_done": 0,
+        "cgra_done": 0,
+        "sobel_out": 0
+      },
+      "expected": {
+        "bus_addr": 0,
+        "bus_wr": 0,
+        "bus_rd": 0,
+        "bus_wdata": 0,
+        "pixel_in": 1,
+        "pixel_shift": 1,
+        "col_cnt": 3,
+        "row_cnt": 0,
+        "start_cgra": 0,
+        "tx_start": 0,
+        "tx_data": 0,
+        "status": 0,
+        "state": 1
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "rx_byte": 2,
+        "rx_valid": 1,
+        "tx_done": 0,
+        "cgra_done": 0,
+        "sobel_out": 0
+      },
+      "expected": {
+        "bus_addr": 0,
+        "bus_wr": 0,
+        "bus_rd": 0,
+        "bus_wdata": 0,
+        "pixel_in": 2,
+        "pixel_shift": 1,
+        "col_cnt": 4,
+        "row_cnt": 0,
+        "start_cgra": 0,
+        "tx_start": 0,
+        "tx_data": 0,
+        "status": 0,
+        "state": 1
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "rx_byte": 3,
+        "rx_valid": 1,
+        "tx_done": 0,
+        "cgra_done": 0,
+        "sobel_out": 0
+      },
+      "expected": {
+        "bus_addr": 0,
+        "bus_wr": 0,
+        "bus_rd": 0,
+        "bus_wdata": 0,
+        "pixel_in": 3,
+        "pixel_shift": 1,
+        "col_cnt": 5,
+        "row_cnt": 0,
+        "start_cgra": 0,
+        "tx_start": 0,
+        "tx_data": 0,
+        "status": 0,
+        "state": 1
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "rx_byte": 4,
+        "rx_valid": 1,
+        "tx_done": 0,
+        "cgra_done": 0,
+        "sobel_out": 0
+      },
+      "expected": {
+        "bus_addr": 0,
+        "bus_wr": 0,
+        "bus_rd": 0,
+        "bus_wdata": 0,
+        "pixel_in": 4,
+        "pixel_shift": 1,
+        "col_cnt": 6,
+        "row_cnt": 0,
+        "start_cgra": 0,
+        "tx_start": 0,
+        "tx_data": 0,
+        "status": 0,
+        "state": 1
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 0,
+        "rx_byte": 0,
+        "rx_valid": 0,
+        "tx_done": 0,
+        "cgra_done": 0,
+        "sobel_out": 0
+      },
+      "expected": {
+        "bus_addr": 0,
+        "bus_wr": 0,
+        "bus_rd": 0,
+        "bus_wdata": 0,
+        "pixel_in": 0,
+        "pixel_shift": 0,
+        "col_cnt": 0,
+        "row_cnt": 0,
+        "start_cgra": 0,
+        "tx_start": 0,
+        "tx_data": 0,
+        "status": 0,
+        "state": 0
+      }
+    }
+  ]
+}

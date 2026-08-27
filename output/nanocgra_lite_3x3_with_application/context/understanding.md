@@ -1,0 +1,9 @@
+# What this design is (web understanding)
+
+Query: nano cgra 3x3 sobel accelerator verilog architecture
+
+- Designing SOBEL Edge Detection Using VLSI on FPGA Ijraset Journal For Research in Applied Science and Engineering Technology Designing SOBEL Edge Detection Using VLSI on FPGA Authors: A. Vani , D SathyaNarayana, G Anirudh, Y Nikhil DOI Link: https://doi.org/10.22214/ijraset.2025.72009 Edge detection is a critical operation in image processing, widely used in fields such as computer vision, robotics, medical imaging, and object recognition. The Sobel operator, known for its simplicity and effectiveness, computes the gradient of pixel intensities to identify edges within an image. Traditional so
+
+- The document discusses accelerators for improving performance in digital systems. It describes how accelerators can perform operations in parallel to speed up algorithms. Key points include: Save to Drive Download now Download to read offline TinyML - 4 speech recognition Tensorflow lite for microcontroller 5.MLP(Multi-Layer Perceptron) CC-4005, Performance analysis of 3D Finite Difference computational stencils ... Keynote (Mike Muller) - Is There Anything New in Heterogeneous Computing - by... 1 introduction to dsp processor 20140919 Tridiagonal solver in gpu Fpga 11-sequence-detector-fir-ii
+
+- Kimi K3 Architecture Notes | Sebastian Raschka, PhD The Kimi K3 architecture figure for yesterdayâs big open-weight model release, along with some observations and thoughts. Yes, it looks relatively complicated, but itâs essentially a scaled-up production version of their Kimi Linear model they released last year (scaled up from 48B -&gt; 2.8T; K3 is by far the biggest open-weight model right now) The one new component compared to Kimi Linear is the LatentMoE . I omitted it in the figure below since itâs already very crowded, but thatâs essentially the same LatentMoE as in Nemotron 3 U

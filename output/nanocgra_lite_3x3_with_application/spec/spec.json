@@ -1,0 +1,26 @@
+{
+  "task_id": "dbe7af46-366c-421b-8cf3-daafc5a7ae6a",
+  "top_module": "nano_cgra_3x3_sobel_accelerator_v4",
+  "interfaces": [
+    "clk",
+    "rst_n",
+    "data_i",
+    "data_o"
+  ],
+  "constraints": {
+    "clock_port": "clk",
+    "pdk_id": "gf180mcuD"
+  },
+  "assumptions": [
+    "Single clock domain",
+    "Synchronous active-low reset"
+  ],
+  "risks": [
+    "Unspecified timing budget",
+    "Testbench coverage may be partial"
+  ],
+  "attachments": [
+    "Screenshot_from_2026-07-14_16-24-31.png",
+    "Screenshot_from_2026-08-01_19-42-51.png"
+  ]
+}

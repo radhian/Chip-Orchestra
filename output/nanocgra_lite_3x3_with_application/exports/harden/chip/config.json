@@ -1,0 +1,74 @@
+{
+  "DESIGN_NAME": "nano_cgra_3x3_sobel_accelerator_v4",
+  "VERILOG_FILES": [
+    "dir::src/baud_gen.v",
+    "dir::src/cgra_3x3.v",
+    "dir::src/line_buffer.v",
+    "dir::src/mmio_bus.v",
+    "dir::src/nano_cgra_3x3_sobel_accelerator_v4.v",
+    "dir::src/nano_controller.v",
+    "dir::src/pe.v",
+    "dir::src/reset_sync.v",
+    "dir::src/sobel_core.v",
+    "dir::src/sram_32b.v",
+    "dir::src/uart_rx.v",
+    "dir::src/uart_tx.v",
+    "dir::src/window_3x3.v"
+  ],
+  "VERILOG_INCLUDE_DIRS": [
+    "dir::src"
+  ],
+  "STA_CORNERS": [
+    "nom_tt_025C_5v00",
+    "nom_ss_125C_4v50",
+    "nom_ff_n40C_5v50"
+  ],
+  "DEFAULT_CORNER": "nom_tt_025C_5v00",
+  "TIMING_VIOLATION_CORNERS": [
+    "*tt*"
+  ],
+  "CLOCK_PORT": "clk",
+  "CLOCK_PERIOD": 28.33,
+  "PDK": "gf180mcuD",
+  "FP_SIZING": "relative",
+  "FP_CORE_UTIL": 35,
+  "PL_TARGET_DENSITY_PCT": 40,
+  "PRIMARY_GDSII_STREAMOUT_TOOL": "klayout",
+  "USE_SLANG": false,
+  "LINTER_ERROR_ON_LATCH": false,
+  "LINTER_ERROR_ON_MULTIDRIVEN": true,
+  "ERROR_ON_LINTER_ERRORS": false,
+  "ERROR_ON_LINTER_WARNINGS": false,
+  "ERROR_ON_SYNTH_CHECKS": false,
+  "ERROR_ON_UNMAPPED_CELLS": false,
+  "ERROR_ON_DISCONNECTED_PINS": false,
+  "LINTER_DISABLE_WARNINGS": [
+    "UNOPTFLAT",
+    "WIDTH",
+    "WIDTHEXPAND",
+    "WIDTHTRUNC",
+    "WIDTHCONCAT",
+    "CASEINCOMPLETE",
+    "CASEOVERLAP",
+    "UNUSEDSIGNAL",
+    "UNDRIVEN",
+    "PINMISSING",
+    "IMPLICIT",
+    "BLKSEQ",
+    "SYNCASYNCNET",
+    "DECLFILENAME",
+    "EOFNEWLINE"
+  ],
+  "MAX_FANOUT_CONSTRAINT": 40,
+  "DESIGN_REPAIR_MAX_SLEW_PCT": 50,
+  "DESIGN_REPAIR_MAX_CAP_PCT": 40,
+  "GRT_DESIGN_REPAIR_MAX_SLEW_PCT": 50,
+  "GRT_DESIGN_REPAIR_MAX_CAP_PCT": 40,
+  "MAX_TRANSITION_CONSTRAINT": 5.0,
+  "CTS_ROOT_BUFFER": "gf180mcu_fd_sc_mcu7t5v0__clkbuf_16",
+  "CTS_CLK_BUFFERS": [
+    "gf180mcu_fd_sc_mcu7t5v0__clkbuf_8",
+    "gf180mcu_fd_sc_mcu7t5v0__clkbuf_16"
+  ],
+  "MAX_CAPACITANCE_CONSTRAINT": 0.5
+}

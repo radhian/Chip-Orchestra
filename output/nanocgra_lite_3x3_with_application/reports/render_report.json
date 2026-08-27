@@ -1,0 +1,74 @@
+{
+  "stage": "RENDER",
+  "summary": "Rendered 4 visual(s): reports/schematic.png, reports/waveform.png, reports/gds.png, reports/metrics.png.",
+  "metrics": {
+    "rendered": 4,
+    "images": [
+      "reports/schematic.png",
+      "reports/waveform.png",
+      "reports/gds.png",
+      "reports/metrics.png"
+    ]
+  },
+  "artifacts": [
+    {
+      "path": "reports/schematic.png",
+      "kind": "visual",
+      "stage": "RENDER",
+      "size": 530498,
+      "mime": "image/png",
+      "summary": "",
+      "created_at": "2026-08-16T09:06:58.591734+00:00"
+    },
+    {
+      "path": "reports/waveform.png",
+      "kind": "visual",
+      "stage": "RENDER",
+      "size": 116655,
+      "mime": "image/png",
+      "summary": "",
+      "created_at": "2026-08-16T09:07:17.028381+00:00"
+    },
+    {
+      "path": "reports/gds.png",
+      "kind": "visual",
+      "stage": "RENDER",
+      "size": 339474,
+      "mime": "image/png",
+      "summary": "",
+      "created_at": "2026-08-16T09:07:17.029832+00:00"
+    },
+    {
+      "path": "reports/metrics.png",
+      "kind": "visual",
+      "stage": "RENDER",
+      "size": 27182,
+      "mime": "image/png",
+      "summary": "",
+      "created_at": "2026-08-16T09:07:17.120119+00:00"
+    },
+    {
+      "path": "logs/render.log",
+      "kind": "log",
+      "stage": "RENDER",
+      "size": 106,
+      "mime": "application/octet-stream",
+      "summary": "",
+      "created_at": "2026-08-16T09:07:17.120378+00:00"
+    }
+  ],
+  "warnings": [],
+  "errors": [],
+  "raw_log_paths": [
+    "logs/render.log"
+  ],
+  "top": "nano_cgra_3x3_sobel_accelerator_v4",
+  "images": [
+    "reports/schematic.png",
+    "reports/waveform.png",
+    "reports/gds.png",
+    "reports/metrics.png"
+  ],
+  "task_id": "dbe7af46-366c-421b-8cf3-daafc5a7ae6a",
+  "generated_at": "2026-08-16T09:07:17.120443Z"
+}

@@ -1,0 +1,44 @@
+{
+  "stage": "LINT",
+  "summary": "Lint clean.",
+  "metrics": {
+    "checked_files": 14,
+    "clean": true,
+    "warning_count": 0
+  },
+  "artifacts": [
+    {
+      "path": "logs/lint.log",
+      "kind": "log",
+      "stage": "LINT",
+      "size": 257,
+      "mime": "application/octet-stream",
+      "summary": "",
+      "created_at": "2026-08-16T09:00:28.851739+00:00"
+    }
+  ],
+  "warnings": [],
+  "errors": [],
+  "raw_log_paths": [
+    "logs/lint.log"
+  ],
+  "clean": true,
+  "checked_files": [
+    "baud_gen.v",
+    "cgra_3x3.v",
+    "line_buffer.v",
+    "mmio_bus.v",
+    "nano_cgra_3x3_sobel_accelerator_v4.v",
+    "nano_controller.v",
+    "params.v",
+    "pe.v",
+    "reset_sync.v",
+    "sobel_core.v",
+    "sram_32b.v",
+    "uart_rx.v",
+    "uart_tx.v",
+    "window_3x3.v"
+  ],
+  "task_id": "dbe7af46-366c-421b-8cf3-daafc5a7ae6a",
+  "generated_at": "2026-08-16T09:00:28.851885Z"
+}

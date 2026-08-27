@@ -1,0 +1,9 @@
+# module=mmio_bus kept=6/6
+# inputs=['clk', 'rst_n', 'mst_addr', 'mst_wr', 'mst_rd', 'mst_wdata', 'sram_rdata', 'uart_rdata', 'cgra_rdata']
+# outputs=['mst_rdata', 'sram_sel', 'uart_sel', 'cgra_sel', 'sram_addr', 'sram_wr_en', 'sram_wdata']
+{"i": 0, "in": {"clk": 1, "rst_n": 1, "mst_addr": 16, "mst_wr": 0, "mst_rd": 1, "mst_wdata": 0, "sram_rdata": 66, "uart_rdata": 0, "cgra_rdata": 0}, "exp": {"mst_rdata": 66, "sram_sel": 1, "uart_sel": 0, "cgra_sel": 0, "sram_addr": 16, "sram_wr_en": 0, "sram_wdata": 0}}
+{"i": 1, "in": {"clk": 1, "rst_n": 1, "mst_addr": 128, "mst_wr": 0, "mst_rd": 1, "mst_wdata": 0, "sram_rdata": 0, "uart_rdata": 85, "cgra_rdata": 0}, "exp": {"mst_rdata": 85, "sram_sel": 0, "uart_sel": 1, "cgra_sel": 0, "sram_addr": 0, "sram_wr_en": 0, "sram_wdata": 0}}
+{"i": 2, "in": {"clk": 1, "rst_n": 1, "mst_addr": 144, "mst_wr": 0, "mst_rd": 1, "mst_wdata": 0, "sram_rdata": 0, "uart_rdata": 0, "cgra_rdata": 119}, "exp": {"mst_rdata": 119, "sram_sel": 0, "uart_sel": 0, "cgra_sel": 1, "sram_addr": 16, "sram_wr_en": 0, "sram_wdata": 0}}
+{"i": 3, "in": {"clk": 1, "rst_n": 1, "mst_addr": 160, "mst_wr": 1, "mst_rd": 0, "mst_wdata": 1, "sram_rdata": 0, "uart_rdata": 0, "cgra_rdata": 0}, "exp": {"mst_rdata": 0, "sram_sel": 0, "uart_sel": 0, "cgra_sel": 1, "sram_addr": 0, "sram_wr_en": 0, "sram_wdata": 1}}
+{"i": 4, "in": {"clk": 1, "rst_n": 1, "mst_addr": 5, "mst_wr": 1, "mst_rd": 0, "mst_wdata": 171, "sram_rdata": 0, "uart_rdata": 0, "cgra_rdata": 0}, "exp": {"mst_rdata": 0, "sram_sel": 1, "uart_sel": 0, "cgra_sel": 0, "sram_addr": 5, "sram_wr_en": 1, "sram_wdata": 171}}
+{"i": 5, "in": {"clk": 1, "rst_n": 0, "mst_addr": 0, "mst_wr": 0, "mst_rd": 0, "mst_wdata": 0, "sram_rdata": 0, "uart_rdata": 0, "cgra_rdata": 0}, "exp": {"mst_rdata": 0, "sram_sel": 0, "uart_sel": 0, "cgra_sel": 0, "sram_addr": 0, "sram_wr_en": 0, "sram_wdata": 0}}

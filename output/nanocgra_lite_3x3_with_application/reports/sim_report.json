@@ -1,0 +1,213 @@
+{
+  "stage": "SIM",
+  "summary": "Simulation completed \u2014 testbench PASSED with waveform.",
+  "metrics": {
+    "compiled": true,
+    "waveform": true,
+    "passed": true,
+    "golden_match": true,
+    "signal_count": 32
+  },
+  "artifacts": [
+    {
+      "path": "waves/waveform.json",
+      "kind": "waveform",
+      "stage": "SIM",
+      "size": 1112179,
+      "mime": "application/json",
+      "summary": "",
+      "created_at": "2026-08-16T06:20:05.499661+00:00"
+    },
+    {
+      "path": "waves/design.vcd",
+      "kind": "waveform",
+      "stage": "SIM",
+      "size": 256449388,
+      "mime": "application/x-cdlink",
+      "summary": "",
+      "created_at": "2026-08-16T06:20:05.499811+00:00"
+    },
+    {
+      "path": "waves/waveform.png",
+      "kind": "image",
+      "stage": "SIM",
+      "size": 53203,
+      "mime": "image/png",
+      "summary": "",
+      "created_at": "2026-08-16T06:20:30.668545+00:00"
+    },
+    {
+      "path": "waves/chip_output.png",
+      "kind": "image",
+      "stage": "SIM",
+      "size": 2181,
+      "mime": "image/png",
+      "summary": "",
+      "created_at": "2026-08-16T06:20:30.670077+00:00"
+    },
+    {
+      "path": "waves/golden_output.png",
+      "kind": "image",
+      "stage": "SIM",
+      "size": 2181,
+      "mime": "image/png",
+      "summary": "",
+      "created_at": "2026-08-16T06:20:30.671320+00:00"
+    },
+    {
+      "path": "logs/sim.log",
+      "kind": "log",
+      "stage": "SIM",
+      "size": 1275,
+      "mime": "application/octet-stream",
+      "summary": "",
+      "created_at": "2026-08-16T06:20:30.673026+00:00"
+    }
+  ],
+  "warnings": [
+    "multiple testbenches found; simulating nano_cgra_3x3_sobel_accelerator_v4_tb.v (unit tbs excluded: baud_gen_tb.v, cgra_3x3_tb.v, line_buffer_tb.v, mmio_bus_tb.v, nano_controller_tb.v, params_tb.v, pe_tb.v, reset_sync_tb.v, sobel_core_tb.v, sram_32b_tb.v, uart_rx_tb.v, uart_tx_tb.v, window_3x3_tb.v)"
+  ],
+  "errors": [],
+  "raw_log_paths": [
+    "logs/sim.log"
+  ],
+  "top": "nano_cgra_3x3_sobel_accelerator_v4",
+  "compiled": true,
+  "waveform": true,
+  "waveform_summary": {
+    "tmax": 44482955000,
+    "signals": [
+      {
+        "name": "clk",
+        "width": 1
+      },
+      {
+        "name": "cnt",
+        "width": 9
+      },
+      {
+        "name": "baud_cnt",
+        "width": 9
+      },
+      {
+        "name": "baud_tick",
+        "width": 1
+      },
+      {
+        "name": "baud_tick",
+        "width": 1
+      },
+      {
+        "name": "b",
+        "width": 32
+      },
+      {
+        "name": "bit_idx",
+        "width": 3
+      },
+      {
+        "name": "b",
+        "width": 32
+      },
+      {
+        "name": "bit_idx",
+        "width": 3
+      },
+      {
+        "name": "rx_in",
+        "width": 1
+      },
+      {
+        "name": "prev_line",
+        "width": 1
+      },
+      {
+        "name": "shreg",
+        "width": 8
+      },
+      {
+        "name": "tx_out",
+        "width": 1
+      },
+      {
+        "name": "byte_val",
+        "width": 8
+      },
+      {
+        "name": "state",
+        "width": 2
+      },
+      {
+        "name": "rx_valid",
+        "width": 1
+      },
+      {
+        "name": "shift_en",
+        "width": 1
+      },
+      {
+        "name": "state",
+        "width": 2
+      },
+      {
+        "name": "tx_start",
+        "width": 1
+      },
+      {
+        "name": "tx_done",
+        "width": 1
+      },
+      {
+        "name": "result_ready",
+        "width": 1
+      },
+      {
+        "name": "hold_valid",
+        "width": 1
+      },
+      {
+        "name": "tx_state",
+        "width": 2
+      },
+      {
+        "name": "start_req",
+        "width": 1
+      },
+      {
+        "name": "win",
+        "width": 72
+      },
+      {
+        "name": "win",
+        "width": 72
+      },
+      {
+        "name": "win",
+        "width": 72
+      },
+      {
+        "name": "win",
+        "width": 72
+      },
+      {
+        "name": "mag",
+        "width": 11
+      },
+      {
+        "name": "gx",
+        "width": 11
+      },
+      {
+        "name": "gy",
+        "width": 11
+      },
+      {
+        "name": "abs_gx",
+        "width": 11
+      }
+    ],
+    "trace_path": "waves/waveform.json"
+  },
+  "task_id": "dbe7af46-366c-421b-8cf3-daafc5a7ae6a",
+  "generated_at": "2026-08-16T06:20:30.802617Z"
+}

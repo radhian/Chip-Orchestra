@@ -1,0 +1,17 @@
+# module=reset_sync kept=14/14
+# inputs=['clk', 'rst_async_n']
+# outputs=['rst_n']
+{"i": 0, "in": {"clk": 1, "rst_async_n": 1}, "exp": {"rst_n": 0}}
+{"i": 1, "in": {"clk": 1, "rst_async_n": 1}, "exp": {"rst_n": 1}}
+{"i": 2, "in": {"clk": 1, "rst_async_n": 1}, "exp": {"rst_n": 1}}
+{"i": 3, "in": {"clk": 1, "rst_async_n": 1}, "exp": {"rst_n": 1}}
+{"i": 4, "in": {"clk": 1, "rst_async_n": 1}, "exp": {"rst_n": 1}}
+{"i": 5, "in": {"clk": 1, "rst_async_n": 0}, "exp": {"rst_n": 0}}
+{"i": 6, "in": {"clk": 1, "rst_async_n": 0}, "exp": {"rst_n": 0}}
+{"i": 7, "in": {"clk": 1, "rst_async_n": 0}, "exp": {"rst_n": 0}}
+{"i": 8, "in": {"clk": 1, "rst_async_n": 0}, "exp": {"rst_n": 0}}
+{"i": 9, "in": {"clk": 1, "rst_async_n": 0}, "exp": {"rst_n": 0}}
+{"i": 10, "in": {"clk": 1, "rst_async_n": 1}, "exp": {"rst_n": 0}}
+{"i": 11, "in": {"clk": 1, "rst_async_n": 1}, "exp": {"rst_n": 1}}
+{"i": 12, "in": {"clk": 1, "rst_async_n": 1}, "exp": {"rst_n": 1}}
+{"i": 13, "in": {"clk": 1, "rst_async_n": 1}, "exp": {"rst_n": 1}}

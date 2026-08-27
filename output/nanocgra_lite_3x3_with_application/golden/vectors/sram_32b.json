@@ -1,0 +1,815 @@
+{
+  "module": "sram_32b",
+  "ports": {
+    "inputs": [
+      [
+        "clk",
+        1
+      ],
+      [
+        "rst_n",
+        1
+      ],
+      [
+        "addr",
+        5
+      ],
+      [
+        "wr_en",
+        1
+      ],
+      [
+        "data_in",
+        8
+      ]
+    ],
+    "outputs": [
+      [
+        "data_out",
+        8
+      ]
+    ]
+  },
+  "vectors": [
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 0,
+        "wr_en": 1,
+        "data_in": 0
+      },
+      "expected": {
+        "data_out": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 1,
+        "wr_en": 1,
+        "data_in": 2
+      },
+      "expected": {
+        "data_out": 2
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 2,
+        "wr_en": 1,
+        "data_in": 4
+      },
+      "expected": {
+        "data_out": 4
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 3,
+        "wr_en": 1,
+        "data_in": 6
+      },
+      "expected": {
+        "data_out": 6
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 4,
+        "wr_en": 1,
+        "data_in": 8
+      },
+      "expected": {
+        "data_out": 8
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 5,
+        "wr_en": 1,
+        "data_in": 10
+      },
+      "expected": {
+        "data_out": 10
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 6,
+        "wr_en": 1,
+        "data_in": 12
+      },
+      "expected": {
+        "data_out": 12
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 7,
+        "wr_en": 1,
+        "data_in": 14
+      },
+      "expected": {
+        "data_out": 14
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 8,
+        "wr_en": 1,
+        "data_in": 16
+      },
+      "expected": {
+        "data_out": 16
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 9,
+        "wr_en": 1,
+        "data_in": 18
+      },
+      "expected": {
+        "data_out": 18
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 10,
+        "wr_en": 1,
+        "data_in": 20
+      },
+      "expected": {
+        "data_out": 20
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 11,
+        "wr_en": 1,
+        "data_in": 22
+      },
+      "expected": {
+        "data_out": 22
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 12,
+        "wr_en": 1,
+        "data_in": 24
+      },
+      "expected": {
+        "data_out": 24
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 13,
+        "wr_en": 1,
+        "data_in": 26
+      },
+      "expected": {
+        "data_out": 26
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 14,
+        "wr_en": 1,
+        "data_in": 28
+      },
+      "expected": {
+        "data_out": 28
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 15,
+        "wr_en": 1,
+        "data_in": 30
+      },
+      "expected": {
+        "data_out": 30
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 16,
+        "wr_en": 1,
+        "data_in": 32
+      },
+      "expected": {
+        "data_out": 32
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 17,
+        "wr_en": 1,
+        "data_in": 34
+      },
+      "expected": {
+        "data_out": 34
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 18,
+        "wr_en": 1,
+        "data_in": 36
+      },
+      "expected": {
+        "data_out": 36
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 19,
+        "wr_en": 1,
+        "data_in": 38
+      },
+      "expected": {
+        "data_out": 38
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 20,
+        "wr_en": 1,
+        "data_in": 40
+      },
+      "expected": {
+        "data_out": 40
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 21,
+        "wr_en": 1,
+        "data_in": 42
+      },
+      "expected": {
+        "data_out": 42
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 22,
+        "wr_en": 1,
+        "data_in": 44
+      },
+      "expected": {
+        "data_out": 44
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 23,
+        "wr_en": 1,
+        "data_in": 46
+      },
+      "expected": {
+        "data_out": 46
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 24,
+        "wr_en": 1,
+        "data_in": 48
+      },
+      "expected": {
+        "data_out": 48
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 25,
+        "wr_en": 1,
+        "data_in": 50
+      },
+      "expected": {
+        "data_out": 50
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 26,
+        "wr_en": 1,
+        "data_in": 52
+      },
+      "expected": {
+        "data_out": 52
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 27,
+        "wr_en": 1,
+        "data_in": 54
+      },
+      "expected": {
+        "data_out": 54
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 28,
+        "wr_en": 1,
+        "data_in": 56
+      },
+      "expected": {
+        "data_out": 56
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 29,
+        "wr_en": 1,
+        "data_in": 58
+      },
+      "expected": {
+        "data_out": 58
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 30,
+        "wr_en": 1,
+        "data_in": 60
+      },
+      "expected": {
+        "data_out": 60
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 31,
+        "wr_en": 1,
+        "data_in": 62
+      },
+      "expected": {
+        "data_out": 62
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 0,
+        "wr_en": 0,
+        "data_in": 0
+      },
+      "expected": {
+        "data_out": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 1,
+        "wr_en": 0,
+        "data_in": 0
+      },
+      "expected": {
+        "data_out": 2
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 2,
+        "wr_en": 0,
+        "data_in": 0
+      },
+      "expected": {
+        "data_out": 4
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 3,
+        "wr_en": 0,
+        "data_in": 0
+      },
+      "expected": {
+        "data_out": 6
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 4,
+        "wr_en": 0,
+        "data_in": 0
+      },
+      "expected": {
+        "data_out": 8
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 5,
+        "wr_en": 0,
+        "data_in": 0
+      },
+      "expected": {
+        "data_out": 10
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 6,
+        "wr_en": 0,
+        "data_in": 0
+      },
+      "expected": {
+        "data_out": 12
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 7,
+        "wr_en": 0,
+        "data_in": 0
+      },
+      "expected": {
+        "data_out": 14
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 8,
+        "wr_en": 0,
+        "data_in": 0
+      },
+      "expected": {
+        "data_out": 16
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 9,
+        "wr_en": 0,
+        "data_in": 0
+      },
+      "expected": {
+        "data_out": 18
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 10,
+        "wr_en": 0,
+        "data_in": 0
+      },
+      "expected": {
+        "data_out": 20
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 11,
+        "wr_en": 0,
+        "data_in": 0
+      },
+      "expected": {
+        "data_out": 22
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 12,
+        "wr_en": 0,
+        "data_in": 0
+      },
+      "expected": {
+        "data_out": 24
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 13,
+        "wr_en": 0,
+        "data_in": 0
+      },
+      "expected": {
+        "data_out": 26
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 14,
+        "wr_en": 0,
+        "data_in": 0
+      },
+      "expected": {
+        "data_out": 28
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 15,
+        "wr_en": 0,
+        "data_in": 0
+      },
+      "expected": {
+        "data_out": 30
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 16,
+        "wr_en": 0,
+        "data_in": 0
+      },
+      "expected": {
+        "data_out": 32
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 17,
+        "wr_en": 0,
+        "data_in": 0
+      },
+      "expected": {
+        "data_out": 34
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 18,
+        "wr_en": 0,
+        "data_in": 0
+      },
+      "expected": {
+        "data_out": 36
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 19,
+        "wr_en": 0,
+        "data_in": 0
+      },
+      "expected": {
+        "data_out": 38
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 20,
+        "wr_en": 0,
+        "data_in": 0
+      },
+      "expected": {
+        "data_out": 40
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 21,
+        "wr_en": 0,
+        "data_in": 0
+      },
+      "expected": {
+        "data_out": 42
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 22,
+        "wr_en": 0,
+        "data_in": 0
+      },
+      "expected": {
+        "data_out": 44
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 23,
+        "wr_en": 0,
+        "data_in": 0
+      },
+      "expected": {
+        "data_out": 46
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 24,
+        "wr_en": 0,
+        "data_in": 0
+      },
+      "expected": {
+        "data_out": 48
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 25,
+        "wr_en": 0,
+        "data_in": 0
+      },
+      "expected": {
+        "data_out": 50
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 26,
+        "wr_en": 0,
+        "data_in": 0
+      },
+      "expected": {
+        "data_out": 52
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 27,
+        "wr_en": 0,
+        "data_in": 0
+      },
+      "expected": {
+        "data_out": 54
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 28,
+        "wr_en": 0,
+        "data_in": 0
+      },
+      "expected": {
+        "data_out": 56
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 29,
+        "wr_en": 0,
+        "data_in": 0
+      },
+      "expected": {
+        "data_out": 58
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 30,
+        "wr_en": 0,
+        "data_in": 0
+      },
+      "expected": {
+        "data_out": 60
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "addr": 31,
+        "wr_en": 0,
+        "data_in": 0
+      },
+      "expected": {
+        "data_out": 62
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 0,
+        "addr": 0,
+        "wr_en": 0,
+        "data_in": 0
+      },
+      "expected": {
+        "data_out": 0
+      }
+    }
+  ]
+}

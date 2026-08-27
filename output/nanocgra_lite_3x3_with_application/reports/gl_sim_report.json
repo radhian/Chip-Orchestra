@@ -1,0 +1,39 @@
+{
+  "stage": "GL_SIM",
+  "summary": "Gate-level sim: compiled=True, PASSED, waveform captured.",
+  "metrics": {},
+  "artifacts": [
+    {
+      "path": "waves/gl_nano_cgra_3x3_sobel_accelerator_v4.vcd",
+      "kind": "waveform",
+      "stage": "GL_SIM",
+      "size": 3150691162,
+      "mime": "application/x-cdlink",
+      "summary": "",
+      "created_at": "2026-08-16T09:06:48.761543+00:00"
+    },
+    {
+      "path": "logs/gl_sim.log",
+      "kind": "log",
+      "stage": "GL_SIM",
+      "size": 3285,
+      "mime": "application/octet-stream",
+      "summary": "",
+      "created_at": "2026-08-16T09:06:48.762094+00:00"
+    }
+  ],
+  "warnings": [
+    "design.vcd is 2.93 GB (cap 256 MB) \u2014 waveform preview SKIPPED so the parse cannot exhaust memory. The simulation's own results (TEST PASSED/FAILED, waves/chip_output.mem, the golden comparison) are UNAFFECTED. To get a waveform back, make the testbench cheaper: (1) narrow the dump \u2014 `$dumpvars(1, tb)` or name the few signals of interest instead of `$dumpvars(0, tb)`, which dumps the entire hierarchy; (2) do not simulate real baud timing \u2014 override the divider for simulation (e.g. `defparam`/`localparam BAUD_DIV = 8`) so a byte costs ~80 cycles instead of ~4340; the framing logic is exercised identically; (3) bound the watchdog \u2014 `repeat (100000000)` is 100M cycles; size it to the real transfer (bytes x 10 x BAUD_DIV plus margin); (4) if a long run is genuinely needed, `$dumpoff`/`$dumpon` around the interesting window."
+  ],
+  "errors": [],
+  "raw_log_paths": [
+    "logs/gl_sim.log"
+  ],
+  "top": "nano_cgra_3x3_sobel_accelerator_v4",
+  "compiled": true,
+  "passed": true,
+  "waveform": true,
+  "netlist": "exports/harden/chip/runs/RUN_2026-08-16_06-21-45/final/nl/nano_cgra_3x3_sobel_accelerator_v4.nl.v",
+  "task_id": "dbe7af46-366c-421b-8cf3-daafc5a7ae6a",
+  "generated_at": "2026-08-16T09:06:48.762166Z"
+}

@@ -1,0 +1,1 @@
+# Golden model package for nano_cgra_3x3_sobel_accelerator_v4

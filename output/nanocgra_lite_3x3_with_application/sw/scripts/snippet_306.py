@@ -1,0 +1,2 @@
+import subprocess
+print(subprocess.run(['sh','-c','iverilog -g2012 -o work/nc.vvp -Irtl -s nano_controller_tb rtl/*.v tb/nano_controller_tb.* && vvp work/nc.vvp'], capture_output=True, text=True).stdout[-3000:])

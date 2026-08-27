@@ -1,0 +1,22 @@
+# module=uart_rx kept=19/17365
+# inputs=['clk', 'rst_n', 'rx_in']
+# outputs=['rx_byte', 'rx_valid']
+{"i": 0, "in": {"clk": 1, "rst_n": 1, "rx_in": 0}, "exp": {"rx_valid": 0}}
+{"i": 1, "in": {"clk": 1, "rst_n": 1, "rx_in": 0}, "exp": {"rx_valid": 0}}
+{"i": 2, "in": {"clk": 1, "rst_n": 1, "rx_in": 0}, "exp": {"rx_valid": 0}}
+{"i": 3, "in": {"clk": 1, "rst_n": 1, "rx_in": 0}, "exp": {"rx_valid": 0}}
+{"i": 4, "in": {"clk": 1, "rst_n": 1, "rx_in": 0}, "exp": {"rx_valid": 0}}
+{"i": 3905, "in": {"clk": 1, "rst_n": 1, "rx_in": 1}, "exp": {"rx_valid": 1}}
+{"i": 3906, "in": {"clk": 1, "rst_n": 1, "rx_in": 1}, "exp": {"rx_valid": 0}}
+{"i": 4340, "in": {"clk": 1, "rst_n": 1, "rx_in": 1}, "exp": {"rx_byte": 165}}
+{"i": 4341, "in": {"clk": 1, "rst_n": 1, "rx_in": 0}, "exp": {"rx_valid": 0}}
+{"i": 8246, "in": {"clk": 1, "rst_n": 1, "rx_in": 0}, "exp": {"rx_valid": 1}}
+{"i": 8247, "in": {"clk": 1, "rst_n": 1, "rx_in": 1}, "exp": {"rx_valid": 0}}
+{"i": 12587, "in": {"clk": 1, "rst_n": 1, "rx_in": 1}, "exp": {"rx_valid": 1}}
+{"i": 12588, "in": {"clk": 1, "rst_n": 1, "rx_in": 1}, "exp": {"rx_valid": 0}}
+{"i": 13022, "in": {"clk": 1, "rst_n": 1, "rx_in": 1}, "exp": {"rx_byte": 255}}
+{"i": 13023, "in": {"clk": 1, "rst_n": 1, "rx_in": 0}, "exp": {"rx_valid": 0}}
+{"i": 16928, "in": {"clk": 1, "rst_n": 1, "rx_in": 0}, "exp": {"rx_valid": 1}}
+{"i": 16929, "in": {"clk": 1, "rst_n": 1, "rx_in": 1}, "exp": {"rx_valid": 0}}
+{"i": 17363, "in": {"clk": 1, "rst_n": 1, "rx_in": 1}, "exp": {"rx_byte": 60}}
+{"i": 17364, "in": {"clk": 1, "rst_n": 0, "rx_in": 1}, "exp": {"rx_valid": 0}}

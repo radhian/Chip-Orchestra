@@ -1,0 +1,14 @@
+# module=baud_gen kept=11/1309
+# inputs=['clk', 'rst_n']
+# outputs=['baud_tick']
+{"i": 0, "in": {"clk": 1, "rst_n": 1}, "exp": {"baud_tick": 0}}
+{"i": 1, "in": {"clk": 1, "rst_n": 1}, "exp": {"baud_tick": 0}}
+{"i": 2, "in": {"clk": 1, "rst_n": 1}, "exp": {"baud_tick": 0}}
+{"i": 3, "in": {"clk": 1, "rst_n": 1}, "exp": {"baud_tick": 0}}
+{"i": 4, "in": {"clk": 1, "rst_n": 1}, "exp": {"baud_tick": 0}}
+{"i": 433, "in": {"clk": 1, "rst_n": 1}, "exp": {"baud_tick": 1}}
+{"i": 434, "in": {"clk": 1, "rst_n": 1}, "exp": {"baud_tick": 0}}
+{"i": 867, "in": {"clk": 1, "rst_n": 1}, "exp": {"baud_tick": 1}}
+{"i": 868, "in": {"clk": 1, "rst_n": 1}, "exp": {"baud_tick": 0}}
+{"i": 1301, "in": {"clk": 1, "rst_n": 1}, "exp": {"baud_tick": 1}}
+{"i": 1302, "in": {"clk": 1, "rst_n": 1}, "exp": {"baud_tick": 0}}

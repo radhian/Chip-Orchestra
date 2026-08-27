@@ -1,0 +1,9 @@
+{
+  "bytes_received": 900,
+  "bytes_expected": 900,
+  "checked": true,
+  "match": true,
+  "mismatches": 0,
+  "first_mismatch": null,
+  "max_abs_diff": 0
+}
