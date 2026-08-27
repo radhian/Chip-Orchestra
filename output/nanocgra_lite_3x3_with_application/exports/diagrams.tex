@@ -1,0 +1,290 @@
+% Block diagrams for the final report — compiled separately from the
+% paper so the report never has to load TikZ (and with it xcolor,
+% which is incompatible with the IEEE Access class's spot-colour blue).
+\documentclass[multi=tikzpicture,crop,border=2pt]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,fit,backgrounds,calc}
+\tikzset{
+  ipblock/.style   = {draw=black!75, thick, rounded corners=2pt, fill=black!5,
+                      align=center, inner sep=4pt, minimum height=9mm},
+  padnode/.style   = {draw=black!60, fill=white, rounded corners=6pt, align=center,
+                      inner sep=3pt, font=\scriptsize\ttfamily},
+  netedge/.style   = {-{Latex[length=4pt]}, draw=black!65, thick},
+  netlabel/.style  = {font=\tiny\ttfamily, fill=white, fill opacity=0.85,
+                      text opacity=1, inner sep=1pt,
+                      text=black!70, midway},
+  pinlabel/.style  = {font=\tiny\ttfamily, inner sep=1pt},
+}
+\begin{document}
+\begin{tikzpicture}[font=\footnotesize]
+\node[padnode] (pad_data_i) at (0.00,-0.00) {data\_\allowbreak{}i};
+\node[ipblock, minimum width=2.9cm] (inst_u_reset) at (0.00,-2.50) {\ttfamily\bfseries reset\_\allowbreak{}sync\\[1pt]\ttfamily\scriptsize u\_\allowbreak{}reset};
+\node[ipblock, minimum width=2.9cm] (inst_u_sram) at (0.00,-5.00) {\ttfamily\bfseries sram\_\allowbreak{}32b\\[1pt]\ttfamily\scriptsize u\_\allowbreak{}sram};
+\node[ipblock, minimum width=2.9cm] (inst_u_uart_rx) at (4.40,-0.00) {\ttfamily\bfseries uart\_\allowbreak{}rx\\[1pt]\ttfamily\scriptsize u\_\allowbreak{}uart\_\allowbreak{}rx};
+\node[ipblock, minimum width=2.9cm] (inst_u_ctrl) at (4.40,-2.50) {\ttfamily\bfseries nano\_\allowbreak{}controller\\[1pt]\ttfamily\scriptsize u\_\allowbreak{}ctrl};
+\node[ipblock, minimum width=2.9cm] (inst_u_mmio) at (4.40,-5.00) {\ttfamily\bfseries mmio\_\allowbreak{}bus\\[1pt]\ttfamily\scriptsize u\_\allowbreak{}mmio};
+\node[ipblock, minimum width=2.9cm] (inst_u_uart_tx) at (8.80,-1.25) {\ttfamily\bfseries uart\_\allowbreak{}tx\\[1pt]\ttfamily\scriptsize u\_\allowbreak{}uart\_\allowbreak{}tx};
+\node[ipblock, minimum width=2.9cm] (inst_u_lb_rn1) at (8.80,-3.75) {\ttfamily\bfseries line\_\allowbreak{}buffer\\[1pt]\ttfamily\scriptsize u\_\allowbreak{}lb\_\allowbreak{}rn1};
+\node[ipblock, minimum width=2.9cm] (inst_u_lb_rn2) at (13.20,-1.25) {\ttfamily\bfseries line\_\allowbreak{}buffer\\[1pt]\ttfamily\scriptsize u\_\allowbreak{}lb\_\allowbreak{}rn2};
+\node[ipblock, minimum width=2.9cm] (inst_u_window) at (13.20,-3.75) {\ttfamily\bfseries window\_\allowbreak{}3x3\\[1pt]\ttfamily\scriptsize u\_\allowbreak{}window};
+\node[padnode] (pad_data_o) at (17.60,-1.25) {data\_\allowbreak{}o};
+\node[ipblock, minimum width=2.9cm] (inst_u_cgra) at (17.60,-3.75) {\ttfamily\bfseries cgra\_\allowbreak{}3x3\\[1pt]\ttfamily\scriptsize u\_\allowbreak{}cgra};
+\draw[netedge] (pad_data_i) to node[netlabel, pos=0.5] {data\_\allowbreak{}i} (inst_u_uart_rx);
+\draw[netedge] (inst_u_uart_rx) to[bend left=24] node[netlabel, pos=0.5] {rx\_\allowbreak{}byte, rx\_\allowbreak{}valid} (inst_u_ctrl);
+\draw[netedge] (inst_u_uart_tx) to[bend right=26] node[netlabel, pos=0.17] {data\_\allowbreak{}o} (pad_data_o);
+\draw[netedge] (inst_u_uart_tx) to[bend left=24] node[netlabel, pos=0.5] {tx\_\allowbreak{}done} (inst_u_ctrl);
+\draw[netedge] (inst_u_ctrl) to node[netlabel, pos=0.5] {pixel\_\allowbreak{}in, pixel\_\allowbreak{}shift +1} (inst_u_lb_rn1);
+\draw[netedge] (inst_u_ctrl) to[bend right=26] node[netlabel, pos=0.17] {pixel\_\allowbreak{}in, pixel\_\allowbreak{}shift +2} (inst_u_window);
+\draw[netedge] (inst_u_ctrl) to[bend right=26] node[netlabel, pos=0.17] {pixel\_\allowbreak{}shift, col\_\allowbreak{}cnt} (inst_u_lb_rn2);
+\draw[netedge] (inst_u_ctrl) to[bend right=32] node[netlabel, pos=0.17] {start\_\allowbreak{}cgra} (inst_u_cgra);
+\draw[netedge] (inst_u_ctrl) to node[netlabel, pos=0.5] {tx\_\allowbreak{}start, tx\_\allowbreak{}data} (inst_u_uart_tx);
+\draw[netedge] (inst_u_lb_rn1) to node[netlabel, pos=0.5] {lb\_\allowbreak{}rn1\_\allowbreak{}rd} (inst_u_lb_rn2);
+\draw[netedge] (inst_u_lb_rn1) to node[netlabel, pos=0.5] {lb\_\allowbreak{}rn1\_\allowbreak{}rd} (inst_u_window);
+\draw[netedge] (inst_u_lb_rn2) to[bend left=24] node[netlabel, pos=0.5] {lb\_\allowbreak{}rn2\_\allowbreak{}rd} (inst_u_window);
+\draw[netedge] (inst_u_window) to node[netlabel, pos=0.5] {win} (inst_u_cgra);
+\draw[netedge] (inst_u_cgra) to[bend left=24] node[netlabel, pos=0.5] {sobel\_\allowbreak{}out} (inst_u_ctrl);
+\draw[netedge] (inst_u_sram) to node[netlabel, pos=0.5] {sram\_\allowbreak{}rdata} (inst_u_mmio);
+\draw[netedge] (inst_u_mmio) to[bend left=24] node[netlabel, pos=0.5] {sram\_\allowbreak{}addr, sram\_\allowbreak{}wr\_\allowbreak{}en +1} (inst_u_sram);
+\end{tikzpicture}
+
+\begin{tikzpicture}[font=\footnotesize]
+\node[ipblock, minimum width=3.6cm, minimum height=1.60cm] (blk) at (0,0) {\ttfamily\bfseries baud\_\allowbreak{}gen};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,0.26) -- (blk.west|-0,0.26);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,0.26) {clk};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,-0.26) -- (blk.west|-0,-0.26);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,-0.26) {rst\_\allowbreak{}n};
+\draw[netedge] (blk.east|-0,0.00) -- ([xshift=0.9cm]blk.east|-0,0.00);
+\node[pinlabel, anchor=west] at ([xshift=0.98cm]blk.east|-0,0.00) {baud\_\allowbreak{}tick};
+\end{tikzpicture}
+
+\begin{tikzpicture}[font=\footnotesize]
+\node[ipblock, minimum width=3.6cm, minimum height=2.58cm] (blk) at (0,0) {\ttfamily\bfseries cgra\_\allowbreak{}3x3};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,0.78) -- (blk.west|-0,0.78);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,0.78) {clk};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,0.26) -- (blk.west|-0,0.26);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,0.26) {rst\_\allowbreak{}n};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,-0.26) -- (blk.west|-0,-0.26);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,-0.26) {win\,\scriptsize[71:0]};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,-0.78) -- (blk.west|-0,-0.78);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,-0.78) {start};
+\draw[netedge] (blk.east|-0,0.26) -- ([xshift=0.9cm]blk.east|-0,0.26);
+\node[pinlabel, anchor=west] at ([xshift=0.98cm]blk.east|-0,0.26) {sobel\_\allowbreak{}out\,\scriptsize[7:0]};
+\draw[netedge] (blk.east|-0,-0.26) -- ([xshift=0.9cm]blk.east|-0,-0.26);
+\node[pinlabel, anchor=west] at ([xshift=0.98cm]blk.east|-0,-0.26) {done};
+\end{tikzpicture}
+
+\begin{tikzpicture}[font=\footnotesize]
+\node[ipblock, minimum width=3.6cm, minimum height=3.62cm] (blk) at (0,0) {\ttfamily\bfseries line\_\allowbreak{}buffer};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,1.30) -- (blk.west|-0,1.30);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,1.30) {clk};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,0.78) -- (blk.west|-0,0.78);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,0.78) {rst\_\allowbreak{}n};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,0.26) -- (blk.west|-0,0.26);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,0.26) {shift\_\allowbreak{}en};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,-0.26) -- (blk.west|-0,-0.26);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,-0.26) {pixel\_\allowbreak{}in\,\scriptsize[7:0]};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,-0.78) -- (blk.west|-0,-0.78);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,-0.78) {wr\_\allowbreak{}col\,\scriptsize[5:0]};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,-1.30) -- (blk.west|-0,-1.30);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,-1.30) {rd\_\allowbreak{}col\,\scriptsize[5:0]};
+\draw[netedge] (blk.east|-0,0.00) -- ([xshift=0.9cm]blk.east|-0,0.00);
+\node[pinlabel, anchor=west] at ([xshift=0.98cm]blk.east|-0,0.00) {rd\_\allowbreak{}data\,\scriptsize[7:0]};
+\end{tikzpicture}
+
+\begin{tikzpicture}[font=\footnotesize]
+\node[ipblock, minimum width=3.6cm, minimum height=5.18cm] (blk) at (0,0) {\ttfamily\bfseries mmio\_\allowbreak{}bus};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,2.08) -- (blk.west|-0,2.08);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,2.08) {clk};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,1.56) -- (blk.west|-0,1.56);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,1.56) {rst\_\allowbreak{}n};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,1.04) -- (blk.west|-0,1.04);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,1.04) {mst\_\allowbreak{}addr\,\scriptsize[7:0]};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,0.52) -- (blk.west|-0,0.52);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,0.52) {mst\_\allowbreak{}wr};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,0.00) -- (blk.west|-0,0.00);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,0.00) {mst\_\allowbreak{}rd};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,-0.52) -- (blk.west|-0,-0.52);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,-0.52) {mst\_\allowbreak{}wdata\,\scriptsize[7:0]};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,-1.04) -- (blk.west|-0,-1.04);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,-1.04) {sram\_\allowbreak{}rdata\,\scriptsize[7:0]};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,-1.56) -- (blk.west|-0,-1.56);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,-1.56) {uart\_\allowbreak{}rdata\,\scriptsize[7:0]};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,-2.08) -- (blk.west|-0,-2.08);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,-2.08) {cgra\_\allowbreak{}rdata\,\scriptsize[7:0]};
+\draw[netedge] (blk.east|-0,1.56) -- ([xshift=0.9cm]blk.east|-0,1.56);
+\node[pinlabel, anchor=west] at ([xshift=0.98cm]blk.east|-0,1.56) {mst\_\allowbreak{}rdata\,\scriptsize[7:0]};
+\draw[netedge] (blk.east|-0,1.04) -- ([xshift=0.9cm]blk.east|-0,1.04);
+\node[pinlabel, anchor=west] at ([xshift=0.98cm]blk.east|-0,1.04) {sram\_\allowbreak{}sel};
+\draw[netedge] (blk.east|-0,0.52) -- ([xshift=0.9cm]blk.east|-0,0.52);
+\node[pinlabel, anchor=west] at ([xshift=0.98cm]blk.east|-0,0.52) {uart\_\allowbreak{}sel};
+\draw[netedge] (blk.east|-0,0.00) -- ([xshift=0.9cm]blk.east|-0,0.00);
+\node[pinlabel, anchor=west] at ([xshift=0.98cm]blk.east|-0,0.00) {cgra\_\allowbreak{}sel};
+\draw[netedge] (blk.east|-0,-0.52) -- ([xshift=0.9cm]blk.east|-0,-0.52);
+\node[pinlabel, anchor=west] at ([xshift=0.98cm]blk.east|-0,-0.52) {sram\_\allowbreak{}addr\,\scriptsize[4:0]};
+\draw[netedge] (blk.east|-0,-1.04) -- ([xshift=0.9cm]blk.east|-0,-1.04);
+\node[pinlabel, anchor=west] at ([xshift=0.98cm]blk.east|-0,-1.04) {sram\_\allowbreak{}wr\_\allowbreak{}en};
+\draw[netedge] (blk.east|-0,-1.56) -- ([xshift=0.9cm]blk.east|-0,-1.56);
+\node[pinlabel, anchor=west] at ([xshift=0.98cm]blk.east|-0,-1.56) {sram\_\allowbreak{}wdata\,\scriptsize[7:0]};
+\end{tikzpicture}
+
+\begin{tikzpicture}[font=\footnotesize]
+\node[ipblock, minimum width=3.6cm, minimum height=2.06cm] (blk) at (0,0) {\ttfamily\bfseries nano\_\allowbreak{}cgra\_\allowbreak{}3x3\_\allowbreak{}sobel\_\allowbreak{}accelerator\_\allowbreak{}v4};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,0.52) -- (blk.west|-0,0.52);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,0.52) {clk};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,0.00) -- (blk.west|-0,0.00);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,0.00) {rst\_\allowbreak{}async\_\allowbreak{}n};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,-0.52) -- (blk.west|-0,-0.52);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,-0.52) {data\_\allowbreak{}i};
+\draw[netedge] (blk.east|-0,0.00) -- ([xshift=0.9cm]blk.east|-0,0.00);
+\node[pinlabel, anchor=west] at ([xshift=0.98cm]blk.east|-0,0.00) {data\_\allowbreak{}o};
+\end{tikzpicture}
+
+\begin{tikzpicture}[font=\footnotesize]
+\node[ipblock, minimum width=3.6cm, minimum height=6.74cm] (blk) at (0,0) {\ttfamily\bfseries nano\_\allowbreak{}controller};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,1.56) -- (blk.west|-0,1.56);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,1.56) {clk};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,1.04) -- (blk.west|-0,1.04);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,1.04) {rst\_\allowbreak{}n};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,0.52) -- (blk.west|-0,0.52);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,0.52) {rx\_\allowbreak{}byte\,\scriptsize[7:0]};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,0.00) -- (blk.west|-0,0.00);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,0.00) {rx\_\allowbreak{}valid};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,-0.52) -- (blk.west|-0,-0.52);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,-0.52) {tx\_\allowbreak{}done};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,-1.04) -- (blk.west|-0,-1.04);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,-1.04) {cgra\_\allowbreak{}done};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,-1.56) -- (blk.west|-0,-1.56);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,-1.56) {sobel\_\allowbreak{}out\,\scriptsize[7:0]};
+\draw[netedge] (blk.east|-0,2.86) -- ([xshift=0.9cm]blk.east|-0,2.86);
+\node[pinlabel, anchor=west] at ([xshift=0.98cm]blk.east|-0,2.86) {bus\_\allowbreak{}addr\,\scriptsize[7:0]};
+\draw[netedge] (blk.east|-0,2.34) -- ([xshift=0.9cm]blk.east|-0,2.34);
+\node[pinlabel, anchor=west] at ([xshift=0.98cm]blk.east|-0,2.34) {bus\_\allowbreak{}wr};
+\draw[netedge] (blk.east|-0,1.82) -- ([xshift=0.9cm]blk.east|-0,1.82);
+\node[pinlabel, anchor=west] at ([xshift=0.98cm]blk.east|-0,1.82) {bus\_\allowbreak{}rd};
+\draw[netedge] (blk.east|-0,1.30) -- ([xshift=0.9cm]blk.east|-0,1.30);
+\node[pinlabel, anchor=west] at ([xshift=0.98cm]blk.east|-0,1.30) {bus\_\allowbreak{}wdata\,\scriptsize[7:0]};
+\draw[netedge] (blk.east|-0,0.78) -- ([xshift=0.9cm]blk.east|-0,0.78);
+\node[pinlabel, anchor=west] at ([xshift=0.98cm]blk.east|-0,0.78) {pixel\_\allowbreak{}in\,\scriptsize[7:0]};
+\draw[netedge] (blk.east|-0,0.26) -- ([xshift=0.9cm]blk.east|-0,0.26);
+\node[pinlabel, anchor=west] at ([xshift=0.98cm]blk.east|-0,0.26) {pixel\_\allowbreak{}shift};
+\draw[netedge] (blk.east|-0,-0.26) -- ([xshift=0.9cm]blk.east|-0,-0.26);
+\node[pinlabel, anchor=west] at ([xshift=0.98cm]blk.east|-0,-0.26) {col\_\allowbreak{}cnt\,\scriptsize[5:0]};
+\draw[netedge] (blk.east|-0,-0.78) -- ([xshift=0.9cm]blk.east|-0,-0.78);
+\node[pinlabel, anchor=west] at ([xshift=0.98cm]blk.east|-0,-0.78) {row\_\allowbreak{}cnt\,\scriptsize[5:0]};
+\draw[netedge] (blk.east|-0,-1.30) -- ([xshift=0.9cm]blk.east|-0,-1.30);
+\node[pinlabel, anchor=west] at ([xshift=0.98cm]blk.east|-0,-1.30) {start\_\allowbreak{}cgra};
+\draw[netedge] (blk.east|-0,-1.82) -- ([xshift=0.9cm]blk.east|-0,-1.82);
+\node[pinlabel, anchor=west] at ([xshift=0.98cm]blk.east|-0,-1.82) {tx\_\allowbreak{}start};
+\draw[netedge] (blk.east|-0,-2.34) -- ([xshift=0.9cm]blk.east|-0,-2.34);
+\node[pinlabel, anchor=west] at ([xshift=0.98cm]blk.east|-0,-2.34) {tx\_\allowbreak{}data\,\scriptsize[7:0]};
+\draw[netedge] (blk.east|-0,-2.86) -- ([xshift=0.9cm]blk.east|-0,-2.86);
+\node[pinlabel, anchor=west] at ([xshift=0.98cm]blk.east|-0,-2.86) {status\,\scriptsize[7:0]};
+\end{tikzpicture}
+
+\begin{tikzpicture}[font=\footnotesize]
+\node[ipblock, minimum width=3.6cm, minimum height=3.10cm] (blk) at (0,0) {\ttfamily\bfseries pe};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,1.04) -- (blk.west|-0,1.04);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,1.04) {clk};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,0.52) -- (blk.west|-0,0.52);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,0.52) {rst\_\allowbreak{}n};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,0.00) -- (blk.west|-0,0.00);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,0.00) {cfg\,\scriptsize[2:0]};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,-0.52) -- (blk.west|-0,-0.52);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,-0.52) {opa\,\scriptsize[7:0]};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,-1.04) -- (blk.west|-0,-1.04);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,-1.04) {opb\,\scriptsize[7:0]};
+\draw[netedge] (blk.east|-0,0.26) -- ([xshift=0.9cm]blk.east|-0,0.26);
+\node[pinlabel, anchor=west] at ([xshift=0.98cm]blk.east|-0,0.26) {result\,\scriptsize[7:0]};
+\draw[netedge] (blk.east|-0,-0.26) -- ([xshift=0.9cm]blk.east|-0,-0.26);
+\node[pinlabel, anchor=west] at ([xshift=0.98cm]blk.east|-0,-0.26) {cout\,\scriptsize[7:0]};
+\end{tikzpicture}
+
+\begin{tikzpicture}[font=\footnotesize]
+\node[ipblock, minimum width=3.6cm, minimum height=1.60cm] (blk) at (0,0) {\ttfamily\bfseries reset\_\allowbreak{}sync};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,0.26) -- (blk.west|-0,0.26);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,0.26) {clk};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,-0.26) -- (blk.west|-0,-0.26);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,-0.26) {rst\_\allowbreak{}async\_\allowbreak{}n};
+\draw[netedge] (blk.east|-0,0.00) -- ([xshift=0.9cm]blk.east|-0,0.00);
+\node[pinlabel, anchor=west] at ([xshift=0.98cm]blk.east|-0,0.00) {rst\_\allowbreak{}n};
+\end{tikzpicture}
+
+\begin{tikzpicture}[font=\footnotesize]
+\node[ipblock, minimum width=3.6cm, minimum height=1.60cm] (blk) at (0,0) {\ttfamily\bfseries sobel\_\allowbreak{}core};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,0.00) -- (blk.west|-0,0.00);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,0.00) {win\,\scriptsize[71:0]};
+\draw[netedge] (blk.east|-0,0.00) -- ([xshift=0.9cm]blk.east|-0,0.00);
+\node[pinlabel, anchor=west] at ([xshift=0.98cm]blk.east|-0,0.00) {sobel\_\allowbreak{}out\,\scriptsize[7:0]};
+\end{tikzpicture}
+
+\begin{tikzpicture}[font=\footnotesize]
+\node[ipblock, minimum width=3.6cm, minimum height=3.10cm] (blk) at (0,0) {\ttfamily\bfseries sram\_\allowbreak{}32b};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,1.04) -- (blk.west|-0,1.04);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,1.04) {clk};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,0.52) -- (blk.west|-0,0.52);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,0.52) {rst\_\allowbreak{}n};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,0.00) -- (blk.west|-0,0.00);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,0.00) {addr\,\scriptsize[4:0]};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,-0.52) -- (blk.west|-0,-0.52);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,-0.52) {wr\_\allowbreak{}en};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,-1.04) -- (blk.west|-0,-1.04);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,-1.04) {data\_\allowbreak{}in\,\scriptsize[7:0]};
+\draw[netedge] (blk.east|-0,0.00) -- ([xshift=0.9cm]blk.east|-0,0.00);
+\node[pinlabel, anchor=west] at ([xshift=0.98cm]blk.east|-0,0.00) {data\_\allowbreak{}out\,\scriptsize[7:0]};
+\end{tikzpicture}
+
+\begin{tikzpicture}[font=\footnotesize]
+\node[ipblock, minimum width=3.6cm, minimum height=2.06cm] (blk) at (0,0) {\ttfamily\bfseries uart\_\allowbreak{}rx};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,0.52) -- (blk.west|-0,0.52);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,0.52) {clk};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,0.00) -- (blk.west|-0,0.00);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,0.00) {rst\_\allowbreak{}n};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,-0.52) -- (blk.west|-0,-0.52);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,-0.52) {rx\_\allowbreak{}in};
+\draw[netedge] (blk.east|-0,0.26) -- ([xshift=0.9cm]blk.east|-0,0.26);
+\node[pinlabel, anchor=west] at ([xshift=0.98cm]blk.east|-0,0.26) {rx\_\allowbreak{}byte\,\scriptsize[7:0]};
+\draw[netedge] (blk.east|-0,-0.26) -- ([xshift=0.9cm]blk.east|-0,-0.26);
+\node[pinlabel, anchor=west] at ([xshift=0.98cm]blk.east|-0,-0.26) {rx\_\allowbreak{}valid};
+\end{tikzpicture}
+
+\begin{tikzpicture}[font=\footnotesize]
+\node[ipblock, minimum width=3.6cm, minimum height=2.58cm] (blk) at (0,0) {\ttfamily\bfseries uart\_\allowbreak{}tx};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,0.78) -- (blk.west|-0,0.78);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,0.78) {clk};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,0.26) -- (blk.west|-0,0.26);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,0.26) {rst\_\allowbreak{}n};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,-0.26) -- (blk.west|-0,-0.26);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,-0.26) {tx\_\allowbreak{}start};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,-0.78) -- (blk.west|-0,-0.78);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,-0.78) {data\_\allowbreak{}in\,\scriptsize[7:0]};
+\draw[netedge] (blk.east|-0,0.26) -- ([xshift=0.9cm]blk.east|-0,0.26);
+\node[pinlabel, anchor=west] at ([xshift=0.98cm]blk.east|-0,0.26) {tx\_\allowbreak{}out};
+\draw[netedge] (blk.east|-0,-0.26) -- ([xshift=0.9cm]blk.east|-0,-0.26);
+\node[pinlabel, anchor=west] at ([xshift=0.98cm]blk.east|-0,-0.26) {tx\_\allowbreak{}done};
+\end{tikzpicture}
+
+\begin{tikzpicture}[font=\footnotesize]
+\node[ipblock, minimum width=3.6cm, minimum height=4.66cm] (blk) at (0,0) {\ttfamily\bfseries window\_\allowbreak{}3x3};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,1.82) -- (blk.west|-0,1.82);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,1.82) {clk};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,1.30) -- (blk.west|-0,1.30);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,1.30) {rst\_\allowbreak{}n};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,0.78) -- (blk.west|-0,0.78);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,0.78) {shift\_\allowbreak{}en};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,0.26) -- (blk.west|-0,0.26);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,0.26) {pixel\_\allowbreak{}in\,\scriptsize[7:0]};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,-0.26) -- (blk.west|-0,-0.26);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,-0.26) {lb0\_\allowbreak{}data\,\scriptsize[7:0]};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,-0.78) -- (blk.west|-0,-0.78);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,-0.78) {lb1\_\allowbreak{}data\,\scriptsize[7:0]};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,-1.30) -- (blk.west|-0,-1.30);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,-1.30) {col\_\allowbreak{}cnt\,\scriptsize[5:0]};
+\draw[netedge] ([xshift=-0.9cm]blk.west|-0,-1.82) -- (blk.west|-0,-1.82);
+\node[pinlabel, anchor=east] at ([xshift=-0.98cm]blk.west|-0,-1.82) {row\_\allowbreak{}cnt\,\scriptsize[5:0]};
+\draw[netedge] (blk.east|-0,0.26) -- ([xshift=0.9cm]blk.east|-0,0.26);
+\node[pinlabel, anchor=west] at ([xshift=0.98cm]blk.east|-0,0.26) {win\,\scriptsize[71:0]};
+\draw[netedge] (blk.east|-0,-0.26) -- ([xshift=0.9cm]blk.east|-0,-0.26);
+\node[pinlabel, anchor=west] at ([xshift=0.98cm]blk.east|-0,-0.26) {window\_\allowbreak{}valid};
+\end{tikzpicture}
+
+\end{document}

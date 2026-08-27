@@ -1,0 +1,38 @@
+{
+  "stage": "PADRING",
+  "summary": "Pad ring not requested (padring=none) \u2014 stage skipped.",
+  "metrics": {
+    "skipped": true,
+    "config": "none"
+  },
+  "artifacts": [
+    {
+      "path": "logs/padring.log",
+      "kind": "log",
+      "stage": "PADRING",
+      "size": 57,
+      "mime": "application/octet-stream",
+      "summary": "",
+      "created_at": "2026-08-16T09:07:20.162657+00:00"
+    }
+  ],
+  "warnings": [],
+  "errors": [],
+  "raw_log_paths": [
+    "logs/padring.log"
+  ],
+  "design": "",
+  "config": "none",
+  "cfg_file": "",
+  "def_file": "",
+  "gds": "",
+  "lef": "",
+  "svg": "",
+  "verilog": "",
+  "deliverables": [],
+  "pad_summary": {},
+  "used_real_tools": false,
+  "skipped": true,
+  "task_id": "dbe7af46-366c-421b-8cf3-daafc5a7ae6a",
+  "generated_at": "2026-08-16T09:07:20.162708Z"
+}

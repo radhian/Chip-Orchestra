@@ -1,0 +1,169 @@
+{
+  "module": "pe",
+  "ports": {
+    "inputs": [
+      [
+        "clk",
+        1
+      ],
+      [
+        "rst_n",
+        1
+      ],
+      [
+        "cfg",
+        3
+      ],
+      [
+        "opa",
+        8
+      ],
+      [
+        "opb",
+        8
+      ]
+    ],
+    "outputs": [
+      [
+        "result",
+        8
+      ],
+      [
+        "cout",
+        8
+      ]
+    ]
+  },
+  "vectors": [
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "cfg": 0,
+        "opa": 83,
+        "opb": 0
+      },
+      "expected": {
+        "result": 83,
+        "cout": 83
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "cfg": 6,
+        "opa": 255,
+        "opb": 0
+      },
+      "expected": {
+        "result": 0,
+        "cout": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "cfg": 3,
+        "opa": 16,
+        "opb": 0
+      },
+      "expected": {
+        "result": 32,
+        "cout": 32
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "cfg": 3,
+        "opa": 128,
+        "opb": 0
+      },
+      "expected": {
+        "result": 0,
+        "cout": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "cfg": 4,
+        "opa": 5,
+        "opb": 0
+      },
+      "expected": {
+        "result": 251,
+        "cout": 251
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "cfg": 5,
+        "opa": 3,
+        "opb": 0
+      },
+      "expected": {
+        "result": 250,
+        "cout": 250
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "cfg": 7,
+        "opa": 251,
+        "opb": 0
+      },
+      "expected": {
+        "result": 5,
+        "cout": 5
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "cfg": 1,
+        "opa": 16,
+        "opb": 2
+      },
+      "expected": {
+        "result": 32,
+        "cout": 32
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1,
+        "cfg": 2,
+        "opa": 16,
+        "opb": 5
+      },
+      "expected": {
+        "result": 21,
+        "cout": 21
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 0,
+        "cfg": 0,
+        "opa": 66,
+        "opb": 0
+      },
+      "expected": {
+        "result": 0,
+        "cout": 0
+      }
+    }
+  ]
+}

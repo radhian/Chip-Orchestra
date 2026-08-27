@@ -1,0 +1,7 @@
+{
+  "clock_period_ns": 28.33,
+  "clock_mhz": 35.298,
+  "clock_hz": 35298270,
+  "stage": "DRC_LVS",
+  "note": "what hardening actually closed timing at; derive CLK_FREQ and every timing-derived constant from this"
+}

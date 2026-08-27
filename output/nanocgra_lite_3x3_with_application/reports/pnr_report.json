@@ -1,0 +1,86 @@
+{
+  "stage": "PNR",
+  "summary": "LibreLane hardening completed (tapeout ready).",
+  "metrics": {
+    "die_area_um2": 246939,
+    "die_bbox_um": "0.0 0.0 488.05 505.97",
+    "core_area_um2": 224979,
+    "cell_count": 10553,
+    "util_pct": 0.424181,
+    "io_pins": 6,
+    "wns_ns": 0.4801830180503395,
+    "tns_ns": 0,
+    "hold_wns_ns": 0.22471247720850843,
+    "power_mw": 0.025658758357167244,
+    "antenna_violations": 0,
+    "drc_errors": 0,
+    "max_slew_violations": 0,
+    "max_cap_violations": 0,
+    "max_fanout_violations": 0,
+    "setup_ws_tt_ns": 13.361870210705904,
+    "setup_ws_ss_ns": 0.4801830180503395,
+    "setup_ws_ff_ns": 18.999234723247483,
+    "clock_period_ns": 28.33,
+    "clock_target_mhz": 35.3,
+    "fmax_mhz": 35.9,
+    "voltage": "5.0V"
+  },
+  "artifacts": [
+    {
+      "path": "gds/nano_cgra_3x3_sobel_accelerator_v4.gds",
+      "kind": "gds",
+      "stage": "PNR",
+      "size": 3447952,
+      "mime": "application/octet-stream",
+      "summary": "",
+      "created_at": "2026-08-16T09:01:05.624659+00:00"
+    },
+    {
+      "path": "gds/nano_cgra_3x3_sobel_accelerator_v4.png",
+      "kind": "layout_preview",
+      "stage": "PNR",
+      "size": 339474,
+      "mime": "image/png",
+      "summary": "",
+      "created_at": "2026-08-16T09:01:05.630204+00:00"
+    },
+    {
+      "path": "logs/librelane.log",
+      "kind": "log",
+      "stage": "PNR",
+      "size": 110,
+      "mime": "application/octet-stream",
+      "summary": "",
+      "created_at": "2026-08-16T09:01:05.630457+00:00"
+    }
+  ],
+  "warnings": [],
+  "errors": [],
+  "raw_log_paths": [
+    "logs/librelane.log"
+  ],
+  "top": "nano_cgra_3x3_sobel_accelerator_v4",
+  "gds": "gds/nano_cgra_3x3_sobel_accelerator_v4.gds",
+  "png": "gds/nano_cgra_3x3_sobel_accelerator_v4.png",
+  "signoff": {
+    "magic_drc": 0,
+    "magic_overlap": 0,
+    "route_drc": 0,
+    "antenna": 0,
+    "lvs": 0,
+    "design_violations": 0,
+    "synth_check": 0,
+    "flow_errors": 0,
+    "max_slew": 0,
+    "max_cap": 0,
+    "max_fanout": 0,
+    "hold_vio": 0,
+    "setup_wns_ns": 0.48,
+    "slow_corner_slew": 0,
+    "clean": true,
+    "failed": []
+  },
+  "tapeout_ready": true,
+  "task_id": "dbe7af46-366c-421b-8cf3-daafc5a7ae6a",
+  "generated_at": "2026-08-16T09:01:05.630574Z"
+}

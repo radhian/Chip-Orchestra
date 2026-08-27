@@ -1,0 +1,14 @@
+import json, os
+
+# Look at the kept vectors for the tricky modules to understand the timing model
+for mod in ['baud_gen','uart_rx','uart_tx','reset_sync','nano_controller','sram_32b','line_buffer','window_3x3']:
+    path = f'tb/vecs/{mod}_vecs.txt'
+    with open(path) as f:
+        lines = f.readlines()
+    print(f"=== {mod} ({len(lines)-3} vecs) ===")
+    for ln in lines[3:3+8]:
+        print(ln.rstrip())
+    print("...")
+    for ln in lines[-4:]:
+        print(ln.rstrip())
+    print()

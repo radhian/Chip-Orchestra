@@ -1,0 +1,21 @@
+{
+  "total": 52,
+  "passed": 52,
+  "failed": 0,
+  "ran": true,
+  "files": [
+    "golden/tests/test_baud_gen.py",
+    "golden/tests/test_cgra_3x3.py",
+    "golden/tests/test_line_buffer.py",
+    "golden/tests/test_mmio_bus.py",
+    "golden/tests/test_nano_controller.py",
+    "golden/tests/test_pe.py",
+    "golden/tests/test_reset_sync.py",
+    "golden/tests/test_sobel_core.py",
+    "golden/tests/test_sram_32b.py",
+    "golden/tests/test_top.py",
+    "golden/tests/test_uart_rx.py",
+    "golden/tests/test_uart_tx.py",
+    "golden/tests/test_window_3x3.py"
+  ]
+}

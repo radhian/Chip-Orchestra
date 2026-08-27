@@ -1,0 +1,15 @@
+{
+  "input": "hwsw/input/Screenshot_from_2026-08-01_05-48-03.png",
+  "bytes_in": 1024,
+  "bytes_out": 900,
+  "in_geometry": [
+    32,
+    32
+  ],
+  "out_geometry": [
+    30,
+    30
+  ],
+  "golden": "golden/model/top.py::sobel_stream",
+  "golden_available": true
+}

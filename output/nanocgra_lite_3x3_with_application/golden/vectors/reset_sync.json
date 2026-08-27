@@ -1,0 +1,149 @@
+{
+  "module": "reset_sync",
+  "ports": {
+    "inputs": [
+      [
+        "clk",
+        1
+      ],
+      [
+        "rst_async_n",
+        1
+      ]
+    ],
+    "outputs": [
+      [
+        "rst_n",
+        1
+      ]
+    ]
+  },
+  "vectors": [
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_async_n": 1
+      },
+      "expected": {
+        "rst_n": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_async_n": 1
+      },
+      "expected": {
+        "rst_n": 1
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_async_n": 1
+      },
+      "expected": {
+        "rst_n": 1
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_async_n": 1
+      },
+      "expected": {
+        "rst_n": 1
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_async_n": 1
+      },
+      "expected": {
+        "rst_n": 1
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_async_n": 0
+      },
+      "expected": {
+        "rst_n": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_async_n": 0
+      },
+      "expected": {
+        "rst_n": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_async_n": 0
+      },
+      "expected": {
+        "rst_n": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_async_n": 0
+      },
+      "expected": {
+        "rst_n": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_async_n": 0
+      },
+      "expected": {
+        "rst_n": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_async_n": 1
+      },
+      "expected": {
+        "rst_n": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_async_n": 1
+      },
+      "expected": {
+        "rst_n": 1
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_async_n": 1
+      },
+      "expected": {
+        "rst_n": 1
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_async_n": 1
+      },
+      "expected": {
+        "rst_n": 1
+      }
+    }
+  ]
+}

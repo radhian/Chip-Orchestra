@@ -1,0 +1,13 @@
+# module=pe kept=10/10
+# inputs=['clk', 'rst_n', 'cfg', 'opa', 'opb']
+# outputs=['result', 'cout']
+{"i": 0, "in": {"clk": 1, "rst_n": 1, "cfg": 0, "opa": 83, "opb": 0}, "exp": {"result": 83, "cout": 83}}
+{"i": 1, "in": {"clk": 1, "rst_n": 1, "cfg": 6, "opa": 255, "opb": 0}, "exp": {"result": 0, "cout": 0}}
+{"i": 2, "in": {"clk": 1, "rst_n": 1, "cfg": 3, "opa": 16, "opb": 0}, "exp": {"result": 32, "cout": 32}}
+{"i": 3, "in": {"clk": 1, "rst_n": 1, "cfg": 3, "opa": 128, "opb": 0}, "exp": {"result": 0, "cout": 0}}
+{"i": 4, "in": {"clk": 1, "rst_n": 1, "cfg": 4, "opa": 5, "opb": 0}, "exp": {"result": 251, "cout": 251}}
+{"i": 5, "in": {"clk": 1, "rst_n": 1, "cfg": 5, "opa": 3, "opb": 0}, "exp": {"result": 250, "cout": 250}}
+{"i": 6, "in": {"clk": 1, "rst_n": 1, "cfg": 7, "opa": 251, "opb": 0}, "exp": {"result": 5, "cout": 5}}
+{"i": 7, "in": {"clk": 1, "rst_n": 1, "cfg": 1, "opa": 16, "opb": 2}, "exp": {"result": 32, "cout": 32}}
+{"i": 8, "in": {"clk": 1, "rst_n": 1, "cfg": 2, "opa": 16, "opb": 5}, "exp": {"result": 21, "cout": 21}}
+{"i": 9, "in": {"clk": 1, "rst_n": 0, "cfg": 0, "opa": 66, "opb": 0}, "exp": {"result": 0, "cout": 0}}

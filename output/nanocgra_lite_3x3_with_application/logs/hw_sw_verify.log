@@ -1,0 +1,56 @@
+# HW/SW verification — nano_cgra_3x3_sobel_accelerator_v4
+
+Top module `nano_cgra_3x3_sobel_accelerator_v4` ports: input clk, input rst_async_n, input data_i, output data_o. Interface is BIT-SERIAL (UART-style): payload enters on `data_i` and leaves on `data_o`, one bit per baud period of 434 clock cycles, 8 data bits per frame, LSB first, with a low start bit and a high stop bit. Data geometry: input 32x32, output 30x30 bytes.
+
+Input: hwsw/input/Screenshot_from_2026-08-01_05-48-03.png
+$ python3 sw/hwsw/host_driver.py encode --input hwsw/input/Screenshot_from_2026-08-01_05-48-03.png
+{
+  "input": "hwsw/input/Screenshot_from_2026-08-01_05-48-03.png",
+  "bytes_in": 1024,
+  "bytes_out": 900,
+  "in_geometry": [
+    32,
+    32
+  ],
+  "out_geometry": [
+    30,
+    30
+  ],
+  "golden": "golden/model/top.py::sobel_stream",
+  "golden_available": true
+}
+/tmp/chip-orchestra/workspaces/dbe7af46-366c-421b-8cf3-daafc5a7ae6a/sw/hwsw/host_driver.py:93: DeprecationWarning: Image.Image.getdata is deprecated and will be removed in Pillow 14 (2027-10-15). Use get_flattened_data instead.
+  return list(image.getdata())
+
+$ iverilog -g2012 -I/tmp/chip-orchestra/workspaces/dbe7af46-366c-421b-8cf3-daafc5a7ae6a/rtl -s nano_cgra_3x3_sobel_accelerator_v4_hwsw_tb -o hwsw/hwsw.vvp rtl/baud_gen.v rtl/cgra_3x3.v rtl/line_buffer.v rtl/mmio_bus.v rtl/nano_cgra_3x3_sobel_accelerator_v4.v rtl/nano_controller.v rtl/params.v rtl/pe.v rtl/reset_sync.v rtl/sobel_core.v rtl/sram_32b.v rtl/uart_rx.v rtl/uart_tx.v rtl/window_3x3.v tb/hwsw/nano_cgra_3x3_sobel_accelerator_v4_hwsw_tb.v
+
+$ vvp hwsw/hwsw.vvp
+VCD info: dumpfile hwsw/hwsw.vcd opened for output.
+Starting Sobel accelerator test: sending 1024 pixels...
+  Captured 100 results...
+  Captured 200 results...
+  Captured 300 results...
+  Captured 400 results...
+  Captured 500 results...
+  Captured 600 results...
+  Captured 700 results...
+  Captured 800 results...
+  Captured 900 results...
+Chip output written to hwsw/chip_output.mem (900 values)
+First 10 chip outputs: 1c 20 16 10 1a 18 1a 1a 18 1c
+First 10 golden outputs: 1c 20 16 10 1a 18 1a 1a 18 1c
+TEST PASSED — all 900 Sobel outputs match golden
+tb/hwsw/nano_cgra_3x3_sobel_accelerator_v4_hwsw_tb.v:189: $finish called at 44482955000 (1ps)
+
+$ python3 sw/hwsw/host_driver.py decode
+{
+  "bytes_received": 900,
+  "bytes_expected": 900,
+  "checked": true,
+  "match": true,
+  "mismatches": 0,
+  "first_mismatch": null,
+  "max_abs_diff": 0
+}
+
+rendered hwsw/waveform.png from the interface dump

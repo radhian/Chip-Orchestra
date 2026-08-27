@@ -1,0 +1,17 @@
+{
+  "input": "context/uploads/Screenshot_from_2026-07-14_16-24-31.png",
+  "framing": "whole image downscaled to 32x32 grayscale (BILINEAR), no crop",
+  "input_size": [
+    32,
+    32
+  ],
+  "output_size": [
+    30,
+    30
+  ],
+  "output_min": 2,
+  "output_max": 255,
+  "output_mean": 112.042,
+  "nonzero_output_pixels": 900,
+  "total_output_pixels": 900
+}

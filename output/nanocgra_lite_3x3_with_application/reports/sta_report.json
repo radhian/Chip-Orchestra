@@ -1,0 +1,44 @@
+{
+  "stage": "STA",
+  "summary": "STA (OpenSTA): WNS=0.0 ns, power=0.0 mW, timing MET.",
+  "metrics": {
+    "wns_ns": 0.0,
+    "tns_ns": 0.0,
+    "power_mw": 0.0,
+    "timing_met": true,
+    "engine": "opensta"
+  },
+  "artifacts": [
+    {
+      "path": "reports/sta.rpt",
+      "kind": "report",
+      "stage": "STA",
+      "size": 14963,
+      "mime": "application/octet-stream",
+      "summary": "",
+      "created_at": "2026-08-16T09:06:55.219873+00:00"
+    },
+    {
+      "path": "reports/power.rpt",
+      "kind": "report",
+      "stage": "STA",
+      "size": 41,
+      "mime": "application/octet-stream",
+      "summary": "",
+      "created_at": "2026-08-16T09:06:55.220122+00:00"
+    }
+  ],
+  "warnings": [],
+  "errors": [],
+  "raw_log_paths": [
+    "reports/sta.rpt"
+  ],
+  "top": "nano_cgra_3x3_sobel_accelerator_v4",
+  "wns_ns": 0.0,
+  "tns_ns": 0.0,
+  "power_mw": 0.0,
+  "timing_met": true,
+  "power_breakdown": {},
+  "task_id": "dbe7af46-366c-421b-8cf3-daafc5a7ae6a",
+  "generated_at": "2026-08-16T09:06:55.220216Z"
+}

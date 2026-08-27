@@ -1,0 +1,124 @@
+\relax 
+\citation{b1}
+\citation{b2}
+\citation{b3}
+\citation{b4}
+\@writefile{toc}{\contentsline {section}{\numberline {I}Introduction}{1}{}\protected@file@percent }
+\newlabel{sec:introduction}{{I}{1}{}{section.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {II}Related Work}{1}{}\protected@file@percent }
+\newlabel{sec:related}{{II}{1}{}{section.2}{}}
+\citation{r1}
+\citation{r2}
+\citation{r3}
+\citation{r4}
+\citation{r5}
+\@writefile{toc}{\contentsline {section}{\numberline {III}System Architecture}{2}{}\protected@file@percent }
+\newlabel{sec:arch}{{III}{2}{}{section.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Module and Data-File Inventory}}{2}{}\protected@file@percent }
+\newlabel{tab:modules}{{1}{2}{}{table.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Golden Model Block Decomposition (Implemented Module-for-Module in Verilog)}}{2}{}\protected@file@percent }
+\newlabel{tab:golden}{{2}{2}{}{table.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {IV}Golden Reference Model}{2}{}\protected@file@percent }
+\newlabel{sec:golden}{{IV}{2}{}{section.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Top-level connection diagram of \texttt  {nano\_cgra\_3x3\_sobel\_accelerator\_v4}, generated from the instantiations and net connectivity in the RTL. Rounded pins are the chip's own I/O; each arrow runs from the block that drives a net to the blocks that read it and is labelled with the net(s) it carries. Clock and reset reach every block and are omitted for clarity.}}{3}{}\protected@file@percent }
+\newlabel{fig:toplevel}{{1}{3}{}{figure.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Canonical chip input derived deterministically from the attached specification image.}}{3}{}\protected@file@percent }
+\newlabel{fig:input}{{2}{3}{}{figure.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {V}Verification Methodology and Evidence}{3}{}\protected@file@percent }
+\newlabel{sec:verif}{{V}{3}{}{section.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-A}}Golden-Model-First Flow}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-B}}Simulation Results}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {VI}Hardware/Software Co-Verification}{3}{}\protected@file@percent }
+\newlabel{sec:hwsw}{{VI}{3}{}{section.6}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Desired output computed by the Python golden model (same algorithm, weights and fixed-point arithmetic as the RTL).}}{3}{}\protected@file@percent }
+\newlabel{fig:golden}{{3}{3}{}{figure.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Functional Verification Results (Simulation and Lint)}}{3}{}\protected@file@percent }
+\newlabel{tab:verif}{{3}{3}{}{table.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Chip output computed by the RTL and dumped by the testbench from the DUT; simulation passes only when it matches Fig.~\ref {fig:golden} value-for-value.}}{4}{}\protected@file@percent }
+\newlabel{fig:chipout}{{4}{4}{}{figure.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Top-level signal activity from the self-checking testbench run (activity-ranked traces from \texttt  {waves/design.vcd}).}}{4}{}\protected@file@percent }
+\newlabel{fig:waves}{{5}{4}{}{figure.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-A}}Detected Host Interface}{4}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Host Interface Read From the Top-Level RTL}}{4}{}\protected@file@percent }
+\newlabel{tab:hwswiface}{{4}{4}{}{table.4}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Hardware/Software Co-Verification Results}}{4}{}\protected@file@percent }
+\newlabel{tab:hwsw}{{5}{4}{}{table.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-B}}The Generated Bridge}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-C}}Result}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {VII}Module Descriptions and Governing Equations}{4}{}\protected@file@percent }
+\newlabel{sec:modules}{{VII}{4}{}{section.7}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces User-supplied input as the host driver encoded it for the device.}}{5}{}\protected@file@percent }
+\newlabel{fig:hwswin}{{6}{5}{}{figure.6}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Response the Python reference model computes for that input.}}{5}{}\protected@file@percent }
+\newlabel{fig:hwswgold}{{7}{5}{}{figure.7}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Response decoded from the bytes the device actually returned over its own interface; co-verification passes only when it equals Fig.~\ref {fig:hwswgold} value-for-value.}}{5}{}\protected@file@percent }
+\newlabel{fig:hwswchip}{{8}{5}{}{figure.8}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Activity on the device's data pins during the transfer, windowed so individual frames are legible.}}{5}{}\protected@file@percent }
+\newlabel{fig:hwswwave}{{9}{5}{}{figure.9}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-A}}params}{5}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-B}}reset\_sync}{5}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Interface of \texttt  {reset\_sync} (\texttt  {reset\_sync.v}): inputs enter on the left, outputs leave on the right, bus widths as declared in the RTL.}}{6}{}\protected@file@percent }
+\newlabel{fig:symresetsync}{{10}{6}{}{figure.10}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Interface of \texttt  {baud\_gen} (\texttt  {baud\_gen.v}): inputs enter on the left, outputs leave on the right, bus widths as declared in the RTL.}}{6}{}\protected@file@percent }
+\newlabel{fig:symbaudgen}{{11}{6}{}{figure.11}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces Interface of \texttt  {uart\_rx} (\texttt  {uart\_rx.v}): inputs enter on the left, outputs leave on the right, bus widths as declared in the RTL.}}{6}{}\protected@file@percent }
+\newlabel{fig:symuartrx}{{12}{6}{}{figure.12}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-C}}baud\_gen}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-D}}uart\_rx}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-E}}uart\_tx}{6}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces Interface of \texttt  {uart\_tx} (\texttt  {uart\_tx.v}): inputs enter on the left, outputs leave on the right, bus widths as declared in the RTL.}}{6}{}\protected@file@percent }
+\newlabel{fig:symuarttx}{{13}{6}{}{figure.13}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces Interface of \texttt  {line\_buffer} (\texttt  {line\_buffer.v}): inputs enter on the left, outputs leave on the right, bus widths as declared in the RTL.}}{6}{}\protected@file@percent }
+\newlabel{fig:symlinebuffer}{{14}{6}{}{figure.14}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces Interface of \texttt  {window\_3x3} (\texttt  {window\_3x3.v}): inputs enter on the left, outputs leave on the right, bus widths as declared in the RTL.}}{6}{}\protected@file@percent }
+\newlabel{fig:symwindow3x3}{{15}{6}{}{figure.15}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-F}}line\_buffer}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-G}}window\_3x3}{6}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {16}{\ignorespaces Interface of \texttt  {pe} (\texttt  {pe.v}): inputs enter on the left, outputs leave on the right, bus widths as declared in the RTL.}}{7}{}\protected@file@percent }
+\newlabel{fig:sympe}{{16}{7}{}{figure.16}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {17}{\ignorespaces Interface of \texttt  {sobel\_core} (\texttt  {sobel\_core.v}): inputs enter on the left, outputs leave on the right, bus widths as declared in the RTL.}}{7}{}\protected@file@percent }
+\newlabel{fig:symsobelcore}{{17}{7}{}{figure.17}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-H}}pe}{7}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-I}}sobel\_core}{7}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {18}{\ignorespaces Interface of \texttt  {cgra\_3x3} (\texttt  {cgra\_3x3.v}): inputs enter on the left, outputs leave on the right, bus widths as declared in the RTL.}}{7}{}\protected@file@percent }
+\newlabel{fig:symcgra3x3}{{18}{7}{}{figure.18}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {19}{\ignorespaces Interface of \texttt  {sram\_32b} (\texttt  {sram\_32b.v}): inputs enter on the left, outputs leave on the right, bus widths as declared in the RTL.}}{7}{}\protected@file@percent }
+\newlabel{fig:symsram32b}{{19}{7}{}{figure.19}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-J}}cgra\_3x3}{7}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-K}}sram\_32b}{7}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {20}{\ignorespaces Interface of \texttt  {mmio\_bus} (\texttt  {mmio\_bus.v}): inputs enter on the left, outputs leave on the right, bus widths as declared in the RTL.}}{8}{}\protected@file@percent }
+\newlabel{fig:symmmiobus}{{20}{8}{}{figure.20}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {21}{\ignorespaces Interface of \texttt  {nano\_controller} (\texttt  {nano\_controller.v}): inputs enter on the left, outputs leave on the right, bus widths as declared in the RTL.}}{8}{}\protected@file@percent }
+\newlabel{fig:symnanocontroller}{{21}{8}{}{figure.21}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-L}}mmio\_bus}{8}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-M}}nano\_controller}{8}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {22}{\ignorespaces Interface of \texttt  {nano\_cgra\_3x3\_sobel\_accelerator\_v4} (\texttt  {nano\_cgra\_3x3\_sobel\_accelerator\_v4.v}): inputs enter on the left, outputs leave on the right, bus widths as declared in the RTL.}}{8}{}\protected@file@percent }
+\newlabel{fig:symnanocgra3x3sobelacceleratorv4}{{22}{8}{}{figure.22}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-N}}nano\_cgra\_3x3\_sobel\_accelerator\_v4}{8}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VII-O}}Dataflow and Cycle Budget}{8}{}\protected@file@percent }
+\bibcite{b1}{1}
+\bibcite{b2}{2}
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Dataflow: Module Chain and Responsibilities}}{9}{}\protected@file@percent }
+\newlabel{tab:dataflow}{{6}{9}{}{table.6}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Measured Cycle Budget}}{9}{}\protected@file@percent }
+\newlabel{tab:cycles}{{7}{9}{}{table.7}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {VIII}Physical Implementation}{9}{}\protected@file@percent }
+\newlabel{sec:impl}{{VIII}{9}{}{section.8}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {IX}Sign-Off Status and Limitations}{9}{}\protected@file@percent }
+\newlabel{sec:signoff}{{IX}{9}{}{section.9}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {X}Conclusion}{9}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces Implementation Parameters (LibreLane Metrics)}}{9}{}\protected@file@percent }
+\newlabel{tab:impl}{{8}{9}{}{table.8}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {9}{\ignorespaces Setup Slack per PVT Corner (Nominal RC)}}{9}{}\protected@file@percent }
+\newlabel{tab:corners}{{9}{9}{}{table.9}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {23}{\ignorespaces Routed GDSII layout (KLayout render).}}{9}{}\protected@file@percent }
+\newlabel{fig:gds}{{23}{9}{}{figure.23}{}}
+\@writefile{toc}{\contentsline {section}{REFERENCES}{9}{}\protected@file@percent }
+\bibcite{b3}{3}
+\bibcite{b4}{4}
+\bibcite{r1}{5}
+\bibcite{r2}{6}
+\bibcite{r3}{7}
+\bibcite{r4}{8}
+\bibcite{r5}{9}
+\gdef \@abspage@last{10}

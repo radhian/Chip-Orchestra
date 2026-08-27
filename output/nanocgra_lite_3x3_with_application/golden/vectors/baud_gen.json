@@ -1,0 +1,11804 @@
+{
+  "module": "baud_gen",
+  "ports": {
+    "inputs": [
+      [
+        "clk",
+        1
+      ],
+      [
+        "rst_n",
+        1
+      ]
+    ],
+    "outputs": [
+      [
+        "baud_tick",
+        1
+      ]
+    ]
+  },
+  "vectors": [
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 1
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 1
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 1
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 1
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 0
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 0
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 0
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 0
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    },
+    {
+      "inputs": {
+        "clk": 1,
+        "rst_n": 0
+      },
+      "expected": {
+        "baud_tick": 0
+      }
+    }
+  ]
+}

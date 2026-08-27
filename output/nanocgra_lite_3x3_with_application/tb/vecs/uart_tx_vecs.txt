@@ -1,0 +1,30 @@
+# module=uart_tx kept=27/20853
+# inputs=['clk', 'rst_n', 'tx_start', 'data_in']
+# outputs=['tx_out', 'tx_done']
+{"i": 0, "in": {"clk": 1, "rst_n": 1, "tx_start": 0, "data_in": 0}, "exp": {"tx_out": 1, "tx_done": 0}}
+{"i": 1, "in": {"clk": 1, "rst_n": 1, "tx_start": 0, "data_in": 0}, "exp": {"tx_out": 1, "tx_done": 0}}
+{"i": 2, "in": {"clk": 1, "rst_n": 1, "tx_start": 0, "data_in": 0}, "exp": {"tx_out": 1, "tx_done": 0}}
+{"i": 3, "in": {"clk": 1, "rst_n": 1, "tx_start": 0, "data_in": 0}, "exp": {"tx_out": 1, "tx_done": 0}}
+{"i": 4, "in": {"clk": 1, "rst_n": 1, "tx_start": 0, "data_in": 0}, "exp": {"tx_out": 1, "tx_done": 0}}
+{"i": 430, "in": {"clk": 1, "rst_n": 1, "tx_start": 0, "data_in": 0}, "exp": {"tx_out": 0, "tx_done": 0}}
+{"i": 1732, "in": {"clk": 1, "rst_n": 1, "tx_start": 0, "data_in": 0}, "exp": {"tx_out": 1, "tx_done": 0}}
+{"i": 3468, "in": {"clk": 1, "rst_n": 1, "tx_start": 0, "data_in": 0}, "exp": {"tx_out": 0, "tx_done": 0}}
+{"i": 4336, "in": {"clk": 1, "rst_n": 1, "tx_start": 0, "data_in": 0}, "exp": {"tx_out": 1, "tx_done": 1}}
+{"i": 4337, "in": {"clk": 1, "rst_n": 1, "tx_start": 0, "data_in": 0}, "exp": {"tx_out": 1, "tx_done": 0}}
+{"i": 5643, "in": {"clk": 1, "rst_n": 1, "tx_start": 0, "data_in": 0}, "exp": {"tx_out": 0, "tx_done": 0}}
+{"i": 6077, "in": {"clk": 1, "rst_n": 1, "tx_start": 0, "data_in": 0}, "exp": {"tx_out": 1, "tx_done": 0}}
+{"i": 9549, "in": {"clk": 1, "rst_n": 1, "tx_start": 0, "data_in": 0}, "exp": {"tx_out": 1, "tx_done": 1}}
+{"i": 9550, "in": {"clk": 1, "rst_n": 1, "tx_start": 0, "data_in": 0}, "exp": {"tx_out": 1, "tx_done": 0}}
+{"i": 10856, "in": {"clk": 1, "rst_n": 1, "tx_start": 0, "data_in": 0}, "exp": {"tx_out": 0, "tx_done": 0}}
+{"i": 11290, "in": {"clk": 1, "rst_n": 1, "tx_start": 0, "data_in": 0}, "exp": {"tx_out": 1, "tx_done": 0}}
+{"i": 11724, "in": {"clk": 1, "rst_n": 1, "tx_start": 0, "data_in": 0}, "exp": {"tx_out": 0, "tx_done": 0}}
+{"i": 12158, "in": {"clk": 1, "rst_n": 1, "tx_start": 0, "data_in": 0}, "exp": {"tx_out": 1, "tx_done": 0}}
+{"i": 12592, "in": {"clk": 1, "rst_n": 1, "tx_start": 0, "data_in": 0}, "exp": {"tx_out": 0, "tx_done": 0}}
+{"i": 13460, "in": {"clk": 1, "rst_n": 1, "tx_start": 0, "data_in": 0}, "exp": {"tx_out": 1, "tx_done": 0}}
+{"i": 13894, "in": {"clk": 1, "rst_n": 1, "tx_start": 0, "data_in": 0}, "exp": {"tx_out": 0, "tx_done": 0}}
+{"i": 14328, "in": {"clk": 1, "rst_n": 1, "tx_start": 0, "data_in": 0}, "exp": {"tx_out": 1, "tx_done": 0}}
+{"i": 14762, "in": {"clk": 1, "rst_n": 1, "tx_start": 0, "data_in": 0}, "exp": {"tx_out": 1, "tx_done": 1}}
+{"i": 14763, "in": {"clk": 1, "rst_n": 1, "tx_start": 0, "data_in": 0}, "exp": {"tx_out": 1, "tx_done": 0}}
+{"i": 16069, "in": {"clk": 1, "rst_n": 1, "tx_start": 0, "data_in": 0}, "exp": {"tx_out": 0, "tx_done": 0}}
+{"i": 19975, "in": {"clk": 1, "rst_n": 1, "tx_start": 0, "data_in": 0}, "exp": {"tx_out": 1, "tx_done": 1}}
+{"i": 19976, "in": {"clk": 1, "rst_n": 1, "tx_start": 0, "data_in": 0}, "exp": {"tx_out": 1, "tx_done": 0}}
