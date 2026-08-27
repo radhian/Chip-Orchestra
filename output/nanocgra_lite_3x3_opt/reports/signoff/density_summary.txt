@@ -1,0 +1,12 @@
+DENSITY DRC summary
+============================================================
+Report database: reports/signoff/density.lyrdb
+Top cell: NanoCGRA_Lite
+Total violations: 48458
+
+Violation count by rule:
+  - 'M2.4': 31936  
+  - 'M3.4': 13186  
+  - 'M4.4': 2592  
+  - 'M5.4': 372  
+  - 'MT.3': 372  

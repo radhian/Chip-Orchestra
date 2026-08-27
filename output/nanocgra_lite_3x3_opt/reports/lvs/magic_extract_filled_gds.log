@@ -1,0 +1,144 @@
+
+Magic 8.3 revision 105 - Compiled on Mon, 06 Dec 2021 22:32:27 +0200.
+Starting magic under Tcl interpreter
+Using the terminal as the console.
+Using NULL graphics device.
+Processing system .magicrc file
+Sourcing design .magicrc for technology gf180mcuD ...
+10 Magic internal units = 1 Lambda
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 20: section version:
+	Error:  Magic version 8.3.411 is required by this techfile, but this version of magic is 8.3.105.
+Input style import: scaleFactor=10, multiplier=2
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 2614: section drc:
+	Rule type "surround" usage: surround layers1 layers2 distance presence why
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 2635: section drc:
+	Rule type "surround" usage: surround layers1 layers2 distance presence why
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 2689: section drc:
+	Rule type "surround" usage: surround layers1 layers2 distance presence why
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 2693: section drc:
+	Rule type "surround" usage: surround layers1 layers2 distance presence why
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 2717: section drc:
+	Rule type "surround" usage: surround layers1 layers2 distance presence why
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 2726: section drc:
+	Rule type "surround" usage: surround layers1 layers2 distance presence why
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 2745: section drc:
+	Rule type "surround" usage: surround layers1 layers2 distance presence why
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 2754: section drc:
+	Rule type "surround" usage: surround layers1 layers2 distance presence why
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 2780: section drc:
+	Rule type "surround" usage: surround layers1 layers2 distance presence why
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 2782: section drc:
+	Rule type "surround" usage: surround layers1 layers2 distance presence why
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 2810: section drc:
+	Rule type "width" usage: width layers width why
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 2811: section drc:
+	Rule type "width" usage: width layers width why
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 2815: section drc:
+	Rule type "width" usage: width layers width why
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 2816: section drc:
+	Rule type "width" usage: width layers width why
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 2963: section extract:
+	Illegal keyword.  Legal keywords are:
+	 areacap contact cscale defaultareacap defaultoverlap defaultperimeter defaultsideoverlap defaultsidewall device fet fetresist height antenna model tiedown lambda overlap perimc planeorder noplaneordering resist rscale sidehalo sideoverlap sidewall step style substrate units variants
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3216: section extract:
+	Malformed line for keyword defaultsidewall.  Correct usage:
+	defaultsidewall types plane capacitance
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3223: section extract:
+	Malformed line for keyword defaultsidewall.  Correct usage:
+	defaultsidewall types plane capacitance
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3240: section extract:
+	Malformed line for keyword defaultsidewall.  Correct usage:
+	defaultsidewall types plane capacitance
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3262: section extract:
+	Malformed line for keyword defaultsidewall.  Correct usage:
+	defaultsidewall types plane capacitance
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3290: section extract:
+	Malformed line for keyword defaultsidewall.  Correct usage:
+	defaultsidewall types plane capacitance
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3323: section extract:
+	Malformed line for keyword defaultsidewall.  Correct usage:
+	defaultsidewall types plane capacitance
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3390: section extract:
+	Malformed line for keyword defaultsidewall.  Correct usage:
+	defaultsidewall types plane capacitance
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3397: section extract:
+	Malformed line for keyword defaultsidewall.  Correct usage:
+	defaultsidewall types plane capacitance
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3414: section extract:
+	Malformed line for keyword defaultsidewall.  Correct usage:
+	defaultsidewall types plane capacitance
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3436: section extract:
+	Malformed line for keyword defaultsidewall.  Correct usage:
+	defaultsidewall types plane capacitance
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3464: section extract:
+	Malformed line for keyword defaultsidewall.  Correct usage:
+	defaultsidewall types plane capacitance
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3497: section extract:
+	Malformed line for keyword defaultsidewall.  Correct usage:
+	defaultsidewall types plane capacitance
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3563: section extract:
+	Malformed line for keyword defaultsidewall.  Correct usage:
+	defaultsidewall types plane capacitance
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3570: section extract:
+	Malformed line for keyword defaultsidewall.  Correct usage:
+	defaultsidewall types plane capacitance
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3588: section extract:
+	Malformed line for keyword defaultsidewall.  Correct usage:
+	defaultsidewall types plane capacitance
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3609: section extract:
+	Malformed line for keyword defaultsidewall.  Correct usage:
+	defaultsidewall types plane capacitance
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3637: section extract:
+	Malformed line for keyword defaultsidewall.  Correct usage:
+	defaultsidewall types plane capacitance
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3670: section extract:
+	Malformed line for keyword defaultsidewall.  Correct usage:
+	defaultsidewall types plane capacitance
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3796: section extract:
+	Ambiguous layer (type) name "error"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3800: section extract:
+	Ambiguous layer (type) name "error"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3821: section extract:
+	Unrecognized layer (type) name "a1>99.0"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3821: section extract:
+	Ambiguous layer (type) name "error"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3822: section extract:
+	Unrecognized layer (type) name "a1>24.0"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3822: section extract:
+	Ambiguous layer (type) name "error"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3823: section extract:
+	Unrecognized layer (type) name "a1>8.5"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3823: section extract:
+	Ambiguous layer (type) name "error"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3824: section extract:
+	Unrecognized layer (type) name "a1>4.2"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3824: section extract:
+	Ambiguous layer (type) name "error"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3825: section extract:
+	Unrecognized layer (type) name "a1>2.0"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3825: section extract:
+	Ambiguous layer (type) name "error"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3826: section extract:
+	Unrecognized layer (type) name "a1>1.0"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3826: section extract:
+	Ambiguous layer (type) name "error"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3828: section extract:
+	Unrecognized layer (type) name "a1>4.1"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3828: section extract:
+	Ambiguous layer (type) name "error"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3829: section extract:
+	Unrecognized layer (type) name "a1>2.0"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3829: section extract:
+	Ambiguous layer (type) name "error"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3830: section extract:
+	Unrecognized layer (type) name "a1>99.0"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3830: section extract:
+	Ambiguous layer (type) name "error"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3831: section extract:
+	Unrecognized layer (type) name "a1>24.0"
+/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech: line 3831: section extract:
+	Ambiguous layer (type) name "error"
+The following sections of /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.tech/magic/gf180mcuD.tech contained errors:
+    version
+Loading gf180mcuD Device Generator Menu ...
+Scaled tech values by 10 / 1 to match internal grid scaling

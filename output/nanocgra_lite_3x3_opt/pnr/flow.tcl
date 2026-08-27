@@ -76,6 +76,10 @@ clock_tree_synthesis \
 set_propagated_clock [all_clocks]
 estimate_parasitics -placement
 repair_clock_nets
+# Re-apply PG logical connectivity after CTS/repair buffers are inserted.
+# This prevents APR-added buf/clkbuf cells from being emitted without
+# .VDD/.VNW/.VPW/.VSS pins in the routed power netlist.
+global_connect
 detailed_placement
 
 # ---- Routing ----
@@ -83,10 +87,14 @@ set_routing_layers -signal Metal2-Metal5 -clock Metal2-Metal5
 global_route -guide_file $OUT/pnr/route.guide
 estimate_parasitics -global_routing
 detailed_route -output_drc $OUT/reports/route_drc.rpt -verbose 1
+# Re-apply PG logical connectivity after routing/repair steps as well.
+global_connect
 
 # ---- Fillers ----
 filler_placement gf180mcu_fd_sc_mcu7t5v0__fill_*
 check_placement
+# One final PG connection run before signoff
+global_connect
 
 # ---- Final parasitics + STA ----
 estimate_parasitics -global_routing
