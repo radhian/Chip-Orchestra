@@ -1,15 +1,17 @@
 # Self-Hosted / AMD-Hosted LLM on ROCm → Chip Orchestra
 
-> **Start here for self-hosting GLM on this hardware:** the endpoints are not serving yet, and R9700 (32GB RDNA4) / Strix Halo (128GB APU, gfx1151) are **not** the MI300X datacenter GPUs the `serve_vllm.sh` path assumes. The accurate, runnable plan — including why full flagship GLM-5.2 needs a smaller model or a cluster, the recommended **GLM co-located with agent-service on Strix Halo** topology, and **Podman as the primary tool** — is in `GLM_SELFHOST_AMD.md`. Podman details are in `PODMAN_DEPLOYMENT.md`.
+> **Primary architecture today:** run the full Chip Orchestra stack on the RX 7900 XT VM and point `agent-service` at the already-running local OpenAI-compatible endpoint. The default single-node profile is `LLM_PROVIDER=openai-compatible`, `OPENAI_BASE_URL=http://172.16.100.2:10000/v1`, and `OPENAI_MODEL=Qwen3.8-27B-multimodal`.
+>
+> **Legacy / reference architecture:** the older R9700 + Strix Halo split remains useful as background material for future multi-node deployments, but it is no longer the default path for this branch. The large-model self-hosting notes for MI300-class hardware are still documented in `GLM_SELFHOST_AMD.md`, and Podman runtime notes remain in `PODMAN_DEPLOYMENT.md`.
 
-Run Chip Orchestra against OpenAI-compatible LLM endpoints hosted on AMD hardware. The recommended single-node profile for the user's RX 7900 XT VM is `LLM_PROVIDER=openai-compatible`, `OPENAI_BASE_URL=http://172.16.100.2:10000/v1`, and `OPENAI_MODEL=Qwen3.8-27B-multimodal`.
+Run Chip Orchestra against OpenAI-compatible LLM endpoints hosted on AMD hardware. For the current branch, the intended production profile is a **single-node RX 7900 XT VM** where the model endpoint, `agent-service`, and the rest of the application stack all live on the same host.
 
-The current AMD infrastructure is:
+The current target infrastructure is:
 
-| Node | OpenAI-compatible base URL | Recommended role |
+| Host | OpenAI-compatible base URL | Recommended role |
 |---|---|---|
-| R9700 | `http://172.16.1.36:8005/v1` | Primary production endpoint for full Chip Orchestra runs |
-| Strix Halo | `http://172.16.1.10:10000/v1` | Secondary endpoint for smoke tests, fallback, smaller/quantized models, or routing experiments |
+| RX 7900 XT VM | `http://172.16.100.2:10000/v1` | Primary and recommended endpoint for the full Chip Orchestra stack |
+| Distributed AMD split (optional) | Varies by deployment | Secondary / future topology for experiments or larger multi-node layouts |
 
 The served model name must be registered by the model server and visible from `/v1/models`. Chip Orchestra sends `OPENAI_MODEL` as the `model` field in `/v1/chat/completions`, so set it to one of the ids returned by `GET <base>/models` unless your server accepts aliases.
 
@@ -19,28 +21,29 @@ The served model name must be registered by the model server and visible from `/
 
 | File | Purpose |
 |---|---|
-| `AMD_DISTRIBUTED_ARCHITECTURE.md` | Full architecture doc for the Strix Halo agent + R9700 core split |
-| `docker-compose.r9700-core.yml` | R9700 stack: MySQL, Redis, orchestrator, EDA, frontend |
-| `r9700-core.env.example` | R9700 environment template for the distributed AMD deployment |
-| `docker-compose.strix-agent.yml` | Strix Halo stack: remote `agent-service` only |
-| `strix-agent.env.example` | Strix Halo environment template for the remote agent stack |
-| `amd-infra.env.example` | Single-stack / endpoint-only env profile for the R9700 + Strix Halo LLM endpoints |
-| `docker-compose.vllm-rocm.yml` | vLLM-ROCm GLM-5.2 server template for running directly on a GPU node |
-| `scripts/check_amd_infra_models.sh` | Checks R9700 and Strix Halo `/v1/models` and runs a chat smoke test |
-| `scripts/serve_vllm.sh` | `docker run` launcher, hardware-profile aware |
-| `scripts/serve_atom.sh` | Same, using AMD's ATOM reference server |
-| `scripts/preflight_rocm.sh` | Check ROCm, GPU count, HBM, disk, device access |
+| `AMD_DISTRIBUTED_ARCHITECTURE.md` | Reference architecture doc for the older Strix Halo agent + R9700 core split |
+| `docker-compose.r9700-core.yml` | Core stack compose used by both the distributed deployment and the RX 7900 XT single-node overlay |
+| `r9700-core.env.example` | Distributed deployment environment template for the core stack |
+| `docker-compose.strix-agent.yml` | `agent-service` compose used for remote-agent mode and for the RX 7900 XT single-node overlay |
+| `strix-agent.env.example` | Remote-agent environment template |
+| `docker-compose.strix-single-node.rootless.yml` | Rootless single-node override for the RX 7900 XT VM |
+| `strix-core.rootless.env` | Current single-node RX 7900 XT environment file |
+| `docker-compose.vllm-rocm.yml` | Legacy MI300-class vLLM-ROCm GLM-5.2 server template |
+| `scripts/check_amd_infra_models.sh` | Checks the current OpenAI-compatible endpoint(s) and runs a chat smoke test |
+| `scripts/serve_vllm.sh` | Legacy `docker run` launcher for MI300-class vLLM deployments |
+| `scripts/serve_atom.sh` | Legacy `docker run` launcher using AMD's ATOM reference server |
+| `scripts/preflight_rocm.sh` | Check ROCm, GPU count, disk, and device access before self-hosting on supported ROCm hardware |
 | `scripts/healthcheck.sh` | Verify one OpenAI-compatible endpoint and a chat-completion smoke test |
 
 ---
 
 ## Recommended deployment plan
 
-The preferred AMD split is now documented in `AMD_DISTRIBUTED_ARCHITECTURE.md`: run `agent-service` on Strix Halo, and run MySQL, Redis, `orchestrator-service`, `eda-service`, and the frontend on R9700. Use the single-stack endpoint profile only when shared storage between the two hosts is not ready yet.
+The current recommended architecture is the **single-node RX 7900 XT VM**. Run the OpenAI-compatible model endpoint, `agent-service`, MySQL, Redis, `orchestrator-service`, `eda-service`, and the frontend on the same host. Keep the older distributed Strix Halo + R9700 split as an optional secondary topology for future experiments or larger multi-node work.
 
-### Phase 0 — endpoint verification
+### Phase 0 — verify the current single-node endpoint
 
-Run this from any host that can reach both AMD nodes:
+Run this from the RX 7900 XT VM, or from any machine that can reach the VM on `172.16.100.2`:
 
 ```bash
 cd deploy/selfhosted-llm-rocm
@@ -49,11 +52,11 @@ bash scripts/check_amd_infra_models.sh
 
 Expected result:
 
-1. `http://172.16.1.36:8005/v1/models` returns at least one model id.
-2. `http://172.16.1.10:10000/v1/models` returns at least one model id.
-3. A minimal `/v1/chat/completions` request succeeds against each endpoint.
+1. `http://172.16.100.2:10000/v1/models` returns at least one model id.
+2. A minimal `/v1/chat/completions` request succeeds.
+3. The served model list includes the id you plan to use from Chip Orchestra, ideally `Qwen3.8-27B-multimodal`.
 
-If either `/v1/models` is empty, fix the serving layer first by setting the server's served-model name / model alias. For vLLM this is typically `--served-model-name <MODEL_ID>`; for ATOM it is also `--served-model-name <MODEL_ID>`.
+If `/v1/models` is empty, fix the serving layer first by setting the server's served-model name / model alias. For vLLM this is typically `--served-model-name <MODEL_ID>`; for ATOM it is also `--served-model-name <MODEL_ID>`.
 
 ### Phase 1 — recommended single-node RX 7900 XT deployment
 
@@ -86,9 +89,9 @@ curl -fsS http://172.16.100.2:8001/agent/models
 curl -fsS http://172.16.100.2:10000/v1/models
 ```
 
-### Phase 2 — distributed AMD deployment: Strix agent + R9700 core
+### Phase 2 — optional distributed AMD deployment: Strix agent + R9700 core
 
-First prepare the shared workspace mount on both hosts at `/srv/chip-orchestra/workspaces`. Then start the R9700 core stack:
+Use this only when you explicitly want a multi-node topology. First prepare the shared workspace mount on both hosts at `/srv/chip-orchestra/workspaces`. Then start the R9700 core stack:
 
 ```bash
 cd deploy/selfhosted-llm-rocm
@@ -115,35 +118,6 @@ curl -fsS http://172.16.1.10:8001/health
 curl -fsS http://172.16.1.10:8001/agent/models
 ```
 
-### Phase 2 — single-node fallback on R9700
-
-Use R9700 as the first production path because it is the most likely node to have enough dedicated accelerator headroom for long agent turns and EDA repair loops.
-
-```bash
-cp deploy/selfhosted-llm-rocm/amd-infra.env.example .env
-
-# IMPORTANT: after checking /v1/models, replace OPENAI_MODEL with the exact id
-# returned by http://172.16.1.36:8005/v1/models if it is not literally R9700.
-# Example:
-# OPENAI_MODEL=GLM-5.2-FP8
-
-docker compose up -d --build
-curl -fsS http://localhost:8001/health
-curl -fsS http://localhost:8001/agent/models
-curl -fsS http://localhost:8080/health
-```
-
-The app stack reads:
-
-```bash
-LLM_PROVIDER=glm
-OPENAI_BASE_URL=http://172.16.1.36:8005/v1
-OPENAI_API_KEY=EMPTY
-OPENAI_MODEL=<one id from /v1/models>
-```
-
-`OPENAI_API_KEY` must be non-empty even for unauthenticated self-hosted servers because the OpenAI-compatible client expects a key.
-
 ### Phase 3 — validate an end-to-end chip flow
 
 Run a small design first, not a large SoC. The feasibility gate is not only model reachability; it is whether the endpoint can survive long multi-step orchestration: planning, RTL generation, compile repair, testbench generation, simulation repair, and hardening analysis.
@@ -156,44 +130,44 @@ bash tests/smoke_test_nanocgra.sh
 
 Then create one UI task for a compact block such as UART FIFO, simple ALU, or NanoCGRA-lite subset. Confirm that the task reaches generated RTL, simulation, and reports without model timeouts.
 
-### Phase 4 — Strix Halo local LLM / routing experiment
+### Phase 4 — optional alternate-endpoint experiment
 
-After R9700 is stable, test Strix Halo independently:
+Only after the RX 7900 XT single-node path is stable should you test a second endpoint or router configuration.
 
-```bash
-BASE=http://172.16.1.10:10000 bash deploy/selfhosted-llm-rocm/scripts/healthcheck.sh
-```
-
-If Strix Halo exposes the same production model and passes real task validation, you can switch the app stack by changing:
+For a second endpoint, verify it independently first:
 
 ```bash
-OPENAI_BASE_URL=http://172.16.1.10:10000/v1
-OPENAI_MODEL=<one id from Strix Halo /v1/models>
+BASE=http://<alternate-host>:10000 bash deploy/selfhosted-llm-rocm/scripts/healthcheck.sh
 ```
 
-Best practical use is to keep R9700 as the primary endpoint and use Strix Halo for smaller tasks, demos, smoke tests, or future model-router work. Avoid assuming Strix Halo can run the same huge model or context length unless `/v1/models`, memory, and task-level smoke tests prove it.
+If that alternate endpoint passes real task validation, you can switch Chip Orchestra by changing:
+
+```bash
+OPENAI_BASE_URL=http://<alternate-host>:10000/v1
+OPENAI_MODEL=<one id from /v1/models on the alternate endpoint>
+```
+
+The current runtime still selects one `OPENAI_BASE_URL` at process start. If you need automatic failover or model routing, place a small OpenAI-compatible router in front of multiple backends or extend `agent-service` with ordered endpoint failover.
 
 ---
 
 ## Feasibility recommendation
 
-This is feasible if both AMD endpoints are already serving OpenAI-compatible chat completions and `/v1/models` returns the exact model ids. The Chip Orchestra application side only needs env changes and the small `/agent/models` integration now included in this branch.
+This is feasible today for the **single-node RX 7900 XT architecture** as long as the local endpoint on `172.16.100.2:10000` is already serving OpenAI-compatible chat completions and `/v1/models` returns the exact model id Chip Orchestra will send, ideally `Qwen3.8-27B-multimodal`.
 
 Best path:
 
-1. Use **R9700 as primary** for full Chip Orchestra runs.
-2. Use **Strix Halo as secondary** until it proves it can handle the same context length and latency under real EDA-agent workloads.
-3. Register stable served-model names on both nodes, for example `GLM-5.2-FP8`, `Qwen3-Coder`, or another exact production alias, instead of hardware names. Hardware names are useful labels, but model ids should describe the model because they are passed into inference requests.
-4. Keep a non-empty `OPENAI_API_KEY=EMPTY` placeholder.
-5. Validate with `/v1/models`, one chat completion, `agent-service /agent/models`, then one end-to-end chip task.
-
-A simple two-endpoint failover is not built into the current app runtime; it selects one `OPENAI_BASE_URL` at process start. If automatic fallback is required, add a small OpenAI-compatible router in front of both endpoints or extend `agent-service` with ordered endpoint failover.
+1. Use the **RX 7900 XT VM as the primary and recommended deployment**.
+2. Keep the endpoint configuration explicit: `LLM_PROVIDER=openai-compatible`, `OPENAI_BASE_URL=http://172.16.100.2:10000/v1`, `OPENAI_MODEL=Qwen3.8-27B-multimodal`, and `OPENAI_API_KEY=EMPTY`.
+3. Validate in order with `/v1/models`, one chat completion, `agent-service /agent/models`, then one end-to-end chip task.
+4. Treat the Strix Halo + R9700 split as optional follow-on work, not as the baseline architecture for this branch.
+5. If you later need multi-endpoint routing or failover, add a router layer or extend `agent-service`; do not describe it as built into the current runtime.
 
 ---
 
 ## Serving your own ROCm node with vLLM / ATOM
 
-Use this section when you need to start the model server on a GPU node instead of consuming the already-running R9700 / Strix Halo endpoints.
+Use this section only when you need to stand up a **new** ROCm model server yourself instead of consuming the already-running OpenAI-compatible endpoint on the RX 7900 XT VM. The scripts below are still useful as reference material for MI300-class hardware or future larger deployments, but they are not the primary day-one path for the current single-node architecture.
 
 ### Hardware profiles
 
