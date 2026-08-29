@@ -75,6 +75,10 @@ export function CreateTaskPage() {
   const [llmModels, setLlmModels] = useState<string[]>([])
   const [attachments, setAttachments] = useState<TaskAttachment[]>([])
   const [attachmentError, setAttachmentError] = useState<string | null>(null)
+  const llmHint = useMemo(() => {
+    if (!llmModels.length) return 'No models detected — the server default will be used'
+    return 'Models detected on the connected OpenAI-compatible endpoint'
+  }, [llmModels])
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
   useEffect(() => {
