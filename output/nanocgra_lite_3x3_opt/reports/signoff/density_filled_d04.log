@@ -1,0 +1,53 @@
+2026-08-29 19:24:09 +0800: Memory Usage (570856K) : Starting running GF180MCU Klayout DRC runset on /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt_filled.gds
+2026-08-29 19:24:09 +0800: Memory Usage (570856K) : Ruby Version for klayout: 3.1.2
+2026-08-29 19:24:09 +0800: Memory Usage (580884K) : Loading database to memory is complete.
+2026-08-29 19:24:09 +0800: Memory Usage (580884K) : GF180MCU Klayout density DRC runset output at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra/output/nanocgra_lite_3x3_opt/reports/signoff/density_filled_d04.lyrdb
+2026-08-29 19:24:09 +0800: Memory Usage (580884K) : Evaluate switches.
+2026-08-29 19:24:09 +0800: Memory Usage (580884K) : Number of threads to use 2
+2026-08-29 19:24:09 +0800: Memory Usage (580884K) : Verbose mode: 
+2026-08-29 19:24:09 +0800: Memory Usage (580884K) : flat  mode is enabled.
+2026-08-29 19:24:09 +0800: Memory Usage (580884K) : METAL_TOP Selected is 9K
+2026-08-29 19:24:09 +0800: Memory Usage (580884K) : METAL_STACK Selected is 5LM
+2026-08-29 19:24:09 +0800: Memory Usage (580884K) : Read in polygons from layers.
+2026-08-29 19:24:10 +0800: Memory Usage (583700K) : dualgate has 569 polygons
+2026-08-29 19:24:10 +0800: Memory Usage (585244K) : poly2 has 24926 polygons
+2026-08-29 19:24:10 +0800: Memory Usage (601312K) : contact has 105451 polygons
+2026-08-29 19:24:10 +0800: Memory Usage (612104K) : metal1_drawn has 27136 polygons
+2026-08-29 19:24:11 +0800: Memory Usage (612104K) : metal1_dummy has 2783 polygons
+2026-08-29 19:24:11 +0800: Memory Usage (612104K) : metal1_label has 0 polygons
+2026-08-29 19:24:11 +0800: Memory Usage (612104K) : metal1_slot has 0 polygons
+2026-08-29 19:24:11 +0800: Memory Usage (612104K) : metal1_blk has 0 polygons
+2026-08-29 19:24:11 +0800: Memory Usage (612104K) : via1 has 24363 polygons
+2026-08-29 19:24:11 +0800: Memory Usage (630560K) : metal2_drawn has 16964 polygons
+2026-08-29 19:24:11 +0800: Memory Usage (630560K) : metal2_dummy has 2783 polygons
+2026-08-29 19:24:11 +0800: Memory Usage (630560K) : metal2_label has 21 polygons
+2026-08-29 19:24:11 +0800: Memory Usage (630560K) : metal2_slot has 0 polygons
+2026-08-29 19:24:11 +0800: Memory Usage (630560K) : metal2_blk has 0 polygons
+2026-08-29 19:24:11 +0800: Memory Usage (630560K) : via2 has 20917 polygons
+2026-08-29 19:24:11 +0800: Memory Usage (630560K) : metal3_drawn has 9372 polygons
+2026-08-29 19:24:11 +0800: Memory Usage (630560K) : metal3_dummy has 2783 polygons
+2026-08-29 19:24:12 +0800: Memory Usage (630560K) : metal3_label has 0 polygons
+2026-08-29 19:24:12 +0800: Memory Usage (630560K) : metal3_slot has 0 polygons
+2026-08-29 19:24:12 +0800: Memory Usage (630560K) : metal3_blk has 0 polygons
+2026-08-29 19:24:12 +0800: Memory Usage (630560K) : via3 has 8037 polygons
+2026-08-29 19:24:12 +0800: Memory Usage (630560K) : metal4_drawn has 1290 polygons
+2026-08-29 19:24:12 +0800: Memory Usage (630560K) : metal4_dummy has 2783 polygons
+2026-08-29 19:24:12 +0800: Memory Usage (630560K) : metal4_label has 0 polygons
+2026-08-29 19:24:12 +0800: Memory Usage (630560K) : metal4_slot has 0 polygons
+2026-08-29 19:24:12 +0800: Memory Usage (630560K) : metal4_blk has 0 polygons
+2026-08-29 19:24:12 +0800: Memory Usage (630560K) : via4 has 3469 polygons
+2026-08-29 19:24:12 +0800: Memory Usage (630560K) : metal5_drawn has 211 polygons
+2026-08-29 19:24:12 +0800: Memory Usage (630560K) : metal5_dummy has 2783 polygons
+2026-08-29 19:24:12 +0800: Memory Usage (630560K) : metal5_label has 0 polygons
+2026-08-29 19:24:12 +0800: Memory Usage (630560K) : metal5_slot has 0 polygons
+2026-08-29 19:24:12 +0800: Memory Usage (630560K) : metal5_blk has 0 polygons
+2026-08-29 19:24:12 +0800: Memory Usage (630560K) : Starting GF180MCU DENSITY layer derivations.
+2026-08-29 19:24:12 +0800: Memory Usage (630560K) : Starting GF180MCU DENSITY DRC rules.
+2026-08-29 19:24:12 +0800: Memory Usage (630560K) : Executing rule PL.8
+2026-08-29 19:24:12 +0800: Memory Usage (630560K) : Executing rule M1.4
+2026-08-29 19:24:12 +0800: Memory Usage (635384K) : Executing rule M2.4
+2026-08-29 19:24:12 +0800: Memory Usage (635384K) : Executing rule M3.4
+2026-08-29 19:24:13 +0800: Memory Usage (635384K) : Executing rule M4.4
+2026-08-29 19:24:13 +0800: Memory Usage (635384K) : Executing rule M5.4
+2026-08-29 19:24:13 +0800: Memory Usage (635384K) : Executing rule MT.3
+2026-08-29 19:24:13 +0800: Memory Usage (635384K) : DRC Total Run time 3.374166 seconds
