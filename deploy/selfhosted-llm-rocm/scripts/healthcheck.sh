@@ -8,7 +8,7 @@
 # ---------------------------------------------------------------------------
 set -uo pipefail
 BASE="${BASE:-http://localhost:${LLM_SERVE_PORT:-8000}}"
-MODEL="${OPENAI_MODEL:-GLM-5.2-FP8}"
+MODEL="${OPENAI_MODEL:-Qwen3.8-27B-multimodal}"
 
 echo "== /v1/models @ $BASE =="
 if ! curl -fsS "$BASE/v1/models" | head -c 600; then
@@ -24,4 +24,4 @@ curl -fsS "$BASE/v1/chat/completions" \
   | head -c 1200
 echo; echo
 echo ">> If you see a JSON completion above, wire agent-service:"
-echo "   LLM_PROVIDER=glm  OPENAI_BASE_URL=$BASE/v1  OPENAI_API_KEY=EMPTY  OPENAI_MODEL=$MODEL"
+echo "   LLM_PROVIDER=openai-compatible  OPENAI_BASE_URL=$BASE/v1  OPENAI_API_KEY=EMPTY  OPENAI_MODEL=$MODEL"

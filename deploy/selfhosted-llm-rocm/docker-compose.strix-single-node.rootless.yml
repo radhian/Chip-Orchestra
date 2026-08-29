@@ -1,7 +1,7 @@
 # Strix Halo SINGLE-NODE rootless override.
 #
 # Composition:
-#   Default (external llama-swap at 172.16.1.10:10000):
+#   Default (external OpenAI-compatible endpoint at 172.16.100.2:10000):
 #     podman-compose --env-file strix-core.rootless.env \
 #       -f docker-compose.r9700-core.yml \
 #       -f docker-compose.strix-agent.yml \
@@ -97,12 +97,14 @@ services:
       - ${CONTAINER_RESOLV_CONF:-./container-resolv.conf}:/etc/resolv.conf:ro
     environment:
       # LLM backend is driven by strix-core.rootless.env. The default in
-      # strix-agent.yml is the external llama-swap, but we set it explicitly
-      # here so the single-node topology is self-describing.
+      # strix-agent.yml is the external Qwen3.8 endpoint, but we set it
+      # explicitly here so the single-node topology is self-describing.
       DATABASE_URL: mysql+pymysql://${MYSQL_USER:-chip}:${MYSQL_PASSWORD:-chip}@mysql:3306/${MYSQL_DATABASE:-chip_orchestra}
       REDIS_URL: redis://redis:6379/0
-      OPENAI_BASE_URL: ${OPENAI_BASE_URL:-http://172.16.1.10:10000/v1}
-      OPENAI_MODEL: ${OPENAI_MODEL:-Laguna-S-2.1}
+      OPENAI_BASE_URL: ${OPENAI_BASE_URL:-http://172.16.100.2:10000/v1}
+      OPENAI_MODEL: ${OPENAI_MODEL:-Qwen3.8-27B-multimodal}
+      OPENAI_TIMEOUT: ${OPENAI_TIMEOUT:-180}
+      OPENAI_MAX_RETRIES: ${OPENAI_MAX_RETRIES:-3}
     networks:
       - chip-orchestra
     extra_hosts:

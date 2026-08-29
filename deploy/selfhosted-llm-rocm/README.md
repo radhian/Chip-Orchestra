@@ -2,7 +2,7 @@
 
 > **Start here for self-hosting GLM on this hardware:** the endpoints are not serving yet, and R9700 (32GB RDNA4) / Strix Halo (128GB APU, gfx1151) are **not** the MI300X datacenter GPUs the `serve_vllm.sh` path assumes. The accurate, runnable plan — including why full flagship GLM-5.2 needs a smaller model or a cluster, the recommended **GLM co-located with agent-service on Strix Halo** topology, and **Podman as the primary tool** — is in `GLM_SELFHOST_AMD.md`. Podman details are in `PODMAN_DEPLOYMENT.md`.
 
-Run Chip Orchestra against OpenAI-compatible LLM endpoints hosted on AMD hardware. The app already supports this path through `LLM_PROVIDER=glm`; no workflow code changes are required.
+Run Chip Orchestra against OpenAI-compatible LLM endpoints hosted on AMD hardware. The recommended single-node profile for the user's RX 7900 XT VM is `LLM_PROVIDER=openai-compatible`, `OPENAI_BASE_URL=http://172.16.100.2:10000/v1`, and `OPENAI_MODEL=Qwen3.8-27B-multimodal`.
 
 The current AMD infrastructure is:
 
@@ -55,7 +55,38 @@ Expected result:
 
 If either `/v1/models` is empty, fix the serving layer first by setting the server's served-model name / model alias. For vLLM this is typically `--served-model-name <MODEL_ID>`; for ATOM it is also `--served-model-name <MODEL_ID>`.
 
-### Phase 1 — distributed AMD deployment: Strix agent + R9700 core
+### Phase 1 — recommended single-node RX 7900 XT deployment
+
+Use the single-node rootless profile on the RX 7900 XT VM when the OpenAI-compatible endpoint is already available locally:
+
+```bash
+cd deploy/selfhosted-llm-rocm
+podman-compose --env-file strix-core.rootless.env \
+  -f docker-compose.r9700-core.yml \
+  -f docker-compose.strix-agent.yml \
+  -f docker-compose.strix-single-node.rootless.yml \
+  up -d --build
+```
+
+This profile assumes:
+
+```bash
+LLM_PROVIDER=openai-compatible
+OPENAI_BASE_URL=http://172.16.100.2:10000/v1
+OPENAI_MODEL=Qwen3.8-27B-multimodal
+OPENAI_API_KEY=EMPTY
+```
+
+Validate health:
+
+```bash
+curl -fsS http://172.16.100.2:8080/health
+curl -fsS http://172.16.100.2:8001/health
+curl -fsS http://172.16.100.2:8001/agent/models
+curl -fsS http://172.16.100.2:10000/v1/models
+```
+
+### Phase 2 — distributed AMD deployment: Strix agent + R9700 core
 
 First prepare the shared workspace mount on both hosts at `/srv/chip-orchestra/workspaces`. Then start the R9700 core stack:
 

@@ -8,7 +8,7 @@
 # ---------------------------------------------------------------------------
 set -euo pipefail
 
-AMD_LLM_ENDPOINTS="${AMD_LLM_ENDPOINTS:-R9700=http://172.16.1.36:8005/v1 Strix-Halo=http://172.16.1.10:10000/v1}"
+AMD_LLM_ENDPOINTS="${AMD_LLM_ENDPOINTS:-RX7900XT=http://172.16.100.2:10000/v1}"
 OPENAI_API_KEY="${OPENAI_API_KEY:-EMPTY}"
 
 fail=0
