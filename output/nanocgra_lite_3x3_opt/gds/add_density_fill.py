@@ -16,8 +16,9 @@ if top is None:
 # GF180 density deck counts drawn + dummy purposes for each metal layer.
 # Add electrically inert dummy-purpose fill on upper metals to close global density.
 # Layers are from GF180 density.drc:
-#   Metal2 dummy: 36/4, Metal3 dummy: 42/4, Metal4 dummy: 46/4, Metal5 dummy: 81/4
-layers = [(36, 4), (42, 4), (46, 4), (81, 4)]
+#   Metal1 dummy: 34/4, Metal2 dummy: 36/4, Metal3 dummy: 42/4,
+#   Metal4 dummy: 46/4, Metal5 dummy: 81/4, MetalTop dummy: 53/4
+layers = [(34, 4), (36, 4), (42, 4), (46, 4), (81, 4), (53, 4)]
 
 bbox = top.bbox()
 margin = int(round(10.0 / layout.dbu))

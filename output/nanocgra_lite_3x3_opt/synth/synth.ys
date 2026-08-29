@@ -9,6 +9,7 @@ read_verilog -I output/nanocgra_lite_3x3_opt/rtl output/nanocgra_lite_3x3_opt/rt
 read_verilog -I output/nanocgra_lite_3x3_opt/rtl output/nanocgra_lite_3x3_opt/rtl/nano_controller.v
 read_verilog -I output/nanocgra_lite_3x3_opt/rtl output/nanocgra_lite_3x3_opt/rtl/uart_bridge.v
 read_verilog -I output/nanocgra_lite_3x3_opt/rtl output/nanocgra_lite_3x3_opt/rtl/nanocgra_lite.v
+read_verilog -I output/nanocgra_lite_3x3_opt/rtl output/nanocgra_lite_3x3_opt/rtl/nanocgra_lite_d04_wrapper.v
 
 # ---- Elaborate ----
 hierarchy -top NanoCGRA_Lite
