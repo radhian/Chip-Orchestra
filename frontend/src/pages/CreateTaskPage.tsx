@@ -75,10 +75,6 @@ export function CreateTaskPage() {
   const [llmModels, setLlmModels] = useState<string[]>([])
   const [attachments, setAttachments] = useState<TaskAttachment[]>([])
   const [attachmentError, setAttachmentError] = useState<string | null>(null)
-  const llmHint = useMemo(() => {
-    if (!llmModels.length) return 'No models detected — the server default will be used'
-    return 'Models detected on the connected Ollama server'
-  }, [llmModels])
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
   useEffect(() => {
@@ -290,7 +286,7 @@ export function CreateTaskPage() {
             </div>
 
             <div className='grid gap-5 md:grid-cols-2'>
-              <Field label='LLM model' hint='Models detected from the configured LLM provider'>
+              <Field label='LLM model' hint={llmHint}>
                 <Select value={llmModel} onValueChange={setLlmModel}>
                   <SelectTrigger className='h-12 rounded-2xl border-slate-200 bg-white px-4 text-sm text-slate-700 shadow-none'>
                     <SelectValue placeholder={llmModels.length ? 'Select LLM model' : 'Using server default model'} />
