@@ -1,0 +1,126 @@
+# Strix Halo SINGLE-NODE rootless override.
+#
+# Composition:
+#   Default (external OpenAI-compatible endpoint at 172.16.100.2:10000):
+#     podman-compose --env-file strix-core.rootless.env \
+#       -f docker-compose.r9700-core.yml \
+#       -f docker-compose.strix-agent.yml \
+#       -f docker-compose.strix-single-node.rootless.yml \
+#       up -d --build
+#
+#   Self-hosted GLM (only after pre-downloading the model):
+#     ./scripts/download_glm_model.sh strix-core.rootless.env
+#     podman-compose --env-file strix-core.rootless.env \
+#       -f docker-compose.r9700-core.yml \
+#       -f docker-compose.strix-agent.yml \
+#       -f docker-compose.strix-glm.yml \
+#       -f docker-compose.strix-glm.rootless.yml \
+#       -f docker-compose.strix-single-node.rootless.yml \
+#       up -d --build
+#     # and set OPENAI_BASE_URL=http://glm-server:10000/v1 / OPENAI_MODEL=<self-hosted id>
+#
+# --- Networking / DNS notes ---
+# podman-compose sometimes fails to resolve compose service names
+# ("Temporary failure in name resolution" for `mysql`) when the rootless
+# netavark + aardvark-dns pipeline is not set up. Two things below make this
+# robust:
+#   1. An explicit shared network `chip-orchestra` all services join, so
+#      podman-compose always creates ONE network (and DNS) shared by all
+#      containers regardless of which -f file they came from.
+#   2. `extra_hosts` fallback using `host-gateway`. If aardvark-dns is still
+#      unavailable, `mysql`/`redis` service names resolve to the Podman host,
+#      which already publishes 3306/6379 on 0.0.0.0.
+#
+# --- Compose-spec compatibility ---
+# This file avoids the `!override` YAML tag and the `profiles:` keyword —
+# neither is reliably supported by podman-compose. Service inclusion is
+# controlled by which -f files are passed, and merged lists are kept small so
+# concat-merge does not misbehave.
+services:
+  mysql:
+    networks:
+      - chip-orchestra
+
+  redis:
+    networks:
+      - chip-orchestra
+
+  orchestrator-service:
+    networks:
+      - chip-orchestra
+    # Rootless Podman custom networks may hand containers only the embedded
+    # aardvark/netavark DNS server (10.89.x.1). On some hosts that resolver
+    # does not forward external names, breaking downloads and API calls. Pin
+    # public resolvers for outbound DNS while service-name routing still uses
+    # explicit host-gateway fallbacks below.
+    dns:
+      - ${CONTAINER_DNS_1:-1.1.1.1}
+      - ${CONTAINER_DNS_2:-8.8.8.8}
+    # podman-compose/rootless netavark can ignore Compose `dns:` and still
+    # generate /etc/resolv.conf with only 10.89.x.1. Bind-mount a known-good
+    # resolver file as the hard fallback.
+    volumes:
+      - ${CONTAINER_RESOLV_CONF:-./container-resolv.conf}:/etc/resolv.conf:ro
+    environment:
+      # Rootless Podman DNS (netavark/aardvark-dns) can intermittently fail to
+      # resolve service names from one container to another. Use the host-published
+      # EDA port as the default SIM/HARDEN endpoint for the single-node topology;
+      # this keeps orchestrator -> eda-service independent of embedded DNS.
+      EDA_SERVICE_URL: ${EDA_SERVICE_URL:-http://host.containers.internal:8002}
+    extra_hosts:
+      - "mysql:host-gateway"
+      - "redis:host-gateway"
+      - "eda-service:host-gateway"
+      - "host.containers.internal:host-gateway"
+
+  eda-service:
+    networks:
+      - chip-orchestra
+    dns:
+      - ${CONTAINER_DNS_1:-1.1.1.1}
+      - ${CONTAINER_DNS_2:-8.8.8.8}
+    volumes:
+      - ${CONTAINER_RESOLV_CONF:-./container-resolv.conf}:/etc/resolv.conf:ro
+    extra_hosts:
+      - "mysql:host-gateway"
+      - "redis:host-gateway"
+
+  frontend:
+    networks:
+      - chip-orchestra
+
+  agent-service:
+    dns:
+      - ${CONTAINER_DNS_1:-1.1.1.1}
+      - ${CONTAINER_DNS_2:-8.8.8.8}
+    volumes:
+      - ${CONTAINER_RESOLV_CONF:-./container-resolv.conf}:/etc/resolv.conf:ro
+    environment:
+      # LLM backend is driven by strix-core.rootless.env. The default in
+      # strix-agent.yml is the external Qwen3.8 endpoint, but we set it
+      # explicitly here so the single-node topology is self-describing.
+      DATABASE_URL: mysql+pymysql://${MYSQL_USER:-chip}:${MYSQL_PASSWORD:-chip}@mysql:3306/${MYSQL_DATABASE:-chip_orchestra}
+      REDIS_URL: redis://redis:6379/0
+      OPENAI_BASE_URL: ${OPENAI_BASE_URL:-http://172.16.100.2:10000/v1}
+      OPENAI_MODEL: ${OPENAI_MODEL:-Qwen3.8-27B-multimodal}
+      OPENAI_TIMEOUT: ${OPENAI_TIMEOUT:-180}
+      OPENAI_MAX_RETRIES: ${OPENAI_MAX_RETRIES:-3}
+    networks:
+      - chip-orchestra
+    extra_hosts:
+      - "mysql:host-gateway"
+      - "redis:host-gateway"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+networks:
+  chip-orchestra:
+    # External no-DNS Podman network created by scripts/create_nodns_network.sh.
+    # This avoids aardvark-dns entirely on rootless hosts where the DNS helper
+    # gets wedged and cannot bind 10.89.x.1:53. Service-to-service paths use
+    # host-gateway aliases and host-published ports instead of Podman DNS.
+    name: ${PODMAN_NETWORK_NAME:-chip-orchestra-nodns}
+    external: true

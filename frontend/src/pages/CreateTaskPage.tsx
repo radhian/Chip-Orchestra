@@ -77,7 +77,7 @@ export function CreateTaskPage() {
   const [attachmentError, setAttachmentError] = useState<string | null>(null)
   const llmHint = useMemo(() => {
     if (!llmModels.length) return 'No models detected — the server default will be used'
-    return 'Models detected on the connected Ollama server'
+    return 'Models detected on the connected OpenAI-compatible endpoint'
   }, [llmModels])
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 

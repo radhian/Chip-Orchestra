@@ -2,17 +2,19 @@
 
 Everything in the service gets its chat model from here, so the provider can be
 switched with a single environment variable instead of editing code. The
-DEFAULT for real runs is a fully-local setup: Ollama for chat (e.g. qwen3.5:9b)
-with an optional local VLM for reading uploaded diagrams.
+DEFAULT for production AMD deployments is an OpenAI-compatible endpoint (for
+example llama-swap serving Qwen3.8 on ROCm) with optional vision support when
+the upstream model advertises it.
 
 Configure via .env (see .env.example):
 
-    LLM_PROVIDER        ollama | openai/glm | mock   (default: mock)
+    LLM_PROVIDER        openai-compatible | ollama | google | openai/glm | mock   (default: mock)
     OLLAMA_MODEL        e.g. qwen3.5:9b
     OLLAMA_BASE_URL     default http://localhost:11434
     OLLAMA_NUM_CTX      context window (Ollama defaults to 2048 otherwise!)
     OLLAMA_THINK        1 = enable the qwen3 thinking pass
     GARUDA_VISION_MODEL force a specific vision model for describe_image
+    GOOGLE_API_KEY      required when LLM_PROVIDER=google
 
 Two layers live here:
 
@@ -93,15 +95,46 @@ def set_model(name) -> None:
 
 
 def current_model() -> str:
-    """The chat model in effect right now: the per-run override the UI picked if
-    set, else the active provider's .env default. Provider-aware, so a pick from
-    a non-Ollama provider is not dropped on the floor by reading OLLAMA_MODEL."""
-    if _MODEL_OVERRIDE:
-        return _MODEL_OVERRIDE
+    """The chat model in effect right now for the active provider."""
     provider = get_provider()
     if provider in ("openai", "glm", "zhipu", "zhipuai", "openai-compatible"):
-        return _env("OPENAI_MODEL", "LLM_MODEL", default="glm-4.6")
-    return os.getenv("OLLAMA_MODEL", "glm-5.2:cloud")
+        return _MODEL_OVERRIDE or _env("OPENAI_MODEL", "LLM_MODEL", default="Qwen3.8-27B-multimodal")
+    if provider in ("google", "gemini"):
+        return _MODEL_OVERRIDE or _env("GOOGLE_MODEL", default="gemini-2.5-pro")
+    return _MODEL_OVERRIDE or os.getenv("OLLAMA_MODEL", "glm-5.2:cloud")
+
+
+def list_openai_compatible_models() -> "list[dict]":
+    """Models advertised by an OpenAI-compatible endpoint's /v1/models API."""
+    base = _env("OPENAI_BASE_URL", "LLM_BASE_URL", "OPENAI_API_BASE", default="").rstrip("/")
+    if not base:
+        return []
+    try:
+        import json as _json
+        import urllib.request
+
+        req = urllib.request.Request(f"{base}/models")
+        api_key = _env("OPENAI_API_KEY", "LLM_API_KEY", "ZHIPUAI_API_KEY", default="")
+        if api_key:
+            req.add_header("Authorization", f"Bearer {api_key}")
+        with urllib.request.urlopen(req, timeout=8) as r:  # noqa: S310
+            data = _json.loads(r.read().decode())
+    except Exception:  # noqa: BLE001 — endpoint down / not OpenAI-compatible
+        return []
+
+    out = []
+    for item in data.get("data", []):
+        model_id = item.get("id", "")
+        if not model_id:
+            continue
+        out.append({
+            "name": model_id,
+            "id": model_id,
+            "owned_by": item.get("owned_by", ""),
+            "created": item.get("created", 0),
+            "openai_compatible": True,
+        })
+    return sorted(out, key=lambda m: m["name"])
 
 
 def list_ollama_models() -> "list[dict]":
@@ -167,7 +200,7 @@ def vision_model() -> "str | None":
 
     Resolution order: GARUDA_VISION_MODEL env → the active chat model if IT
     reports vision → the first installed LOCAL model with a 'vision' capability
-    → None."""
+    → None. Google provider is handled separately in describe_image."""
     forced = os.getenv("GARUDA_VISION_MODEL", "").strip()
     if forced:
         return forced
@@ -190,6 +223,8 @@ def model_supports_vision(name: "str | None" = None) -> bool:
         return True
     if force in ("0", "false", "no", "off"):
         return False
+    if get_provider() in ("google", "gemini"):
+        return True
     return vision_model() is not None
 
 
@@ -269,7 +304,9 @@ def provider_label() -> str:
     if provider == "ollama":
         m = current_model()
         return f"Ollama · {m} ({'cloud' if is_cloud_model(m) else 'local'})"
-    return f"{provider} · {current_model()}"
+    if provider in ("google", "gemini"):
+        return f"Google · {os.getenv('GOOGLE_MODEL', 'gemini-2.5-pro')}"
+    return provider
 
 
 # --------------------------------------------------------------------------- #
@@ -374,6 +411,23 @@ def get_chat_model(temperature: float = 0.2, **kwargs):
             **kwargs,
         )
 
+    if provider in ("google", "gemini"):
+        from langchain_google_genai import ChatGoogleGenerativeAI
+
+        api_key = os.getenv("GOOGLE_API_KEY")
+        if not api_key:
+            raise RuntimeError(
+                "LLM_PROVIDER=google but GOOGLE_API_KEY is not set. "
+                "Add it to your .env file or switch LLM_PROVIDER=ollama."
+            )
+        return ChatGoogleGenerativeAI(
+            model=str(kwargs.pop("model", None) or os.getenv("GOOGLE_MODEL", "gemini-2.5-pro")),
+            google_api_key=api_key,
+            temperature=temperature,
+            callbacks=[_TOKEN_CB],
+            **kwargs,
+        )
+
     if provider in ("openai", "glm", "zhipu", "zhipuai", "openai-compatible"):
         from langchain_openai import ChatOpenAI
 
@@ -383,25 +437,37 @@ def get_chat_model(temperature: float = 0.2, **kwargs):
                 f"LLM_PROVIDER={provider} but OPENAI_API_KEY is not set."
             )
         base_url = _env("OPENAI_BASE_URL", "LLM_BASE_URL", "OPENAI_API_BASE")
+        openai_timeout = os.getenv("OPENAI_TIMEOUT", "180")
+        openai_max_retries = os.getenv("OPENAI_MAX_RETRIES", "3")
         openai_kwargs = {
-            "model": str(kwargs.pop("model", None) or current_model()),
+            "model": str(kwargs.pop("model", None)
+                         or _env("OPENAI_MODEL", "LLM_MODEL", default="Qwen3.8-27B-multimodal")),
             "api_key": api_key,
             "temperature": temperature,
             "callbacks": [_TOKEN_CB],
         }
+        try:
+            openai_kwargs["timeout"] = float(openai_timeout)
+        except ValueError:
+            pass
+        try:
+            openai_kwargs["max_retries"] = int(openai_max_retries)
+        except ValueError:
+            pass
         if base_url:
             openai_kwargs["base_url"] = base_url
         openai_kwargs.update(kwargs)
         return ChatOpenAI(**openai_kwargs)
 
     raise ValueError(
-        f"Unknown LLM_PROVIDER={provider!r}. Use 'ollama', 'openai'/'glm', or 'mock'."
+        f"Unknown LLM_PROVIDER={provider!r}. Use 'openai-compatible', 'ollama', 'google', 'openai'/'glm', or 'mock'."
     )
 
 
 def _detect_memory_bytes() -> "tuple[int, str]":
-    """(usable_bytes, device) for sizing the KV cache: GPU VRAM when CUDA is
-    present, else system RAM. Best-effort; 0 if nothing detectable."""
+    """(usable_bytes, device) for sizing the KV cache: prefer GPU memory when a
+    supported accelerator is present, else system RAM. Best-effort; 0 if
+    nothing detectable."""
     try:
         import subprocess
         out = subprocess.run(
@@ -410,6 +476,28 @@ def _detect_memory_bytes() -> "tuple[int, str]":
         mb = max(int(x) for x in out.stdout.split() if x.strip().isdigit())
         if mb > 0:
             return mb * 1024 * 1024, "cuda"
+    except Exception:  # noqa: BLE001
+        pass
+    try:
+        import json as _json
+        import subprocess
+
+        out = subprocess.run(
+            ["rocm-smi", "--showmeminfo", "vram", "--json"],
+            capture_output=True, text=True, timeout=4)
+        if out.stdout.strip():
+            data = _json.loads(out.stdout)
+            totals = []
+            for device_data in data.values():
+                vram = device_data.get("VRAM Total Memory (B)")
+                if isinstance(vram, str):
+                    digits = "".join(ch for ch in vram if ch.isdigit())
+                    if digits:
+                        totals.append(int(digits))
+                elif isinstance(vram, int):
+                    totals.append(vram)
+            if totals:
+                return max(totals), "rocm"
     except Exception:  # noqa: BLE001
         pass
     try:
@@ -426,7 +514,7 @@ def recommended_ctx_limits() -> dict:
     {device, total_gb, num_ctx_min, num_ctx_max, num_ctx_default}."""
     total, device = _detect_memory_bytes()
     kv_per_tok = int(os.getenv("OLLAMA_KV_BYTES_PER_TOKEN", str(56 * 1024)))
-    reserve_gb = float(os.getenv("OLLAMA_RESERVE_GB", "6.0" if device == "cuda" else "8.0"))
+    reserve_gb = float(os.getenv("OLLAMA_RESERVE_GB", "6.0" if device in {"cuda", "rocm"} else "8.0"))
     hard_max = int(os.getenv("OLLAMA_CTX_HARD_MAX", "262144"))
     step = 2048
     if total > 0:
@@ -514,8 +602,10 @@ def build_llm_runtime(model_override: Optional[str] = None) -> LLMRuntime:
 
     if provider == "ollama":
         model = model_override or current_model()
+    elif provider in ("google", "gemini"):
+        model = model_override or _env("GOOGLE_MODEL", default="gemini-2.5-pro")
     else:
-        model = model_override or _env("OPENAI_MODEL", "LLM_MODEL", default="glm-4.6")
+        model = model_override or _env("OPENAI_MODEL", "LLM_MODEL", default="Qwen3.8-27B-multimodal")
 
     try:
         client = get_chat_model(temperature=0, model=model)
@@ -536,6 +626,7 @@ __all__ = [
     "current_model",
     "set_num_ctx",
     "list_ollama_models",
+    "list_openai_compatible_models",
     "is_cloud_model",
     "vision_model",
     "model_supports_vision",

@@ -1,0 +1,96 @@
+# Strix Halo FULL stack: self-hosted GLM model server + agent-service, co-located.
+# This is the PRIMARY inference host: Strix Halo (Ryzen AI Max+ 395) has up to
+# 128GB unified memory — a far better model host than the 32GB R9700 — and the
+# agent talks to the model over localhost, keeping the chattiest path off the network.
+#
+# Primary tool for the AMD path is Podman:
+#   sudo podman-compose --env-file strix-agent.env -f docker-compose.strix-full.yml up -d
+# Docker alternative:
+#   docker compose --env-file strix-agent.env -f docker-compose.strix-full.yml up -d --build
+#
+# The rest of Chip Orchestra (mysql, redis, orchestrator, eda, frontend) runs on
+# R9700 via docker-compose.r9700-core.yml.
+services:
+  glm-server:
+    # NOTE: For single-node rootless deployments, prefer the split files
+    # docker-compose.strix-agent.yml + docker-compose.strix-glm.yml (+
+    # docker-compose.strix-glm.rootless.yml). podman-compose does not reliably
+    # honor `profiles:` or the `!override` YAML tag, so combining agent-service
+    # and glm-server in the same file makes it hard to opt out of self-hosting.
+    # This file is kept for the two-node rootful path documented in
+    # AMD_DISTRIBUTED_ARCHITECTURE.md.
+    image: ${LLAMA_IMAGE:-ghcr.io/ggml-org/llama.cpp:server-rocm}
+    container_name: glm-strixhalo
+    restart: unless-stopped
+    devices:
+      - /dev/kfd
+      - /dev/dri
+    group_add:
+      - video
+      - render
+    ipc: host
+    security_opt:
+      - seccomp:unconfined
+    environment:
+      # gfx1151 (Strix Halo iGPU) is Preview in ROCm and needs this override.
+      HSA_OVERRIDE_GFX_VERSION: ${HSA_OVERRIDE_GFX_VERSION:-11.5.1}
+      HF_HUB_ENABLE_HF_TRANSFER: "1"
+    volumes:
+      - ${MODEL_DIR:-/data/models}:/models
+    ports:
+      # Exposed for host-side validation. Keep the container port stable for
+      # agent-service (OPENAI_BASE_URL=http://glm-server:10000/v1 by default),
+      # while allowing the host bind port to move if :10000 is already occupied.
+      - "${LLM_HOST_PORT:-10000}:${LLM_SERVE_PORT:-10000}"
+    command: >
+      -hf ${GLM_MODEL_REPO:-unsloth/GLM-4.5-Air-GGUF}:${GLM_MODEL_FILE:-GLM-4.5-Air-Q4_K_M.gguf}
+      --model /models/${GLM_MODEL_FILE:-GLM-4.5-Air-Q4_K_M.gguf}
+      --alias ${OPENAI_MODEL:-GLM-5.2}
+      --host 0.0.0.0 --port ${LLM_SERVE_PORT:-10000}
+      --n-gpu-layers ${NGL:-999}
+      --ctx-size ${LLM_CTX:-32768}
+      --jinja --flash-attn on
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:${LLM_SERVE_PORT:-10000}/v1/models >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 60
+      start_period: 1800s
+
+  agent-service:
+    build:
+      context: ../../agent-service
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: mysql+pymysql://${MYSQL_USER:-chip}:${MYSQL_PASSWORD:-chip}@${R9700_HOST:-172.16.1.36}:${MYSQL_PORT:-3306}/${MYSQL_DATABASE:-chip_orchestra}
+      REDIS_URL: redis://${R9700_HOST:-172.16.1.36}:${REDIS_PORT:-6379}/0
+      DEFAULT_USERNAME: ${DEFAULT_USERNAME:-admin}
+      DEFAULT_FULL_NAME: ${DEFAULT_FULL_NAME:-Admin Admin}
+      WORKSPACE_ROOT: ${WORKSPACE_ROOT:-/srv/chip-orchestra/workspaces}
+      AGENT_ARTIFACT_ROOT: ${AGENT_ARTIFACT_ROOT:-/srv/chip-orchestra/workspaces}
+      LLM_PROVIDER: ${LLM_PROVIDER:-glm}
+      # Co-located: reach the GLM server by compose service name, on-node.
+      OPENAI_BASE_URL: ${OPENAI_BASE_URL:-http://glm-server:10000/v1}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-EMPTY}
+      OPENAI_MODEL: ${OPENAI_MODEL:-GLM-5.2}
+      AGENT_DEEP_AGENTS: ${AGENT_DEEP_AGENTS:-1}
+      GARUDA_DEEP_BUDGET_S: ${GARUDA_DEEP_BUDGET_S:-2400}
+      GARUDA_PY_TIMEOUT_S: ${GARUDA_PY_TIMEOUT_S:-600}
+      AGENT_WEB_RESEARCH: ${AGENT_WEB_RESEARCH:-1}
+      GARUDA_RESEARCH_BUDGET_S: ${GARUDA_RESEARCH_BUDGET_S:-420}
+      GARUDA_CLONE_TIMEOUT_S: ${GARUDA_CLONE_TIMEOUT_S:-90}
+      MAX_REPAIR_ITERS: ${MAX_REPAIR_ITERS:-3}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      glm-server:
+        condition: service_healthy
+    ports:
+      - "${AGENT_BIND_HOST:-172.16.1.10}:${AGENT_PORT:-8001}:8001"
+    volumes:
+      - ${WORKSPACE_HOST_PATH:-/srv/chip-orchestra/workspaces}:${WORKSPACE_ROOT:-/srv/chip-orchestra/workspaces}${WORKSPACE_MOUNT_FLAG:-}
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8001/health')\" || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12

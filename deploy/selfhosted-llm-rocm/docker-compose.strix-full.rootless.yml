@@ -1,0 +1,19 @@
+# Rootless (no-sudo) override for the Strix Halo full stack.
+# Use TOGETHER with the base file:
+#   podman-compose --env-file strix-agent.rootless.env \
+#     -f docker-compose.strix-full.yml -f docker-compose.strix-full.rootless.yml up -d --build
+#
+# The only rootless-critical delta is GPU access: rootful passes the host
+# 'video'/'render' groups by name, but under rootless those names resolve to
+# mapped (subgid) GIDs that do NOT grant access to the host /dev/dri render node.
+# 'keep-groups' makes the container retain your real host supplementary groups,
+# which is how rootless Podman reaches the GPU. You must be a member of the
+# render (and usually video) group on the host: `id -nG | tr ' ' '\n' | grep -E 'render|video'`.
+services:
+  glm-server:
+    # Compose normally appends sequences from multiple -f files. Podman rejects
+    # keep-groups when video/render are also present, so this must replace the
+    # base Strix group_add list rather than merge with it.
+    group_add: !override
+      - keep-groups
+

@@ -1,0 +1,16 @@
+# Rootless-only override for docker-compose.strix-glm.yml.
+# Replaces the base group_add [video, render] with [keep-groups], which is how
+# rootless Podman keeps the invoking user's host supplementary groups so the
+# container can reach the GPU render node. Merge (not override) semantics in
+# podman-compose would concatenate the two lists and Podman rejects the
+# combination:
+#   Error: the '--group-add keep-groups' option is not allowed with any other
+#          --group-add options
+# Since podman-compose does not reliably honor the `!override` YAML tag, we
+# achieve the same effect by writing a plain list here AND expecting the user
+# to pass this file ONLY when using rootless Podman (i.e. omit it under
+# rootful Podman where the base video/render list is correct).
+services:
+  glm-server:
+    group_add:
+      - keep-groups

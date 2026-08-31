@@ -1,0 +1,63 @@
+# =============================================================================
+# vLLM-ROCm server for GLM-5.2 — run this ON THE AMD GPU NODE.
+#   cp .env.selfhosted.example .env  (edit values)
+#   docker compose -f docker-compose.vllm-rocm.yml up -d
+#
+# Requires: ROCm >= 6.2 (7.2.x recommended), Docker, AMD Instinct GPUs.
+# This stack serves ONLY the model; the Chip Orchestra app stack stays separate
+# and reaches it via OPENAI_BASE_URL.
+# =============================================================================
+services:
+  glm-vllm:
+    image: docker.io/rocm/vllm:latest
+    container_name: glm52-vllm-rocm
+    # ROCm device passthrough (equivalent to the docker run flags AMD documents).
+    devices:
+      - /dev/kfd
+      - /dev/dri
+    group_add:
+      - video
+      - render
+    ipc: host
+    shm_size: "16gb"
+    security_opt:
+      - seccomp:unconfined
+    cap_add:
+      - SYS_PTRACE
+    environment:
+      HF_TOKEN: ${HF_TOKEN:-}
+      HUGGING_FACE_HUB_TOKEN: ${HF_TOKEN:-}
+      HF_HOME: /root/.cache/huggingface
+      # DSA/MLA MoE kernels — required for GLM-5.2 performance on ROCm.
+      VLLM_ROCM_USE_AITER: "1"
+      VLLM_ROCM_USE_AITER_FUSION_SHARED_EXPERTS: "1"
+    volumes:
+      - ${HF_CACHE_DIR:-/data/hf-cache}:/root/.cache/huggingface
+    ports:
+      - "${LLM_SERVE_PORT:-8000}:8000"
+    # 8x MI300X FP8 TP8 config. For MI355X, use serve_vllm.sh (TP4 / MXFP4) or
+    # override `command` per that script.
+    command: >
+      vllm serve ${MODEL_ID:-zai-org/GLM-5.2-FP8}
+      --served-model-name GLM-5.2-FP8
+      --tensor-parallel-size 8
+      --kv-cache-dtype fp8_e4m3
+      --block-size 1
+      --speculative-config.method mtp
+      --speculative-config.num_speculative_tokens 5
+      --reasoning-parser glm45
+      --tool-call-parser glm47
+      --enable-auto-tool-choice
+      --gpu-memory-utilization 0.80
+      --max-model-len ${MAX_MODEL_LEN:-524288}
+      --linear-backend aiter
+      --moe-backend aiter
+      --host 0.0.0.0
+      --port 8000
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8000/v1/models >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 40
+      start_period: 1800s
+    restart: unless-stopped

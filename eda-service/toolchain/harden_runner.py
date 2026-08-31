@@ -690,8 +690,24 @@ def run_harden(
             _write_log(logs_dir, ["no synthesizable RTL files found"], report, artifacts, workspace)
             return report
 
-    cmd = [_librelane_bin(), "--manual-pdk", "--pdk-root", _pdk_root(), "config.json"]
-    env = {**os.environ, "PDK_ROOT": _pdk_root()}
+    pdk_root = _pdk_root()
+    pdk_name = _pdk()
+    pdk_config = Path(pdk_root) / pdk_name / "libs.tech" / "openlane" / "config.tcl"
+    setup_script = Path("/app/pdk/setup_pdk.sh")
+    env = {**os.environ, "PDK_ROOT": pdk_root, "PDK": pdk_name}
+    if not pdk_config.exists() and setup_script.exists():
+        lines.append(f"PDK config missing at {pdk_config}; running {setup_script} before LibreLane")
+        setup = runner.run(["bash", str(setup_script)], cwd=workspace, timeout=1800, env=env)
+        if setup.output:
+            lines.append(setup.output)
+    if not pdk_config.exists():
+        msg = f"PDK {pdk_name} was not found at {pdk_config}; run scripts/install_gf180_pdk_in_eda.sh and verify /opt/pdk is mounted into eda-service."
+        report.errors.append(msg)
+        report.summary = "Hardening could not run: PDK is missing."
+        _write_log(logs_dir, lines + [msg], report, artifacts, workspace)
+        return report
+
+    cmd = [_librelane_bin(), "--manual-pdk", "--pdk-root", pdk_root, "config.json"]
 
     # PARAMETER AUTO-TUNING loop: a functional chip requires clean sign-off
     # numbers. Each failure class adjusts the parameter that governs it, then
