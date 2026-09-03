@@ -1,0 +1,23 @@
+OpenROAD f12e2f474102bfb875eeee57fb610d7d7de17770 
+This program is licensed under the BSD-3 license. See the LICENSE file for details.
+Components of this program may be licensed under more restrictive licenses which must be honored.
+NanoCGRA_Lite internal PDN connectivity
+[WARNING PSM-0016] Voltage pad location (VSRC) file not specified, defaulting pad location to checkerboard pattern on core area.
+[WARNING PSM-0017] X direction bump pitch is not specified, defaulting to 140um.
+[WARNING PSM-0018] Y direction bump pitch is not specified, defaulting to 140um.
+[WARNING PSM-0065] VSRC location not specified, using default checkerboard pattern with one VDD every size bumps in x-direction and one in two bumps in the y-direction
+[WARNING PSM-0030] VSRC location at (10.080um, 11.760um) and size 10.000um, is not located on an existing power stripe node. Moving to closest node at (10.080um, 41.460um).
+[WARNING PSM-0030] VSRC location at (290.080um, 151.760um) and size 10.000um, is not located on an existing power stripe node. Moving to closest node at (280.080um, 161.460um).
+[INFO PSM-0031] Number of PDN nodes on net vdd = 16202.
+[INFO PSM-0064] Number of voltage sources = 2.
+[INFO PSM-0040] All PDN stripes on net vdd are connected.
+[WARNING PSM-0016] Voltage pad location (VSRC) file not specified, defaulting pad location to checkerboard pattern on core area.
+[WARNING PSM-0017] X direction bump pitch is not specified, defaulting to 140um.
+[WARNING PSM-0018] Y direction bump pitch is not specified, defaulting to 140um.
+[WARNING PSM-0065] VSRC location not specified, using default checkerboard pattern with one VDD every size bumps in x-direction and one in two bumps in the y-direction
+[WARNING PSM-0030] VSRC location at (10.080um, 11.760um) and size 10.000um, is not located on an existing power stripe node. Moving to closest node at (10.080um, 21.460um).
+[WARNING PSM-0030] VSRC location at (290.080um, 151.760um) and size 10.000um, is not located on an existing power stripe node. Moving to closest node at (300.080um, 141.460um).
+[INFO PSM-0031] Number of PDN nodes on net vss = 16438.
+[INFO PSM-0064] Number of voltage sources = 2.
+[INFO PSM-0040] All PDN stripes on net vss are connected.
+PG_CONNECTIVITY_CHECK_COMPLETED

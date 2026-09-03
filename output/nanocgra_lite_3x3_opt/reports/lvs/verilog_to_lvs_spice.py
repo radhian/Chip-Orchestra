@@ -1,73 +1,114 @@
+#!/usr/bin/env python3
+"""Convert powered post-route Verilog to hierarchical LVS SPICE using official PDK CDL pin order."""
+import argparse
 import re
 from pathlib import Path
 
-vpath = Path('../../pnr/nanocgra_lite_3x3_opt.pnr.pwr.v')
-stdpath = Path('stdcells_from_layout.spice')
-out = Path('nanocgra_lite_3x3_opt_source_lvs.spice')
+TOP_PORTS = [
+    "vss", "clk_PU", "clk_PD", "clk", "rst_n_PU", "rst_n_PD", "rst_n",
+    "uart_rx_PU", "uart_rx_PD", "uart_rx", "uart_tx_CS", "uart_tx_SL",
+    "uart_tx_IE", "uart_tx_OE", "uart_tx_PU", "uart_tx_PD", "uart_tx_OUT",
+    "uart_tx_PDRV0", "uart_tx_PDRV1", "uart_tx_IN", "vdd",
+]
 
-text = vpath.read_text()
-std = stdpath.read_text()
 
-subckt_pins = {}
-for m in re.finditer(r'^\.subckt\s+(\S+)\s+(.+)$', std, re.M):
-    subckt_pins[m.group(1)] = m.group(2).split()
+def normalize(name: str) -> str:
+    name = name.strip()
+    if name.startswith("\\"):
+        name = name[1:].strip()
+    constants = {
+        "1'b0": "vss", "1'h0": "vss", "1'd0": "vss", "0": "vss",
+        "1'b1": "vdd", "1'h1": "vdd", "1'd1": "vdd", "1": "vdd",
+    }
+    if name in constants:
+        return constants[name]
+    return re.sub(r"[^A-Za-z0-9_./\[\]-]", "_", name)
 
-parent = {}
-def find(x):
-    parent.setdefault(x, x)
-    if parent[x] != x:
-        parent[x] = find(parent[x])
-    return parent[x]
-def union(a, b):
-    ra, rb = find(a), find(b)
-    if ra != rb:
-        keep = min(ra, rb, key=lambda s: (len(s), s))
-        other = rb if keep == ra else ra
-        parent[other] = keep
 
-def norm(n):
-    n = n.strip()
-    if not n:
-        return n
-    if n.startswith('\\'):
-        n = n[1:].strip()
-    if n in ("1'b0", "1'h0", "1'd0", "0"):
-        return 'vss'
-    if n in ("1'b1", "1'h1", "1'd1", "1"):
-        return 'vdd'
-    return re.sub(r'[^A-Za-z0-9_./\[\]-]', '_', n)
+def parse_cdl_pins(text: str) -> dict[str, list[str]]:
+    lines = text.splitlines()
+    result: dict[str, list[str]] = {}
+    index = 0
+    while index < len(lines):
+        match = re.match(r"\s*\.subckt\s+(\S+)\s*(.*)", lines[index], re.I)
+        if not match:
+            index += 1
+            continue
+        name = match.group(1)
+        fields = match.group(2).split()
+        index += 1
+        while index < len(lines) and re.match(r"\s*\+", lines[index]):
+            fields.extend(re.sub(r"^\s*\+", "", lines[index]).split())
+            index += 1
+        result[name] = fields
+    return result
 
-for a, b in re.findall(r'assign\s+([^=;]+?)\s*=\s*([^;]+?)\s*;', text, re.S):
-    union(norm(a), norm(b))
 
-ports_m = re.search(r'module\s+NanoCGRA_Lite\s*\((.*?)\);', text, re.S)
-ports = [norm(p) for p in re.findall(r'\\[^\s,()]+\s?|[A-Za-z_][A-Za-z0-9_$]*', ports_m.group(1))]
-# Keep D04/reference order to match layout extraction.
-ports = ['vss','clk_PU','clk_PD','clk','rst_n_PU','rst_n_PD','rst_n','uart_rx_PU','uart_rx_PD','uart_rx','uart_tx_CS','uart_tx_SL','uart_tx_IE','uart_tx_OE','uart_tx_PU','uart_tx_PD','uart_tx_OUT','uart_tx_IN','vdd']
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--verilog", required=True, type=Path)
+    parser.add_argument("--cdl", required=True, type=Path)
+    parser.add_argument("--output", required=True, type=Path)
+    args = parser.parse_args()
 
-inst_re = re.compile(r'\b(gf180mcu_fd_sc_mcu7t5v0__[A-Za-z0-9_]+)\s+(\\[^\s(]+|[A-Za-z0-9_$./\[\]-]+)\s*\((.*?)\);', re.S)
-conn_re = re.compile(r'\.([A-Za-z0-9_]+)\s*\(\s*([^()]+?)\s*\)', re.S)
-lines = ['* Source LVS SPICE generated from post-route power Verilog', '.subckt NanoCGRA_Lite ' + ' '.join(ports)]
-missing = set()
-count = 0
-for cell, inst, body in inst_re.findall(text):
-    pins = subckt_pins.get(cell)
-    if not pins:
-        missing.add(cell)
-        continue
-    conns = {p: norm(n) for p, n in conn_re.findall(body)}
-    ordered = []
-    for p in pins:
-        if p in conns:
-            ordered.append(find(conns[p]))
-        elif p in ('VDD','VNW'):
-            ordered.append('vdd')
-        elif p in ('VSS','VPW'):
-            ordered.append('vss')
-        else:
-            ordered.append(f'{norm(inst)}/{p}')
-    lines.append('X' + norm(inst) + ' ' + ' '.join(ordered) + ' ' + cell)
-    count += 1
-lines += ['.ends NanoCGRA_Lite', '']
-out.write_text('\n'.join(lines))
-print(f'wrote {out} instances={count} missing={sorted(missing)}')
+    verilog = args.verilog.read_text()
+    cell_pins = parse_cdl_pins(args.cdl.read_text(errors="replace"))
+
+    parent: dict[str, str] = {}
+
+    def find(name: str) -> str:
+        parent.setdefault(name, name)
+        if parent[name] != name:
+            parent[name] = find(parent[name])
+        return parent[name]
+
+    def union(left: str, right: str) -> None:
+        left_root, right_root = find(left), find(right)
+        if left_root == right_root:
+            return
+        preferred = min((left_root, right_root), key=lambda value: (value not in TOP_PORTS, len(value), value))
+        parent[right_root if preferred == left_root else left_root] = preferred
+
+    for left, right in re.findall(r"\bassign\s+([^=;]+?)\s*=\s*([^;]+?)\s*;", verilog, re.S):
+        union(normalize(left), normalize(right))
+
+    instance_re = re.compile(
+        r"\b(gf180mcu_fd_sc_mcu7t5v0__[A-Za-z0-9_]+)\s+"
+        r"(\\[^\s(]+|[A-Za-z0-9_$./\[\]-]+)\s*\((.*?)\);",
+        re.S,
+    )
+    connection_re = re.compile(r"\.([A-Za-z0-9_]+)\s*\(\s*([^()]*)\)", re.S)
+    output = [
+        "* Source LVS SPICE generated from powered post-route Verilog",
+        "* Standard-cell pin order comes only from the official GF180MCU CDL",
+        ".subckt NanoCGRA_Lite " + " ".join(TOP_PORTS),
+    ]
+    missing_cells: set[str] = set()
+    instances = 0
+    for cell, instance, body in instance_re.findall(verilog):
+        pins = cell_pins.get(cell)
+        if pins is None:
+            missing_cells.add(cell)
+            continue
+        connections = {pin: normalize(net) for pin, net in connection_re.findall(body) if net.strip()}
+        ordered = []
+        for pin in pins:
+            if pin in connections:
+                ordered.append(find(connections[pin]))
+            elif pin in {"VDD", "VNW"}:
+                ordered.append("vdd")
+            elif pin in {"VSS", "VPW"}:
+                ordered.append("vss")
+            else:
+                raise SystemExit(f"instance {instance} ({cell}) has no connection for required pin {pin}")
+        output.append("X" + normalize(instance) + " " + " ".join(ordered) + " " + cell)
+        instances += 1
+    output.extend([".ends NanoCGRA_Lite", ""])
+    if missing_cells:
+        raise SystemExit("missing official CDL definitions: " + ", ".join(sorted(missing_cells)))
+    args.output.write_text("\n".join(output))
+    print(f"wrote {args.output} with {instances} instances and {len(cell_pins)} official cell definitions")
+
+
+if __name__ == "__main__":
+    main()

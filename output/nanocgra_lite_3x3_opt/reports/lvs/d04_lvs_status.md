@@ -1,44 +1,35 @@
 # D04 LVS Status
 
-Date: 2026-08-29
-Design: `output/nanocgra_lite_3x3_opt`
+Date: 2026-09-03  
+Design: `output/nanocgra_lite_3x3_opt`  
 Top: `NanoCGRA_Lite`
 
 ## Status
 
-PASS. The D04 LVS issue is resolved.
+**PASS — real transistor-level LVS matches uniquely.**
 
-The earlier blocker was caused by the system Magic build crashing during DEF extraction. A newer Magic build compatible with the GF180 techfile was used for extraction, then the LVS comparison was rerun with normalized source/layout SPICE views.
-
-## Final result
-
-`reports/lvs/netgen_final.log` and `reports/lvs/netgen_final_d04.log` report:
+`reports/lvs/netgen_final.log` reports:
 
 ```text
-Circuit 1 contains 5321 devices, Circuit 2 contains 5321 devices.
-Circuit 1 contains 5339 nets,    Circuit 2 contains 5339 nets.
-Netlists match uniquely.
-Result: Circuits match uniquely.
+Circuit 1 contains 5362 devices, Circuit 2 contains 5362 devices.
+Circuit 1 contains 5367 nets,    Circuit 2 contains 5367 nets.
+Final result:
+Circuits match uniquely.
+NETGEN_LVS_PASSED
 ```
 
 ## LVS method
 
-The final LVS flow compares:
+- Layout side: Magic 8.3.465 extracts the canonical unfilled GDS into
+  `nanocgra_lite_3x3_opt_layout_lvs.spice`.
+- `normalize_magic_devices.py` converts Magic's extracted GF180
+  `X... nfet_05v0/pfet_05v0` proxy syntax to real MOS `M` records. It does not
+  replace cells with empty stubs or derive the source view from layout.
+- Source side: `verilog_to_lvs_spice.py` converts the populated powered
+  post-route Verilog into hierarchical SPICE using official GF180 PDK CDL pin
+  order.
+- `run_lvs_final.tcl` compares these independent views with the official GF180
+  Netgen setup and fails closed unless the comparison reports a unique match.
 
-- `reports/lvs/nanocgra_lite_3x3_opt_layout_lvs_norm.spice`
-  - Magic-extracted layout SPICE normalized for GF180 physical power/well aliases.
-- `reports/lvs/nanocgra_lite_3x3_opt_source_lvs.spice`
-  - LVS-specific source SPICE generated from the post-route power Verilog with explicit ordered standard-cell pins.
-
-The LVS driver is:
-
-- `reports/lvs/run_lvs_final.tcl`
-
-Helper scripts:
-
-- `reports/lvs/normalize_layout_lvs.py`
-- `reports/lvs/verilog_to_lvs_spice.py`
-
-## Notes
-
-The D04 wrapper preserves the functional NanoCGRA-Lite core. The wrapper only adapts the top-level interface to the D04 template and ties off the additional D04 pad-control pins.
+The former 5,321-device normalized-stub result is withdrawn and must not be
+used. The current pass marker is `reports/lvs/netgen.complete`.
