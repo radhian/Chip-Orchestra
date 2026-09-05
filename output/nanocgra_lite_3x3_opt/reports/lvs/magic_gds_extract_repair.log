@@ -11,11 +11,13 @@ The following types are not handled by extraction and will be treated as non-ele
     obsactive mvobsactive filldiff fillpoly m1hole obsm1 fillm1 obsv1 m2hole obsm2 fillm2 obsv2 m3hole obsm3 fillm3 m4hole obsm4 fillm4 m5hole obsm5 fillm5 glass fillblock lvstext obscomment 
 Scaled tech values by 10 / 1 to match internal grid scaling
 Loading gf180mcuD Device Generator Menu ...
-Loading "/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra/output/nanocgra_lite_3x3_opt/reports/lvs/extract_gds.tcl" from command line.
+Loading "/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/lvs/extract_gds.tcl" from command line.
 Warning: Calma reading is not undoable!  I hope that's OK.
 Library written using GDS-II Release 6.0
 Library name: LIB
 Reading "VIA_Via4_VH".
+CIF file read warning: CIF style import: units rescaled by factor of 5 / 1
+CIF file read warning: Input off lambda grid by 3/5; snapped to grid.
 Reading "VIA_Via3_HV".
 Reading "VIA_Via1_VV".
 Reading "VIA_Via2_VH".
@@ -150,8 +152,8 @@ Extracting gf180mcu_fd_sc_mcu7t5v0__fill_1 into gf180mcu_fd_sc_mcu7t5v0__fill_1.
 Extracting gf180mcu_fd_sc_mcu7t5v0__fill_4 into gf180mcu_fd_sc_mcu7t5v0__fill_4.ext:
 Extracting gf180mcu_fd_sc_mcu7t5v0__fill_2 into gf180mcu_fd_sc_mcu7t5v0__fill_2.ext:
 Extracting VIA_Via4_3200x3200 into VIA_Via4_3200x3200.ext:
-Extracting VIA_Via2_VH into VIA_Via2_VH.ext:
 Extracting VIA_Via1_VV into VIA_Via1_VV.ext:
+Extracting VIA_Via2_VH into VIA_Via2_VH.ext:
 Extracting gf180mcu_fd_sc_mcu7t5v0__clkinv_1 into gf180mcu_fd_sc_mcu7t5v0__clkinv_1.ext:
 Extracting gf180mcu_fd_sc_mcu7t5v0__fill_8 into gf180mcu_fd_sc_mcu7t5v0__fill_8.ext:
 Extracting gf180mcu_fd_sc_mcu7t5v0__dffq_1 into gf180mcu_fd_sc_mcu7t5v0__dffq_1.ext:

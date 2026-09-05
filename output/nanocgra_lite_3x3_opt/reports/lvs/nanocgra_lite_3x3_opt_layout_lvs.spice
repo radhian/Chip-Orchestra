@@ -1904,9 +1904,9 @@ M6 VSS a_56_472# Z VPW nfet_05v0 ad=0.3608p pd=2.52u as=0.2132p ps=1.34u w=0.82u
 M7 VSS A2 a_56_472# VPW nfet_05v0 ad=0.2132p pd=1.34u as=0.2132p ps=1.34u w=0.82u l=0.6u
 .ends
 
-.subckt NanoCGRA_Lite vss clk_PU clk_PD clk rst_n_PU rst_n_PD rst_n uart_rx_PU uart_rx_PD
-+ uart_rx uart_tx_CS uart_tx_SL uart_tx_IE uart_tx_OE uart_tx_PU uart_tx_PD uart_tx_OUT
-+ uart_tx_PDRV0 uart_tx_PDRV1 uart_tx_IN vdd
+.subckt NanoCGRA_Lite clk clk_PD clk_PU rst_n rst_n_PD rst_n_PU uart_rx uart_rx_PD
++ uart_rx_PU uart_tx_CS uart_tx_IE uart_tx_IN uart_tx_OE uart_tx_OUT uart_tx_PD uart_tx_PDRV0
++ uart_tx_PDRV1 uart_tx_PU uart_tx_SL vdd vss
 Xgf180mcu_fd_sc_mcu7t5v0__clkinv_1_310 vdd vss gf180mcu_fd_sc_mcu7t5v0__dffq_1_351/Q
 + gf180mcu_fd_sc_mcu7t5v0__nand4_1_6/A3 vdd vss gf180mcu_fd_sc_mcu7t5v0__clkinv_1
 Xgf180mcu_fd_sc_mcu7t5v0__clkinv_1_321 vdd vss gf180mcu_fd_sc_mcu7t5v0__dffq_1_406/Q

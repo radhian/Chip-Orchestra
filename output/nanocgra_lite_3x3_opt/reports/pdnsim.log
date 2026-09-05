@@ -1,7 +1,7 @@
 OpenROAD f12e2f474102bfb875eeee57fb610d7d7de17770 
 This program is licensed under the BSD-3 license. See the LICENSE file for details.
 Components of this program may be licensed under more restrictive licenses which must be honored.
-[INFO PSM-0002] Output voltage file is specified as: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra/output/nanocgra_lite_3x3_opt/reports/pdnsim_vdd.rpt.
+[INFO PSM-0002] Output voltage file is specified as: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/pdnsim_vdd.rpt.
 [WARNING PSM-0016] Voltage pad location (VSRC) file not specified, defaulting pad location to checkerboard pattern on core area.
 [WARNING PSM-0017] X direction bump pitch is not specified, defaulting to 140um.
 [WARNING PSM-0018] Y direction bump pitch is not specified, defaulting to 140um.
@@ -1017,7 +1017,7 @@ Worstcase voltage: 5.00e+00 V
 Average IR drop  : 1.07e-06 V
 Worstcase IR drop: 1.48e-06 V
 ######################################
-[INFO PSM-0002] Output voltage file is specified as: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra/output/nanocgra_lite_3x3_opt/reports/pdnsim_vss.rpt.
+[INFO PSM-0002] Output voltage file is specified as: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/pdnsim_vss.rpt.
 [WARNING PSM-0016] Voltage pad location (VSRC) file not specified, defaulting pad location to checkerboard pattern on core area.
 [WARNING PSM-0017] X direction bump pitch is not specified, defaulting to 140um.
 [WARNING PSM-0018] Y direction bump pitch is not specified, defaulting to 140um.

@@ -54,6 +54,30 @@ def main() -> int:
         errors.append("forbidden dummy-purpose shapes found: " + ", ".join(forbidden_counts))
     else:
         print("forbidden dummy-purpose shapes=NONE")
+    minimum_metal_area = 0.1444
+    undersized_via_shapes = []
+    checked_via_shapes = 0
+    for cell in layout.each_cell():
+        if not cell.name.startswith("VIA_"):
+            continue
+        for layer in (34, 36, 42, 46, 81):
+            index = layout.find_layer(layer, 0)
+            if index is None or index < 0:
+                continue
+            for shape in cell.shapes(index).each():
+                if shape.is_box():
+                    area = shape.box.area() * layout.dbu * layout.dbu
+                elif shape.is_polygon():
+                    area = shape.polygon.area() * layout.dbu * layout.dbu
+                else:
+                    continue
+                checked_via_shapes += 1
+                if area + 1e-12 < minimum_metal_area:
+                    undersized_via_shapes.append(f"{cell.name}:{layer}/0={area:.6f}um^2")
+    if undersized_via_shapes:
+        errors.append("generated via landing metal below 0.1444um^2: " + ", ".join(undersized_via_shapes))
+    else:
+        print(f"generated via landing shapes checked={checked_via_shapes}; all >=0.1444um^2")
     if top is not None:
         bbox = top.bbox()
         width = bbox.width() * layout.dbu

@@ -2,6 +2,7 @@
 import os
 import re
 import sys
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 pkg = Path(os.environ["PKG"])
@@ -38,13 +39,19 @@ reference_def = pkg / "pnr/D04.def"
 if generated_def.is_file() and reference_def.is_file():
     generated_geometry = pin_geometry(generated_def)
     reference_geometry = pin_geometry(reference_def)
-    # The supplied D04 reference violates Metal2 spacing in the UART pin cluster;
-    # generated DEF applies the documented OE/OUT/SL spacing corrections.
-    reference_geometry["uart_tx_OE"] = [("Metal2", "0", "898260", "2000", "898540")]
-    reference_geometry["uart_tx_OUT"] = [("Metal2", "0", "900840", "2000", "901120")]
-    reference_geometry["uart_tx_SL"] = [("Metal2", "0", "902810", "2000", "903190")]
-    if generated_geometry != reference_geometry:
-        errors.append("generated DEF pin geometry differs from D04 plus the documented UART spacing corrections")
+    for pg_pin in ("vdd", "vss"):
+        if generated_geometry.get(pg_pin) != reference_geometry.get(pg_pin):
+            errors.append(f"generated DEF {pg_pin} geometry differs from the D04 contract")
+    for pin_name, geometry in generated_geometry.items():
+        if pin_name in ("vdd", "vss"):
+            continue
+        if len(geometry) != 1 or geometry[0][0] != "Metal2":
+            errors.append(f"signal pin {pin_name} must have exactly one Metal2 rectangle")
+            continue
+        _, x1, y1, x2, y2 = geometry[0]
+        x1, y1, x2, y2 = map(int, (x1, y1, x2, y2))
+        if min(x2 - x1, y2 - y1) < 560:
+            errors.append(f"signal pin {pin_name} violates the 0.28um Metal2 minimum width")
     generated_text = generated_def.read_text(errors="replace")
     if "DIEAREA ( 0 0 ) ( 1100000 1100000 ) ;" not in generated_text:
         errors.append("generated DEF does not satisfy the D04 550um die contract")
@@ -71,6 +78,19 @@ if not route_drc.is_file():
     errors.append("missing detailed-route DRC report: reports/route_drc.rpt")
 elif route_drc.stat().st_size != 0:
     errors.append("detailed-route DRC report is not clean: reports/route_drc.rpt")
+for mode in ("flat", "deep"):
+    report = pkg / f"reports/signoff/drc_full_{mode}.lyrdb"
+    log = pkg / f"reports/signoff/drc_full_{mode}.log"
+    if not report.is_file() or not log.is_file():
+        errors.append(f"missing full {mode} DRC evidence")
+        continue
+    items = ET.parse(report).getroot().find("items")
+    if items is None or len(items):
+        errors.append(f"full {mode} DRC report is not clean")
+    log_text = log.read_text(errors="replace")
+    for required in ("FEOL enabled: true", "BEOL enabled: true", "CONNECTIVITY_RULES enabled: true"):
+        if required not in log_text:
+            errors.append(f"full {mode} DRC did not enable {required.split(':')[0]}")
 for report in ["reports/signoff/sta_ss_repair.rpt", "reports/signoff/pg_connectivity.rpt"]:
     path = pkg / report
     if not path.is_file() or path.stat().st_size == 0:

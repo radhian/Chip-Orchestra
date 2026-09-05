@@ -31,6 +31,34 @@ if ti is None:
     print("ERROR: top cell %s not found" % top_name)
     raise SystemExit(1)
 
+# KLayout's DEF reader represents generated vias as separate VIA_* helper cells.
+# Make each helper's M1-M5 landing metal independently satisfy Mn.3 so a
+# hierarchical top-level check does not depend on merging it with parent routes.
+minimum_area_dbu2 = int(round(0.1444 / (layout.dbu * layout.dbu)))
+patched_via_shapes = 0
+metal_layers = [layout.layer(layer, 0) for layer in (34, 36, 42, 46, 81)]
+for via_cell in [cell for cell in layout.each_cell() if cell.name.startswith("VIA_")]:
+    for layer_index in metal_layers:
+        for shape in list(via_cell.shapes(layer_index).each()):
+            if not shape.is_box():
+                continue
+            box = shape.box
+            if box.area() >= minimum_area_dbu2:
+                continue
+            if box.width() >= box.height():
+                required_width = (minimum_area_dbu2 + box.height() - 1) // box.height()
+                required_width += required_width % 2
+                delta = required_width - box.width()
+                box = pya.Box(box.left - delta // 2, box.bottom, box.right + delta // 2, box.top)
+            else:
+                required_height = (minimum_area_dbu2 + box.width() - 1) // box.width()
+                required_height += required_height % 2
+                delta = required_height - box.height()
+                box = pya.Box(box.left, box.bottom - delta // 2, box.right, box.top + delta // 2)
+            shape.box = box
+            patched_via_shapes += 1
+print("Patched %d generated via landing shapes to minimum area" % patched_via_shapes)
+
 # Prune cells not referenced by the top hierarchy (unused std cells from merged GDS)
 keep = set(ti.called_cells())
 keep.add(ti.cell_index())

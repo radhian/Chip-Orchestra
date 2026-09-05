@@ -3,28 +3,25 @@
 **NanoCGRA-Lite** is a minimal, ultra-compact **coarse-grained reconfigurable array (CGRA) soft-IP** implemented using the open **GF180MCU PDK** and generated through **Chip Orchestra**, targeting low-cost experimentation and deployment of reconfigurable hardware for resource-constrained embedded systems. The canonical tapeout configuration integrates a **3×3 processing-element (PE) mesh** with nine lightweight compute elements, a compact **32-byte SRAM implemented as a 32×8-bit memory** for local data and intermediate results, and a simple **4-pin UART-only interface** (`clk`, `rst_n`, `uart_rx`, `uart_tx`) controlled by the packet-based `uart_bridge.v` FSM. The architecture provides configurable parallel computation while minimizing silicon area, memory requirements, and interface complexity, making it suitable for **embedded signal processing, sensor data processing, vector and arithmetic operations, lightweight image processing, control-oriented computation, communication data processing, and experimentation with reconfigurable computing architectures**. Workloads can be configured and executed through the UART interface, allowing an external host to load data, configure the CGRA, trigger computation, and retrieve results. By combining a small programmable compute fabric with local memory and a minimal communication interface, NanoCGRA-Lite explores the design space between a conventional processor and a fixed-function accelerator while providing an open platform for **CGRA research, ASIC prototyping, embedded computing, and application-specific hardware acceleration**. The results documented in this README correspond to the **verified EDA implementation flow for the canonical 3×3 PE + 32-byte SRAM configuration**.
 
 
-## Re-harden Update (2026-09-03)
+## Re-harden Update (2026-09-05)
 
-The repaired flow has been rerun end-to-end with OpenROAD, KLayout, Magic
-8.3.465, and Netgen 1.5.272. The canonical GDS contains CTS and routed logic,
-`fill_1/2/4/8/16` row fillers, `filltie`, and `endcap`, with no project-level
-dummy-purpose fill. Explicit M2-M3-M4 routes connect the D04 `vdd` and `vss`
-boundary pins to the internal PDN.
+The final GDS was regenerated after the integration review of Metal2/3/4
+minimum-area and Metal2 pad-connection errors. Router-generated signal pins are
+now preserved instead of being overwritten by undersized D04 reference shapes;
+every signal pin is at least 0.28 µm wide. KLayout-generated `VIA_*` helper
+cells now have independently legal landing metal of at least 0.1444 µm², so
+hierarchical top-level checks do not depend on merging those shapes with parent
+routes.
 
 Fresh checks completed:
 
 - Detailed-route DRC: PASS, zero violations.
-- Main KLayout DRC: PASS, zero report items.
-- Canonical GDS audit: PASS, sole `NanoCGRA_Lite` top, 550.000 × 550.000 µm.
+- Full GF180 KLayout DRC in both flat and deep modes: PASS, zero items, with FEOL, BEOL, and connectivity rules explicitly enabled.
+- Canonical GDS audit: PASS, sole `NanoCGRA_Lite` top, 550.000 × 550.000 µm; all generated via landing shapes meet 0.1444 µm².
 - Real transistor-level LVS: PASS, unique match; 5,362 devices and 5,367 nets on both sides.
-- Post-route STA at ss/125°C/4.5 V: WNS/TNS 0.00, setup slack 75.17 ns, hold slack 1.50 ns, with no reported max slew/capacitance/fanout violators.
-- Internal PG connectivity: PASS; OpenROAD reports all VDD and VSS stripes connected.
-- PDNSim: completed for VDD/VSS. Worst reported drop is approximately 1.55 µV under default checkerboard source assumptions; this is diagnostic rather than package-aware final IR signoff.
-
-The supplied D04 reference has illegal Metal2 spacing in the UART pin cluster.
-The generated DEF applies minimal documented spacing corrections to
-`uart_tx_OE`, `uart_tx_OUT`, and `uart_tx_SL`, while preserving the D04 side,
-layer, ordering, net names, die size, and all other pin geometry.
+- Post-route STA at ss/125°C/4.5 V: WNS/TNS 0.00, setup slack 74.67 ns, hold slack 1.49 ns, with no reported max slew/capacitance/fanout violators.
+- Internal VDD/VSS connectivity: PASS; PDNSim completed with the documented block-level source assumptions.
+- No project-level dummy-purpose fill; required `fill_1/2/4/8/16`, `filltie`, and `endcap` cells remain present.
 
 
 ### Canonical flow
@@ -33,9 +30,11 @@ layer, ordering, net names, die size, and all other pin geometry.
 2. `pnr/flow.tcl` performs the fixed D04 floorplan, tap/endcap insertion, PDN,
    placement, CTS, timing repair, global/detailed routing, approved row-filler
    insertion, PG checks, electrical reports, and DEF/ODB/netlist generation.
-3. `pnr/apply_d04_pin_contract.py` applies the D04 boundary contract plus the
-   three documented UART Metal2 spacing corrections.
-4. DEF-to-GDS conversion writes the **unfilled** canonical layout:
+3. `pnr/apply_d04_pin_contract.py` applies only the disjoint D04 VDD/VSS
+   boundary geometry. Router-generated signal-pin geometry is preserved, so
+   legal width and spacing are not replaced after detailed routing.
+4. DEF-to-GDS conversion writes the **unfilled** canonical layout and repairs
+   generated `VIA_*` helper-cell landing metal to the GF180 0.1444 µm² minimum:
    `gds/nanocgra_lite_3x3_opt.gds`.
 5. `reports/lvs/extract_gds.tcl` extracts the canonical GDS with compatible
    Magic and normalizes Magic's GF180 MOS proxy syntax into MOS device records
@@ -47,8 +46,9 @@ layer, ordering, net names, die size, and all other pin geometry.
    reports a unique match.
 8. `reports/pdnsim_ir.tcl` produces VDD/VSS diagnostic PDNSim reports.
 9. `validate.sh` checks config paths, GDS top/size, forbidden dummy layers,
-   physical fillers, D04 PG topology, empty route-DRC output, required reports,
-   and fresh completion/pass markers.
+   generated-via minimum area, physical fillers, legal signal-pin width, D04
+   PG topology, empty route-DRC output, zero-item full flat/deep FEOL+BEOL DRC,
+   required reports, and fresh completion/pass markers.
 
 The prior normalized empty-stub LVS result and legacy `_filled.gds` are not
 valid signoff evidence and must not be used. `gds/add_density_fill.py` is
@@ -68,8 +68,9 @@ export NETGEN_BIN=/path/to/netgen
 "$UPRJ_ROOT/output/nanocgra_lite_3x3_opt/scripts/run_repair_signoff.sh"
 ```
 
-The runner fails closed on non-zero main DRC or LVS mismatch. Final validation
-also rejects a non-empty detailed-route DRC report.
+The runner fails closed on non-zero full flat/deep FEOL+BEOL DRC or LVS
+mismatch. Final validation also rejects undersized generated-via landing metal,
+illegal signal-pin widths, and non-empty detailed-route DRC output.
 
 ### Integration note
 
@@ -88,11 +89,11 @@ The registered `_opt` design was re-hardened against the provided D04 DEF/templa
 | DEF/GDS block size | 550 µm × 550 µm |
 | D04-facing top-level pins | 21 |
 | Functional core mapping | `clk`, `rst_n`, `uart_rx`, and core `uart_tx` preserved through wrapper |
-| DEF pin geometry | Matches provided `D04_D.def` after DBU scaling |
-| Main DRC | CLEAN — 0 violations |
-| Density | CLEAN — 0 violations on filled GDS |
-| Antenna | CLEAN — 0 violations on filled GDS |
-| LVS | CLEAN — `Netlists match uniquely.` / `Result: Circuits match uniquely.` |
+| DEF pin geometry | D04 placement preserved; signal pins use legal router-generated M2 geometry |
+| Full DRC | CLEAN — 0 violations in flat and deep FEOL+BEOL runs |
+| Dummy-purpose fill | NONE — chip-top integration owns density fill |
+| Antenna | CLEAN — 0 detailed-route antenna violations |
+| LVS | CLEAN — 5,362 devices and 5,367 nets on both sides; unique match |
 
 Key D04 artifacts are under `output/nanocgra_lite_3x3_opt/pnr/`, `output/nanocgra_lite_3x3_opt/gds/`, `output/nanocgra_lite_3x3_opt/reports/signoff/`, and `output/nanocgra_lite_3x3_opt/reports/lvs/`.
 
