@@ -290,8 +290,8 @@ No property area found for device diode_pd2nw_06v0
 No property area found for device diode_pd2nw_06v0
 No property par1 found for device diode_pd2nw_06v0
 No property pj found for device diode_pd2nw_06v0
-Comparison output logged to file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra/output/nanocgra_lite_3x3_opt/reports/lvs/comp_final.out
-Logging to file "/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra/output/nanocgra_lite_3x3_opt/reports/lvs/comp_final.out" enabled
+Comparison output logged to file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/lvs/comp_final.out
+Logging to file "/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/lvs/comp_final.out" enabled
 
 Contents of circuit 1:  Circuit: 'gf180mcu_fd_sc_mcu7t5v0__clkinv_1'
 Circuit gf180mcu_fd_sc_mcu7t5v0__clkinv_1 contains 2 device instances.
@@ -2821,6 +2821,6 @@ Circuit 1 contains 5367 nets,    Circuit 2 contains 5367 nets.
 Final result: 
 Circuits match uniquely.
 .
-Logging to file "/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra/output/nanocgra_lite_3x3_opt/reports/lvs/comp_final.out" disabled
+Logging to file "/workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/lvs/comp_final.out" disabled
 LVS Done.
 NETGEN_LVS_PASSED

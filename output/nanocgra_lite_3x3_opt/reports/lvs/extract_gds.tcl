@@ -28,6 +28,9 @@ if {![file exists $spice_file] || [file size $spice_file] == 0} {
     error "Magic did not produce non-empty layout SPICE"
 }
 exec python3 [file join $lvs_dir normalize_magic_devices.py] $spice_file
+foreach scratch [glob -nocomplain [file join $lvs_dir *.ext]] {
+    file delete -force $scratch
+}
 set fh [open $marker w]
 puts $fh "MAGIC_GDS_EXTRACTION_COMPLETED"
 close $fh
