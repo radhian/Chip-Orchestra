@@ -3,24 +3,23 @@
 **NanoCGRA-Lite** is a minimal, ultra-compact **coarse-grained reconfigurable array (CGRA) soft-IP** implemented using the open **GF180MCU PDK** and generated through **Chip Orchestra**, targeting low-cost experimentation and deployment of reconfigurable hardware for resource-constrained embedded systems. The canonical tapeout configuration integrates a **3×3 processing-element (PE) mesh** with nine lightweight compute elements, a compact **32-byte SRAM implemented as a 32×8-bit memory** for local data and intermediate results, and a simple **4-pin UART-only interface** (`clk`, `rst_n`, `uart_rx`, `uart_tx`) controlled by the packet-based `uart_bridge.v` FSM. The architecture provides configurable parallel computation while minimizing silicon area, memory requirements, and interface complexity, making it suitable for **embedded signal processing, sensor data processing, vector and arithmetic operations, lightweight image processing, control-oriented computation, communication data processing, and experimentation with reconfigurable computing architectures**. Workloads can be configured and executed through the UART interface, allowing an external host to load data, configure the CGRA, trigger computation, and retrieve results. By combining a small programmable compute fabric with local memory and a minimal communication interface, NanoCGRA-Lite explores the design space between a conventional processor and a fixed-function accelerator while providing an open platform for **CGRA research, ASIC prototyping, embedded computing, and application-specific hardware acceleration**. The results documented in this README correspond to the **verified EDA implementation flow for the canonical 3×3 PE + 32-byte SRAM configuration**.
 
 
-## Re-harden Update (2026-09-05)
+## Re-harden Update (2026-09-06)
 
-The final GDS was regenerated after the integration review of Metal2/3/4
-minimum-area and Metal2 pad-connection errors. Router-generated signal pins are
-now preserved instead of being overwritten by undersized D04 reference shapes;
-every signal pin is at least 0.28 µm wide. KLayout-generated `VIA_*` helper
-cells now have independently legal landing metal of at least 0.1444 µm², so
-hierarchical top-level checks do not depend on merging those shapes with parent
-routes.
+The final GDS was regenerated from a fresh OpenROAD hardening run after the
+integration review of Metal2/3/4 minimum-area, metal-spacing, and Metal2
+pad-connection errors. Router-generated signal pins are preserved instead of
+being overwritten by undersized D04 reference shapes. Generated DEF-via helper
+instances are flattened into their routed parent metal during GDS export; no
+via landing metal is enlarged after routing.
 
 Fresh checks completed:
 
 - Detailed-route DRC: PASS, zero violations.
 - Full GF180 KLayout DRC in both flat and deep modes: PASS, zero items, with FEOL, BEOL, and connectivity rules explicitly enabled.
-- Canonical GDS audit: PASS, sole `NanoCGRA_Lite` top, 550.000 × 550.000 µm; all generated via landing shapes meet 0.1444 µm².
+- Canonical GDS audit: PASS, sole `NanoCGRA_Lite` top, 550.000 × 550.000 µm; generated via helpers are flattened into routed metal, with no post-route geometry growth.
 - Real transistor-level LVS: PASS, unique match; 5,362 devices and 5,367 nets on both sides.
-- Post-route STA at ss/125°C/4.5 V: WNS/TNS 0.00, setup slack 74.67 ns, hold slack 1.49 ns, with no reported max slew/capacitance/fanout violators.
-- Internal VDD/VSS connectivity: PASS; PDNSim completed with the documented block-level source assumptions.
+- Post-route STA at ss/125°C/4.5 V: WNS/TNS 0.00, setup slack 74.66 ns, hold slack 1.50 ns, with no reported max slew/capacitance/fanout violators.
+- Internal VDD/VSS connectivity: PASS; a 1.6 µm M4/M5 core ring matches the 1.6 µm internal straps, and all 6 VDD plus all 6 VSS D04 boundary fingers connect through legal staged transitions to their same-net ring/internal grid. PDNSim completed with the documented block-level source assumptions.
 - No project-level dummy-purpose fill; required `fill_1/2/4/8/16`, `filltie`, and `endcap` cells remain present.
 
 
@@ -33,20 +32,24 @@ Fresh checks completed:
 3. `pnr/apply_d04_pin_contract.py` applies only the disjoint D04 VDD/VSS
    boundary geometry. Router-generated signal-pin geometry is preserved, so
    legal width and spacing are not replaced after detailed routing.
-4. DEF-to-GDS conversion writes the **unfilled** canonical layout and repairs
-   generated `VIA_*` helper-cell landing metal to the GF180 0.1444 µm² minimum:
+4. `pnr/connect_d04_pg.py` connects every D04 PG finger to the generated M4/M5
+   core ring; `pnr/check_d04_pg.py` fails unless all 6 VDD and all 6 VSS
+   fingers have complete same-net via/route chains.
+5. DEF-to-GDS conversion writes the **unfilled** canonical layout and flattens
+   only generated `VIA_*` helper instances into their routed parent metal. It
+   does not resize via landing geometry after detailed routing:
    `gds/nanocgra_lite_3x3_opt.gds`.
-5. `reports/lvs/extract_gds.tcl` extracts the canonical GDS with compatible
+6. `reports/lvs/extract_gds.tcl` extracts the canonical GDS with compatible
    Magic and normalizes Magic's GF180 MOS proxy syntax into MOS device records
    without changing extracted geometry or connectivity.
-6. `reports/lvs/verilog_to_lvs_spice.py` converts the populated powered
+7. `reports/lvs/verilog_to_lvs_spice.py` converts the populated powered
    post-route Verilog to source SPICE using official GF180 PDK CDL pin order.
-7. `reports/lvs/run_lvs_final.tcl` compares the extracted layout and independent
+8. `reports/lvs/run_lvs_final.tcl` compares the extracted layout and independent
    source views with the official PDK setup. It fails closed unless Netgen
    reports a unique match.
-8. `reports/pdnsim_ir.tcl` produces VDD/VSS diagnostic PDNSim reports.
-9. `validate.sh` checks config paths, GDS top/size, forbidden dummy layers,
-   generated-via minimum area, physical fillers, legal signal-pin width, D04
+9. `reports/pdnsim_ir.tcl` produces VDD/VSS diagnostic PDNSim reports.
+10. `validate.sh` checks config paths, GDS top/size, forbidden dummy layers,
+   flattened generated-via hierarchy, physical fillers, legal signal-pin width, D04
    PG topology, empty route-DRC output, zero-item full flat/deep FEOL+BEOL DRC,
    required reports, and fresh completion/pass markers.
 
@@ -69,14 +72,16 @@ export NETGEN_BIN=/path/to/netgen
 ```
 
 The runner fails closed on non-zero full flat/deep FEOL+BEOL DRC or LVS
-mismatch. Final validation also rejects undersized generated-via landing metal,
+mismatch. Final validation also rejects hierarchical generated-via helpers,
 illegal signal-pin widths, and non-empty detailed-route DRC output.
 
 ### Integration note
 
 Density/antenna closure against the assembled chip remains the responsibility
 of the chip-top integration flow. Package-aware IR signoff should be rerun when
-actual pad/bump locations and current assumptions are available.
+actual pad/bump locations and current assumptions are available. The submitted
+`lvs_config.json` relies on `lvs_config.base.json` for standard-cell models and
+contains no duplicate CDL entry or unsupported custom script/log keys.
 
 
 ## D04 Re-harden Update (2026-08-29)

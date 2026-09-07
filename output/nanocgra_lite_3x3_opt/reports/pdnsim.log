@@ -6,9 +6,8 @@ Components of this program may be licensed under more restrictive licenses which
 [WARNING PSM-0017] X direction bump pitch is not specified, defaulting to 140um.
 [WARNING PSM-0018] Y direction bump pitch is not specified, defaulting to 140um.
 [WARNING PSM-0065] VSRC location not specified, using default checkerboard pattern with one VDD every size bumps in x-direction and one in two bumps in the y-direction
-[WARNING PSM-0030] VSRC location at (10.080um, 11.760um) and size 10.000um, is not located on an existing power stripe node. Moving to closest node at (10.080um, 41.460um).
-[WARNING PSM-0030] VSRC location at (290.080um, 151.760um) and size 10.000um, is not located on an existing power stripe node. Moving to closest node at (280.080um, 161.460um).
-[INFO PSM-0031] Number of PDN nodes on net vdd = 16202.
+[WARNING PSM-0030] VSRC location at (290.080um, 151.760um) and size 10.000um, is not located on an existing power stripe node. Moving to closest node at (280.880um, 162.560um).
+[INFO PSM-0031] Number of PDN nodes on net vdd = 16322.
 [WARNING PSM-0024] Instance _04710_, current node at (415800, 658560) at layer 1 have been moved from (415520, 650720).
 [WARNING PSM-0024] Instance _04711_, current node at (399600, 595840) at layer 1 have been moved from (399840, 588000).
 [WARNING PSM-0024] Instance _04712_, current node at (270000, 846720) at layer 1 have been moved from (268800, 838880).
@@ -1014,22 +1013,22 @@ Components of this program may be licensed under more restrictive licenses which
 [INFO PSM-0040] All PDN stripes on net vdd are connected.
 ########## IR report #################
 Worstcase voltage: 5.00e+00 V
-Average IR drop  : 1.07e-06 V
-Worstcase IR drop: 1.48e-06 V
+Average IR drop  : 9.86e-07 V
+Worstcase IR drop: 1.35e-06 V
 ######################################
 [INFO PSM-0002] Output voltage file is specified as: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/pdnsim_vss.rpt.
 [WARNING PSM-0016] Voltage pad location (VSRC) file not specified, defaulting pad location to checkerboard pattern on core area.
 [WARNING PSM-0017] X direction bump pitch is not specified, defaulting to 140um.
 [WARNING PSM-0018] Y direction bump pitch is not specified, defaulting to 140um.
 [WARNING PSM-0065] VSRC location not specified, using default checkerboard pattern with one VDD every size bumps in x-direction and one in two bumps in the y-direction
-[WARNING PSM-0030] VSRC location at (10.080um, 11.760um) and size 10.000um, is not located on an existing power stripe node. Moving to closest node at (10.080um, 21.460um).
-[WARNING PSM-0030] VSRC location at (290.080um, 151.760um) and size 10.000um, is not located on an existing power stripe node. Moving to closest node at (300.080um, 141.460um).
-[INFO PSM-0031] Number of PDN nodes on net vss = 16438.
+[WARNING PSM-0030] VSRC location at (10.080um, 11.760um) and size 10.000um, is not located on an existing power stripe node. Moving to closest node at (4.480um, 6.160um).
+[WARNING PSM-0030] VSRC location at (290.080um, 151.760um) and size 10.000um, is not located on an existing power stripe node. Moving to closest node at (300.880um, 142.560um).
+[INFO PSM-0031] Number of PDN nodes on net vss = 16558.
 [INFO PSM-0064] Number of voltage sources = 2.
 [INFO PSM-0040] All PDN stripes on net vss are connected.
 ########## IR report #################
-Worstcase voltage: 1.55e-06 V
-Average IR drop  : 1.09e-06 V
-Worstcase IR drop: 1.55e-06 V
+Worstcase voltage: 1.40e-06 V
+Average IR drop  : 1.00e-06 V
+Worstcase IR drop: 1.40e-06 V
 ######################################
 PDNSIM_COMPLETED

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check that D04 Metal2 PG BTerms physically enter same-net SPECIALNET routing."""
+"""Verify every D04 PG finger reaches the generated same-net core ring."""
 import re
 import sys
 from pathlib import Path
@@ -15,6 +15,22 @@ def block(body: str, name: str) -> str:
     return match.group(1) if match else ""
 
 
+def rectangles(pin_block: str) -> list[tuple[int, int, int, int]]:
+    return [
+        tuple(map(int, values))
+        for values in re.findall(
+            r"\+\s+LAYER\s+Metal2\s+\(\s*(-?\d+)\s+(-?\d+)\s*\)\s+\(\s*(-?\d+)\s+(-?\d+)\s*\)",
+            pin_block,
+        )
+    ]
+
+
+def contains(rectangle: tuple[int, int, int, int], point: tuple[int, int]) -> bool:
+    x1, y1, x2, y2 = rectangle
+    x, y = point
+    return min(x1, x2) <= x <= max(x1, x2) and min(y1, y2) <= y <= max(y1, y2)
+
+
 def main() -> int:
     if len(sys.argv) != 2:
         print(f"usage: {Path(sys.argv[0]).name} routed.def", file=sys.stderr)
@@ -24,35 +40,63 @@ def main() -> int:
     pins = section(text, r"PINS\s+\d+", r"END PINS")
     special = section(text, r"SPECIALNETS\s+\d+", r"END SPECIALNETS")
     errors = []
+
     for net in ("vdd", "vss"):
-        pin_block = block(pins, net)
+        pin_rectangles = rectangles(block(pins, net))
         net_block = block(special, net)
-        rects = [tuple(map(int, r)) for r in re.findall(
-            r"\+\s+LAYER\s+Metal2\s+\(\s*(-?\d+)\s+(-?\d+)\s*\)\s+\(\s*(-?\d+)\s+(-?\d+)\s*\)", pin_block)]
-        routes = re.findall(r"(?:\+\s+ROUTED|\bNEW)\s+Metal2\b(.*?)(?=(?:\bNEW\s+Metal\d+)|;)", net_block, re.S)
-        points = []
-        for route in routes:
-            points.extend((int(x), int(y)) for x, y in re.findall(r"\(\s*(-?\d+)\s+(-?\d+)(?:\s+-?\d+)?\s*\)", route))
-        touches = any(min(x1, x2) <= x <= max(x1, x2) and min(y1, y2) <= y <= max(y1, y2)
-                      for x, y in points for x1, y1, x2, y2 in rects)
-        reaches_core = any(20000 <= x <= 1080000 and 20000 <= y <= 1080000 for x, y in points)
-        has_via2 = "Via2_3200x1200" in net_block
-        has_via3 = "Via3_3200x1200" in net_block
-        if not rects:
-            errors.append(f"{net}: no Metal2 boundary-pin rectangle")
-        if not routes:
-            errors.append(f"{net}: no same-net SPECIALNET Metal2 route")
-        elif not touches:
-            errors.append(f"{net}: Metal2 SPECIALNET route does not touch its boundary pin")
-        elif not reaches_core:
-            errors.append(f"{net}: Metal2 SPECIALNET route does not reach the core boundary/interior")
-        if not has_via2 or not has_via3:
-            errors.append(f"{net}: missing complete Metal2-Metal3-Metal4 via stack")
+        marker_match = re.search(
+            rf"# D04_ALL_FINGERS_BEGIN {net}(.*?)# D04_ALL_FINGERS_END {net}",
+            net_block,
+            re.S,
+        )
+        if len(pin_rectangles) != 6:
+            errors.append(f"{net}: expected 6 D04 Metal2 rectangles, found {len(pin_rectangles)}")
+            continue
+        if not marker_match:
+            errors.append(f"{net}: missing generated all-finger connection block")
+            continue
+        routes = marker_match.group(1)
+        metal2_vias = re.findall(
+            r"NEW\s+Metal2\s+1200\s+\+\s+SHAPE\s+STRIPE\s+\(\s*(-?\d+)\s+(-?\d+)\s*\)\s+\(\s*(?:\*|-?\d+)\s+(?:\*|-?\d+)\s*\)\s+Via2_3200x1200",
+            routes,
+        )
+        starts = [tuple(map(int, point)) for point in metal2_vias]
+        connected = sum(any(contains(rectangle, point) for point in starts) for rectangle in pin_rectangles)
+        if connected != 6 or len(starts) != 6:
+            errors.append(f"{net}: only {connected}/6 boundary rectangles have one aligned Metal2-to-Metal3 via")
+        if net == "vdd":
+            metal4_routes = re.findall(
+                r"NEW\s+Metal4\s+3200\s+\+\s+SHAPE\s+STRIPE\s+\([^)]*\)\s+\([^)]*\)\s+Via4_3200x3200",
+                routes,
+            )
+            if len(metal4_routes) != 6:
+                errors.append("vdd: expected 6 Metal4 finger-to-Metal5-ring routes")
+        expected_via3 = 6
+        expected_via4 = 6 if net == "vdd" else 0
+        if routes.count("Via2_3200x1200") != 6:
+            errors.append(f"{net}: expected 6 Via2 arrays")
+        if routes.count("Via3_3200x1200") != expected_via3:
+            errors.append(f"{net}: expected {expected_via3} Via3 arrays")
+        if routes.count("Via4_3200x3200") != expected_via4:
+            errors.append(f"{net}: expected {expected_via4} Via4 arrays")
+        ring_layer = "Metal5" if net == "vdd" else "Metal4"
+        ring_segments = [
+            tuple(map(int, values))
+            for values in re.findall(
+                rf"NEW\s+{ring_layer}\s+3200\s+\+\s+SHAPE\s+STRIPE\s+\(\s*(-?\d+)\s+(-?\d+)\s*\)\s+\(\s*(-?\d+)\s+(-?\d+)\s*\)",
+                net_block,
+            )
+        ]
+        if not any(max(abs(x2 - x1), abs(y2 - y1)) > 500000 for x1, y1, x2, y2 in ring_segments):
+            errors.append(f"{net}: missing long {ring_layer} ring segment")
+        if len(ring_segments) < 4:
+            errors.append(f"{net}: ring is not accompanied by internal {ring_layer} stripes")
+
     for error in errors:
         print("ERROR: " + error, file=sys.stderr)
     if errors:
         return 1
-    print("PASS: D04 Metal2 vdd/vss pins have same-net SPECIALNET routes reaching the core")
+    print("PASS: all 6 VDD and all 6 VSS D04 fingers reach the same-net M4/M5 ring and internal grid")
     return 0
 
 

@@ -10,6 +10,7 @@ errors = []
 checks = {
     "powered netlist": pkg / "pnr/nanocgra_lite_3x3_opt.pnr.pwr.v",
     "canonical GDS": pkg / "gds/nanocgra_lite_3x3_opt.gds",
+    "layout LVS SPICE": pkg / "reports/lvs/nanocgra_lite_3x3_opt_layout_lvs.spice",
     "D04 reference": pkg / "pnr/D04.def",
 }
 for label, path in checks.items():

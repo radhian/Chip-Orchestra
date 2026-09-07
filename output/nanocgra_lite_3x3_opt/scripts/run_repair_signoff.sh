@@ -10,6 +10,7 @@ PKG="$UPRJ_ROOT/output/nanocgra_lite_3x3_opt"
 SCDIR="$PDK_ROOT/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0"
 
 "$OPENROAD_BIN" -exit -no_init "$PKG/pnr/flow.tcl" > "$PKG/logs/pnr_repair.log" 2>&1
+"$OPENROAD_BIN" -exit -no_init "$PKG/pnr/finalize_odb.tcl" > "$PKG/logs/finalize_odb.log" 2>&1
 "$KLAYOUT_BIN" -zz -b -r "$PKG/gds/def2gds.py" \
   -rd def_file="$PKG/pnr/nanocgra_lite_3x3_opt.def" \
   -rd out_gds="$PKG/gds/nanocgra_lite_3x3_opt.gds" \
