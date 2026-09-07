@@ -308,35 +308,6 @@ Circuit 1 contains 2 devices, Circuit 2 contains 2 devices.
 Circuit 1 contains 6 nets,    Circuit 2 contains 6 nets.
 
 
-Contents of circuit 1:  Circuit: 'gf180mcu_fd_sc_mcu7t5v0__nand2_4'
-Circuit gf180mcu_fd_sc_mcu7t5v0__nand2_4 contains 16 device instances.
-  Class: pfet_05v0             instances:   8
-  Class: nfet_05v0             instances:   8
-Circuit contains 11 nets.
-Contents of circuit 2:  Circuit: 'gf180mcu_fd_sc_mcu7t5v0__nand2_4'
-Circuit gf180mcu_fd_sc_mcu7t5v0__nand2_4 contains 16 device instances.
-  Class: pfet_05v0             instances:   8
-  Class: nfet_05v0             instances:   8
-Circuit contains 11 nets.
-
-Circuit was modified by parallel/series device merging.
-New circuit summary:
-
-Contents of circuit 1:  Circuit: 'gf180mcu_fd_sc_mcu7t5v0__nand2_4'
-Circuit gf180mcu_fd_sc_mcu7t5v0__nand2_4 contains 10 device instances.
-  Class: pfet_05v0             instances:   2
-  Class: nfet_05v0             instances:   8
-Circuit contains 11 nets.
-Contents of circuit 2:  Circuit: 'gf180mcu_fd_sc_mcu7t5v0__nand2_4'
-Circuit gf180mcu_fd_sc_mcu7t5v0__nand2_4 contains 10 device instances.
-  Class: pfet_05v0             instances:   2
-  Class: nfet_05v0             instances:   8
-Circuit contains 11 nets.
-
-Circuit 1 contains 10 devices, Circuit 2 contains 10 devices.
-Circuit 1 contains 11 nets,    Circuit 2 contains 11 nets.
-
-
 Contents of circuit 1:  Circuit: 'gf180mcu_fd_sc_mcu7t5v0__clkinv_3'
 Circuit gf180mcu_fd_sc_mcu7t5v0__clkinv_3 contains 6 device instances.
   Class: pfet_05v0             instances:   3
@@ -364,6 +335,35 @@ Circuit contains 6 nets.
 
 Circuit 1 contains 2 devices, Circuit 2 contains 2 devices.
 Circuit 1 contains 6 nets,    Circuit 2 contains 6 nets.
+
+
+Contents of circuit 1:  Circuit: 'gf180mcu_fd_sc_mcu7t5v0__nand2_4'
+Circuit gf180mcu_fd_sc_mcu7t5v0__nand2_4 contains 16 device instances.
+  Class: pfet_05v0             instances:   8
+  Class: nfet_05v0             instances:   8
+Circuit contains 11 nets.
+Contents of circuit 2:  Circuit: 'gf180mcu_fd_sc_mcu7t5v0__nand2_4'
+Circuit gf180mcu_fd_sc_mcu7t5v0__nand2_4 contains 16 device instances.
+  Class: pfet_05v0             instances:   8
+  Class: nfet_05v0             instances:   8
+Circuit contains 11 nets.
+
+Circuit was modified by parallel/series device merging.
+New circuit summary:
+
+Contents of circuit 1:  Circuit: 'gf180mcu_fd_sc_mcu7t5v0__nand2_4'
+Circuit gf180mcu_fd_sc_mcu7t5v0__nand2_4 contains 10 device instances.
+  Class: pfet_05v0             instances:   2
+  Class: nfet_05v0             instances:   8
+Circuit contains 11 nets.
+Contents of circuit 2:  Circuit: 'gf180mcu_fd_sc_mcu7t5v0__nand2_4'
+Circuit gf180mcu_fd_sc_mcu7t5v0__nand2_4 contains 10 device instances.
+  Class: pfet_05v0             instances:   2
+  Class: nfet_05v0             instances:   8
+Circuit contains 11 nets.
+
+Circuit 1 contains 10 devices, Circuit 2 contains 10 devices.
+Circuit 1 contains 11 nets,    Circuit 2 contains 11 nets.
 
 
 Contents of circuit 1:  Circuit: 'gf180mcu_fd_sc_mcu7t5v0__dffq_4'
@@ -425,6 +425,21 @@ Circuit 1 contains 10 devices, Circuit 2 contains 10 devices.
 Circuit 1 contains 14 nets,    Circuit 2 contains 14 nets.
 
 
+Contents of circuit 1:  Circuit: 'gf180mcu_fd_sc_mcu7t5v0__dffq_1'
+Circuit gf180mcu_fd_sc_mcu7t5v0__dffq_1 contains 24 device instances.
+  Class: pfet_05v0             instances:  12
+  Class: nfet_05v0             instances:  12
+Circuit contains 19 nets.
+Contents of circuit 2:  Circuit: 'gf180mcu_fd_sc_mcu7t5v0__dffq_1'
+Circuit gf180mcu_fd_sc_mcu7t5v0__dffq_1 contains 24 device instances.
+  Class: pfet_05v0             instances:  12
+  Class: nfet_05v0             instances:  12
+Circuit contains 19 nets.
+
+Circuit 1 contains 24 devices, Circuit 2 contains 24 devices.
+Circuit 1 contains 19 nets,    Circuit 2 contains 19 nets.
+
+
 Contents of circuit 1:  Circuit: 'gf180mcu_fd_sc_mcu7t5v0__clkinv_4'
 Circuit gf180mcu_fd_sc_mcu7t5v0__clkinv_4 contains 8 device instances.
   Class: pfet_05v0             instances:   4
@@ -452,21 +467,6 @@ Circuit contains 6 nets.
 
 Circuit 1 contains 2 devices, Circuit 2 contains 2 devices.
 Circuit 1 contains 6 nets,    Circuit 2 contains 6 nets.
-
-
-Contents of circuit 1:  Circuit: 'gf180mcu_fd_sc_mcu7t5v0__dffq_1'
-Circuit gf180mcu_fd_sc_mcu7t5v0__dffq_1 contains 24 device instances.
-  Class: pfet_05v0             instances:  12
-  Class: nfet_05v0             instances:  12
-Circuit contains 19 nets.
-Contents of circuit 2:  Circuit: 'gf180mcu_fd_sc_mcu7t5v0__dffq_1'
-Circuit gf180mcu_fd_sc_mcu7t5v0__dffq_1 contains 24 device instances.
-  Class: pfet_05v0             instances:  12
-  Class: nfet_05v0             instances:  12
-Circuit contains 19 nets.
-
-Circuit 1 contains 24 devices, Circuit 2 contains 24 devices.
-Circuit 1 contains 19 nets,    Circuit 2 contains 19 nets.
 
 
 Contents of circuit 1:  Circuit: 'gf180mcu_fd_sc_mcu7t5v0__nand3_2'

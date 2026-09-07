@@ -1,40 +1,100 @@
 #!/usr/bin/env python3
-"""Connect the D04 Metal2 power pins to existing Metal4 PDN stripes in a DEF."""
+"""Connect every D04 PG finger to the generated M4/M5 core ring."""
 import argparse
 import re
 from pathlib import Path
 
-ROUTES = {
-    "vdd": [
-        "      NEW Metal2 1200 + SHAPE STRIPE ( 80160 1099000 ) ( * 1042920 ) Via2_3200x1200",
-        "      NEW Metal3 1200 + SHAPE STRIPE ( 80160 1042920 ) Via3_3200x1200",
-    ],
-    "vss": [
-        "      NEW Metal2 1200 + SHAPE STRIPE ( 1000 100000 ) ( 40160 * ) Via2_3200x1200",
-        "      NEW Metal3 1200 + SHAPE STRIPE ( 40160 100000 ) Via3_3200x1200",
-    ],
-}
+DBU_PER_UM = 2000
+ROUTE_WIDTH = 1200
+RING_WIDTH = 3200
+VIA_HALF_WIDTH = 1600
 
 
-def add_routes(text: str, net: str, routes: list[str]) -> str:
-    section_match = re.search(r"SPECIALNETS\s+\d+\s*;(.*?)END SPECIALNETS", text, re.S)
-    if not section_match:
-        raise SystemExit("missing SPECIALNETS section")
-    body = section_match.group(1)
-    net_match = re.search(
-        rf"(^[ \t]*-[ \t]+{re.escape(net)}\b.*?)(\s*;)(?=\s*(?:^[ \t]*-[ \t]+\S+|\Z))",
+def section(text: str, start: str, end: str) -> tuple[str, int, int]:
+    match = re.search(rf"{start}.*?;\s*(.*?){end}", text, re.S)
+    if not match:
+        raise SystemExit(f"missing {start} section")
+    return match.group(1), match.start(1), match.end(1)
+
+
+def named_block(body: str, name: str) -> tuple[str, int, int]:
+    match = re.search(
+        rf"(^[ \t]*-[ \t]+{re.escape(name)}\b.*?)(\s*;)(?=\s*(?:^[ \t]*-[ \t]+\S+|\Z))",
         body,
         re.M | re.S,
     )
-    if not net_match:
-        raise SystemExit(f"missing SPECIALNET {net}")
-    block = net_match.group(1)
-    marker = routes[0].strip()
-    if marker in block:
-        return text
-    replacement = block.rstrip() + "\n" + "\n".join(routes) + net_match.group(2)
-    new_body = body[: net_match.start()] + replacement + body[net_match.end() :]
-    return text[: section_match.start(1)] + new_body + text[section_match.end(1) :]
+    if not match:
+        raise SystemExit(f"missing block for {name}")
+    return match.group(1), match.start(), match.end()
+
+
+def pin_rectangles(pin_body: str, name: str) -> list[tuple[int, int, int, int]]:
+    block, _, _ = named_block(pin_body, name)
+    rectangles = [
+        tuple(map(int, values))
+        for values in re.findall(
+            r"\+\s+LAYER\s+Metal2\s+\(\s*(-?\d+)\s+(-?\d+)\s*\)\s+\(\s*(-?\d+)\s+(-?\d+)\s*\)",
+            block,
+        )
+    ]
+    if len(rectangles) != 6:
+        raise SystemExit(f"{name}: expected 6 D04 Metal2 rectangles, found {len(rectangles)}")
+    return rectangles
+
+
+def ring_coordinate(net_block: str, layer: str, orientation: str) -> int:
+    candidates = []
+    pattern = rf"(?:\+\s+ROUTED|\bNEW)\s+{layer}\s+{RING_WIDTH}\s+\+\s+SHAPE\s+STRIPE\s+\(\s*(-?\d+)\s+(-?\d+)\s*\)\s+\(\s*(-?\d+)\s+(-?\d+)\s*\)"
+    for x1, y1, x2, y2 in re.findall(pattern, net_block):
+        x1, y1, x2, y2 = map(int, (x1, y1, x2, y2))
+        if orientation == "horizontal" and y1 == y2 and abs(x2 - x1) > 500000:
+            candidates.append(y1)
+        elif orientation == "vertical" and x1 == x2 and abs(y2 - y1) > 500000:
+            candidates.append(x1)
+    if not candidates:
+        raise SystemExit(f"missing {net_block[:20].strip()} {layer} {orientation} ring segment")
+    return max(candidates) if orientation == "horizontal" else min(candidates)
+
+
+def connection_routes(net: str, rectangles: list[tuple[int, int, int, int]], target: int) -> list[str]:
+    routes = []
+    if net == "vdd":
+        for x1, y1, x2, y2 in sorted(rectangles):
+            x = (x1 + x2) // 2
+            y = (y1 + y2) // 2
+            via_y = y - ROUTE_WIDTH // 2
+            ring_x = x + 10000
+            routes.extend([
+                f"      NEW Metal2 {ROUTE_WIDTH} + SHAPE STRIPE ( {x} {y} ) ( * {via_y} ) Via2_3200x1200",
+                f"      NEW Metal3 {ROUTE_WIDTH} + SHAPE STRIPE ( {x} {via_y} ) ( * {target} ) ( {ring_x} * ) Via3_3200x1200",
+                f"      NEW Metal4 3200 + SHAPE STRIPE ( {ring_x} {target} ) ( {ring_x + 2000} * ) Via4_3200x3200",
+            ])
+    else:
+        for x1, y1, x2, y2 in sorted(rectangles, key=lambda rectangle: rectangle[1]):
+            x = (x1 + x2) // 2
+            y = (y1 + y2) // 2
+            via_x = max(x + ROUTE_WIDTH // 2, VIA_HALF_WIDTH)
+            routes.extend([
+                f"      NEW Metal2 {ROUTE_WIDTH} + SHAPE STRIPE ( {x} {y} ) ( {via_x} * ) Via2_3200x1200",
+                f"      NEW Metal3 {ROUTE_WIDTH} + SHAPE STRIPE ( {via_x} {y} ) ( {target} * ) Via3_3200x1200",
+            ])
+    return routes
+
+
+def replace_connections(text: str, net: str, rectangles: list[tuple[int, int, int, int]]) -> str:
+    special, special_start, special_end = section(text, r"SPECIALNETS\s+\d+", r"END SPECIALNETS")
+    net_block, block_start, block_end = named_block(special, net)
+    begin = f"      # D04_ALL_FINGERS_BEGIN {net}"
+    end = f"      # D04_ALL_FINGERS_END {net}"
+    net_block = re.sub(rf"\n?\s*# D04_ALL_FINGERS_BEGIN {net}.*?# D04_ALL_FINGERS_END {net}", "", net_block, flags=re.S)
+    if net == "vdd":
+        target = ring_coordinate(net_block, "Metal5", "horizontal")
+    else:
+        target = ring_coordinate(net_block, "Metal4", "vertical")
+    addition = "\n" + begin + "\n" + "\n".join(connection_routes(net, rectangles, target)) + "\n" + end
+    net_block = net_block.rstrip() + addition + "\n    ;"
+    special = special[:block_start] + net_block + special[block_end:]
+    return text[:special_start] + special + text[special_end:]
 
 
 def main() -> None:
@@ -42,10 +102,12 @@ def main() -> None:
     parser.add_argument("def_file", type=Path)
     args = parser.parse_args()
     text = args.def_file.read_text()
-    for net, routes in ROUTES.items():
-        text = add_routes(text, net, routes)
+    pins, _, _ = section(text, r"PINS\s+\d+", r"END PINS")
+    rectangles = {net: pin_rectangles(pins, net) for net in ("vdd", "vss")}
+    for net in ("vdd", "vss"):
+        text = replace_connections(text, net, rectangles[net])
     args.def_file.write_text(text)
-    print(f"Connected D04 vdd/vss Metal2 pins to the existing Metal4 PDN in {args.def_file}")
+    print(f"Connected all 6 VDD and all 6 VSS D04 fingers to the generated PDN ring in {args.def_file}")
 
 
 if __name__ == "__main__":

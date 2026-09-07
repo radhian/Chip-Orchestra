@@ -17,7 +17,7 @@ file copy -force $cells $cells_source
 set setup [file join $env(PDK_ROOT) gf180mcuD libs.tech netgen gf180mcuD_setup.tcl]
 set output [file join $lvs_dir comp_final.out]
 set marker [file join $lvs_dir netgen.complete]
-file delete -force $marker
+file delete -force $marker $output
 foreach path [list $layout $powered_verilog $converter $cells $setup] {
     if {![file exists $path] || [file size $path] == 0} { error "missing or empty LVS input: $path" }
 }
@@ -33,7 +33,8 @@ file delete -force $cells_source
 set fh [open $output r]
 set comparison [read $fh]
 close $fh
-if {![regexp {Netlists match uniquely|Circuits match uniquely} $comparison]} {
+if {[regexp {Netlists do not match|Circuits do not match|\*\*Mismatch\*\*|\*\*\* MISMATCH \*\*\*} $comparison]
+        || ![regexp {Final result:\s+(?:Netlists|Circuits) match uniquely\.} $comparison]} {
     error "LVS comparison failed; inspect $output"
 }
 set fh [open $marker w]

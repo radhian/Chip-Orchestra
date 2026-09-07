@@ -91,6 +91,11 @@ add_global_connection -net vss -pin_pattern {^VPW$} -ground
 run_global_connect
 set_voltage_domain -name CORE -power vdd -ground vss
 define_pdn_grid -name stdcell_grid -voltage_domains CORE
+add_pdn_ring -grid stdcell_grid \
+    -layers {Metal4 Metal5} \
+    -widths {1.6 1.6} \
+    -spacings {2.0 2.0} \
+    -core_offset {2.0 2.0}
 add_pdn_stripe -grid stdcell_grid -layer Metal1 -width 0.6 -followpins
 add_pdn_stripe -grid stdcell_grid -layer Metal4 -width 1.6 -pitch 40 -offset 10
 add_pdn_stripe -grid stdcell_grid -layer Metal5 -width 1.6 -pitch 40 -offset 10
@@ -98,8 +103,9 @@ add_pdn_connect -grid stdcell_grid -layers {Metal1 Metal4}
 add_pdn_connect -grid stdcell_grid -layers {Metal4 Metal5}
 pdngen
 
-# The D04 Metal2 boundary PG pins are connected to the generated Metal4 grid
-# after DEF export, once exact reference pin geometry has been applied.
+# The M4/M5 core ring gives every D04 PG finger a continuous, alignment-safe
+# top-level hookup target. Disjoint Metal2 finger geometry is applied after DEF
+# export and every finger is connected to this generated ring.
 
 global_placement -density 0.70
 estimate_parasitics -placement
@@ -168,8 +174,8 @@ if {[llength [info commands write_db]]} {
 exec python3 [file join $OUT pnr apply_d04_pin_contract.py] \
     [file join $OUT pnr D04.def] \
     [file join $OUT pnr nanocgra_lite_3x3_opt.def]
-# Add deterministic M2-M3-M4 special routes from the D04 vdd/vss pins to
-# existing PDN stripe intersections, then require an independent connectivity check.
+# Connect all six VDD and all six VSS Metal2 fingers to the generated M4/M5
+# core ring, then require an independent 6/6 geometry/connectivity check.
 exec python3 [file join $OUT pnr connect_d04_pg.py] \
     [file join $OUT pnr nanocgra_lite_3x3_opt.def]
 exec python3 [file join $OUT pnr check_d04_pg.py] \
