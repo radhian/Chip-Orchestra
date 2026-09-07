@@ -104,6 +104,12 @@ def current_model() -> str:
     return _MODEL_OVERRIDE or os.getenv("OLLAMA_MODEL", "glm-5.2:cloud")
 
 
+def is_multimodal_model(name: str) -> bool:
+    """True when the model name suggests vision capabilities (multimodal/vl/llava)."""
+    n = (name or "").lower()
+    return any(k in n for k in ("multimodal", "vl", "vision", "llava", "4v", "minicpm-v", "moondream"))
+
+
 def list_openai_compatible_models() -> "list[dict]":
     """Models advertised by an OpenAI-compatible endpoint's /v1/models API."""
     base = _env("OPENAI_BASE_URL", "LLM_BASE_URL", "OPENAI_API_BASE", default="").rstrip("/")
@@ -204,9 +210,12 @@ def vision_model() -> "str | None":
     forced = os.getenv("GARUDA_VISION_MODEL", "").strip()
     if forced:
         return forced
-    if get_provider() != "ollama":
-        return None
+    provider = get_provider()
     cur = current_model()
+    if provider in ("openai", "glm", "zhipu", "zhipuai", "openai-compatible"):
+        return cur if is_multimodal_model(cur) else None
+    if provider != "ollama":
+        return None
     if not is_cloud_model(cur) and _ollama_has_vision(cur):
         return cur
     for m in list_ollama_models():        # any installed local VLM (image step ≠ RTL model)
@@ -436,7 +445,7 @@ def get_chat_model(temperature: float = 0.2, **kwargs):
             raise RuntimeError(
                 f"LLM_PROVIDER={provider} but OPENAI_API_KEY is not set."
             )
-        base_url = _env("OPENAI_BASE_URL", "LLM_BASE_URL", "OPENAI_API_BASE")
+        base_url = _env("OPENAI_BASE_URL", "LLM_BASE_URL", "OPENAI_API_BASE", default="http://172.16.100.2:10000/v1")
         openai_timeout = os.getenv("OPENAI_TIMEOUT", "180")
         openai_max_retries = os.getenv("OPENAI_MAX_RETRIES", "3")
         openai_kwargs = {

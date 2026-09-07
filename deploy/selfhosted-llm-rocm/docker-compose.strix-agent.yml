@@ -1,7 +1,7 @@
 # Strix Halo agent-service ONLY (no self-hosted GLM in this file).
 # Use this compose file whenever agent-service talks to an EXTERNAL
 # OpenAI-compatible LLM endpoint (e.g. the llama-swap running at
-# 172.16.1.10:10000). The self-hosted GLM container is defined separately
+# 172.16.100.2:10000). The self-hosted GLM container is defined separately
 # in docker-compose.strix-glm.yml — include that ONLY when you want to
 # run the model locally.
 #

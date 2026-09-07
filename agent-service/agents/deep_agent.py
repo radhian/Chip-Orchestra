@@ -359,21 +359,31 @@ def make_python_tools(base_dir: str | Path, timeout: int = 0) -> List:
     _LLM_HELPER = (
         "def llm(prompt, temperature=0.2):\n"
         "    \"\"\"One fresh LLM call — the RLM recursion primitive, callable from code.\n"
-        "    Routes to the run's active Ollama model.\n"
+        "    Routes to the run's active LLM provider (Ollama or OpenAI-compatible).\n"
         "    Loop over chunks/files and call this per piece; collect the results.\"\"\"\n"
         "    import json as _j, os as _o, urllib.request as _u\n"
-        "    _m = _o.environ.get('GARUDA_LLM_MODEL') or _o.environ.get('OLLAMA_MODEL', 'qwen3.5:9b')\n"
+        "    _m = _o.environ.get('GARUDA_LLM_MODEL') or _o.environ.get('OLLAMA_MODEL', 'Qwen3.8-27B-multimodal')\n"
+        "    _p = (_o.environ.get('GARUDA_LLM_PROVIDER') or _o.environ.get('LLM_PROVIDER', 'openai-compatible')).lower()\n"
         "    def _count(_in, _out):\n"
         "        try:  # token accounting — folded into the stage's token note\n"
         "            with open('context/tokens.jsonl', 'a') as _f:\n"
         "                _f.write(_j.dumps({'in': _in, 'out': _out}) + chr(10))\n"
-        "        except Exception:\n"
-        "            pass\n"
+        "        except Exception: pass\n"
+        "    if _p in ('openai', 'glm', 'openai-compatible', 'zhipu', 'zhipuai'):\n"
+        "        _b = _o.environ.get('GARUDA_LLM_BASE_URL', 'http://172.16.100.2:10000/v1').rstrip('/')\n"
+        "        _k = _o.environ.get('GARUDA_LLM_API_KEY', 'EMPTY')\n"
+        "        _body = {'model': _m, 'messages': [{'role': 'user', 'content': str(prompt)[:24000]}],\n"
+        "                 'temperature': temperature}\n"
+        "        _rq = _u.Request(f'{_b}/chat/completions', _j.dumps(_body).encode(),\n"
+        "                         {'Content-Type': 'application/json', 'Authorization': f'Bearer {_k}'})\n"
+        "        _r = _j.loads(_u.urlopen(_rq, timeout=600).read())\n"
+        "        _u_meta = _r.get('usage', {})\n"
+        "        _count(_u_meta.get('prompt_tokens', 0), _u_meta.get('completion_tokens', 0))\n"
+        "        return _r['choices'][0]['message']['content']\n"
         "    _b = _o.environ.get('OLLAMA_BASE_URL', 'http://localhost:11434').rstrip('/')\n"
         "    _body = {'model': _m, 'messages': [{'role': 'user', 'content': str(prompt)[:24000]}],\n"
         "             'stream': False, 'think': False, 'options': {'temperature': temperature}}\n"
-        "    _rq = _u.Request(_b + '/api/chat', _j.dumps(_body).encode(),\n"
-        "                     {'Content-Type': 'application/json'})\n"
+        "    _rq = _u.Request(_b + '/api/chat', _j.dumps(_body).encode(), {'Content-Type': 'application/json'})\n"
         "    _r = _j.loads(_u.urlopen(_rq, timeout=600).read())\n"
         "    _count(_r.get('prompt_eval_count', 0), _r.get('eval_count', 0))\n"
         "    return _r['message']['content']\n"
@@ -415,8 +425,15 @@ def make_python_tools(base_dir: str | Path, timeout: int = 0) -> List:
         script.write_text(header + (code or ""))
         env = _pydeps_env()   # agent-installed packages (persistent volume) importable
         try:
-            from llm import current_model
+            from llm import current_model, get_provider
             env["GARUDA_LLM_MODEL"] = current_model()   # snippet's llm() uses the active model
+            env["GARUDA_LLM_PROVIDER"] = get_provider()
+            # For OpenAI-compatible endpoints, pass the base URL so the helper can reach it.
+            # We use the same env resolution order as llm.get_chat_model().
+            env["GARUDA_LLM_BASE_URL"] = os.getenv("OPENAI_BASE_URL") or os.getenv("LLM_BASE_URL") \
+                or os.getenv("OPENAI_API_BASE") or "http://172.16.100.2:10000/v1"
+            env["GARUDA_LLM_API_KEY"] = os.getenv("OPENAI_API_KEY") or os.getenv("LLM_API_KEY") \
+                or os.getenv("ZHIPUAI_API_KEY") or "EMPTY"
         except Exception:  # noqa: BLE001
             pass
         try:
