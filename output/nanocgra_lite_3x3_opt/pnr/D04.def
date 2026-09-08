@@ -41,16 +41,16 @@ PINS 21 ;
   + LAYER Metal2 ( 0 697520 ) ( 2000 698280 )
   + FIXED ( 0 0 ) N ;
 - uart_tx_CS + NET uart_tx_CS + DIRECTION OUTPUT + USE SIGNAL
-  + LAYER Metal2 ( 0 1032710 ) ( 2000 1033090 )
+  + LAYER Metal2 ( 0 1032520 ) ( 2000 1033280 )
   + FIXED ( 0 0 ) N ;
 - uart_tx_SL + NET uart_tx_SL + DIRECTION OUTPUT + USE SIGNAL
-  + LAYER Metal2 ( 0 902090 ) ( 2000 902470 )
+  + LAYER Metal2 ( 0 901900 ) ( 2000 902660 )
   + FIXED ( 0 0 ) N ;
 - uart_tx_IE + NET uart_tx_IE + DIRECTION OUTPUT + USE SIGNAL
-  + LAYER Metal2 ( 0 1016660 ) ( 2000 1017040 )
+  + LAYER Metal2 ( 0 1016470 ) ( 2000 1017230 )
   + FIXED ( 0 0 ) N ;
 - uart_tx_OE + NET uart_tx_OE + DIRECTION OUTPUT + USE SIGNAL
-  + LAYER Metal2 ( 0 899170 ) ( 2000 899550 )
+  + LAYER Metal2 ( 0 898980 ) ( 2000 899740 )
   + FIXED ( 0 0 ) N ;
 - uart_tx_PU + NET uart_tx_PU + DIRECTION OUTPUT + USE SIGNAL
   + LAYER Metal2 ( 0 1027310 ) ( 2000 1028070 )
@@ -59,16 +59,16 @@ PINS 21 ;
   + LAYER Metal2 ( 0 1018580 ) ( 2000 1019340 )
   + FIXED ( 0 0 ) N ;
 - uart_tx_OUT + NET uart_tx_OUT + DIRECTION OUTPUT + USE SIGNAL
-  + LAYER Metal2 ( 0 900630 ) ( 2000 901010 )
+  + LAYER Metal2 ( 0 900440 ) ( 2000 901200 )
   + FIXED ( 0 0 ) N ;
 - uart_tx_PDRV0 + NET uart_tx_PDRV0 + DIRECTION OUTPUT + USE SIGNAL
-  + LAYER Metal2 ( 0 1025210 ) ( 2000 1025590 )
+  + LAYER Metal2 ( 0 1025020 ) ( 2000 1025780 )
   + FIXED ( 0 0 ) N ;
 - uart_tx_PDRV1 + NET uart_tx_PDRV1 + DIRECTION OUTPUT + USE SIGNAL
-  + LAYER Metal2 ( 0 1023780 ) ( 2000 1024180 )
+  + LAYER Metal2 ( 0 1023600 ) ( 2000 1024360 )
   + FIXED ( 0 0 ) N ;
 - uart_tx_IN + NET uart_tx_IN + DIRECTION INPUT + USE SIGNAL
-  + LAYER Metal2 ( 0 899520 ) ( 2000 900280 )
+  + LAYER Metal2 ( 0 897520 ) ( 2000 898280 )
   + FIXED ( 0 0 ) N ;
 - vdd + NET vdd + DIRECTION INOUT + USE POWER
   + LAYER Metal2 ( 188280 1098000 ) ( 207280 1100000 )

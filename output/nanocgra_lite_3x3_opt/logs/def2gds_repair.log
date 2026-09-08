@@ -1,6 +1,6 @@
-After DEF read: 113 cells
+After DEF read: 114 cells
    top: NanoCGRA_Lite
-After cell GDS merge: 343 cells
-Flattened 44894 generated via instances into routed top-level geometry
-After prune: 343 cells
+After cell GDS merge: 344 cells
+Flattened 44969 generated via instances into routed top-level geometry
+After prune: 344 cells
 WROTE /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds
