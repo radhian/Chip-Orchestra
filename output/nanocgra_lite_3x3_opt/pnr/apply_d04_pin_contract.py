@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Apply only the disjoint D04 PG-pin geometry to a routed DEF."""
+"""Apply the reviewer-authoritative D04 pin geometry to a routed DEF.
+
+Overrides ALL 21 D04 pin rectangles from the tracked D04.def reference so the
+deliverable exactly matches the reviewer's authoritative pad-side pin
+locations. Preserves router-generated net names and routes for signal pins.
+"""
 import argparse
 import re
 from pathlib import Path
@@ -31,25 +36,39 @@ def pin_blocks(body: str) -> dict[str, str]:
 
 reference_pins = pin_blocks(reference_match.group(1))
 generated_pins = pin_blocks(generated_match.group(1))
+if len(reference_pins) != 21:
+    raise SystemExit(f"reference DEF must contain 21 pins, found {len(reference_pins)}")
 if len(generated_pins) != 21:
     raise SystemExit(f"generated DEF must contain 21 pins, found {len(generated_pins)}")
 
-for pin_name in ("vdd", "vss"):
-    if pin_name not in reference_pins or pin_name not in generated_pins:
-        raise SystemExit(f"missing D04 PG pin {pin_name}")
+# Enforce every pin from the reviewer-authoritative D04 reference, preserving
+# whatever net name the router assigned in the generated DEF.
+for pin_name, ref_block in reference_pins.items():
+    if pin_name not in generated_pins:
+        raise SystemExit(f"generated DEF is missing D04 pin {pin_name}")
     net_match = re.search(r"\+\s+NET\s+(\S+)", generated_pins[pin_name])
     if not net_match:
         raise SystemExit(f"generated DEF pin {pin_name} has no net")
-    replacement = re.sub(
+    generated_pins[pin_name] = re.sub(
         r"^(\s*-\s+\S+\s+\+\s+NET\s+)\S+",
         rf"\g<1>{net_match.group(1)}",
-        reference_pins[pin_name],
+        ref_block,
         count=1,
     )
-    generated_pins[pin_name] = replacement
 
-replacement_body = "\n".join(generated_pins.values())
-generated = generated[: generated_match.start(1)] + replacement_body + generated[generated_match.end(1) :]
+replacement_body = "\n".join(generated_pins[name] for name in reference_pins)
+generated = (
+    generated[: generated_match.start(1)]
+    + replacement_body
+    + generated[generated_match.end(1) :]
+)
+
+# Preserve the public port name in DEF/GDS extraction rather than exposing the
+# synthesized internal alias used for this top-level output net.
 generated = generated.replace("u_core.u_uart.uart_tx", "uart_tx_OUT")
+
 args.generated.write_text(generated)
-print(f"Applied D04 vdd/vss pin geometry from {args.reference} to {args.generated}; preserved router-generated signal pins")
+print(
+    f"Applied all 21 D04 pin geometries from {args.reference} to {args.generated}; "
+    "router-generated signal routes preserved"
+)

@@ -1,0 +1,161 @@
+08-Sep-2026 12:55:30 | INFO    | Your Klayout version is: KLayout 0.28.5
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['metal3.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['dummy_exclude.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['via4_split.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['metal2.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['ldnmos_split.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['via2.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['nwell_split.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['dnwell_split.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['via2_split.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['lres.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['mcell.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['ldpmos_split.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['ymtp_mk.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['contact_split.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['lvs_bjt.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['metal4.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['mim_b.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['nwell.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['hres.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['ldpmos.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['pplus.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['sab.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['dualgate.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['drc_bjt.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['efuse.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['mim_a.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['ldnmos.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['via3_split.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['via5.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['lvpwell.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['via4.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['metal1_split.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['poly2.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['nplus.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['contact.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['via1_split.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['dnwell.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['lvpwell_split.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['sram_5p0.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['pres.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['via1.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['nat.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['via3.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['metal5.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['sram_3p3.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['metaltop_30k.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['nat_split.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['metal1.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['otp_mk.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['metaltop.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['comp.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['esd.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | ## Generating template with for the following rule tables: ['geom.drc']
+08-Sep-2026 12:55:30 | INFO    | ## Your run dir located at: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/reports/signoff/foundry_drc_full
+08-Sep-2026 12:55:30 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design metal3 on cell NanoCGRA_Lite:
+08-Sep-2026 12:55:30 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design dummy_exclude on cell NanoCGRA_Lite:
+08-Sep-2026 12:55:30 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design via4_split on cell NanoCGRA_Lite:
+08-Sep-2026 12:55:30 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design metal2 on cell NanoCGRA_Lite:
+08-Sep-2026 12:55:30 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design ldnmos_split on cell NanoCGRA_Lite:
+08-Sep-2026 12:55:30 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design via2 on cell NanoCGRA_Lite:
+08-Sep-2026 12:55:30 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design nwell_split on cell NanoCGRA_Lite:
+08-Sep-2026 12:55:30 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design dnwell_split on cell NanoCGRA_Lite:
+08-Sep-2026 12:55:30 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design via2_split on cell NanoCGRA_Lite:
+08-Sep-2026 12:55:30 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design lres on cell NanoCGRA_Lite:
+08-Sep-2026 12:55:30 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design mcell on cell NanoCGRA_Lite:
+08-Sep-2026 12:55:30 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design ldpmos_split on cell NanoCGRA_Lite:
+08-Sep-2026 12:55:49 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design ymtp_mk on cell NanoCGRA_Lite:
+08-Sep-2026 12:55:49 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design contact_split on cell NanoCGRA_Lite:
+08-Sep-2026 12:55:51 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design lvs_bjt on cell NanoCGRA_Lite:
+08-Sep-2026 12:55:51 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design metal4 on cell NanoCGRA_Lite:
+08-Sep-2026 12:55:52 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design mim_b on cell NanoCGRA_Lite:
+08-Sep-2026 12:55:52 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design nwell on cell NanoCGRA_Lite:
+08-Sep-2026 12:55:53 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design hres on cell NanoCGRA_Lite:
+08-Sep-2026 12:55:53 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design ldpmos on cell NanoCGRA_Lite:
+08-Sep-2026 12:55:54 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design pplus on cell NanoCGRA_Lite:
+08-Sep-2026 12:55:56 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design sab on cell NanoCGRA_Lite:
+08-Sep-2026 12:55:57 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design dualgate on cell NanoCGRA_Lite:
+08-Sep-2026 12:56:03 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design drc_bjt on cell NanoCGRA_Lite:
+08-Sep-2026 12:56:08 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design efuse on cell NanoCGRA_Lite:
+08-Sep-2026 12:56:12 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design mim_a on cell NanoCGRA_Lite:
+08-Sep-2026 12:56:13 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design ldnmos on cell NanoCGRA_Lite:
+08-Sep-2026 12:56:13 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design via3_split on cell NanoCGRA_Lite:
+08-Sep-2026 12:56:15 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design via5 on cell NanoCGRA_Lite:
+08-Sep-2026 12:56:19 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design lvpwell on cell NanoCGRA_Lite:
+08-Sep-2026 12:56:23 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design via4 on cell NanoCGRA_Lite:
+08-Sep-2026 12:56:24 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design metal1_split on cell NanoCGRA_Lite:
+08-Sep-2026 12:56:25 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design poly2 on cell NanoCGRA_Lite:
+08-Sep-2026 12:56:26 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design nplus on cell NanoCGRA_Lite:
+08-Sep-2026 12:56:26 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design contact on cell NanoCGRA_Lite:
+08-Sep-2026 12:56:32 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design via1_split on cell NanoCGRA_Lite:
+08-Sep-2026 12:56:34 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design dnwell on cell NanoCGRA_Lite:
+08-Sep-2026 12:56:35 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design lvpwell_split on cell NanoCGRA_Lite:
+08-Sep-2026 12:56:36 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design sram_5p0 on cell NanoCGRA_Lite:
+08-Sep-2026 12:56:39 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design pres on cell NanoCGRA_Lite:
+08-Sep-2026 12:56:43 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design via1 on cell NanoCGRA_Lite:
+08-Sep-2026 12:56:46 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design nat on cell NanoCGRA_Lite:
+08-Sep-2026 12:56:50 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design via3 on cell NanoCGRA_Lite:
+08-Sep-2026 12:56:53 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design metal5 on cell NanoCGRA_Lite:
+08-Sep-2026 12:56:54 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design sram_3p3 on cell NanoCGRA_Lite:
+08-Sep-2026 12:56:55 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design metaltop_30k on cell NanoCGRA_Lite:
+08-Sep-2026 12:56:59 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design nat_split on cell NanoCGRA_Lite:
+08-Sep-2026 12:57:01 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design metal1 on cell NanoCGRA_Lite:
+08-Sep-2026 12:57:04 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design otp_mk on cell NanoCGRA_Lite:
+08-Sep-2026 12:57:05 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design metaltop on cell NanoCGRA_Lite:
+08-Sep-2026 12:57:06 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design comp on cell NanoCGRA_Lite:
+08-Sep-2026 12:57:15 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design esd on cell NanoCGRA_Lite:
+08-Sep-2026 12:57:17 | INFO    | Running Global Foundries 180nm MCU /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds checks on design geom on cell NanoCGRA_Lite:
+08-Sep-2026 12:58:48 | INFO    | Klayout DRC run is clean. GDS has no DRC violations.

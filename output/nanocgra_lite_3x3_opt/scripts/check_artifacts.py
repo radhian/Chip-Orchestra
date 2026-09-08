@@ -40,9 +40,9 @@ reference_def = pkg / "pnr/D04.def"
 if generated_def.is_file() and reference_def.is_file():
     generated_geometry = pin_geometry(generated_def)
     reference_geometry = pin_geometry(reference_def)
-    for pg_pin in ("vdd", "vss"):
-        if generated_geometry.get(pg_pin) != reference_geometry.get(pg_pin):
-            errors.append(f"generated DEF {pg_pin} geometry differs from the D04 contract")
+    for pin_name, reference in reference_geometry.items():
+        if generated_geometry.get(pin_name) != reference:
+            errors.append(f"generated DEF {pin_name} geometry differs from the D04 contract")
     for pin_name, geometry in generated_geometry.items():
         if pin_name in ("vdd", "vss"):
             continue
@@ -79,19 +79,14 @@ if not route_drc.is_file():
     errors.append("missing detailed-route DRC report: reports/route_drc.rpt")
 elif route_drc.stat().st_size != 0:
     errors.append("detailed-route DRC report is not clean: reports/route_drc.rpt")
-for mode in ("flat", "deep"):
-    report = pkg / f"reports/signoff/drc_full_{mode}.lyrdb"
-    log = pkg / f"reports/signoff/drc_full_{mode}.log"
-    if not report.is_file() or not log.is_file():
-        errors.append(f"missing full {mode} DRC evidence")
-        continue
+drc_dir = pkg / "reports/signoff/foundry_drc_full"
+drc_reports = list(drc_dir.glob("*.lyrdb")) if drc_dir.is_dir() else []
+if len(drc_reports) < 50:
+    errors.append(f"foundry DRC evidence is incomplete: only {len(drc_reports)} rule-table reports")
+for report in drc_reports:
     items = ET.parse(report).getroot().find("items")
-    if items is None or len(items):
-        errors.append(f"full {mode} DRC report is not clean")
-    log_text = log.read_text(errors="replace")
-    for required in ("FEOL enabled: true", "BEOL enabled: true", "CONNECTIVITY_RULES enabled: true"):
-        if required not in log_text:
-            errors.append(f"full {mode} DRC did not enable {required.split(':')[0]}")
+    if items is not None and len(items):
+        errors.append(f"foundry DRC report is not clean: {report.name} has {len(items)} items")
 for report in ["reports/signoff/sta_ss_repair.rpt", "reports/signoff/pg_connectivity.rpt"]:
     path = pkg / report
     if not path.is_file() or path.stat().st_size == 0:

@@ -64,21 +64,13 @@ def main() -> int:
         connected = sum(any(contains(rectangle, point) for point in starts) for rectangle in pin_rectangles)
         if connected != 6 or len(starts) != 6:
             errors.append(f"{net}: only {connected}/6 boundary rectangles have one aligned Metal2-to-Metal3 via")
-        if net == "vdd":
-            metal4_routes = re.findall(
-                r"NEW\s+Metal4\s+3200\s+\+\s+SHAPE\s+STRIPE\s+\([^)]*\)\s+\([^)]*\)\s+Via4_3200x3200",
-                routes,
-            )
-            if len(metal4_routes) != 6:
-                errors.append("vdd: expected 6 Metal4 finger-to-Metal5-ring routes")
         expected_via3 = 6
-        expected_via4 = 6 if net == "vdd" else 0
         if routes.count("Via2_3200x1200") != 6:
             errors.append(f"{net}: expected 6 Via2 arrays")
         if routes.count("Via3_3200x1200") != expected_via3:
             errors.append(f"{net}: expected {expected_via3} Via3 arrays")
-        if routes.count("Via4_3200x3200") != expected_via4:
-            errors.append(f"{net}: expected {expected_via4} Via4 arrays")
+        if "Via4_" in routes:
+            errors.append(f"{net}: custom finger routes must reuse PDN stripe/ring intersections, not add overlapping Via4 arrays")
         ring_layer = "Metal5" if net == "vdd" else "Metal4"
         ring_segments = [
             tuple(map(int, values))

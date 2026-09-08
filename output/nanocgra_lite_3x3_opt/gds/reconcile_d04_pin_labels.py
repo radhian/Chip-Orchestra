@@ -8,12 +8,9 @@ centers = []
 for block in re.finditer(r"-\s+(\S+)\s+\+\s+NET\s+\S+.*?(?=\n\s*-\s+\S+\s+\+\s+NET|\Z)", pins, re.S):
     name = block.group(1)
     rects = re.findall(r"\+ LAYER\s+Metal2\s+\(\s*(-?\d+)\s+(-?\d+)\s*\)\s+\(\s*(-?\d+)\s+(-?\d+)\s*\)", block.group(0))
-    xs, ys = [], []
-    for x1, y1, x2, y2 in rects:
-        xs += [int(x1), int(x2)]
-        ys += [int(y1), int(y2)]
-    if xs:
-        centers.append((name, ((min(xs) + max(xs)) // 2) // 2, ((min(ys) + max(ys)) // 2) // 2))
+    if rects:
+        x1, y1, x2, y2 = map(int, rects[0])
+        centers.append((name, ((x1 + x2) // 2) // 2, ((y1 + y2) // 2) // 2))
 
 for in_name, out_name in [
     ("gds/nanocgra_lite_3x3_opt.gds", "gds/nanocgra_lite_3x3_opt_tmp.gds"),

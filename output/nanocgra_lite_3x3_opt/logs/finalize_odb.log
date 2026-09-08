@@ -1,21 +1,21 @@
 OpenROAD f12e2f474102bfb875eeee57fb610d7d7de17770 
 This program is licensed under the BSD-3 license. See the LICENSE file for details.
 Components of this program may be licensed under more restrictive licenses which must be honored.
-[INFO ODB-0222] Reading LEF file: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/techlef/gf180mcu_fd_sc_mcu7t5v0__nom.tlef
+[INFO ODB-0222] Reading LEF file: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/pnr/gf180mcu_fd_sc_mcu7t5v0__drc_clean.tlef
 [INFO ODB-0223]     Created 15 technology layers
 [INFO ODB-0224]     Created 56 technology vias
-[INFO ODB-0226] Finished LEF file:  /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/techlef/gf180mcu_fd_sc_mcu7t5v0__nom.tlef
-[INFO ODB-0222] Reading LEF file: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/lef/gf180mcu_fd_sc_mcu7t5v0.lef
+[INFO ODB-0226] Finished LEF file:  /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/pnr/gf180mcu_fd_sc_mcu7t5v0__drc_clean.tlef
+[INFO ODB-0222] Reading LEF file: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/../.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/lef/gf180mcu_fd_sc_mcu7t5v0.lef
 [WARNING ODB-0220] WARNING (LEFPARS-2008): NOWIREEXTENSIONATPIN statement is obsolete in version 5.6 or later.
-The NOWIREEXTENSIONATPIN statement will be ignored. See file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/lef/gf180mcu_fd_sc_mcu7t5v0.lef at line 2.
+The NOWIREEXTENSIONATPIN statement will be ignored. See file /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/../.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/lef/gf180mcu_fd_sc_mcu7t5v0.lef at line 2.
 
 [INFO ODB-0225]     Created 229 library cells
-[INFO ODB-0226] Finished LEF file:  /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/lef/gf180mcu_fd_sc_mcu7t5v0.lef
+[INFO ODB-0226] Finished LEF file:  /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/../.pdk/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/lef/gf180mcu_fd_sc_mcu7t5v0.lef
 [INFO ODB-0127] Reading DEF file: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/pnr/nanocgra_lite_3x3_opt.def
 [INFO ODB-0128] Design: NanoCGRA_Lite
 [INFO ODB-0130]     Created 21 pins.
-[INFO ODB-0131]     Created 15911 components and 78557 component-terminals.
-[INFO ODB-0132]     Created 2 special nets and 59572 connections.
+[INFO ODB-0131]     Created 15936 components and 78657 component-terminals.
+[INFO ODB-0132]     Created 2 special nets and 59672 connections.
 [INFO ODB-0133]     Created 5366 nets and 18985 connections.
 [INFO ODB-0134] Finished DEF file: /workspace/iris_c3a247b9-0025-43e1-bae8-42a940fa0b63/Chip-Orchestra-review-latest/output/nanocgra_lite_3x3_opt/pnr/nanocgra_lite_3x3_opt.def
 FINAL_DELIVERABLE_DEF_PARSED

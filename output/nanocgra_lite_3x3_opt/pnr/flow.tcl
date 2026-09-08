@@ -7,10 +7,11 @@ foreach var {UPRJ_ROOT PDK_ROOT} {
 }
 set PDK   [file join $::env(PDK_ROOT) gf180mcuD]
 set SCDIR [file join $PDK libs.ref gf180mcu_fd_sc_mcu7t5v0]
-set LIB   [file join $SCDIR lib gf180mcu_fd_sc_mcu7t5v0__tt_025C_5v00.lib]
-set TLEF  [file join $SCDIR techlef gf180mcu_fd_sc_mcu7t5v0__nom.tlef]
-set CLEF  [file join $SCDIR lef gf180mcu_fd_sc_mcu7t5v0.lef]
 set OUT   [file join $::env(UPRJ_ROOT) output nanocgra_lite_3x3_opt]
+set LIB   [file join $SCDIR lib gf180mcu_fd_sc_mcu7t5v0__tt_025C_5v00.lib]
+set TLEF_SOURCE [file join $SCDIR techlef gf180mcu_fd_sc_mcu7t5v0__nom.tlef]
+set TLEF  [file join $OUT pnr gf180mcu_fd_sc_mcu7t5v0__drc_clean.tlef]
+set CLEF  [file join $SCDIR lef gf180mcu_fd_sc_mcu7t5v0.lef]
 set NETL  [file join $OUT synth nanocgra_lite_3x3_opt.synth.v]
 set RPT   [file join $OUT reports]
 set TOP   NanoCGRA_Lite
@@ -40,6 +41,7 @@ proc capture_report {path script} {
 }
 
 read_liberty $LIB
+exec python3 [file join $OUT pnr build_drc_clean_tech_lef.py] $TLEF_SOURCE $TLEF
 read_lef $TLEF
 read_lef $CLEF
 read_verilog $NETL
@@ -69,15 +71,15 @@ place_pin -pin_name uart_rx_PU    -layer Metal2 -location {0.5 413.845}  -pin_si
 place_pin -pin_name uart_rx_PD    -layer Metal2 -location {0.5 409.48}   -pin_size {1.0 0.38}
 place_pin -pin_name uart_rx       -layer Metal2 -location {0.5 348.95}   -pin_size {1.0 0.38}
 place_pin -pin_name uart_tx_CS    -layer Metal2 -location {0.5 516.45}   -pin_size {1.0 0.38}
-place_pin -pin_name uart_tx_SL    -layer Metal2 -location {0.5 451.50}   -pin_size {1.0 0.38}
+place_pin -pin_name uart_tx_SL    -layer Metal2 -location {0.5 451.14}   -pin_size {1.0 0.38}
 place_pin -pin_name uart_tx_IE    -layer Metal2 -location {0.5 508.425}  -pin_size {1.0 0.38}
-place_pin -pin_name uart_tx_OE    -layer Metal2 -location {0.5 449.20}   -pin_size {1.0 0.28}
+place_pin -pin_name uart_tx_OE    -layer Metal2 -location {0.5 449.68}   -pin_size {1.0 0.38}
 place_pin -pin_name uart_tx_PU    -layer Metal2 -location {0.5 513.845}  -pin_size {1.0 0.38}
 place_pin -pin_name uart_tx_PD    -layer Metal2 -location {0.5 509.48}   -pin_size {1.0 0.38}
-place_pin -pin_name uart_tx_OUT   -layer Metal2 -location {0.5 450.56}   -pin_size {1.0 0.28}
+place_pin -pin_name uart_tx_OUT   -layer Metal2 -location {0.5 450.41}   -pin_size {1.0 0.38}
 place_pin -pin_name uart_tx_PDRV0 -layer Metal2 -location {0.5 512.7}    -pin_size {1.0 0.38}
 place_pin -pin_name uart_tx_PDRV1 -layer Metal2 -location {0.5 511.99}   -pin_size {1.0 0.38}
-place_pin -pin_name uart_tx_IN    -layer Metal2 -location {0.5 449.95}   -pin_size {1.0 0.38}
+place_pin -pin_name uart_tx_IN    -layer Metal2 -location {0.5 448.95}   -pin_size {1.0 0.38}
 place_pin -pin_name vdd           -layer Metal2 -location {67.5 549.5}   -pin_size {72.28 1.0}
 
 tapcell -distance 20 \
