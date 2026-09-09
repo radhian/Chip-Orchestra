@@ -294,3 +294,50 @@ curl -fsS -X POST http://172.16.100.2:8001/agent/llm/unload \
 ```
 
 For rollback, check out the previous revision and rerun the same `build` and `up -d` commands. Persistent volumes and workspace files are not deleted by this procedure.
+
+
+### Login request shows a red network failure
+
+A red `login` request with no HTTP status means the browser did not receive an HTTP response; it is not an incorrect-password response. Check the API container and firewall before resetting credentials:
+
+```bash
+cd deploy/selfhosted-llm-rocm
+podman-compose --env-file strix-core.rootless.env.local \
+  -f docker-compose.r9700-core.yml \
+  -f docker-compose.strix-agent.yml \
+  -f docker-compose.strix-single-node.rootless.yml \
+  ps
+podman-compose --env-file strix-core.rootless.env.local \
+  -f docker-compose.r9700-core.yml \
+  -f docker-compose.strix-agent.yml \
+  -f docker-compose.strix-single-node.rootless.yml \
+  logs --tail 200 orchestrator-service
+curl -v http://127.0.0.1:8080/health
+curl -v http://172.16.100.2:8080/health
+```
+
+If loopback works but the LAN URL fails, apply the repository firewall rules from the repository root:
+
+```bash
+sudo LAN_CIDR=172.16.100.0/24 \
+  PODMAN_CIDR=10.90.0.0/24 \
+  bash scripts/ufw-core.sh
+```
+
+Then rebuild the frontend so its compile-time API URL matches the browser-visible host:
+
+```bash
+VITE_API_BASE_URL=http://172.16.100.2:8080 \
+podman-compose --env-file strix-core.rootless.env.local \
+  -f docker-compose.r9700-core.yml \
+  -f docker-compose.strix-agent.yml \
+  -f docker-compose.strix-single-node.rootless.yml \
+  build --no-cache frontend
+podman-compose --env-file strix-core.rootless.env.local \
+  -f docker-compose.r9700-core.yml \
+  -f docker-compose.strix-agent.yml \
+  -f docker-compose.strix-single-node.rootless.yml \
+  up -d frontend
+```
+
+Do not run `scripts/rebuild_frontend_localhost.sh` for LAN access. That helper deliberately bakes `http://localhost:8080` into the frontend and is only for SSH local-port-forward mode.
