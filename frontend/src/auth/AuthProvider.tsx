@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 
-import { clearStoredAuth, fetchMe, getStoredToken, getStoredUser, login as loginRequest, persistAuth } from '@/api/auth'
+import { SKIP_LOGIN, bootstrapAuth, clearStoredAuth, fetchMe, getStoredToken, getStoredUser, login as loginRequest, persistAuth } from '@/api/auth'
 import type { UserProfile } from '@/types/orchestra'
 
 type AuthStatus = 'checking' | 'authenticated' | 'unauthenticated'
@@ -23,7 +23,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const storedToken = getStoredToken()
-    if (!storedToken) {
+    if (!storedToken && !SKIP_LOGIN) {
       setStatus('unauthenticated')
       setToken(null)
       setUser(null)
@@ -34,12 +34,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     async function bootstrap() {
       try {
-        const profile = await fetchMe(storedToken)
+        const auth = storedToken
+          ? { token: storedToken, user: await fetchMe(storedToken) }
+          : await bootstrapAuth()
         if (cancelled) {
           return
         }
-        setToken(storedToken)
-        setUser(profile)
+        setToken(auth.token)
+        setUser(auth.user)
         setStatus('authenticated')
       } catch {
         if (cancelled) {

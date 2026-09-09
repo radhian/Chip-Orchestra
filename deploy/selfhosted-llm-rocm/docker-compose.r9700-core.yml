@@ -52,6 +52,7 @@ services:
       DEFAULT_FULL_NAME: ${DEFAULT_FULL_NAME:-Admin Admin}
       DEFAULT_EMAIL: ${DEFAULT_EMAIL:-admin.local}
       DEFAULT_PASSWORD: ${DEFAULT_PASSWORD:-chip-orchestra}
+      SKIP_LOGIN: ${SKIP_LOGIN:-false}
       WORKSPACE_ROOT: ${WORKSPACE_ROOT:-/srv/chip-orchestra/workspaces}
     depends_on:
       mysql:
@@ -122,6 +123,7 @@ services:
       args:
         VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://172.16.1.36:8080}
         VITE_USE_MOCKS: "false"
+        VITE_SKIP_LOGIN: ${SKIP_LOGIN:-false}
     restart: unless-stopped
     environment:
       VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:8080}

@@ -257,3 +257,43 @@ func taskColumns() []string {
 		"updated_at",
 	}
 }
+
+func TestBootstrapAuthIssuesTokenWhenSkipLoginEnabled(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	t.Setenv("SKIP_LOGIN", "true")
+	t.Setenv("DEFAULT_USERNAME", "admin")
+
+	db := newSQLiteDB(t)
+	require.NoError(t, db.Create(&models.User{
+		ID: "user-admin", Username: "admin", FullName: "Local Admin",
+		Email: "admin.local", PasswordHash: middleware.HashPassword("unused"),
+		Roles: string(models.UserRoleAdmin),
+	}).Error)
+	app := &App{DB: db, JWTSecret: "unit-secret"}
+	router := gin.New()
+	app.RegisterRoutes(router)
+
+	rec := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodPost, "/api/v1/auth/bootstrap", nil)
+	router.ServeHTTP(rec, req)
+
+	require.Equal(t, http.StatusOK, rec.Code)
+	var response map[string]any
+	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &response))
+	require.NotEmpty(t, response["access_token"])
+	assert.Equal(t, "admin", response["user"].(map[string]any)["username"])
+}
+
+func TestBootstrapAuthIsHiddenByDefault(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	t.Setenv("SKIP_LOGIN", "false")
+	app := &App{DB: newSQLiteDB(t), JWTSecret: "unit-secret"}
+	router := gin.New()
+	app.RegisterRoutes(router)
+
+	rec := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodPost, "/api/v1/auth/bootstrap", nil)
+	router.ServeHTTP(rec, req)
+
+	require.Equal(t, http.StatusNotFound, rec.Code)
+}

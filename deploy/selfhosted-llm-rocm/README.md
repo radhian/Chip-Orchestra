@@ -238,6 +238,7 @@ OPENAI_MODEL=Qwen3.8-27B-multimodal
 OPENAI_API_KEY=EMPTY
 OPENAI_TIMEOUT=600
 OPENAI_MAX_TOKENS=8192
+SKIP_LOGIN=true
 WORKSPACE_HOST_PATH=/home/efison-radhi/chip-orchestra/workspaces
 MODEL_DIR=/home/efison-radhi/chip-orchestra/models
 ```
@@ -341,3 +342,26 @@ podman-compose --env-file strix-core.rootless.env.local \
 ```
 
 Do not run `scripts/rebuild_frontend_localhost.sh` for LAN access. That helper deliberately bakes `http://localhost:8080` into the frontend and is only for SSH local-port-forward mode.
+
+
+### Skip-login mode
+
+This private single-user profile enables `SKIP_LOGIN=true`. The frontend calls the protected bootstrap endpoint, receives a normal 24-hour JWT for `DEFAULT_USERNAME`, and opens the application without showing the login form. Normal API and WebSocket authorization still use that token.
+
+Both the frontend and orchestrator must be rebuilt after changing this option because `VITE_SKIP_LOGIN` is compiled into the frontend bundle:
+
+```bash
+podman-compose --env-file strix-core.rootless.env \
+  -f docker-compose.r9700-core.yml \
+  -f docker-compose.strix-agent.yml \
+  -f docker-compose.strix-single-node.rootless.yml \
+  up -d --build orchestrator-service frontend
+```
+
+Disable the bypass before exposing Chip Orchestra outside the trusted private network:
+
+```bash
+SKIP_LOGIN=false
+```
+
+When disabled, the bootstrap endpoint returns `404` and the normal username/password page remains active.
