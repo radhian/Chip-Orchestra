@@ -14,6 +14,10 @@ from memory import MemoryStore
 from tools import ToolRegistry
 
 
+class LLMUnloadRequest(BaseModel):
+    model: str | None = None
+
+
 class AgentInvokeRequest(BaseModel):
     task_id: str
     stage: str = Field(default="FLOW_ASSISTANT")
@@ -163,6 +167,23 @@ def create_app(
             "detail": detail,
             "vision": vision,
         }
+
+    @app.get("/agent/llm/status")
+    def llm_status():
+        """Expose llama-swap health and loaded-model state when available."""
+        from llm import get_provider, llama_swap_status
+
+        provider = get_provider()
+        if provider not in {"openai", "glm", "zhipu", "zhipuai", "openai-compatible"}:
+            return {"provider": provider, "llama_swap": False}
+        return {"provider": provider, **llama_swap_status()}
+
+    @app.post("/agent/llm/unload")
+    def llm_unload(request: LLMUnloadRequest):
+        """Unload one or all llama-swap models to release GPU memory."""
+        from llm import unload_llama_swap_model
+
+        return unload_llama_swap_model(request.model)
 
     @app.post("/agent/invoke")
     def invoke_agent(request: AgentInvokeRequest, fastapi_request: Request):

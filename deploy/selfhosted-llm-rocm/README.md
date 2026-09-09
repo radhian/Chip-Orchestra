@@ -216,3 +216,81 @@ HW_PROFILE=mi300x LLM_SERVE_PORT=8005 MODEL_ID=zai-org/GLM-5.2-FP8 bash scripts/
 - vLLM GLM-5.2 recipe: https://recipes.vllm.ai/zai-org/GLM-5.2
 - vLLM V1 perf optimization on ROCm: https://rocm.docs.amd.com/en/latest/how-to/rocm-for-ai/inference-optimization/vllm-optimization.html
 - SGLang GLM-5.2 cookbook: https://docs.sglang.io/cookbook/autoregressive/GLM/GLM-5.2
+
+
+---
+
+## Updating and redeploying
+
+Use this workflow after copying the fix into your checkout. It preserves the persistent database, Redis data, model files, and design workspaces; only application images are rebuilt.
+
+```bash
+cd Chip-Orchestra
+cp deploy/selfhosted-llm-rocm/strix-core.rootless.env \
+   deploy/selfhosted-llm-rocm/strix-core.rootless.env.local
+```
+
+Edit `strix-core.rootless.env.local` for the target host. At minimum, verify:
+
+```bash
+OPENAI_BASE_URL=http://172.16.100.2:10000/v1
+OPENAI_MODEL=Qwen3.8-27B-multimodal
+OPENAI_API_KEY=EMPTY
+OPENAI_TIMEOUT=600
+OPENAI_MAX_TOKENS=8192
+WORKSPACE_HOST_PATH=/home/efison-radhi/chip-orchestra/workspaces
+MODEL_DIR=/home/efison-radhi/chip-orchestra/models
+```
+
+Verify the existing llama-swap endpoint before rebuilding Chip Orchestra:
+
+```bash
+cd deploy/selfhosted-llm-rocm
+BASE=http://172.16.100.2:10000 \
+OPENAI_MODEL=Qwen3.8-27B-multimodal \
+bash scripts/healthcheck.sh
+```
+
+Update the checkout and redeploy the application containers:
+
+```bash
+cd /path/to/Chip-Orchestra
+git pull --ff-only
+cd deploy/selfhosted-llm-rocm
+podman-compose --env-file strix-core.rootless.env.local \
+  -f docker-compose.r9700-core.yml \
+  -f docker-compose.strix-agent.yml \
+  -f docker-compose.strix-single-node.rootless.yml \
+  build agent-service orchestrator-service frontend
+podman-compose --env-file strix-core.rootless.env.local \
+  -f docker-compose.r9700-core.yml \
+  -f docker-compose.strix-agent.yml \
+  -f docker-compose.strix-single-node.rootless.yml \
+  up -d
+```
+
+Docker users can replace `podman-compose` with `docker compose`. Do not add the `strix-glm` compose files when llama-swap is already running on port `10000`; those files launch another model server and can conflict with it.
+
+Post-deployment verification:
+
+```bash
+curl -fsS http://172.16.100.2:8001/health
+curl -fsS http://172.16.100.2:8001/agent/models
+curl -fsS http://172.16.100.2:8001/agent/llm/status
+```
+
+The last response reports llama-swap health and currently loaded models. To release GPU memory through llama-swap:
+
+```bash
+# Unload one model
+curl -fsS -X POST http://172.16.100.2:8001/agent/llm/unload \
+  -H 'Content-Type: application/json' \
+  -d '{"model":"Qwen3.8-27B-multimodal"}'
+
+# Unload all models
+curl -fsS -X POST http://172.16.100.2:8001/agent/llm/unload \
+  -H 'Content-Type: application/json' \
+  -d '{}'
+```
+
+For rollback, check out the previous revision and rerun the same `build` and `up -d` commands. Persistent volumes and workspace files are not deleted by this procedure.
