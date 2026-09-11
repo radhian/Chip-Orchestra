@@ -1,0 +1,33 @@
+# GF180 Chipathon Workshop — pad slot configuration
+# This maps logical pad slots to physical GF180 I/O cells.
+
+slots:
+  analog:
+    cell: gf180mcu_fd_io__asig_5p0
+    count: 60
+    description: 5.0V analog signal pads
+
+  bidirectional:
+    cell: gf180mcu_fd_io__bi_24t
+    count: 20
+    description: 24mA bidirectional I/O pads
+
+  dvdd:
+    cell: gf180mcu_fd_io__dvdd
+    count: 4
+    description: Digital VDD power pads
+
+  dvss:
+    cell: gf180mcu_fd_io__dvss
+    count: 4
+    description: Digital VSS ground pads
+
+  input:
+    cell: gf180mcu_fd_io__in_s
+    count: 2
+    description: Dedicated input pads
+
+  corner:
+    cell: gf180mcu_fd_io__cor
+    count: 4
+    description: Corner pads (SW, SE, NE, NW)
