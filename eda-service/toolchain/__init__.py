@@ -5,7 +5,7 @@ from .sta_runner import run_sta
 from .gl_sim import run_gl_sim
 from .render import run_render
 from .padring_runner import run_padring
-from . import artifacts, reports, vcd
+from . import artifacts, librelane, reports, vcd
 
 __all__ = [
     "run_mock_toolchain",
@@ -16,6 +16,7 @@ __all__ = [
     "run_gl_sim",
     "run_render",
     "run_padring",
+    "librelane",
     "artifacts",
     "reports",
     "vcd",
