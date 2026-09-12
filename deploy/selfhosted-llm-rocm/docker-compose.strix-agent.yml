@@ -1,7 +1,7 @@
 # Strix Halo agent-service ONLY (no self-hosted GLM in this file).
 # Use this compose file whenever agent-service talks to an EXTERNAL
 # OpenAI-compatible LLM endpoint (e.g. the llama-swap running at
-# 172.16.1.10:10000). The self-hosted GLM container is defined separately
+# 172.16.100.2:10000). The self-hosted GLM container is defined separately
 # in docker-compose.strix-glm.yml — include that ONLY when you want to
 # run the model locally.
 #
@@ -43,7 +43,7 @@ services:
       # By default reach the user's external OpenAI-compatible endpoint.
       # Override to http://glm-server:10000/v1 only when using the
       # self-hosted GLM path (strix-glm.yml).
-      OPENAI_BASE_URL: ${OPENAI_BASE_URL:-http://172.16.100.2:10000/v1}
+      OPENAI_BASE_URL: ${OPENAI_BASE_URL:-http://host.containers.internal:10000/v1}
       OPENAI_API_KEY: ${OPENAI_API_KEY:-EMPTY}
       OPENAI_MODEL: ${OPENAI_MODEL:-Qwen3.8-27B-multimodal}
       OPENAI_TIMEOUT: ${OPENAI_TIMEOUT:-180}

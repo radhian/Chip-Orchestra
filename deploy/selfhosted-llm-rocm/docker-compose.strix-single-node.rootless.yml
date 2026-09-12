@@ -101,15 +101,17 @@ services:
       # explicitly here so the single-node topology is self-describing.
       DATABASE_URL: mysql+pymysql://${MYSQL_USER:-chip}:${MYSQL_PASSWORD:-chip}@mysql:3306/${MYSQL_DATABASE:-chip_orchestra}
       REDIS_URL: redis://redis:6379/0
-      OPENAI_BASE_URL: ${OPENAI_BASE_URL:-http://172.16.100.2:10000/v1}
+      OPENAI_BASE_URL: ${OPENAI_BASE_URL:-http://host.containers.internal:10000/v1}
       OPENAI_MODEL: ${OPENAI_MODEL:-Qwen3.8-27B-multimodal}
-      OPENAI_TIMEOUT: ${OPENAI_TIMEOUT:-180}
+      OPENAI_TIMEOUT: ${OPENAI_TIMEOUT:-600}
       OPENAI_MAX_RETRIES: ${OPENAI_MAX_RETRIES:-3}
+      OPENAI_MAX_TOKENS: ${OPENAI_MAX_TOKENS:-8192}
     networks:
       - chip-orchestra
     extra_hosts:
       - "mysql:host-gateway"
       - "redis:host-gateway"
+      - "host.containers.internal:host-gateway"
     depends_on:
       mysql:
         condition: service_healthy

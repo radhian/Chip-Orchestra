@@ -5,8 +5,10 @@ RUN npm install --legacy-peer-deps
 COPY . .
 ARG VITE_API_BASE_URL=http://localhost:8080
 ARG VITE_USE_MOCKS=false
+ARG VITE_SKIP_LOGIN=false
 ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
 ENV VITE_USE_MOCKS=$VITE_USE_MOCKS
+ENV VITE_SKIP_LOGIN=$VITE_SKIP_LOGIN
 RUN npm run build
 
 FROM docker.io/library/node:20-alpine

@@ -28,6 +28,7 @@ def test_build_llm_runtime_uses_qwen_default_for_openai_compatible(monkeypatch) 
     monkeypatch.setenv("LLM_PROVIDER", "openai-compatible")
     monkeypatch.setenv("OPENAI_API_KEY", "EMPTY")
     monkeypatch.delenv("OPENAI_MODEL", raising=False)
+    monkeypatch.delenv("OPENAI_BASE_URL", raising=False)
 
     fake_client = object()
     with patch.object(llm, "get_chat_model", return_value=fake_client) as get_chat_model_mock:
@@ -37,3 +38,41 @@ def test_build_llm_runtime_uses_qwen_default_for_openai_compatible(monkeypatch) 
     assert runtime.model == "Qwen3.8-27B-multimodal"
     assert runtime.client is fake_client
     get_chat_model_mock.assert_called_once_with(temperature=0, model="Qwen3.8-27B-multimodal")
+
+
+def test_get_chat_model_uses_lan_ip_default_for_openai_compatible(monkeypatch) -> None:
+    monkeypatch.setenv("LLM_PROVIDER", "openai-compatible")
+    monkeypatch.setenv("OPENAI_API_KEY", "EMPTY")
+    monkeypatch.delenv("OPENAI_BASE_URL", raising=False)
+
+    with patch("langchain_openai.ChatOpenAI") as chat_mock:
+        llm.get_chat_model()
+
+    args, kwargs = chat_mock.call_args
+    assert kwargs["base_url"] == "http://172.16.100.2:10000/v1"
+    assert kwargs["model"] == "Qwen3.8-27B-multimodal"
+
+
+def test_llama_swap_status_distinguishes_generic_openai_backend(monkeypatch) -> None:
+    monkeypatch.setenv("OPENAI_BASE_URL", "http://172.16.100.2:10000/v1")
+
+    with patch.object(llm, "_read_json_url") as read_json_mock:
+        read_json_mock.side_effect = [{"status": "ok"}, RuntimeError("404 Not Found")]
+        status = llm.llama_swap_status()
+
+    assert status == {"healthy": True, "llama_swap": False, "running": []}
+    assert read_json_mock.call_args_list[0].args[0] == "http://172.16.100.2:10000/health"
+    assert read_json_mock.call_args_list[1].args[0] == "http://172.16.100.2:10000/running"
+
+
+def test_unload_reports_unsupported_for_generic_openai_backend() -> None:
+    with patch.object(
+        llm,
+        "llama_swap_status",
+        return_value={"healthy": True, "llama_swap": False, "running": []},
+    ):
+        result = llm.unload_llama_swap_model("Qwen3.8-27B-multimodal")
+
+    assert result["ok"] is False
+    assert result["supported"] is False
+    assert "not supported" in result["error"]

@@ -2,6 +2,7 @@ import type { UserProfile } from '@/types/orchestra'
 
 const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL ?? '').replace(/\/$/, '')
 const AUTH_STORAGE_KEY = import.meta.env.VITE_AUTH_STORAGE_KEY ?? 'chip-orchestra.auth'
+export const SKIP_LOGIN = import.meta.env.VITE_SKIP_LOGIN === 'true'
 
 interface StoredAuth {
   token: string
@@ -89,6 +90,17 @@ export function persistAuth(token: string, user: UserProfile | null) {
 
 export function clearStoredAuth() {
   writeStoredAuth(null)
+}
+
+export async function bootstrapAuth(): Promise<{ token: string; user: UserProfile | null }> {
+  const response = await fetch(`${API_BASE_URL}/api/v1/auth/bootstrap`, { method: 'POST' })
+  if (!response.ok) {
+    throw new Error(await parseError(response))
+  }
+  const payload = (await response.json()) as LoginResponse
+  const user = normalizeUser(payload.user)
+  persistAuth(payload.access_token, user)
+  return { token: payload.access_token, user }
 }
 
 export async function login(username: string, password: string): Promise<{ token: string; user: UserProfile | null }> {

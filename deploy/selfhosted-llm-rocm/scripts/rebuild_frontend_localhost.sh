@@ -49,8 +49,8 @@ if [ -z "$CID" ]; then
   exit 1
 fi
 
-if podman exec "$CID" sh -lc 'grep -R "http://172.16.1.10:8080" -n /usr/share/nginx/html /app/dist 2>/dev/null'; then
-  echo "[frontend] ERROR: stale bundle still contains http://172.16.1.10:8080" >&2
+if podman exec "$CID" sh -lc 'grep -RE "http://172\\.16\\.[0-9]+\\.[0-9]+:8080" -n /usr/share/nginx/html /app/dist 2>/dev/null'; then
+  echo "[frontend] ERROR: stale bundle still contains a private LAN API URL" >&2
   exit 2
 fi
 

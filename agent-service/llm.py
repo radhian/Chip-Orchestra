@@ -104,6 +104,89 @@ def current_model() -> str:
     return _MODEL_OVERRIDE or os.getenv("OLLAMA_MODEL", "glm-5.2:cloud")
 
 
+def is_multimodal_model(name: str) -> bool:
+    """True when the model name suggests vision capabilities (multimodal/vl/llava)."""
+    n = (name or "").lower()
+    return any(k in n for k in ("multimodal", "vl", "vision", "llava", "4v", "minicpm-v", "moondream"))
+
+
+def openai_base_url() -> str:
+    """Configured OpenAI-compatible API URL, including its optional /v1 suffix."""
+    return _env(
+        "OPENAI_BASE_URL",
+        "LLM_BASE_URL",
+        "OPENAI_API_BASE",
+        default="http://172.16.100.2:10000/v1",
+    ).rstrip("/")
+
+
+def llama_swap_base_url() -> str:
+    """Management URL for a llama-swap server behind the OpenAI-compatible API."""
+    base = openai_base_url()
+    return base[:-3] if base.endswith("/v1") else base
+
+
+def _read_json_url(url: str, *, timeout: float = 5.0) -> dict:
+    import json as _json
+    import urllib.request
+
+    request = urllib.request.Request(url)
+    api_key = _env("OPENAI_API_KEY", "LLM_API_KEY", "ZHIPUAI_API_KEY", default="")
+    if api_key:
+        request.add_header("Authorization", f"Bearer {api_key}")
+    with urllib.request.urlopen(request, timeout=timeout) as response:  # noqa: S310
+        payload = response.read().decode()
+    return _json.loads(payload) if payload else {}
+
+
+def llama_swap_status() -> dict:
+    """Report backend health without assuming every OpenAI server is llama-swap."""
+    base = llama_swap_base_url()
+    try:
+        _read_json_url(f"{base}/health")
+    except Exception as exc:  # noqa: BLE001
+        return {"healthy": False, "llama_swap": False, "running": [], "error": str(exc)}
+
+    try:
+        running = _read_json_url(f"{base}/running")
+    except Exception:  # noqa: BLE001 - a plain llama-server has no management API
+        return {"healthy": True, "llama_swap": False, "running": []}
+
+    return {"healthy": True, "llama_swap": True, "running": running}
+
+
+def unload_llama_swap_model(model: "str | None" = None) -> dict:
+    """Unload llama-swap models, or return a stable unsupported response."""
+    status = llama_swap_status()
+    if not status.get("llama_swap"):
+        return {
+            "ok": False,
+            "supported": False,
+            "error": "LLM management API is not supported by this OpenAI-compatible backend",
+        }
+
+    import json as _json
+    import urllib.request
+
+    body = {"model": model} if model else {}
+    request = urllib.request.Request(
+        f"{llama_swap_base_url()}/api/models/unload",
+        data=_json.dumps(body).encode(),
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+    api_key = _env("OPENAI_API_KEY", "LLM_API_KEY", "ZHIPUAI_API_KEY", default="")
+    if api_key:
+        request.add_header("Authorization", f"Bearer {api_key}")
+    try:
+        with urllib.request.urlopen(request, timeout=15) as response:  # noqa: S310
+            payload = response.read().decode()
+        result = _json.loads(payload) if payload else {}
+        return {"ok": True, "supported": True, **result}
+    except Exception as exc:  # noqa: BLE001
+        return {"ok": False, "supported": True, "error": str(exc)}
+
+
 def list_openai_compatible_models() -> "list[dict]":
     """Models advertised by an OpenAI-compatible endpoint's /v1/models API."""
     base = _env("OPENAI_BASE_URL", "LLM_BASE_URL", "OPENAI_API_BASE", default="").rstrip("/")
@@ -204,9 +287,12 @@ def vision_model() -> "str | None":
     forced = os.getenv("GARUDA_VISION_MODEL", "").strip()
     if forced:
         return forced
-    if get_provider() != "ollama":
-        return None
+    provider = get_provider()
     cur = current_model()
+    if provider in ("openai", "glm", "zhipu", "zhipuai", "openai-compatible"):
+        return cur if is_multimodal_model(cur) else None
+    if provider != "ollama":
+        return None
     if not is_cloud_model(cur) and _ollama_has_vision(cur):
         return cur
     for m in list_ollama_models():        # any installed local VLM (image step ≠ RTL model)
@@ -436,7 +522,7 @@ def get_chat_model(temperature: float = 0.2, **kwargs):
             raise RuntimeError(
                 f"LLM_PROVIDER={provider} but OPENAI_API_KEY is not set."
             )
-        base_url = _env("OPENAI_BASE_URL", "LLM_BASE_URL", "OPENAI_API_BASE")
+        base_url = _env("OPENAI_BASE_URL", "LLM_BASE_URL", "OPENAI_API_BASE", default="http://172.16.100.2:10000/v1")
         openai_timeout = os.getenv("OPENAI_TIMEOUT", "180")
         openai_max_retries = os.getenv("OPENAI_MAX_RETRIES", "3")
         openai_kwargs = {
@@ -635,4 +721,8 @@ __all__ = [
     "count_subprocess_usage",
     "fmt_tokens",
     "recommended_ctx_limits",
+    "openai_base_url",
+    "llama_swap_base_url",
+    "llama_swap_status",
+    "unload_llama_swap_model",
 ]

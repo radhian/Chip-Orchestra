@@ -216,3 +216,152 @@ HW_PROFILE=mi300x LLM_SERVE_PORT=8005 MODEL_ID=zai-org/GLM-5.2-FP8 bash scripts/
 - vLLM GLM-5.2 recipe: https://recipes.vllm.ai/zai-org/GLM-5.2
 - vLLM V1 perf optimization on ROCm: https://rocm.docs.amd.com/en/latest/how-to/rocm-for-ai/inference-optimization/vllm-optimization.html
 - SGLang GLM-5.2 cookbook: https://docs.sglang.io/cookbook/autoregressive/GLM/GLM-5.2
+
+
+---
+
+## Updating and redeploying
+
+Use this workflow after copying the fix into your checkout. It preserves the persistent database, Redis data, model files, and design workspaces; only application images are rebuilt.
+
+```bash
+cd Chip-Orchestra
+cp deploy/selfhosted-llm-rocm/strix-core.rootless.env \
+   deploy/selfhosted-llm-rocm/strix-core.rootless.env.local
+```
+
+Edit `strix-core.rootless.env.local` for the target host. At minimum, verify:
+
+```bash
+OPENAI_BASE_URL=http://172.16.100.2:10000/v1
+OPENAI_MODEL=Qwen3.8-27B-multimodal
+OPENAI_API_KEY=EMPTY
+OPENAI_TIMEOUT=600
+OPENAI_MAX_TOKENS=8192
+SKIP_LOGIN=true
+WORKSPACE_HOST_PATH=/home/efison-radhi/chip-orchestra/workspaces
+MODEL_DIR=/home/efison-radhi/chip-orchestra/models
+```
+
+Verify the existing llama-swap endpoint before rebuilding Chip Orchestra:
+
+```bash
+cd deploy/selfhosted-llm-rocm
+BASE=http://172.16.100.2:10000 \
+OPENAI_MODEL=Qwen3.8-27B-multimodal \
+bash scripts/healthcheck.sh
+```
+
+Update the checkout and redeploy the application containers:
+
+```bash
+cd /path/to/Chip-Orchestra
+git pull --ff-only
+cd deploy/selfhosted-llm-rocm
+podman-compose --env-file strix-core.rootless.env.local \
+  -f docker-compose.r9700-core.yml \
+  -f docker-compose.strix-agent.yml \
+  -f docker-compose.strix-single-node.rootless.yml \
+  build agent-service orchestrator-service frontend
+podman-compose --env-file strix-core.rootless.env.local \
+  -f docker-compose.r9700-core.yml \
+  -f docker-compose.strix-agent.yml \
+  -f docker-compose.strix-single-node.rootless.yml \
+  up -d
+```
+
+Docker users can replace `podman-compose` with `docker compose`. Do not add the `strix-glm` compose files when llama-swap is already running on port `10000`; those files launch another model server and can conflict with it.
+
+Post-deployment verification:
+
+```bash
+curl -fsS http://172.16.100.2:8001/health
+curl -fsS http://172.16.100.2:8001/agent/models
+curl -fsS http://172.16.100.2:8001/agent/llm/status
+```
+
+The last response reports llama-swap health and currently loaded models. To release GPU memory through llama-swap:
+
+```bash
+# Unload one model
+curl -fsS -X POST http://172.16.100.2:8001/agent/llm/unload \
+  -H 'Content-Type: application/json' \
+  -d '{"model":"Qwen3.8-27B-multimodal"}'
+
+# Unload all models
+curl -fsS -X POST http://172.16.100.2:8001/agent/llm/unload \
+  -H 'Content-Type: application/json' \
+  -d '{}'
+```
+
+For rollback, check out the previous revision and rerun the same `build` and `up -d` commands. Persistent volumes and workspace files are not deleted by this procedure.
+
+
+### Login request shows a red network failure
+
+A red `login` request with no HTTP status means the browser did not receive an HTTP response; it is not an incorrect-password response. Check the API container and firewall before resetting credentials:
+
+```bash
+cd deploy/selfhosted-llm-rocm
+podman-compose --env-file strix-core.rootless.env.local \
+  -f docker-compose.r9700-core.yml \
+  -f docker-compose.strix-agent.yml \
+  -f docker-compose.strix-single-node.rootless.yml \
+  ps
+podman-compose --env-file strix-core.rootless.env.local \
+  -f docker-compose.r9700-core.yml \
+  -f docker-compose.strix-agent.yml \
+  -f docker-compose.strix-single-node.rootless.yml \
+  logs --tail 200 orchestrator-service
+curl -v http://127.0.0.1:8080/health
+curl -v http://172.16.100.2:8080/health
+```
+
+If loopback works but the LAN URL fails, apply the repository firewall rules from the repository root:
+
+```bash
+sudo LAN_CIDR=172.16.100.0/24 \
+  PODMAN_CIDR=10.90.0.0/24 \
+  bash scripts/ufw-core.sh
+```
+
+Then rebuild the frontend so its compile-time API URL matches the browser-visible host:
+
+```bash
+VITE_API_BASE_URL=http://172.16.100.2:8080 \
+podman-compose --env-file strix-core.rootless.env.local \
+  -f docker-compose.r9700-core.yml \
+  -f docker-compose.strix-agent.yml \
+  -f docker-compose.strix-single-node.rootless.yml \
+  build --no-cache frontend
+podman-compose --env-file strix-core.rootless.env.local \
+  -f docker-compose.r9700-core.yml \
+  -f docker-compose.strix-agent.yml \
+  -f docker-compose.strix-single-node.rootless.yml \
+  up -d frontend
+```
+
+Do not run `scripts/rebuild_frontend_localhost.sh` for LAN access. That helper deliberately bakes `http://localhost:8080` into the frontend and is only for SSH local-port-forward mode.
+
+
+### Skip-login mode
+
+This private single-user profile enables `SKIP_LOGIN=true`. The frontend calls the protected bootstrap endpoint, receives a normal 24-hour JWT for `DEFAULT_USERNAME`, and opens the application without showing the login form. Normal API and WebSocket authorization still use that token.
+
+Both the frontend and orchestrator must be rebuilt after changing this option because `VITE_SKIP_LOGIN` is compiled into the frontend bundle:
+
+```bash
+podman-compose --env-file strix-core.rootless.env \
+  -f docker-compose.r9700-core.yml \
+  -f docker-compose.strix-agent.yml \
+  -f docker-compose.strix-single-node.rootless.yml \
+  up -d --build orchestrator-service frontend
+```
+
+Disable the bypass before exposing Chip Orchestra outside the trusted private network:
+
+```bash
+SKIP_LOGIN=false
+```
+
+When disabled, the bootstrap endpoint returns `404` and the normal username/password page remains active.
