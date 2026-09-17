@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Chip Orchestra QoR Summary",
+  "type": "object",
+  "required": ["generated_at", "schema", "designs"],
+  "properties": {
+    "generated_at": {"type": "string"},
+    "schema": {"type": "string"},
+    "designs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["design", "design_root", "timing", "area", "power"],
+        "properties": {
+          "design": {"type": "string"},
+          "design_root": {"type": "string"},
+          "timing": {
+            "type": "object",
+            "required": ["wns_ns", "timing_met", "reason", "source"],
+            "properties": {
+              "wns_ns": {"type": ["number", "null"]},
+              "timing_met": {"type": ["boolean", "null"]},
+              "reason": {"type": ["string", "null"]},
+              "source": {"type": ["string", "null"]}
+            }
+          },
+          "area": {
+            "type": "object",
+            "required": ["area_um2", "reason", "source"],
+            "properties": {
+              "area_um2": {"type": ["number", "null"]},
+              "reason": {"type": ["string", "null"]},
+              "source": {"type": ["string", "null"]}
+            }
+          },
+          "power": {
+            "type": "object",
+            "required": ["power_mw", "reason", "source"],
+            "properties": {
+              "power_mw": {"type": ["number", "null"]},
+              "reason": {"type": ["string", "null"]},
+              "source": {"type": ["string", "null"]}
+            }
+          }
+        }
+      }
+    }
+  }
+}
