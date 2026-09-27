@@ -16,6 +16,10 @@ project:
   discord: "rads"
   description: "A compact 3x3 coarse-grained reconfigurable array with a 32-byte SRAM and a 4-pin UART-only interface (clk, rst_n, uart_rx, uart_tx), implemented in GF180MCU. The internal UART bridge exposes an 8-bit MMIO command protocol for SRAM, PE configuration, operands, start/status control, and UART registers."
   lvs_config: "output/nanocgra_lite_3x3_opt/lvs_config.json"
+  gf_def_ready: true
+  ws_def_ready: false
+  drc_ready: true
+  lvs_ready: true
 
 # ======================================================
 # Pin list (must match the padring / info.yaml section
