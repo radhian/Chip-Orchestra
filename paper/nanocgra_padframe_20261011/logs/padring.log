@@ -1,0 +1,32 @@
+[padring] config=gf180-v1 design=NanoCGRA_Lite_padring pdk=gf180mcuD
+$ padring -v --def /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_padframe_20261011/padring/NanoCGRA_Lite_padring.def --svg /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_padframe_20261011/padring/NanoCGRA_Lite_padring.svg --ver /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_padframe_20261011/padring/NanoCGRA_Lite_padring.v /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_padframe_20261011/padring/NanoCGRA_Lite_padring.cfg
+[padring] binary unavailable/failed — using deterministic pad-ring assembly.
+[padring] Python-native gdspy assembly succeeded.
+[padring] ring_path=/mnt/d/LinkedinProjects/Chip-Orchestra/eda-service/toolchain/gf180/RING_PAD.gds
+[padring] core_path=/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_padframe_20261011/gds/nanocgra_lite_3x3_opt.gds
+[padring] ring_width_um=2935.0
+[padring] ring_height_um=2935.0
+[padring] ring_center_x_um=1487.8
+[padring] ring_center_y_um=1487.8
+[padring] core_width_um=466.555
+[padring] core_height_um=466.555
+[padring] core_center_x_um=233.278
+[padring] core_center_y_um=233.278
+[padring] core_offset_x_um=1254.523
+[padring] core_offset_y_um=1254.523
+[padring] chip_width_um=2935.0
+[padring] chip_height_um=2935.0
+[padring] top_cell=NanoCGRA_Lite_chip
+[padring] ring_cell=RING_PAD
+[padring] core_cell=NanoCGRA_Lite
+[padring] merged_cells=993
+[padring] routes_total=11
+[padring] routes_signal=4
+[padring] routes_power=7
+[padring] route_layers=30/0,34/0
+[padring] route_signal_width_um=0.5
+[padring] route_power_width_um=1.0
+[padring] route_signal_nets=clk,rst_n,uart_rx,uart_tx
+[padring] route_power_nets=dvdd,dvss
+[padring] route_core_def=/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_padframe_20261011/pnr/nanocgra_lite_3x3_opt.def
+[padring] route_warning=

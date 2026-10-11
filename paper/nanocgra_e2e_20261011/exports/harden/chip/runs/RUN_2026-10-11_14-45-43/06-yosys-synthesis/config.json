@@ -1,0 +1,182 @@
+{
+    "STD_CELL_LIBRARY": "gf180mcu_fd_sc_mcu7t5v0",
+    "VDD_PIN": "VDD",
+    "GND_PIN": "VSS",
+    "TECH_LEFS": {
+        "nom_*": "/home/wlmoi/.volare/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/techlef/gf180mcu_fd_sc_mcu7t5v0__nom.tlef",
+        "min_*": "/home/wlmoi/.volare/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/techlef/gf180mcu_fd_sc_mcu7t5v0__min.tlef",
+        "max_*": "/home/wlmoi/.volare/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/techlef/gf180mcu_fd_sc_mcu7t5v0__max.tlef"
+    },
+    "PRIMARY_GDSII_STREAMOUT_TOOL": "klayout",
+    "DEFAULT_MAX_TRAN": null,
+    "DEFAULT_CORNER": "nom_tt_025C_5v00",
+    "STA_CORNERS": [
+        "nom_tt_025C_5v00",
+        "nom_ss_125C_4v50",
+        "nom_ff_n40C_5v50"
+    ],
+    "RT_MIN_LAYER": "Metal2",
+    "RT_MAX_LAYER": "Metal5",
+    "SCL_GROUND_PINS": [
+        "VSS",
+        "VPW"
+    ],
+    "SCL_POWER_PINS": [
+        "VDD",
+        "VNW"
+    ],
+    "TRISTATE_CELLS": [
+        "gf180mcu_fd_sc_mcu7t5v0__bufz*"
+    ],
+    "FILL_CELLS": [
+        "gf180mcu_fd_sc_mcu7t5v0__fill_*"
+    ],
+    "DECAP_CELLS": [
+        "gf180mcu_fd_sc_mcu7t5v0__fillcap_*"
+    ],
+    "LIB": {
+        "*_tt_025C_5v00": [
+            "/home/wlmoi/.volare/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/lib/gf180mcu_fd_sc_mcu7t5v0__tt_025C_5v00.lib"
+        ],
+        "*_ss_125C_4v50": [
+            "/home/wlmoi/.volare/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/lib/gf180mcu_fd_sc_mcu7t5v0__ss_125C_4v50.lib"
+        ],
+        "*_ff_n40C_5v50": [
+            "/home/wlmoi/.volare/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/lib/gf180mcu_fd_sc_mcu7t5v0__ff_n40C_5v50.lib"
+        ]
+    },
+    "CELL_LEFS": [
+        "/home/wlmoi/.volare/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/lef/gf180mcu_fd_sc_mcu7t5v0.lef"
+    ],
+    "CELL_GDS": [
+        "/home/wlmoi/.volare/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/gds/gf180mcu_fd_sc_mcu7t5v0.gds"
+    ],
+    "CELL_VERILOG_MODELS": [
+        "/home/wlmoi/.volare/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/verilog/gf180mcu_fd_sc_mcu7t5v0.v",
+        "/home/wlmoi/.volare/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/verilog/primitives.v"
+    ],
+    "CELL_BB_VERILOG_MODELS": null,
+    "CELL_SPICE_MODELS": [
+        "/home/wlmoi/.volare/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/spice/gf180mcu_fd_sc_mcu7t5v0.spice"
+    ],
+    "CELL_CDLS": [
+        "/home/wlmoi/.volare/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/cdl/gf180mcu_fd_sc_mcu7t5v0.cdl"
+    ],
+    "SYNTH_EXCLUDED_CELL_FILE": "/home/wlmoi/.volare/gf180mcuD/libs.tech/openlane/gf180mcu_fd_sc_mcu7t5v0/no_synth.cells",
+    "PNR_EXCLUDED_CELL_FILE": "/home/wlmoi/.volare/gf180mcuD/libs.tech/openlane/gf180mcu_fd_sc_mcu7t5v0/drc_exclude.cells",
+    "OUTPUT_CAP_LOAD": 72.91,
+    "MAX_FANOUT_CONSTRAINT": 10,
+    "MAX_TRANSITION_CONSTRAINT": 3,
+    "MAX_CAPACITANCE_CONSTRAINT": 0.2,
+    "CLOCK_UNCERTAINTY_CONSTRAINT": 0.25,
+    "CLOCK_TRANSITION_CONSTRAINT": 0.15,
+    "TIME_DERATING_CONSTRAINT": 5,
+    "IO_DELAY_CONSTRAINT": 20,
+    "SYNTH_DRIVING_CELL": "gf180mcu_fd_sc_mcu7t5v0__inv_1/ZN",
+    "SYNTH_CLK_DRIVING_CELL": "gf180mcu_fd_sc_mcu7t5v0__inv_4/ZN",
+    "SYNTH_TIEHI_CELL": "gf180mcu_fd_sc_mcu7t5v0__tieh/Z",
+    "SYNTH_TIELO_CELL": "gf180mcu_fd_sc_mcu7t5v0__tiel/ZN",
+    "SYNTH_BUFFER_CELL": "gf180mcu_fd_sc_mcu7t5v0__buf_1/I/Z",
+    "PLACE_SITE": "GF018hv5v_mcu_sc7",
+    "CELL_PAD_EXCLUDE": [
+        "gf180mcu_fd_sc_mcu7t5v0__filltie",
+        "gf180mcu_fd_sc_mcu7t5v0__fill_*",
+        "gf180mcu_fd_sc_mcu7t5v0__endcap"
+    ],
+    "DIODE_CELL": "gf180mcu_fd_sc_mcu7t5v0__antenna/I",
+    "WELLTAP_CELL": "gf180mcu_fd_sc_mcu7t5v0__filltie",
+    "ENDCAP_CELL": "gf180mcu_fd_sc_mcu7t5v0__endcap",
+    "DESIGN_DIR": "/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip",
+    "PDK_ROOT": "/home/wlmoi/.volare",
+    "DESIGN_NAME": "NanoCGRA_Lite",
+    "PDK": "gf180mcuD",
+    "CLOCK_PERIOD": 100,
+    "CLOCK_PORT": "clk",
+    "CLOCK_NET": null,
+    "VDD_NETS": null,
+    "GND_NETS": null,
+    "DIE_AREA": null,
+    "EXTRA_EXCLUDED_CELLS": null,
+    "MACROS": null,
+    "EXTRA_LEFS": null,
+    "EXTRA_VERILOG_MODELS": null,
+    "EXTRA_SPICE_MODELS": null,
+    "EXTRA_CDLS": null,
+    "EXTRA_LIBS": null,
+    "EXTRA_GDS": null,
+    "FALLBACK_SDC": "/mnt/d/LinkedinProjects/Chip-Orchestra/paper/eda_runtime/librelane/scripts/base.sdc",
+    "PAD_GDS": null,
+    "PAD_LEFS": null,
+    "PAD_VERILOG_MODELS": null,
+    "PAD_SPICE_MODELS": null,
+    "PAD_CDLS": null,
+    "PAD_LIBS": null,
+    "PAD_CORNER": null,
+    "PAD_FILLERS": null,
+    "PAD_SITE_NAME": null,
+    "PAD_CORNER_SITE_NAME": null,
+    "PAD_FAKE_SITES": null,
+    "PAD_BONDPAD_NAME": null,
+    "PAD_BONDPAD_WIDTH": null,
+    "PAD_BONDPAD_HEIGHT": null,
+    "PAD_BONDPAD_OFFSETS": null,
+    "PAD_PLACE_IO_TERMINALS": null,
+    "PAD_EDGE_SPACING": 0,
+    "SYNTH_LATCH_MAP": null,
+    "SYNTH_TRISTATE_MAP": null,
+    "SYNTH_CSA_MAP": null,
+    "SYNTH_RCA_MAP": null,
+    "SYNTH_FA_MAP": null,
+    "SYNTH_CLOCKGATE_MIN_WIDTH": null,
+    "SYNTH_CLOCKGATE_POSEDGE_ICG": null,
+    "SYNTH_CLOCKGATE_NEGEDGE_ICG": null,
+    "YOSYS_LOG_LEVEL": "ALL",
+    "SYNTH_CORNER": null,
+    "SYNTH_SHOW": false,
+    "SYNTH_CHECKS_ALLOW_TRISTATE": true,
+    "SYNTH_AUTONAME": false,
+    "SYNTH_STRATEGY": "AREA 0",
+    "SYNTH_ABC_BUFFERING": false,
+    "SYNTH_ABC_LEGACY_REFACTOR": false,
+    "SYNTH_ABC_LEGACY_REWRITE": false,
+    "SYNTH_ABC_DFF": false,
+    "SYNTH_ABC_USE_MFS3": false,
+    "SYNTH_ABC_AREA_USE_NF": false,
+    "SYNTH_DIRECT_WIRE_BUFFERING": true,
+    "SYNTH_SPLITNETS": true,
+    "SYNTH_SIZING": false,
+    "SYNTH_HIERARCHY_MODE": "flatten",
+    "SYNTH_KEEP_HIERARCHY_MIN_COST": null,
+    "SYNTH_KEEP_HIERARCHY_INSTANCES": null,
+    "SYNTH_KEEP_HIERARCHY_MODULES": null,
+    "SYNTH_SHARE_RESOURCES": true,
+    "SYNTH_ADDER_TYPE": "YOSYS",
+    "SYNTH_EXTRA_MAPPING_FILE": null,
+    "SYNTH_ELABORATE_ONLY": false,
+    "SYNTH_MUL_BOOTH": false,
+    "SYNTH_TIE_UNDEFINED": "low",
+    "SYNTH_WRITE_NOATTR": true,
+    "SYNTH_NORMALIZE_SINGLE_BIT_VECTORS": true,
+    "VERILOG_FILES": [
+        "/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v",
+        "/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/cgra.v",
+        "/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/nano_controller.v",
+        "/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/nanocgra_lite.v",
+        "/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/pe.v",
+        "/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v",
+        "/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart.v",
+        "/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart_bridge.v"
+    ],
+    "VERILOG_DEFINES": null,
+    "VERILOG_POWER_DEFINE": "USE_POWER_PINS",
+    "VERILOG_INCLUDE_DIRS": [
+        "/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src"
+    ],
+    "SYNTH_PARAMETERS": null,
+    "USE_SLANG": false,
+    "SLANG_ARGUMENTS": null,
+    "meta": {
+        "librelane_version": "3.0.7",
+        "step": "Yosys.Synthesis"
+    }
+}

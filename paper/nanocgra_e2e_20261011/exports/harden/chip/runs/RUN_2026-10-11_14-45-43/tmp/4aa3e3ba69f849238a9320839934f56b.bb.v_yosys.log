@@ -1,0 +1,638 @@
+
+ /----------------------------------------------------------------------------\
+ |                                                                            |
+ |  yosys -- Yosys Open SYnthesis Suite                                       |
+ |                                                                            |
+ |  Copyright (C) 2012 - 2020  Claire Xenia Wolf <claire@yosyshq.com>         |
+ |                                                                            |
+ |  Permission to use, copy, modify, and/or distribute this software for any  |
+ |  purpose with or without fee is hereby granted, provided that the above    |
+ |  copyright notice and this permission notice appear in all copies.         |
+ |                                                                            |
+ |  THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES  |
+ |  WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF          |
+ |  MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR   |
+ |  ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES    |
+ |  WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN     |
+ |  ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF   |
+ |  OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.            |
+ |                                                                            |
+ \----------------------------------------------------------------------------/
+
+ Yosys 0.38 (git sha1 543faed9c8c, clang++ 17.0.6 -fPIC -Os)
+
+Loaded SDC plugin
+
+-- Running command `
+                    verilog_defines -DUSE_POWER_PINS;
+read_verilog -sv -lib /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v;
+
+                    blackbox;
+                    write_verilog -noattr -noexpr -nohex -nodec -defparam -blackboxes /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v;
+                    ' --
+
+1. Executing Verilog-2005 frontend: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v
+Parsing SystemVerilog input from `/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v' to AST representation.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__addf_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__addf_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__addf_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__addf_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__addh_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__addh_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__addh_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__addh_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__and2_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__and2_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__and2_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__and2_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__and3_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__and3_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__and3_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__and3_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__and4_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__and4_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__and4_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__and4_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__antenna'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__antenna_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__aoi21_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__aoi21_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__aoi21_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__aoi21_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__aoi22_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__aoi22_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__aoi22_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__aoi22_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__aoi211_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__aoi211_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__aoi211_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__aoi211_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__aoi221_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__aoi221_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__aoi221_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__aoi221_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__aoi222_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__aoi222_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__aoi222_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__aoi222_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__buf_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__buf_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__buf_3'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__buf_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__buf_8'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__buf_12'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__buf_16'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__buf_20'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__buf_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__bufz_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__bufz_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__bufz_3'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__bufz_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__bufz_8'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__bufz_12'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__bufz_16'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__bufz_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__clkbuf_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__clkbuf_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__clkbuf_3'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__clkbuf_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__clkbuf_8'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__clkbuf_12'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__clkbuf_16'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__clkbuf_20'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__clkbuf_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__clkinv_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__clkinv_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__clkinv_3'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__clkinv_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__clkinv_8'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__clkinv_12'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__clkinv_16'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__clkinv_20'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__clkinv_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffnq_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffnq_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffnq_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffnq_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffnrnq_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffnrnq_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffnrnq_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffnrnq_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffnrsnq_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffnrsnq_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffnrsnq_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffnrsnq_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffnsnq_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffnsnq_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffnsnq_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffnsnq_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffq_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffq_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffq_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffq_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffrnq_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffrnq_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffrnq_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffrnq_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffrsnq_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffrsnq_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffrsnq_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffrsnq_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffsnq_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffsnq_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffsnq_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffsnq_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dlya_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dlya_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dlya_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dlya_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dlyb_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dlyb_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dlyb_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dlyb_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dlyc_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dlyc_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dlyc_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dlyc_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dlyd_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dlyd_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dlyd_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dlyd_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__endcap'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__endcap_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__fill_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__fill_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__fill_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__fill_8'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__fill_16'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__fill_32'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__fill_64'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__fill_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__fillcap_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__fillcap_8'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__fillcap_16'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__fillcap_32'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__fillcap_64'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__fillcap_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__filltie'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__filltie_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__hold'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__hold_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__icgtn_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__icgtn_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__icgtn_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__icgtn_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__icgtp_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__icgtp_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__icgtp_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__icgtp_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__inv_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__inv_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__inv_3'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__inv_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__inv_8'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__inv_12'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__inv_16'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__inv_20'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__inv_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__invz_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__invz_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__invz_3'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__invz_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__invz_8'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__invz_12'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__invz_16'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__invz_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__latq_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__latq_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__latq_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__latq_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__latrnq_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__latrnq_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__latrnq_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__latrnq_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__latrsnq_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__latrsnq_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__latrsnq_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__latrsnq_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__latsnq_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__latsnq_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__latsnq_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__latsnq_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__mux2_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__mux2_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__mux2_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__mux2_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__mux4_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__mux4_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__mux4_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__mux4_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nand2_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nand2_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nand2_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nand2_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nand3_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nand3_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nand3_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nand3_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nand4_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nand4_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nand4_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nand4_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nor2_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nor2_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nor2_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nor2_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nor3_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nor3_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nor3_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nor3_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nor4_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nor4_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nor4_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nor4_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai21_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai21_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai21_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai21_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai22_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai22_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai22_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai22_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai31_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai31_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai31_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai31_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai32_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai32_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai32_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai32_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai33_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai33_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai33_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai33_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai211_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai211_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai211_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai211_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai221_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai221_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai221_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai221_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai222_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai222_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai222_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai222_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__or2_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__or2_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__or2_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__or2_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__or3_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__or3_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__or3_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__or3_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__or4_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__or4_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__or4_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__or4_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__sdffq_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__sdffq_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__sdffq_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__sdffq_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__sdffrnq_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__sdffrnq_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__sdffrnq_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__sdffrnq_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__sdffrsnq_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__sdffrsnq_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__sdffrsnq_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__sdffrsnq_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__sdffsnq_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__sdffsnq_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__sdffsnq_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__sdffsnq_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__tieh'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__tieh_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__tiel'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__tiel_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__xnor2_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__xnor2_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__xnor2_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__xnor2_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__xnor3_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__xnor3_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__xnor3_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__xnor3_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__xor2_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__xor2_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__xor2_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__xor2_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__xor3_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__xor3_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__xor3_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__xor3_func'.
+Successfully finished Verilog frontend.
+
+2. Executing Verilog backend.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__addf_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__addf_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__addf_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__addf_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__addh_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__addh_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__addh_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__addh_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__and2_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__and2_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__and2_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__and2_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__and3_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__and3_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__and3_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__and3_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__and4_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__and4_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__and4_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__and4_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__antenna'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__antenna_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__aoi211_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__aoi211_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__aoi211_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__aoi211_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__aoi21_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__aoi21_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__aoi21_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__aoi21_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__aoi221_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__aoi221_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__aoi221_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__aoi221_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__aoi222_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__aoi222_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__aoi222_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__aoi222_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__aoi22_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__aoi22_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__aoi22_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__aoi22_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__buf_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__buf_12'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__buf_16'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__buf_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__buf_20'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__buf_3'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__buf_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__buf_8'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__buf_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__bufz_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__bufz_12'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__bufz_16'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__bufz_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__bufz_3'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__bufz_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__bufz_8'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__bufz_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__clkbuf_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__clkbuf_12'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__clkbuf_16'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__clkbuf_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__clkbuf_20'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__clkbuf_3'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__clkbuf_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__clkbuf_8'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__clkbuf_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__clkinv_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__clkinv_12'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__clkinv_16'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__clkinv_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__clkinv_20'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__clkinv_3'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__clkinv_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__clkinv_8'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__clkinv_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dffnq_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dffnq_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dffnq_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dffnq_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dffnrnq_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dffnrnq_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dffnrnq_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dffnrnq_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dffnrsnq_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dffnrsnq_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dffnrsnq_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dffnrsnq_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dffnsnq_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dffnsnq_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dffnsnq_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dffnsnq_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dffq_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dffq_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dffq_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dffq_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dffrnq_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dffrnq_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dffrnq_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dffrnq_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dffrsnq_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dffrsnq_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dffrsnq_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dffrsnq_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dffsnq_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dffsnq_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dffsnq_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dffsnq_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dlya_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dlya_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dlya_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dlya_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dlyb_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dlyb_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dlyb_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dlyb_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dlyc_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dlyc_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dlyc_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dlyc_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dlyd_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dlyd_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dlyd_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__dlyd_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__endcap'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__endcap_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__fill_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__fill_16'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__fill_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__fill_32'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__fill_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__fill_64'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__fill_8'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__fill_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__fillcap_16'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__fillcap_32'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__fillcap_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__fillcap_64'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__fillcap_8'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__fillcap_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__filltie'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__filltie_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__hold'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__hold_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__icgtn_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__icgtn_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__icgtn_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__icgtn_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__icgtp_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__icgtp_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__icgtp_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__icgtp_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__inv_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__inv_12'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__inv_16'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__inv_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__inv_20'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__inv_3'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__inv_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__inv_8'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__inv_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__invz_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__invz_12'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__invz_16'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__invz_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__invz_3'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__invz_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__invz_8'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__invz_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__latq_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__latq_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__latq_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__latq_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__latrnq_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__latrnq_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__latrnq_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__latrnq_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__latrsnq_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__latrsnq_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__latrsnq_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__latrsnq_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__latsnq_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__latsnq_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__latsnq_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__latsnq_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__mux2_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__mux2_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__mux2_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__mux2_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__mux4_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__mux4_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__mux4_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__mux4_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__nand2_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__nand2_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__nand2_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__nand2_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__nand3_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__nand3_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__nand3_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__nand3_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__nand4_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__nand4_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__nand4_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__nand4_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__nor2_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__nor2_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__nor2_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__nor2_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__nor3_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__nor3_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__nor3_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__nor3_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__nor4_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__nor4_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__nor4_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__nor4_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__oai211_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__oai211_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__oai211_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__oai211_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__oai21_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__oai21_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__oai21_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__oai21_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__oai221_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__oai221_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__oai221_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__oai221_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__oai222_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__oai222_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__oai222_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__oai222_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__oai22_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__oai22_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__oai22_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__oai22_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__oai31_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__oai31_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__oai31_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__oai31_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__oai32_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__oai32_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__oai32_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__oai32_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__oai33_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__oai33_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__oai33_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__oai33_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__or2_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__or2_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__or2_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__or2_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__or3_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__or3_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__or3_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__or3_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__or4_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__or4_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__or4_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__or4_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__sdffq_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__sdffq_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__sdffq_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__sdffq_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__sdffrnq_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__sdffrnq_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__sdffrnq_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__sdffrnq_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__sdffrsnq_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__sdffrsnq_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__sdffrsnq_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__sdffrsnq_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__sdffsnq_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__sdffsnq_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__sdffsnq_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__sdffsnq_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__tieh'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__tieh_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__tiel'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__tiel_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__xnor2_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__xnor2_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__xnor2_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__xnor2_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__xnor3_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__xnor3_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__xnor3_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__xnor3_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__xor2_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__xor2_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__xor2_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__xor2_func'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__xor3_1'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__xor3_2'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__xor3_4'.
+Dumping module `\gf180mcu_fd_sc_mcu7t5v0__xor3_func'.
+
+End of script. Logfile hash: d457eccebc, CPU: user 0.31s system 0.03s, MEM: 48.88 MB peak
+Yosys 0.38 (git sha1 543faed9c8c, clang++ 17.0.6 -fPIC -Os)
+Time spent: 97% 2x read_verilog (0 sec), 2% 2x write_verilog (0 sec), ...

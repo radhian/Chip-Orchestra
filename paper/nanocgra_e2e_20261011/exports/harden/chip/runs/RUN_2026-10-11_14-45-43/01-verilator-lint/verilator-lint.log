@@ -1,0 +1,1790 @@
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+    3 | module gf180mcu_fd_sc_mcu7t5v0__addf_1(S, A, CI, B, CO, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+                       ... For warning description see https://verilator.org/warn/TIMESCALEMOD?v=5.018
+                       ... Use "/* verilator lint_off TIMESCALEMOD */" and lint_on around source to disable this message.
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:24:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+   24 | module gf180mcu_fd_sc_mcu7t5v0__addf_2(S, A, CI, B, CO, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:45:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+   45 | module gf180mcu_fd_sc_mcu7t5v0__addf_4(S, A, CI, B, CO, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:66:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+   66 | module gf180mcu_fd_sc_mcu7t5v0__addf_func(S, A, CI, B, CO, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:87:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+   87 | module gf180mcu_fd_sc_mcu7t5v0__addh_1(CO, A, B, S, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:106:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  106 | module gf180mcu_fd_sc_mcu7t5v0__addh_2(CO, A, B, S, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:125:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  125 | module gf180mcu_fd_sc_mcu7t5v0__addh_4(A, B, CO, S, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:144:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  144 | module gf180mcu_fd_sc_mcu7t5v0__addh_func(CO, A, B, S, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:163:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  163 | module gf180mcu_fd_sc_mcu7t5v0__and2_1(A1, A2, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:180:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  180 | module gf180mcu_fd_sc_mcu7t5v0__and2_2(A1, A2, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:197:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  197 | module gf180mcu_fd_sc_mcu7t5v0__and2_4(A2, A1, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:214:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  214 | module gf180mcu_fd_sc_mcu7t5v0__and2_func(A1, A2, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:231:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  231 | module gf180mcu_fd_sc_mcu7t5v0__and3_1(A1, A2, A3, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:250:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  250 | module gf180mcu_fd_sc_mcu7t5v0__and3_2(A1, A2, A3, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:269:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  269 | module gf180mcu_fd_sc_mcu7t5v0__and3_4(A3, A2, A1, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:288:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  288 | module gf180mcu_fd_sc_mcu7t5v0__and3_func(A3, A2, A1, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:307:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  307 | module gf180mcu_fd_sc_mcu7t5v0__and4_1(A1, A2, A3, A4, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:328:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  328 | module gf180mcu_fd_sc_mcu7t5v0__and4_2(A1, A2, A3, A4, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:349:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  349 | module gf180mcu_fd_sc_mcu7t5v0__and4_4(A4, A3, A1, A2, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:370:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  370 | module gf180mcu_fd_sc_mcu7t5v0__and4_func(A1, A2, A3, A4, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:391:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  391 | module gf180mcu_fd_sc_mcu7t5v0__antenna(I, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:404:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  404 | module gf180mcu_fd_sc_mcu7t5v0__antenna_func(I, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:417:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  417 | module gf180mcu_fd_sc_mcu7t5v0__aoi211_1(A2, ZN, A1, B, C, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:438:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  438 | module gf180mcu_fd_sc_mcu7t5v0__aoi211_2(A2, A1, ZN, B, C, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:459:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  459 | module gf180mcu_fd_sc_mcu7t5v0__aoi211_4(ZN, A2, A1, B, C, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:480:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  480 | module gf180mcu_fd_sc_mcu7t5v0__aoi211_func(ZN, A2, A1, B, C, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:501:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  501 | module gf180mcu_fd_sc_mcu7t5v0__aoi21_1(A2, ZN, A1, B, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:520:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  520 | module gf180mcu_fd_sc_mcu7t5v0__aoi21_2(B, ZN, A2, A1, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:539:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  539 | module gf180mcu_fd_sc_mcu7t5v0__aoi21_4(A2, A1, ZN, B, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:558:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  558 | module gf180mcu_fd_sc_mcu7t5v0__aoi21_func(A2, A1, ZN, B, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:577:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  577 | module gf180mcu_fd_sc_mcu7t5v0__aoi221_1(B2, B1, ZN, C, A2, A1, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:600:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  600 | module gf180mcu_fd_sc_mcu7t5v0__aoi221_2(ZN, B2, C, B1, A1, A2, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:623:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  623 | module gf180mcu_fd_sc_mcu7t5v0__aoi221_4(ZN, B2, B1, C, A1, A2, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:646:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  646 | module gf180mcu_fd_sc_mcu7t5v0__aoi221_func(B2, B1, ZN, C, A2, A1, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:669:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  669 | module gf180mcu_fd_sc_mcu7t5v0__aoi222_1(C2, C1, B1, ZN, B2, A2, A1, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:694:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  694 | module gf180mcu_fd_sc_mcu7t5v0__aoi222_2(ZN, C2, C1, B2, B1, A1, A2, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:719:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  719 | module gf180mcu_fd_sc_mcu7t5v0__aoi222_4(ZN, C2, C1, B1, B2, A2, A1, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:744:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  744 | module gf180mcu_fd_sc_mcu7t5v0__aoi222_func(ZN, C2, C1, B1, B2, A2, A1, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:769:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  769 | module gf180mcu_fd_sc_mcu7t5v0__aoi22_1(B2, B1, ZN, A1, A2, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:790:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  790 | module gf180mcu_fd_sc_mcu7t5v0__aoi22_2(B2, B1, ZN, A2, A1, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:811:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  811 | module gf180mcu_fd_sc_mcu7t5v0__aoi22_4(B2, B1, ZN, A2, A1, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:832:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  832 | module gf180mcu_fd_sc_mcu7t5v0__aoi22_func(B2, B1, ZN, A2, A1, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:853:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  853 | module gf180mcu_fd_sc_mcu7t5v0__buf_1(I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:868:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  868 | module gf180mcu_fd_sc_mcu7t5v0__buf_12(I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:883:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  883 | module gf180mcu_fd_sc_mcu7t5v0__buf_16(I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:898:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  898 | module gf180mcu_fd_sc_mcu7t5v0__buf_2(I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:913:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  913 | module gf180mcu_fd_sc_mcu7t5v0__buf_20(I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:928:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  928 | module gf180mcu_fd_sc_mcu7t5v0__buf_3(I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:943:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  943 | module gf180mcu_fd_sc_mcu7t5v0__buf_4(I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:958:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  958 | module gf180mcu_fd_sc_mcu7t5v0__buf_8(I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:973:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  973 | module gf180mcu_fd_sc_mcu7t5v0__buf_func(I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:988:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+  988 | module gf180mcu_fd_sc_mcu7t5v0__bufz_1(EN, I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1005:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1005 | module gf180mcu_fd_sc_mcu7t5v0__bufz_12(EN, I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1022:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1022 | module gf180mcu_fd_sc_mcu7t5v0__bufz_16(EN, I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1039:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1039 | module gf180mcu_fd_sc_mcu7t5v0__bufz_2(EN, I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1056:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1056 | module gf180mcu_fd_sc_mcu7t5v0__bufz_3(EN, I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1073:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1073 | module gf180mcu_fd_sc_mcu7t5v0__bufz_4(EN, I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1090:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1090 | module gf180mcu_fd_sc_mcu7t5v0__bufz_8(EN, I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1107:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1107 | module gf180mcu_fd_sc_mcu7t5v0__bufz_func(EN, I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1124:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1124 | module gf180mcu_fd_sc_mcu7t5v0__clkbuf_1(I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1139:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1139 | module gf180mcu_fd_sc_mcu7t5v0__clkbuf_12(I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1154:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1154 | module gf180mcu_fd_sc_mcu7t5v0__clkbuf_16(I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1169:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1169 | module gf180mcu_fd_sc_mcu7t5v0__clkbuf_2(I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1184:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1184 | module gf180mcu_fd_sc_mcu7t5v0__clkbuf_20(I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1199:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1199 | module gf180mcu_fd_sc_mcu7t5v0__clkbuf_3(I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1214:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1214 | module gf180mcu_fd_sc_mcu7t5v0__clkbuf_4(I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1229:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1229 | module gf180mcu_fd_sc_mcu7t5v0__clkbuf_8(I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1244:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1244 | module gf180mcu_fd_sc_mcu7t5v0__clkbuf_func(I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1259:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1259 | module gf180mcu_fd_sc_mcu7t5v0__clkinv_1(I, ZN, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1274:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1274 | module gf180mcu_fd_sc_mcu7t5v0__clkinv_12(I, ZN, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1289:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1289 | module gf180mcu_fd_sc_mcu7t5v0__clkinv_16(I, ZN, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1304:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1304 | module gf180mcu_fd_sc_mcu7t5v0__clkinv_2(I, ZN, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1319:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1319 | module gf180mcu_fd_sc_mcu7t5v0__clkinv_20(I, ZN, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1334:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1334 | module gf180mcu_fd_sc_mcu7t5v0__clkinv_3(I, ZN, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1349:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1349 | module gf180mcu_fd_sc_mcu7t5v0__clkinv_4(I, ZN, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1364:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1364 | module gf180mcu_fd_sc_mcu7t5v0__clkinv_8(I, ZN, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1379:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1379 | module gf180mcu_fd_sc_mcu7t5v0__clkinv_func(I, ZN, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1394:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1394 | module gf180mcu_fd_sc_mcu7t5v0__dffnq_1(CLKN, D, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1411:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1411 | module gf180mcu_fd_sc_mcu7t5v0__dffnq_2(CLKN, D, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1428:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1428 | module gf180mcu_fd_sc_mcu7t5v0__dffnq_4(CLKN, D, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1445:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1445 | module gf180mcu_fd_sc_mcu7t5v0__dffnq_func(CLKN, D, Q, VDD, VSS, VNW, VPW, notifier);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1464:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1464 | module gf180mcu_fd_sc_mcu7t5v0__dffnrnq_1(CLKN, D, RN, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1483:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1483 | module gf180mcu_fd_sc_mcu7t5v0__dffnrnq_2(CLKN, D, RN, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1502:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1502 | module gf180mcu_fd_sc_mcu7t5v0__dffnrnq_4(CLKN, D, RN, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1521:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1521 | module gf180mcu_fd_sc_mcu7t5v0__dffnrnq_func(CLKN, D, RN, Q, VDD, VSS, VNW, VPW, notifier);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1542:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1542 | module gf180mcu_fd_sc_mcu7t5v0__dffnrsnq_1(CLKN, D, SETN, RN, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1563:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1563 | module gf180mcu_fd_sc_mcu7t5v0__dffnrsnq_2(CLKN, D, SETN, RN, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1584:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1584 | module gf180mcu_fd_sc_mcu7t5v0__dffnrsnq_4(CLKN, D, SETN, RN, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1605:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1605 | module gf180mcu_fd_sc_mcu7t5v0__dffnrsnq_func(CLKN, D, SETN, RN, Q, VDD, VSS, VNW, VPW, notifier);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1628:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1628 | module gf180mcu_fd_sc_mcu7t5v0__dffnsnq_1(CLKN, D, SETN, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1647:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1647 | module gf180mcu_fd_sc_mcu7t5v0__dffnsnq_2(CLKN, D, SETN, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1666:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1666 | module gf180mcu_fd_sc_mcu7t5v0__dffnsnq_4(CLKN, D, SETN, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1685:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1685 | module gf180mcu_fd_sc_mcu7t5v0__dffnsnq_func(CLKN, D, SETN, Q, VDD, VSS, VNW, VPW, notifier);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1706:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1706 | module gf180mcu_fd_sc_mcu7t5v0__dffq_1(CLK, D, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1723:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1723 | module gf180mcu_fd_sc_mcu7t5v0__dffq_2(CLK, D, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1740:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1740 | module gf180mcu_fd_sc_mcu7t5v0__dffq_4(CLK, D, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1757:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1757 | module gf180mcu_fd_sc_mcu7t5v0__dffq_func(CLK, D, Q, VDD, VSS, VNW, VPW, notifier);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1776:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1776 | module gf180mcu_fd_sc_mcu7t5v0__dffrnq_1(CLK, D, RN, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1795:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1795 | module gf180mcu_fd_sc_mcu7t5v0__dffrnq_2(CLK, D, RN, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1814:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1814 | module gf180mcu_fd_sc_mcu7t5v0__dffrnq_4(CLK, D, RN, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1833:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1833 | module gf180mcu_fd_sc_mcu7t5v0__dffrnq_func(CLK, D, RN, Q, VDD, VSS, VNW, VPW, notifier);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1854:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1854 | module gf180mcu_fd_sc_mcu7t5v0__dffrsnq_1(CLK, D, SETN, RN, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1875:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1875 | module gf180mcu_fd_sc_mcu7t5v0__dffrsnq_2(CLK, D, SETN, RN, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1896:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1896 | module gf180mcu_fd_sc_mcu7t5v0__dffrsnq_4(CLK, D, SETN, RN, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1917:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1917 | module gf180mcu_fd_sc_mcu7t5v0__dffrsnq_func(CLK, D, SETN, RN, Q, VDD, VSS, VNW, VPW, notifier);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1940:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1940 | module gf180mcu_fd_sc_mcu7t5v0__dffsnq_1(CLK, D, SETN, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1959:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1959 | module gf180mcu_fd_sc_mcu7t5v0__dffsnq_2(CLK, D, SETN, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1978:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1978 | module gf180mcu_fd_sc_mcu7t5v0__dffsnq_4(CLK, D, SETN, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:1997:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 1997 | module gf180mcu_fd_sc_mcu7t5v0__dffsnq_func(CLK, D, SETN, Q, VDD, VSS, VNW, VPW, notifier);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2018:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2018 | module gf180mcu_fd_sc_mcu7t5v0__dlya_1(I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2033:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2033 | module gf180mcu_fd_sc_mcu7t5v0__dlya_2(I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2048:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2048 | module gf180mcu_fd_sc_mcu7t5v0__dlya_4(I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2063:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2063 | module gf180mcu_fd_sc_mcu7t5v0__dlya_func(I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2078:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2078 | module gf180mcu_fd_sc_mcu7t5v0__dlyb_1(I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2093:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2093 | module gf180mcu_fd_sc_mcu7t5v0__dlyb_2(I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2108:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2108 | module gf180mcu_fd_sc_mcu7t5v0__dlyb_4(I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2123:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2123 | module gf180mcu_fd_sc_mcu7t5v0__dlyb_func(I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2138:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2138 | module gf180mcu_fd_sc_mcu7t5v0__dlyc_1(I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2153:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2153 | module gf180mcu_fd_sc_mcu7t5v0__dlyc_2(I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2168:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2168 | module gf180mcu_fd_sc_mcu7t5v0__dlyc_4(I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2183:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2183 | module gf180mcu_fd_sc_mcu7t5v0__dlyc_func(I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2198:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2198 | module gf180mcu_fd_sc_mcu7t5v0__dlyd_1(I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2213:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2213 | module gf180mcu_fd_sc_mcu7t5v0__dlyd_2(I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2228:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2228 | module gf180mcu_fd_sc_mcu7t5v0__dlyd_4(I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2243:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2243 | module gf180mcu_fd_sc_mcu7t5v0__dlyd_func(I, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2258:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2258 | module gf180mcu_fd_sc_mcu7t5v0__endcap(VDD, VSS);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2265:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2265 | module gf180mcu_fd_sc_mcu7t5v0__endcap_func(VDD, VSS);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2272:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2272 | module gf180mcu_fd_sc_mcu7t5v0__fill_1(VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2283:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2283 | module gf180mcu_fd_sc_mcu7t5v0__fill_16(VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2294:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2294 | module gf180mcu_fd_sc_mcu7t5v0__fill_2(VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2305:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2305 | module gf180mcu_fd_sc_mcu7t5v0__fill_32(VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2316:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2316 | module gf180mcu_fd_sc_mcu7t5v0__fill_4(VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2327:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2327 | module gf180mcu_fd_sc_mcu7t5v0__fill_64(VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2338:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2338 | module gf180mcu_fd_sc_mcu7t5v0__fill_8(VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2349:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2349 | module gf180mcu_fd_sc_mcu7t5v0__fill_func(VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2360:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2360 | module gf180mcu_fd_sc_mcu7t5v0__fillcap_16(VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2371:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2371 | module gf180mcu_fd_sc_mcu7t5v0__fillcap_32(VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2382:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2382 | module gf180mcu_fd_sc_mcu7t5v0__fillcap_4(VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2393:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2393 | module gf180mcu_fd_sc_mcu7t5v0__fillcap_64(VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2404:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2404 | module gf180mcu_fd_sc_mcu7t5v0__fillcap_8(VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2415:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2415 | module gf180mcu_fd_sc_mcu7t5v0__fillcap_func(VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2426:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2426 | module gf180mcu_fd_sc_mcu7t5v0__filltie(VDD, VSS);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2433:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2433 | module gf180mcu_fd_sc_mcu7t5v0__filltie_func(VDD, VSS);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2440:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2440 | module gf180mcu_fd_sc_mcu7t5v0__hold(Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2453:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2453 | module gf180mcu_fd_sc_mcu7t5v0__hold_func(Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2466:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2466 | module gf180mcu_fd_sc_mcu7t5v0__icgtn_1(TE, E, CLKN, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2485:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2485 | module gf180mcu_fd_sc_mcu7t5v0__icgtn_2(TE, E, CLKN, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2504:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2504 | module gf180mcu_fd_sc_mcu7t5v0__icgtn_4(TE, E, CLKN, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2523:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2523 | module gf180mcu_fd_sc_mcu7t5v0__icgtn_func(TE, E, CLKN, Q, VDD, VSS, VNW, VPW, notifier);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2544:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2544 | module gf180mcu_fd_sc_mcu7t5v0__icgtp_1(TE, E, CLK, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2563:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2563 | module gf180mcu_fd_sc_mcu7t5v0__icgtp_2(TE, E, CLK, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2582:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2582 | module gf180mcu_fd_sc_mcu7t5v0__icgtp_4(TE, E, CLK, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2601:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2601 | module gf180mcu_fd_sc_mcu7t5v0__icgtp_func(TE, E, CLK, Q, VDD, VSS, VNW, VPW, notifier);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2622:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2622 | module gf180mcu_fd_sc_mcu7t5v0__inv_1(I, ZN, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2637:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2637 | module gf180mcu_fd_sc_mcu7t5v0__inv_12(I, ZN, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2652:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2652 | module gf180mcu_fd_sc_mcu7t5v0__inv_16(I, ZN, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2667:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2667 | module gf180mcu_fd_sc_mcu7t5v0__inv_2(I, ZN, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2682:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2682 | module gf180mcu_fd_sc_mcu7t5v0__inv_20(I, ZN, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2697:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2697 | module gf180mcu_fd_sc_mcu7t5v0__inv_3(I, ZN, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2712:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2712 | module gf180mcu_fd_sc_mcu7t5v0__inv_4(I, ZN, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2727:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2727 | module gf180mcu_fd_sc_mcu7t5v0__inv_8(I, ZN, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2742:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2742 | module gf180mcu_fd_sc_mcu7t5v0__inv_func(I, ZN, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2757:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2757 | module gf180mcu_fd_sc_mcu7t5v0__invz_1(EN, ZN, I, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2774:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2774 | module gf180mcu_fd_sc_mcu7t5v0__invz_12(EN, I, ZN, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2791:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2791 | module gf180mcu_fd_sc_mcu7t5v0__invz_16(EN, I, ZN, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2808:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2808 | module gf180mcu_fd_sc_mcu7t5v0__invz_2(EN, ZN, I, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2825:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2825 | module gf180mcu_fd_sc_mcu7t5v0__invz_3(EN, I, ZN, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2842:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2842 | module gf180mcu_fd_sc_mcu7t5v0__invz_4(EN, I, ZN, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2859:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2859 | module gf180mcu_fd_sc_mcu7t5v0__invz_8(EN, I, ZN, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2876:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2876 | module gf180mcu_fd_sc_mcu7t5v0__invz_func(EN, ZN, I, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2893:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2893 | module gf180mcu_fd_sc_mcu7t5v0__latq_1(E, D, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2910:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2910 | module gf180mcu_fd_sc_mcu7t5v0__latq_2(E, D, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2927:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2927 | module gf180mcu_fd_sc_mcu7t5v0__latq_4(E, D, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2944:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2944 | module gf180mcu_fd_sc_mcu7t5v0__latq_func(E, D, Q, VDD, VSS, VNW, VPW, notifier);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2963:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2963 | module gf180mcu_fd_sc_mcu7t5v0__latrnq_1(E, D, RN, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:2982:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 2982 | module gf180mcu_fd_sc_mcu7t5v0__latrnq_2(E, D, RN, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3001:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3001 | module gf180mcu_fd_sc_mcu7t5v0__latrnq_4(E, D, RN, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3020:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3020 | module gf180mcu_fd_sc_mcu7t5v0__latrnq_func(E, D, RN, Q, VDD, VSS, VNW, VPW, notifier);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3041:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3041 | module gf180mcu_fd_sc_mcu7t5v0__latrsnq_1(E, D, RN, SETN, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3062:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3062 | module gf180mcu_fd_sc_mcu7t5v0__latrsnq_2(E, D, RN, SETN, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3083:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3083 | module gf180mcu_fd_sc_mcu7t5v0__latrsnq_4(E, D, RN, SETN, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3104:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3104 | module gf180mcu_fd_sc_mcu7t5v0__latrsnq_func(E, D, RN, SETN, Q, VDD, VSS, VNW, VPW, notifier);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3127:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3127 | module gf180mcu_fd_sc_mcu7t5v0__latsnq_1(E, D, SETN, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3146:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3146 | module gf180mcu_fd_sc_mcu7t5v0__latsnq_2(E, D, SETN, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3165:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3165 | module gf180mcu_fd_sc_mcu7t5v0__latsnq_4(E, D, SETN, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3184:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3184 | module gf180mcu_fd_sc_mcu7t5v0__latsnq_func(E, D, SETN, Q, VDD, VSS, VNW, VPW, notifier);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3205:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3205 | module gf180mcu_fd_sc_mcu7t5v0__mux2_1(Z, I1, S, I0, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3224:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3224 | module gf180mcu_fd_sc_mcu7t5v0__mux2_2(Z, I1, S, I0, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3243:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3243 | module gf180mcu_fd_sc_mcu7t5v0__mux2_4(Z, I1, S, I0, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3262:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3262 | module gf180mcu_fd_sc_mcu7t5v0__mux2_func(Z, I1, S, I0, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3281:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3281 | module gf180mcu_fd_sc_mcu7t5v0__mux4_1(I2, S0, I3, Z, S1, I1, I0, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3306:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3306 | module gf180mcu_fd_sc_mcu7t5v0__mux4_2(I2, S0, I3, Z, S1, I1, I0, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3331:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3331 | module gf180mcu_fd_sc_mcu7t5v0__mux4_4(I2, S0, I3, Z, S1, I1, I0, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3356:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3356 | module gf180mcu_fd_sc_mcu7t5v0__mux4_func(I2, S0, I3, Z, S1, I1, I0, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3381:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3381 | module gf180mcu_fd_sc_mcu7t5v0__nand2_1(A2, A1, ZN, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3398:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3398 | module gf180mcu_fd_sc_mcu7t5v0__nand2_2(A1, A2, ZN, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3415:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3415 | module gf180mcu_fd_sc_mcu7t5v0__nand2_4(A1, A2, ZN, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3432:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3432 | module gf180mcu_fd_sc_mcu7t5v0__nand2_func(A1, A2, ZN, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3449:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3449 | module gf180mcu_fd_sc_mcu7t5v0__nand3_1(A3, ZN, A2, A1, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3468:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3468 | module gf180mcu_fd_sc_mcu7t5v0__nand3_2(ZN, A3, A2, A1, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3487:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3487 | module gf180mcu_fd_sc_mcu7t5v0__nand3_4(A2, ZN, A3, A1, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3506:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3506 | module gf180mcu_fd_sc_mcu7t5v0__nand3_func(ZN, A3, A2, A1, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3525:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3525 | module gf180mcu_fd_sc_mcu7t5v0__nand4_1(A4, ZN, A3, A2, A1, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3546:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3546 | module gf180mcu_fd_sc_mcu7t5v0__nand4_2(ZN, A3, A1, A4, A2, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3567:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3567 | module gf180mcu_fd_sc_mcu7t5v0__nand4_4(A3, ZN, A4, A1, A2, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3588:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3588 | module gf180mcu_fd_sc_mcu7t5v0__nand4_func(A3, ZN, A4, A1, A2, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3609:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3609 | module gf180mcu_fd_sc_mcu7t5v0__nor2_1(A2, ZN, A1, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3626:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3626 | module gf180mcu_fd_sc_mcu7t5v0__nor2_2(A2, ZN, A1, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3643:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3643 | module gf180mcu_fd_sc_mcu7t5v0__nor2_4(ZN, A2, A1, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3660:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3660 | module gf180mcu_fd_sc_mcu7t5v0__nor2_func(ZN, A2, A1, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3677:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3677 | module gf180mcu_fd_sc_mcu7t5v0__nor3_1(A3, ZN, A2, A1, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3696:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3696 | module gf180mcu_fd_sc_mcu7t5v0__nor3_2(ZN, A3, A2, A1, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3715:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3715 | module gf180mcu_fd_sc_mcu7t5v0__nor3_4(A2, ZN, A3, A1, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3734:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3734 | module gf180mcu_fd_sc_mcu7t5v0__nor3_func(A2, ZN, A3, A1, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3753:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3753 | module gf180mcu_fd_sc_mcu7t5v0__nor4_1(A4, ZN, A3, A2, A1, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3774:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3774 | module gf180mcu_fd_sc_mcu7t5v0__nor4_2(A4, A3, ZN, A2, A1, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3795:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3795 | module gf180mcu_fd_sc_mcu7t5v0__nor4_4(A4, A3, ZN, A2, A1, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3816:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3816 | module gf180mcu_fd_sc_mcu7t5v0__nor4_func(A4, A3, ZN, A2, A1, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3837:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3837 | module gf180mcu_fd_sc_mcu7t5v0__oai211_1(A2, ZN, A1, B, C, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3858:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3858 | module gf180mcu_fd_sc_mcu7t5v0__oai211_2(A2, ZN, A1, B, C, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3879:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3879 | module gf180mcu_fd_sc_mcu7t5v0__oai211_4(A2, ZN, A1, B, C, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3900:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3900 | module gf180mcu_fd_sc_mcu7t5v0__oai211_func(A2, ZN, A1, B, C, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3921:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3921 | module gf180mcu_fd_sc_mcu7t5v0__oai21_1(A2, ZN, A1, B, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3940:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3940 | module gf180mcu_fd_sc_mcu7t5v0__oai21_2(B, ZN, A2, A1, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3959:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3959 | module gf180mcu_fd_sc_mcu7t5v0__oai21_4(A2, ZN, A1, B, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3978:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3978 | module gf180mcu_fd_sc_mcu7t5v0__oai21_func(A2, ZN, A1, B, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:3997:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 3997 | module gf180mcu_fd_sc_mcu7t5v0__oai221_1(B2, B1, C, ZN, A2, A1, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4020:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4020 | module gf180mcu_fd_sc_mcu7t5v0__oai221_2(B2, B1, ZN, C, A1, A2, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4043:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4043 | module gf180mcu_fd_sc_mcu7t5v0__oai221_4(ZN, B1, B2, C, A1, A2, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4066:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4066 | module gf180mcu_fd_sc_mcu7t5v0__oai221_func(B2, B1, C, ZN, A2, A1, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4089:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4089 | module gf180mcu_fd_sc_mcu7t5v0__oai222_1(C2, C1, B1, ZN, B2, A2, A1, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4114:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4114 | module gf180mcu_fd_sc_mcu7t5v0__oai222_2(ZN, C1, C2, B1, B2, A1, A2, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4139:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4139 | module gf180mcu_fd_sc_mcu7t5v0__oai222_4(C1, ZN, C2, B1, B2, A1, A2, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4164:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4164 | module gf180mcu_fd_sc_mcu7t5v0__oai222_func(C1, ZN, C2, B1, B2, A1, A2, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4189:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4189 | module gf180mcu_fd_sc_mcu7t5v0__oai22_1(B2, B1, ZN, A1, A2, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4210:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4210 | module gf180mcu_fd_sc_mcu7t5v0__oai22_2(B2, B1, ZN, A2, A1, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4231:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4231 | module gf180mcu_fd_sc_mcu7t5v0__oai22_4(B2, B1, ZN, A2, A1, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4252:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4252 | module gf180mcu_fd_sc_mcu7t5v0__oai22_func(B2, B1, ZN, A2, A1, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4273:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4273 | module gf180mcu_fd_sc_mcu7t5v0__oai31_1(B, A1, ZN, A2, A3, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4294:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4294 | module gf180mcu_fd_sc_mcu7t5v0__oai31_2(B, ZN, A3, A2, A1, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4315:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4315 | module gf180mcu_fd_sc_mcu7t5v0__oai31_4(A3, ZN, A1, A2, B, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4336:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4336 | module gf180mcu_fd_sc_mcu7t5v0__oai31_func(A3, ZN, A1, A2, B, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4357:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4357 | module gf180mcu_fd_sc_mcu7t5v0__oai32_1(A3, A2, A1, ZN, B1, B2, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4380:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4380 | module gf180mcu_fd_sc_mcu7t5v0__oai32_2(A3, A2, A1, ZN, B2, B1, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4403:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4403 | module gf180mcu_fd_sc_mcu7t5v0__oai32_4(A2, A3, A1, ZN, B2, B1, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4426:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4426 | module gf180mcu_fd_sc_mcu7t5v0__oai32_func(A2, A3, A1, ZN, B2, B1, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4449:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4449 | module gf180mcu_fd_sc_mcu7t5v0__oai33_1(B3, B2, B1, ZN, A1, A2, A3, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4474:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4474 | module gf180mcu_fd_sc_mcu7t5v0__oai33_2(B3, B2, ZN, B1, A3, A2, A1, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4499:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4499 | module gf180mcu_fd_sc_mcu7t5v0__oai33_4(B2, B3, B1, ZN, A1, A2, A3, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4524:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4524 | module gf180mcu_fd_sc_mcu7t5v0__oai33_func(B3, B2, B1, ZN, A1, A2, A3, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4549:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4549 | module gf180mcu_fd_sc_mcu7t5v0__or2_1(A1, A2, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4566:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4566 | module gf180mcu_fd_sc_mcu7t5v0__or2_2(A1, A2, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4583:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4583 | module gf180mcu_fd_sc_mcu7t5v0__or2_4(A2, A1, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4600:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4600 | module gf180mcu_fd_sc_mcu7t5v0__or2_func(A2, A1, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4617:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4617 | module gf180mcu_fd_sc_mcu7t5v0__or3_1(A1, A2, A3, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4636:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4636 | module gf180mcu_fd_sc_mcu7t5v0__or3_2(A1, A2, A3, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4655:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4655 | module gf180mcu_fd_sc_mcu7t5v0__or3_4(A3, A2, A1, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4674:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4674 | module gf180mcu_fd_sc_mcu7t5v0__or3_func(A1, A2, A3, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4693:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4693 | module gf180mcu_fd_sc_mcu7t5v0__or4_1(A1, A2, A3, A4, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4714:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4714 | module gf180mcu_fd_sc_mcu7t5v0__or4_2(A1, A2, A3, A4, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4735:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4735 | module gf180mcu_fd_sc_mcu7t5v0__or4_4(A4, A3, A2, A1, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4756:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4756 | module gf180mcu_fd_sc_mcu7t5v0__or4_func(A1, A2, A3, A4, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4777:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4777 | module gf180mcu_fd_sc_mcu7t5v0__sdffq_1(SE, SI, D, CLK, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4798:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4798 | module gf180mcu_fd_sc_mcu7t5v0__sdffq_2(SE, SI, D, CLK, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4819:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4819 | module gf180mcu_fd_sc_mcu7t5v0__sdffq_4(SE, SI, D, CLK, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4840:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4840 | module gf180mcu_fd_sc_mcu7t5v0__sdffq_func(SE, SI, D, CLK, Q, VDD, VSS, VNW, VPW, notifier);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4863:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4863 | module gf180mcu_fd_sc_mcu7t5v0__sdffrnq_1(SE, SI, D, CLK, RN, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4886:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4886 | module gf180mcu_fd_sc_mcu7t5v0__sdffrnq_2(SE, SI, D, CLK, RN, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4909:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4909 | module gf180mcu_fd_sc_mcu7t5v0__sdffrnq_4(SE, SI, D, CLK, RN, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4932:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4932 | module gf180mcu_fd_sc_mcu7t5v0__sdffrnq_func(SE, SI, D, CLK, RN, Q, VDD, VSS, VNW, VPW, notifier);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4957:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4957 | module gf180mcu_fd_sc_mcu7t5v0__sdffrsnq_1(SE, SI, D, CLK, SETN, RN, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:4982:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 4982 | module gf180mcu_fd_sc_mcu7t5v0__sdffrsnq_2(SE, SI, D, CLK, SETN, RN, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:5007:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 5007 | module gf180mcu_fd_sc_mcu7t5v0__sdffrsnq_4(SE, SI, D, CLK, SETN, RN, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:5032:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 5032 | module gf180mcu_fd_sc_mcu7t5v0__sdffrsnq_func(SE, SI, D, CLK, SETN, RN, Q, VDD, VSS, VNW, VPW, notifier);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:5059:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 5059 | module gf180mcu_fd_sc_mcu7t5v0__sdffsnq_1(SE, SI, D, CLK, SETN, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:5082:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 5082 | module gf180mcu_fd_sc_mcu7t5v0__sdffsnq_2(SE, SI, D, CLK, SETN, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:5105:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 5105 | module gf180mcu_fd_sc_mcu7t5v0__sdffsnq_4(SE, SI, D, CLK, SETN, Q, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:5128:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 5128 | module gf180mcu_fd_sc_mcu7t5v0__sdffsnq_func(SE, SI, D, CLK, SETN, Q, VDD, VSS, VNW, VPW, notifier);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:5153:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 5153 | module gf180mcu_fd_sc_mcu7t5v0__tieh(Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:5166:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 5166 | module gf180mcu_fd_sc_mcu7t5v0__tieh_func(Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:5179:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 5179 | module gf180mcu_fd_sc_mcu7t5v0__tiel(ZN, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:5192:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 5192 | module gf180mcu_fd_sc_mcu7t5v0__tiel_func(ZN, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:5205:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 5205 | module gf180mcu_fd_sc_mcu7t5v0__xnor2_1(A2, A1, ZN, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:5222:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 5222 | module gf180mcu_fd_sc_mcu7t5v0__xnor2_2(A2, A1, ZN, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:5239:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 5239 | module gf180mcu_fd_sc_mcu7t5v0__xnor2_4(A2, A1, ZN, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:5256:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 5256 | module gf180mcu_fd_sc_mcu7t5v0__xnor2_func(A2, A1, ZN, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:5273:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 5273 | module gf180mcu_fd_sc_mcu7t5v0__xnor3_1(A2, A1, A3, ZN, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:5292:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 5292 | module gf180mcu_fd_sc_mcu7t5v0__xnor3_2(A2, A1, A3, ZN, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:5311:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 5311 | module gf180mcu_fd_sc_mcu7t5v0__xnor3_4(A2, A1, A3, ZN, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:5330:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 5330 | module gf180mcu_fd_sc_mcu7t5v0__xnor3_func(A2, A1, A3, ZN, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:5349:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 5349 | module gf180mcu_fd_sc_mcu7t5v0__xor2_1(A2, A1, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:5366:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 5366 | module gf180mcu_fd_sc_mcu7t5v0__xor2_2(A2, A1, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:5383:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 5383 | module gf180mcu_fd_sc_mcu7t5v0__xor2_4(A2, A1, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:5400:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 5400 | module gf180mcu_fd_sc_mcu7t5v0__xor2_func(A2, A1, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:5417:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 5417 | module gf180mcu_fd_sc_mcu7t5v0__xor3_1(A2, A1, A3, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:5436:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 5436 | module gf180mcu_fd_sc_mcu7t5v0__xor3_2(A2, A1, A3, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:5455:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 5455 | module gf180mcu_fd_sc_mcu7t5v0__xor3_4(A2, A1, A3, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~
+%Warning-TIMESCALEMOD: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v:5474:8: Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)
+ 5474 | module gf180mcu_fd_sc_mcu7t5v0__xor3_func(A2, A1, A3, Z, VDD, VSS, VNW, VPW);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:7:8: ... Location of module with timescale
+    7 | module bus_decoder #(
+      |        ^~~~~~~~~~~

@@ -1,0 +1,12 @@
+yamlcore-0.0.4.dist-info/INSTALLER,sha256=zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg,4
+yamlcore-0.0.4.dist-info/LICENSE,sha256=X8_Fc4fSN5jEBo_o5jAao2dmDh0ZllFMo9s0gkvFhQM,1078
+yamlcore-0.0.4.dist-info/METADATA,sha256=LyGD6XHMU5uTEtbBv_cTO09tITLNzaG76GmQuU6Eh0w,4025
+yamlcore-0.0.4.dist-info/RECORD,,
+yamlcore-0.0.4.dist-info/WHEEL,sha256=GV9aMThwP_4oNCtvEC2ec3qUYutgWeAzklro_0m4WJQ,91
+yamlcore-0.0.4.dist-info/top_level.txt,sha256=jk1AsDKileXVYp-qjNJiwiibd-wJDQw1ktuOaISLvk8,9
+yamlcore/__init__.py,sha256=Wy80mkGdE7uwiXhSH7K6dHp7thLE_SC5L0jep2jM-ro,1216
+yamlcore/__pycache__/__init__.cpython-312.pyc,,
+yamlcore/__pycache__/dumper.cpython-312.pyc,,
+yamlcore/__pycache__/loader.cpython-312.pyc,,
+yamlcore/dumper.py,sha256=HCJFLGFGC7SEFrh3j4vXxnoHuost8iYc6mBSS-mQp_E,1106
+yamlcore/loader.py,sha256=JR761h6zSlOaa4XQnqsx0SLzAFnq-Hwxv2ArT9S62ro,4832

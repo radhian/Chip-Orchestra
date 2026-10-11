@@ -1,0 +1,36 @@
+{
+  "stage": "PNR",
+  "summary": "LibreLane hardening did not produce a GDS.",
+  "metrics": {
+    "clock_period_ns": 100.0,
+    "clock_target_mhz": 10.0,
+    "voltage": "5.0V"
+  },
+  "artifacts": [
+    {
+      "path": "logs/librelane.log",
+      "kind": "log",
+      "stage": "PNR",
+      "size": 560462,
+      "mime": "application/octet-stream",
+      "summary": "",
+      "created_at": "2026-10-11T07:46:17.608515+00:00"
+    }
+  ],
+  "warnings": [],
+  "errors": [
+    "no GDS produced"
+  ],
+  "raw_log_paths": [
+    "logs/librelane.log"
+  ],
+  "top": "NanoCGRA_Lite",
+  "gds": "",
+  "png": "",
+  "signoff": {
+    "clean": false,
+    "reason": "no metrics",
+    "failed": []
+  },
+  "tapeout_ready": false
+}

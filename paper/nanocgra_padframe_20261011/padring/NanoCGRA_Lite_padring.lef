@@ -1,0 +1,9 @@
+VERSION 5.8 ;
+BUSBITCHARS "[]" ;
+DIVIDERCHAR "/" ;
+MACRO NanoCGRA_Lite_padring
+  CLASS BLOCK ;
+  ORIGIN 0 0 ;
+  SIZE 2935 BY 2935 ;
+END NanoCGRA_Lite_padring
+END LIBRARY

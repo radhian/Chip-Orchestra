@@ -1,0 +1,1 @@
+$ iverilog -g2012 -t null -I rtl -s NanoCGRA_Lite bus_decoder.v cgra.v nano_controller.v nanocgra_lite.v pe.v sram.v uart.v uart_bridge.v

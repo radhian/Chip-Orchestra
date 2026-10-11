@@ -1,0 +1,57 @@
+{
+  "DESIGN_NAME": "NanoCGRA_Lite",
+  "VERILOG_FILES": [
+    "dir::src/bus_decoder.v",
+    "dir::src/cgra.v",
+    "dir::src/nano_controller.v",
+    "dir::src/nanocgra_lite.v",
+    "dir::src/pe.v",
+    "dir::src/sram.v",
+    "dir::src/uart.v",
+    "dir::src/uart_bridge.v"
+  ],
+  "VERILOG_INCLUDE_DIRS": [
+    "dir::src"
+  ],
+  "STA_CORNERS": [
+    "nom_tt_025C_5v00",
+    "nom_ss_125C_4v50",
+    "nom_ff_n40C_5v50"
+  ],
+  "DEFAULT_CORNER": "nom_tt_025C_5v00",
+  "TIMING_VIOLATION_CORNERS": [
+    "*tt*"
+  ],
+  "CLOCK_PORT": "clk",
+  "CLOCK_PERIOD": 100.0,
+  "PDK": "gf180mcuD",
+  "FP_SIZING": "relative",
+  "FP_CORE_UTIL": 55,
+  "PL_TARGET_DENSITY_PCT": 60,
+  "PRIMARY_GDSII_STREAMOUT_TOOL": "klayout",
+  "USE_SLANG": false,
+  "LINTER_ERROR_ON_LATCH": false,
+  "LINTER_ERROR_ON_MULTIDRIVEN": true,
+  "ERROR_ON_LINTER_ERRORS": false,
+  "ERROR_ON_LINTER_WARNINGS": false,
+  "ERROR_ON_SYNTH_CHECKS": false,
+  "ERROR_ON_UNMAPPED_CELLS": false,
+  "ERROR_ON_DISCONNECTED_PINS": false,
+  "LINTER_DISABLE_WARNINGS": [
+    "UNOPTFLAT",
+    "WIDTH",
+    "WIDTHEXPAND",
+    "WIDTHTRUNC",
+    "WIDTHCONCAT",
+    "CASEINCOMPLETE",
+    "CASEOVERLAP",
+    "UNUSEDSIGNAL",
+    "UNDRIVEN",
+    "PINMISSING",
+    "IMPLICIT",
+    "BLKSEQ",
+    "SYNCASYNCNET",
+    "DECLFILENAME",
+    "EOFNEWLINE"
+  ]
+}

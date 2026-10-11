@@ -1,0 +1,40 @@
+163. Printing statistics.
+
+=== NanoCGRA_Lite ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     6279        - wires
+     6899        - wire bits
+      110        - public wires
+      693        - public wire bits
+        4        - ports
+        4        - port bits
+     6826 3.93E+04 cells
+     1738        -   $_ANDNOT_
+      155        -   $_AND_
+     1743        -   $_MUX_
+      179        -   $_NAND_
+      188        -   $_NOR_
+      279        -   $_NOT_
+      123        -   $_ORNOT_
+      879        -   $_OR_
+      153        -   $_XNOR_
+      772        -   $_XOR_
+      617 3.93E+04   gf180mcu_fd_sc_mcu7t5v0__dffq_1
+
+   Area for cell type $_ANDNOT_ is unknown!
+   Area for cell type $_AND_ is unknown!
+   Area for cell type $_MUX_ is unknown!
+   Area for cell type $_NAND_ is unknown!
+   Area for cell type $_NOR_ is unknown!
+   Area for cell type $_NOT_ is unknown!
+   Area for cell type $_ORNOT_ is unknown!
+   Area for cell type $_OR_ is unknown!
+   Area for cell type $_XNOR_ is unknown!
+   Area for cell type $_XOR_ is unknown!
+
+   Chip area for module '\NanoCGRA_Lite': 39278.713600
+     of which used for sequential elements: 39278.713600 (100.00%)
+

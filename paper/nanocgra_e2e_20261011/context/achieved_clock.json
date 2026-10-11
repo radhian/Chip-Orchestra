@@ -1,0 +1,7 @@
+{
+  "clock_period_ns": 100.0,
+  "clock_mhz": 10.0,
+  "clock_hz": 10000000,
+  "stage": "PNR",
+  "note": "what hardening actually closed timing at; derive CLK_FREQ and every timing-derived constant from this"
+}

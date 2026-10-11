@@ -1,0 +1,12 @@
+$ iverilog -g2012 -o exports/sim.vvp -I rtl -s nanocgra_lite_tb bus_decoder.v cgra.v nano_controller.v nanocgra_lite.v pe.v sram.v uart.v uart_bridge.v nanocgra_lite_tb.v
+(compiled, no warnings)
+$ vvp exports/sim.vvp
+VCD info: dumpfile design.vcd opened for output.
+PASS  SRAM_uart  expected=123  actual=123
+PASS  CGRA_ADD  expected=8  actual=8
+PASS  CGRA_MUL  expected=144  actual=144
+PASS  CGRA_XOR  expected=85  actual=85
+TEST PASSED
+/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/tb/nanocgra_lite_tb.v:143: $finish called at 780750000 (1ps)
+rendered waves/waveform.png
+no design.vcd produced - add `$dumpfile("design.vcd"); $dumpvars(0, <tb>);` to your testbench to see a waveform.

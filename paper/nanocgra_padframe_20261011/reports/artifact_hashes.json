@@ -1,0 +1,17 @@
+[
+    {
+        "Algorithm":  "SHA256",
+        "Hash":  "B95C90DDBCBDACE98DC4F6E885E2F354329BB0F57E7CEC729F0A0C76205133DA",
+        "Path":  "D:\\LinkedinProjects\\Chip-Orchestra\\paper\\nanocgra_padframe_20261011\\padring\\NanoCGRA_Lite_chip.gds"
+    },
+    {
+        "Algorithm":  "SHA256",
+        "Hash":  "20591A5CF827BC7A672D508C33EE75AF49018898C3FD5990CE7A2B20875B549E",
+        "Path":  "D:\\LinkedinProjects\\Chip-Orchestra\\paper\\nanocgra_padframe_20261011\\gds\\nanocgra_lite_3x3_opt.gds"
+    },
+    {
+        "Algorithm":  "SHA256",
+        "Hash":  "5D0AB8A374AA8EDDB656BA0EFB01AE36029E59922A9B74F75F48A497DDDE8D8C",
+        "Path":  "D:\\LinkedinProjects\\Chip-Orchestra\\paper\\iscas2027\\figures\\nanocgra_padframe_klayout.png"
+    }
+]

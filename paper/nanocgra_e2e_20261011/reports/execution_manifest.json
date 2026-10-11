@@ -1,0 +1,186 @@
+{
+  "started_utc": "2026-10-11T07:45:32Z",
+  "workspace": "/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011",
+  "input": "output/nanocgra_lite_3x3_opt/rtl",
+  "mode": "Direct repository EDA runners on existing RTL, without AI regeneration",
+  "stages": {
+    "SIM": {
+      "stage": "SIM",
+      "summary": "Simulation completed \u2014 testbench PASSED with waveform.",
+      "metrics": {
+        "compiled": true,
+        "waveform": true,
+        "passed": true,
+        "golden_match": null,
+        "signal_count": 10
+      },
+      "artifacts": [
+        {
+          "path": "waves/waveform.json",
+          "kind": "waveform",
+          "stage": "SIM",
+          "size": 36796,
+          "mime": "application/json",
+          "summary": "",
+          "created_at": "2026-10-11T07:45:33.078377+00:00"
+        },
+        {
+          "path": "waves/design.vcd",
+          "kind": "waveform",
+          "stage": "SIM",
+          "size": 217981,
+          "mime": "application/x-cdlink",
+          "summary": "",
+          "created_at": "2026-10-11T07:45:33.091642+00:00"
+        },
+        {
+          "path": "waves/waveform.png",
+          "kind": "image",
+          "stage": "SIM",
+          "size": 28921,
+          "mime": "image/png",
+          "summary": "",
+          "created_at": "2026-10-11T07:45:38.389140+00:00"
+        },
+        {
+          "path": "logs/sim.log",
+          "kind": "log",
+          "stage": "SIM",
+          "size": 706,
+          "mime": "application/octet-stream",
+          "summary": "",
+          "created_at": "2026-10-11T07:45:38.435239+00:00"
+        }
+      ],
+      "warnings": [
+        "multiple testbenches found; simulating nanocgra_lite_tb.v (unit tbs excluded: nano_controller_tb.v, pe_tb.v, sram_tb.v, uart_tb.v)",
+        "no waveform (design.vcd) produced"
+      ],
+      "errors": [],
+      "raw_log_paths": [
+        "logs/sim.log"
+      ],
+      "top": "NanoCGRA_Lite",
+      "compiled": true,
+      "waveform": true,
+      "waveform_summary": {
+        "tmax": 780750000,
+        "signals": [
+          {
+            "name": "clk",
+            "width": 1
+          },
+          {
+            "name": "uart_rx",
+            "width": 1
+          },
+          {
+            "name": "uart_tx",
+            "width": 1
+          },
+          {
+            "name": "AW",
+            "width": 32
+          },
+          {
+            "name": "BITT",
+            "width": 32
+          },
+          {
+            "name": "CPB",
+            "width": 32
+          },
+          {
+            "name": "DW",
+            "width": 32
+          },
+          {
+            "name": "rd",
+            "width": 8
+          },
+          {
+            "name": "rst_n",
+            "width": 1
+          },
+          {
+            "name": "errors",
+            "width": 32
+          }
+        ],
+        "trace_path": "waves/waveform.json"
+      }
+    },
+    "LINT": {
+      "stage": "LINT",
+      "summary": "Lint clean.",
+      "metrics": {
+        "checked_files": 8,
+        "clean": true,
+        "warning_count": 0
+      },
+      "artifacts": [
+        {
+          "path": "logs/lint.log",
+          "kind": "log",
+          "stage": "LINT",
+          "size": 138,
+          "mime": "application/octet-stream",
+          "summary": "",
+          "created_at": "2026-10-11T07:45:38.525537+00:00"
+        }
+      ],
+      "warnings": [],
+      "errors": [],
+      "raw_log_paths": [
+        "logs/lint.log"
+      ],
+      "clean": true,
+      "checked_files": [
+        "bus_decoder.v",
+        "cgra.v",
+        "nano_controller.v",
+        "nanocgra_lite.v",
+        "pe.v",
+        "sram.v",
+        "uart.v",
+        "uart_bridge.v"
+      ]
+    },
+    "HARDEN": {
+      "stage": "PNR",
+      "summary": "LibreLane hardening did not produce a GDS.",
+      "metrics": {
+        "clock_period_ns": 100.0,
+        "clock_target_mhz": 10.0,
+        "voltage": "5.0V"
+      },
+      "artifacts": [
+        {
+          "path": "logs/librelane.log",
+          "kind": "log",
+          "stage": "PNR",
+          "size": 560462,
+          "mime": "application/octet-stream",
+          "summary": "",
+          "created_at": "2026-10-11T07:46:17.608515+00:00"
+        }
+      ],
+      "warnings": [],
+      "errors": [
+        "no GDS produced"
+      ],
+      "raw_log_paths": [
+        "logs/librelane.log"
+      ],
+      "top": "NanoCGRA_Lite",
+      "gds": "",
+      "png": "",
+      "signoff": {
+        "clean": false,
+        "reason": "no metrics",
+        "failed": []
+      },
+      "tapeout_ready": false
+    }
+  }
+}

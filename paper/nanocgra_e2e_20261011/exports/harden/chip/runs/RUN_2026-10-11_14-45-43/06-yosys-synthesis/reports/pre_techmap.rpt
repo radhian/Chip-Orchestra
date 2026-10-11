@@ -1,0 +1,51 @@
+161. Printing statistics.
+
+=== NanoCGRA_Lite ===
+
+        +----------Local Count, excluding submodules.
+        | 
+     5139 wires
+     5759 wire bits
+      110 public wires
+      693 public wire bits
+        4 ports
+        4 port bits
+     5686 cells
+     1738   $_ANDNOT_
+      155   $_AND_
+       24   $_DFF_P_
+      603   $_MUX_
+      179   $_NAND_
+      188   $_NOR_
+      279   $_NOT_
+      123   $_ORNOT_
+      879   $_OR_
+      256   $_SDFFCE_PN0P_
+      217   $_SDFFE_PN0P_
+        2   $_SDFFE_PN1P_
+       72   $_SDFFE_PP0P_
+       27   $_SDFF_PN0_
+        3   $_SDFF_PN1_
+       16   $_SDFF_PP0_
+      153   $_XNOR_
+      772   $_XOR_
+
+   Area for cell type $_ANDNOT_ is unknown!
+   Area for cell type $_AND_ is unknown!
+   Area for cell type $_DFF_P_ is unknown!
+   Area for cell type $_MUX_ is unknown!
+   Area for cell type $_NAND_ is unknown!
+   Area for cell type $_NOR_ is unknown!
+   Area for cell type $_NOT_ is unknown!
+   Area for cell type $_ORNOT_ is unknown!
+   Area for cell type $_OR_ is unknown!
+   Area for cell type $_SDFFCE_PN0P_ is unknown!
+   Area for cell type $_SDFFE_PN0P_ is unknown!
+   Area for cell type $_SDFFE_PN1P_ is unknown!
+   Area for cell type $_SDFFE_PP0P_ is unknown!
+   Area for cell type $_SDFF_PN0_ is unknown!
+   Area for cell type $_SDFF_PN1_ is unknown!
+   Area for cell type $_SDFF_PP0_ is unknown!
+   Area for cell type $_XNOR_ is unknown!
+   Area for cell type $_XOR_ is unknown!
+

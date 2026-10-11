@@ -1,0 +1,15 @@
+{
+  "pages": 5,
+  "technical_pages": 4,
+  "page_5_references_only": true,
+  "abstract_characters": 1062,
+  "abstract_words": 150,
+  "references": 11,
+  "compared_research_studies": 8,
+  "independent_functional_checks_passed": 448,
+  "pdf_bytes": 678903,
+  "embedded_fonts_without_type3": true,
+  "rendered_semicolons": 0,
+  "visual_review": "All five final page images reviewed",
+  "sha256": "ca4221a3b61c7fa74edcc09bd2e66ba4d2e1e9d8bc948977bcdb4dcf381c340f"
+}

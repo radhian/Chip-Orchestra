@@ -1,0 +1,30 @@
+Subprocess had a non-zero exit.
+Last 10 line(s):
+============================================================================
+%OL_METRIC_I timing__hold_vio__count__corner:nom_ff_n40C_5v50 0
+%OL_METRIC_F timing__hold_r2r__ws__corner:nom_ff_n40C_5v50 0.210323
+%OL_METRIC_I timing__hold_r2r_vio__count__corner:nom_ff_n40C_5v50 0
+%OL_METRIC_I timing__setup_vio__count__corner:nom_ff_n40C_5v50 0
+%OL_METRIC_F timing__setup_r2r__ws__corner:nom_ff_n40C_5v50 inf
+%OL_METRIC_I timing__setup_r2r_vio__count__corner:nom_ff_n40C_5v50 0
+%OL_END_REPORT
+%OL_CREATE_REPORT unpropagated.rpt
+Error: clock objects do not have a is_propagated property.
+
+Full log file: 'runs/RUN_2026-10-11_14-45-43/12-openroad-staprepnr/nom_ff_n40C_5v50/sta.log'
+Failed STA for the nom_ff_n40C_5v50 timing corner:
+Subprocess had a non-zero exit.
+Last 10 line(s):
+============================================================================
+%OL_METRIC_I timing__hold_vio__count__corner:nom_tt_025C_5v00 0
+%OL_METRIC_F timing__hold_r2r__ws__corner:nom_tt_025C_5v00 0.502395
+%OL_METRIC_I timing__hold_r2r_vio__count__corner:nom_tt_025C_5v00 0
+%OL_METRIC_I timing__setup_vio__count__corner:nom_tt_025C_5v00 0
+%OL_METRIC_F timing__setup_r2r__ws__corner:nom_tt_025C_5v00 inf
+%OL_METRIC_I timing__setup_r2r_vio__count__corner:nom_tt_025C_5v00 0
+%OL_END_REPORT
+%OL_CREATE_REPORT unpropagated.rpt
+Error: clock objects do not have a is_propagated property.
+
+Full log file: 'runs/RUN_2026-10-11_14-45-43/12-openroad-staprepnr/nom_tt_025C_5v00/sta.log'
+Failed STA for the nom_tt_025C_5v00 timing corner:

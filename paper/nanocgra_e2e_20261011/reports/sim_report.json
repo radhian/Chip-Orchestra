@@ -1,0 +1,106 @@
+{
+  "stage": "SIM",
+  "summary": "Simulation completed \u2014 testbench PASSED with waveform.",
+  "metrics": {
+    "compiled": true,
+    "waveform": true,
+    "passed": true,
+    "golden_match": null,
+    "signal_count": 10
+  },
+  "artifacts": [
+    {
+      "path": "waves/waveform.json",
+      "kind": "waveform",
+      "stage": "SIM",
+      "size": 36796,
+      "mime": "application/json",
+      "summary": "",
+      "created_at": "2026-10-11T07:45:33.078377+00:00"
+    },
+    {
+      "path": "waves/design.vcd",
+      "kind": "waveform",
+      "stage": "SIM",
+      "size": 217981,
+      "mime": "application/x-cdlink",
+      "summary": "",
+      "created_at": "2026-10-11T07:45:33.091642+00:00"
+    },
+    {
+      "path": "waves/waveform.png",
+      "kind": "image",
+      "stage": "SIM",
+      "size": 28921,
+      "mime": "image/png",
+      "summary": "",
+      "created_at": "2026-10-11T07:45:38.389140+00:00"
+    },
+    {
+      "path": "logs/sim.log",
+      "kind": "log",
+      "stage": "SIM",
+      "size": 706,
+      "mime": "application/octet-stream",
+      "summary": "",
+      "created_at": "2026-10-11T07:45:38.435239+00:00"
+    }
+  ],
+  "warnings": [
+    "multiple testbenches found; simulating nanocgra_lite_tb.v (unit tbs excluded: nano_controller_tb.v, pe_tb.v, sram_tb.v, uart_tb.v)",
+    "no waveform (design.vcd) produced"
+  ],
+  "errors": [],
+  "raw_log_paths": [
+    "logs/sim.log"
+  ],
+  "top": "NanoCGRA_Lite",
+  "compiled": true,
+  "waveform": true,
+  "waveform_summary": {
+    "tmax": 780750000,
+    "signals": [
+      {
+        "name": "clk",
+        "width": 1
+      },
+      {
+        "name": "uart_rx",
+        "width": 1
+      },
+      {
+        "name": "uart_tx",
+        "width": 1
+      },
+      {
+        "name": "AW",
+        "width": 32
+      },
+      {
+        "name": "BITT",
+        "width": 32
+      },
+      {
+        "name": "CPB",
+        "width": 32
+      },
+      {
+        "name": "DW",
+        "width": 32
+      },
+      {
+        "name": "rd",
+        "width": 8
+      },
+      {
+        "name": "rst_n",
+        "width": 1
+      },
+      {
+        "name": "errors",
+        "width": 32
+      }
+    ],
+    "trace_path": "waves/waveform.json"
+  }
+}

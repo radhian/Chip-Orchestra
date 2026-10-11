@@ -1,0 +1,6 @@
+Collecting pyosys
+  Downloading pyosys-0.69.post176-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (10 kB)
+Downloading pyosys-0.69.post176-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (33.6 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 33.6/33.6 MB 43.0 MB/s  0:00:00
+Installing collected packages: pyosys
+Successfully installed pyosys-0.69.post176

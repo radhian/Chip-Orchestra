@@ -1,0 +1,4 @@
+SIM Simulation completed — testbench PASSED with waveform. errors= []
+LINT Lint clean. errors= []
+HARDEN LibreLane hardening did not produce a GDS. errors= ['no GDS produced']
+Fresh hardening failed. No new GDS was produced.

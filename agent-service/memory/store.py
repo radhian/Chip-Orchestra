@@ -17,7 +17,10 @@ class Base(DeclarativeBase):
 class AgentMemory(Base):
     __tablename__ = "agent_memories"
 
-    id: Mapped[str] = mapped_column(String(128), primary_key=True)
+    # The generated identifier is "<task_id>-<stage>-<unix_timestamp>", which
+    # exceeds the prior 36-character limit in MySQL once the task UUID and stage
+    # name are combined. Keep enough room for future task/stage keys as well.
+    id: Mapped[str] = mapped_column(String(255), primary_key=True)
     task_id: Mapped[str] = mapped_column(String(64), index=True)
     stage: Mapped[str] = mapped_column(String(64), index=True)
     agent_name: Mapped[str] = mapped_column(String(64))
@@ -49,6 +52,31 @@ class MemoryStore:
 
     def create_tables(self):
         Base.metadata.create_all(self.engine)
+        self._ensure_schema()
+
+    def _ensure_schema(self):
+        """MySQL can keep an older, undersized id column from a prior run.
+
+        Existing installations may have ``agent_memories.id`` defined as
+        ``VARCHAR(36)`` even though the app generates longer composite IDs.
+        Extend it in-place so the service can persist stage memories without
+        failing on the first agent invocation.
+        """
+        try:
+            with self.engine.begin() as conn:
+                result = conn.exec_driver_sql(
+                    "SHOW COLUMNS FROM agent_memories LIKE 'id'"
+                ).fetchone()
+                if result and result[1].lower().startswith("varchar"):
+                    length = int(result[1].split("(")[1].split(")")[0])
+                    if length < 255:
+                        conn.exec_driver_sql(
+                            "ALTER TABLE agent_memories MODIFY id VARCHAR(255) NOT NULL"
+                        )
+        except Exception:
+            # Ignore schema drift issues here; the service should still boot and
+            # the application may have already been corrected externally.
+            pass
 
     def search_memories(self, task_id: str, stage: str) -> List[MemoryItem]:
         with Session(self.engine) as session:

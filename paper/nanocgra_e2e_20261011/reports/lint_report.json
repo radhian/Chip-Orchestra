@@ -1,0 +1,36 @@
+{
+  "stage": "LINT",
+  "summary": "Lint clean.",
+  "metrics": {
+    "checked_files": 8,
+    "clean": true,
+    "warning_count": 0
+  },
+  "artifacts": [
+    {
+      "path": "logs/lint.log",
+      "kind": "log",
+      "stage": "LINT",
+      "size": 138,
+      "mime": "application/octet-stream",
+      "summary": "",
+      "created_at": "2026-10-11T07:45:38.525537+00:00"
+    }
+  ],
+  "warnings": [],
+  "errors": [],
+  "raw_log_paths": [
+    "logs/lint.log"
+  ],
+  "clean": true,
+  "checked_files": [
+    "bus_decoder.v",
+    "cgra.v",
+    "nano_controller.v",
+    "nanocgra_lite.v",
+    "pe.v",
+    "sram.v",
+    "uart.v",
+    "uart_bridge.v"
+  ]
+}

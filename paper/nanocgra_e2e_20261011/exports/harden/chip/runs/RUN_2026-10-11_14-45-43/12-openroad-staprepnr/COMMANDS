@@ -1,0 +1,3 @@
+sta -no_splash -exit /mnt/d/LinkedinProjects/Chip-Orchestra/paper/eda_runtime/librelane/scripts/openroad/sta/corner.tcl
+sta -no_splash -exit /mnt/d/LinkedinProjects/Chip-Orchestra/paper/eda_runtime/librelane/scripts/openroad/sta/corner.tcl
+sta -no_splash -exit /mnt/d/LinkedinProjects/Chip-Orchestra/paper/eda_runtime/librelane/scripts/openroad/sta/corner.tcl

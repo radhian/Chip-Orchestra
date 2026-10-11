@@ -1,0 +1,49 @@
+171. Printing statistics.
+
+=== NanoCGRA_Lite ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     5542        - wires
+     5542        - wire bits
+      620        - public wires
+      620        - public wire bits
+        4        - ports
+        4        - port bits
+     5539  1.3E+05 cells
+      192 3.37E+03   gf180mcu_fd_sc_mcu7t5v0__and2_1
+       39  856.128   gf180mcu_fd_sc_mcu7t5v0__and3_1
+        9  217.325   gf180mcu_fd_sc_mcu7t5v0__and4_1
+       77 1.69E+03   gf180mcu_fd_sc_mcu7t5v0__aoi211_1
+      505 8.87E+03   gf180mcu_fd_sc_mcu7t5v0__aoi21_1
+       54  1.3E+03   gf180mcu_fd_sc_mcu7t5v0__aoi221_1
+        7   215.13   gf180mcu_fd_sc_mcu7t5v0__aoi222_1
+      235 4.64E+03   gf180mcu_fd_sc_mcu7t5v0__aoi22_1
+      508 4.46E+03   gf180mcu_fd_sc_mcu7t5v0__clkinv_1
+      617 3.93E+04   gf180mcu_fd_sc_mcu7t5v0__dffq_1
+        6  197.568   gf180mcu_fd_sc_mcu7t5v0__mux2_2
+        8  561.971   gf180mcu_fd_sc_mcu7t5v0__mux4_1
+      791 8.68E+03   gf180mcu_fd_sc_mcu7t5v0__nand2_1
+      206 3.17E+03   gf180mcu_fd_sc_mcu7t5v0__nand3_1
+       17  335.866   gf180mcu_fd_sc_mcu7t5v0__nand4_1
+      460 6.06E+03   gf180mcu_fd_sc_mcu7t5v0__nor2_1
+       82 1.44E+03   gf180mcu_fd_sc_mcu7t5v0__nor3_1
+       15   329.28   gf180mcu_fd_sc_mcu7t5v0__nor4_1
+      169 3.71E+03   gf180mcu_fd_sc_mcu7t5v0__oai211_1
+      428 7.52E+03   gf180mcu_fd_sc_mcu7t5v0__oai21_1
+       28  737.587   gf180mcu_fd_sc_mcu7t5v0__oai221_1
+      315  6914.88   gf180mcu_fd_sc_mcu7t5v0__oai22_1
+       41  990.035   gf180mcu_fd_sc_mcu7t5v0__oai31_1
+        8  210.739   gf180mcu_fd_sc_mcu7t5v0__oai32_1
+       80  1.4E+03   gf180mcu_fd_sc_mcu7t5v0__or2_1
+       30   658.56   gf180mcu_fd_sc_mcu7t5v0__or3_1
+        1   26.342   gf180mcu_fd_sc_mcu7t5v0__or4_1
+      111 3.17E+03   gf180mcu_fd_sc_mcu7t5v0__xnor2_1
+       32 1.69E+03   gf180mcu_fd_sc_mcu7t5v0__xnor3_1
+      273 7.19E+03   gf180mcu_fd_sc_mcu7t5v0__xor2_1
+      195 9.85E+03   gf180mcu_fd_sc_mcu7t5v0__xor3_1
+
+   Chip area for module '\NanoCGRA_Lite': 129736.320000
+     of which used for sequential elements: 39278.713600 (30.28%)
+

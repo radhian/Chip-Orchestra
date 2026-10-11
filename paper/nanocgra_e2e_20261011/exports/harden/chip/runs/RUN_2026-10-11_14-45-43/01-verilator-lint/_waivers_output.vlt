@@ -1,0 +1,619 @@
+// DESCRIPTION: Verilator output: Waivers generated with --waiver-output
+
+`verilator_config
+
+// Below you find suggested waivers. You have three options:
+//   1. Fix the reason for the linter warning
+//   2. Keep the waiver permanently if you are sure this is okay
+//   3. Keep the waiver temporarily to suppress the output
+
+// lint_off -rule DECLFILENAME -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Filename '4aa3e3ba69f849238a9320839934f56b' does not match MODULE name: 'gf180mcu_fd_sc_mcu7t5v0__addf_1'"
+
+// lint_off -rule DECLFILENAME -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/nanocgra_lite.v" -match "Filename 'nanocgra_lite' does not match MODULE name: 'NanoCGRA_Lite'"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule TIMESCALEMOD -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v" -match "Timescale missing on this module as other modules have it (IEEE 1800-2017 3.14.2.3)*"
+
+// lint_off -rule UNUSEDSIGNAL -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/nanocgra_lite.v" -match "Signal is not used: 'sel_status'"
+
+// lint_off -rule UNUSEDSIGNAL -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/nanocgra_lite.v" -match "Bits of signal are not used: 'opa_reg'[7:5]"
+
+// lint_off -rule UNUSEDSIGNAL -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/nanocgra_lite.v" -match "Bits of signal are not used: 'opb_reg'[7:5]"
+
+// lint_off -rule UNUSEDSIGNAL -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/nanocgra_lite.v" -match "Bits of signal are not used: 'res_reg'[7:5]"
+
+// lint_off -rule UNUSEDSIGNAL -file "*/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/pe.v" -match "Bits of signal are not used: 'cfg_reg'[7:5]"
+

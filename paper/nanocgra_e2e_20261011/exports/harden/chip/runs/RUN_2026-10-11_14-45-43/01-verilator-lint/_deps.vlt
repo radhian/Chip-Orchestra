@@ -1,0 +1,18 @@
+`verilator_config
+lint_off -rule UNOPTFLAT
+lint_off -rule WIDTH
+lint_off -rule WIDTHEXPAND
+lint_off -rule WIDTHTRUNC
+lint_off -rule WIDTHCONCAT
+lint_off -rule CASEINCOMPLETE
+lint_off -rule CASEOVERLAP
+lint_off -rule UNUSEDSIGNAL
+lint_off -rule UNDRIVEN
+lint_off -rule PINMISSING
+lint_off -rule IMPLICIT
+lint_off -rule BLKSEQ
+lint_off -rule SYNCASYNCNET
+lint_off -rule DECLFILENAME
+lint_off -rule EOFNEWLINE
+lint_off -rule UNDRIVEN -file "/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v"
+lint_off -rule UNUSEDSIGNAL -file "/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v"

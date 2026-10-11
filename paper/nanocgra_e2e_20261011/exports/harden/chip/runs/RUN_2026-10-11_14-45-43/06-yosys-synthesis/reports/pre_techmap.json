@@ -1,0 +1,73 @@
+{
+   "creator": "Yosys 0.66 (git sha1 86f2ddebc-dirty, g++ 12.2.1 -fPIC -O3)",
+   "invocation": "stat -json -liberty /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/af7a85f6c19d4fd08d141427d3730934.lib ",
+   "modules": {
+      "\\NanoCGRA_Lite": {
+         "num_wires":         5139,
+         "num_wire_bits":     5759,
+         "num_pub_wires":     110,
+         "num_pub_wire_bits": 693,
+         "num_ports":         4,
+         "num_port_bits":     4,
+         "num_memories":      0,
+         "num_memory_bits":   0,
+         "num_processes":     0,
+         "num_cells":         5686,
+         "num_submodules":       0,
+         "num_cells_by_type": {
+            "$_ANDNOT_": 1738,
+            "$_AND_": 155,
+            "$_DFF_P_": 24,
+            "$_MUX_": 603,
+            "$_NAND_": 179,
+            "$_NOR_": 188,
+            "$_NOT_": 279,
+            "$_ORNOT_": 123,
+            "$_OR_": 879,
+            "$_SDFFCE_PN0P_": 256,
+            "$_SDFFE_PN0P_": 217,
+            "$_SDFFE_PN1P_": 2,
+            "$_SDFFE_PP0P_": 72,
+            "$_SDFF_PN0_": 27,
+            "$_SDFF_PN1_": 3,
+            "$_SDFF_PP0_": 16,
+            "$_XNOR_": 153,
+            "$_XOR_": 772
+         }
+      }
+   },
+      "design": {
+         "num_wires":         5139,
+         "num_wire_bits":     5759,
+         "num_pub_wires":     110,
+         "num_pub_wire_bits": 693,
+         "num_ports":         4,
+         "num_port_bits":     4,
+         "num_memories":      0,
+         "num_memory_bits":   0,
+         "num_processes":     0,
+         "num_cells":         5686,
+         "num_submodules":       0,
+         "num_cells_by_type": {
+            "$_ANDNOT_": 1738,
+            "$_AND_": 155,
+            "$_DFF_P_": 24,
+            "$_MUX_": 603,
+            "$_NAND_": 179,
+            "$_NOR_": 188,
+            "$_NOT_": 279,
+            "$_ORNOT_": 123,
+            "$_OR_": 879,
+            "$_SDFFCE_PN0P_": 256,
+            "$_SDFFE_PN0P_": 217,
+            "$_SDFFE_PN1P_": 2,
+            "$_SDFFE_PP0P_": 72,
+            "$_SDFF_PN0_": 27,
+            "$_SDFF_PN1_": 3,
+            "$_SDFF_PP0_": 16,
+            "$_XNOR_": 153,
+            "$_XOR_": 772
+         }
+      }
+}
+

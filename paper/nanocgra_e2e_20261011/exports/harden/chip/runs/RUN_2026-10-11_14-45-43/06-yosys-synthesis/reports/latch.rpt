@@ -1,0 +1,7 @@
+
+21. Executing PROC_DLATCH pass (convert process syncs to latches).
+No latch inferred for signal `$paramod$000cc2b270b42b131af50c15269800a3b20033de\bus_decoder.\rdata' from process `$paramod$000cc2b270b42b131af50c15269800a3b20033de\bus_decoder.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:34$168'.
+No latch inferred for signal `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.\rdata' from process `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart.v:166$42'.
+No latch inferred for signal `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.\tx_start' from process `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart.v:94$22'.
+No latch inferred for signal `$paramod\pe\DW=s32'00000000000000000000000000001000.\alu_r' from process `$paramod\pe\DW=s32'00000000000000000000000000001000.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/pe.v:61$176'.
+No latch inferred for signal `$paramod\pe\DW=s32'00000000000000000000000000001000.\opb' from process `$paramod\pe\DW=s32'00000000000000000000000000001000.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/pe.v:46$174'.

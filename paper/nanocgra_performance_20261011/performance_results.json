@@ -1,0 +1,3914 @@
+{
+  "8": {
+    "cpb": 8,
+    "clock_hz": 10000000,
+    "baud": 1250000.0,
+    "returncode": 0,
+    "passed": true,
+    "vectors": 192,
+    "sram_checks": 32,
+    "latency_definition": "First operand-write start bit to completion of returned result byte, including six writes, RUN, 200-cycle host wait, READ, and UART response",
+    "timing": {
+      "total_ns": {
+        "min": 239500,
+        "max": 239500,
+        "mean": 239500.0
+      },
+      "run_read_ns": {
+        "min": 81100,
+        "max": 81100,
+        "mean": 81100.0
+      },
+      "read_ns": {
+        "min": 34800,
+        "max": 34800,
+        "mean": 34800.0
+      },
+      "core_cycles": {
+        "min": 5,
+        "max": 5,
+        "mean": 5.0
+      }
+    },
+    "measurements": [
+      {
+        "id": 0,
+        "op": 0,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 1,
+        "op": 0,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 2,
+        "op": 0,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 3,
+        "op": 0,
+        "expected": 254,
+        "observed": 254,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 4,
+        "op": 0,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 5,
+        "op": 0,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 6,
+        "op": 0,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 7,
+        "op": 0,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 8,
+        "op": 0,
+        "expected": 172,
+        "observed": 172,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 9,
+        "op": 0,
+        "expected": 170,
+        "observed": 170,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 10,
+        "op": 0,
+        "expected": 170,
+        "observed": 170,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 11,
+        "op": 0,
+        "expected": 203,
+        "observed": 203,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 12,
+        "op": 0,
+        "expected": 8,
+        "observed": 8,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 13,
+        "op": 0,
+        "expected": 183,
+        "observed": 183,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 14,
+        "op": 0,
+        "expected": 176,
+        "observed": 176,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 15,
+        "op": 0,
+        "expected": 254,
+        "observed": 254,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 16,
+        "op": 0,
+        "expected": 118,
+        "observed": 118,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 17,
+        "op": 0,
+        "expected": 200,
+        "observed": 200,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 18,
+        "op": 0,
+        "expected": 32,
+        "observed": 32,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 19,
+        "op": 0,
+        "expected": 125,
+        "observed": 125,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 20,
+        "op": 0,
+        "expected": 79,
+        "observed": 79,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 21,
+        "op": 0,
+        "expected": 88,
+        "observed": 88,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 22,
+        "op": 0,
+        "expected": 26,
+        "observed": 26,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 23,
+        "op": 0,
+        "expected": 12,
+        "observed": 12,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 24,
+        "op": 1,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 25,
+        "op": 1,
+        "expected": 1,
+        "observed": 1,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 26,
+        "op": 1,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 27,
+        "op": 1,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 28,
+        "op": 1,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 29,
+        "op": 1,
+        "expected": 1,
+        "observed": 1,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 30,
+        "op": 1,
+        "expected": 2,
+        "observed": 2,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 31,
+        "op": 1,
+        "expected": 254,
+        "observed": 254,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 32,
+        "op": 1,
+        "expected": 74,
+        "observed": 74,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 33,
+        "op": 1,
+        "expected": 80,
+        "observed": 80,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 34,
+        "op": 1,
+        "expected": 114,
+        "observed": 114,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 35,
+        "op": 1,
+        "expected": 93,
+        "observed": 93,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 36,
+        "op": 1,
+        "expected": 226,
+        "observed": 226,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 37,
+        "op": 1,
+        "expected": 87,
+        "observed": 87,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 38,
+        "op": 1,
+        "expected": 46,
+        "observed": 46,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 39,
+        "op": 1,
+        "expected": 228,
+        "observed": 228,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 40,
+        "op": 1,
+        "expected": 140,
+        "observed": 140,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 41,
+        "op": 1,
+        "expected": 46,
+        "observed": 46,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 42,
+        "op": 1,
+        "expected": 166,
+        "observed": 166,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 43,
+        "op": 1,
+        "expected": 83,
+        "observed": 83,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 44,
+        "op": 1,
+        "expected": 193,
+        "observed": 193,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 45,
+        "op": 1,
+        "expected": 174,
+        "observed": 174,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 46,
+        "op": 1,
+        "expected": 76,
+        "observed": 76,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 47,
+        "op": 1,
+        "expected": 42,
+        "observed": 42,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 48,
+        "op": 2,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 49,
+        "op": 2,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 50,
+        "op": 2,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 51,
+        "op": 2,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 52,
+        "op": 2,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 53,
+        "op": 2,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 54,
+        "op": 2,
+        "expected": 1,
+        "observed": 1,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 55,
+        "op": 2,
+        "expected": 1,
+        "observed": 1,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 56,
+        "op": 2,
+        "expected": 177,
+        "observed": 177,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 57,
+        "op": 2,
+        "expected": 173,
+        "observed": 173,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 58,
+        "op": 2,
+        "expected": 12,
+        "observed": 12,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 59,
+        "op": 2,
+        "expected": 20,
+        "observed": 20,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 60,
+        "op": 2,
+        "expected": 17,
+        "observed": 17,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 61,
+        "op": 2,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 62,
+        "op": 2,
+        "expected": 65,
+        "observed": 65,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 63,
+        "op": 2,
+        "expected": 1,
+        "observed": 1,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 64,
+        "op": 2,
+        "expected": 1,
+        "observed": 1,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 65,
+        "op": 2,
+        "expected": 73,
+        "observed": 73,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 66,
+        "op": 2,
+        "expected": 33,
+        "observed": 33,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 67,
+        "op": 2,
+        "expected": 128,
+        "observed": 128,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 68,
+        "op": 2,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 69,
+        "op": 2,
+        "expected": 129,
+        "observed": 129,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 70,
+        "op": 2,
+        "expected": 35,
+        "observed": 35,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 71,
+        "op": 2,
+        "expected": 17,
+        "observed": 17,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 72,
+        "op": 3,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 73,
+        "op": 3,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 74,
+        "op": 3,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 75,
+        "op": 3,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 76,
+        "op": 3,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 77,
+        "op": 3,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 78,
+        "op": 3,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 79,
+        "op": 3,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 80,
+        "op": 3,
+        "expected": 251,
+        "observed": 251,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 81,
+        "op": 3,
+        "expected": 253,
+        "observed": 253,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 82,
+        "op": 3,
+        "expected": 158,
+        "observed": 158,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 83,
+        "op": 3,
+        "expected": 183,
+        "observed": 183,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 84,
+        "op": 3,
+        "expected": 247,
+        "observed": 247,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 85,
+        "op": 3,
+        "expected": 183,
+        "observed": 183,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 86,
+        "op": 3,
+        "expected": 111,
+        "observed": 111,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 87,
+        "op": 3,
+        "expected": 253,
+        "observed": 253,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 88,
+        "op": 3,
+        "expected": 117,
+        "observed": 117,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 89,
+        "op": 3,
+        "expected": 127,
+        "observed": 127,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 90,
+        "op": 3,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 91,
+        "op": 3,
+        "expected": 253,
+        "observed": 253,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 92,
+        "op": 3,
+        "expected": 79,
+        "observed": 79,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 93,
+        "op": 3,
+        "expected": 215,
+        "observed": 215,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 94,
+        "op": 3,
+        "expected": 247,
+        "observed": 247,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 95,
+        "op": 3,
+        "expected": 251,
+        "observed": 251,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 96,
+        "op": 4,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 97,
+        "op": 4,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 98,
+        "op": 4,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 99,
+        "op": 4,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 100,
+        "op": 4,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 101,
+        "op": 4,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 102,
+        "op": 4,
+        "expected": 254,
+        "observed": 254,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 103,
+        "op": 4,
+        "expected": 254,
+        "observed": 254,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 104,
+        "op": 4,
+        "expected": 74,
+        "observed": 74,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 105,
+        "op": 4,
+        "expected": 80,
+        "observed": 80,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 106,
+        "op": 4,
+        "expected": 146,
+        "observed": 146,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 107,
+        "op": 4,
+        "expected": 163,
+        "observed": 163,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 108,
+        "op": 4,
+        "expected": 230,
+        "observed": 230,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 109,
+        "op": 4,
+        "expected": 183,
+        "observed": 183,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 110,
+        "op": 4,
+        "expected": 46,
+        "observed": 46,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 111,
+        "op": 4,
+        "expected": 252,
+        "observed": 252,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 112,
+        "op": 4,
+        "expected": 116,
+        "observed": 116,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 113,
+        "op": 4,
+        "expected": 54,
+        "observed": 54,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 114,
+        "op": 4,
+        "expected": 222,
+        "observed": 222,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 115,
+        "op": 4,
+        "expected": 125,
+        "observed": 125,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 116,
+        "op": 4,
+        "expected": 79,
+        "observed": 79,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 117,
+        "op": 4,
+        "expected": 86,
+        "observed": 86,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 118,
+        "op": 4,
+        "expected": 212,
+        "observed": 212,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 119,
+        "op": 4,
+        "expected": 234,
+        "observed": 234,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 120,
+        "op": 5,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 121,
+        "op": 5,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 122,
+        "op": 5,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 123,
+        "op": 5,
+        "expected": 1,
+        "observed": 1,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 124,
+        "op": 5,
+        "expected": 128,
+        "observed": 128,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 125,
+        "op": 5,
+        "expected": 128,
+        "observed": 128,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 126,
+        "op": 5,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 127,
+        "op": 5,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 128,
+        "op": 5,
+        "expected": 139,
+        "observed": 139,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 129,
+        "op": 5,
+        "expected": 249,
+        "observed": 249,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 130,
+        "op": 5,
+        "expected": 136,
+        "observed": 136,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 131,
+        "op": 5,
+        "expected": 76,
+        "observed": 76,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 132,
+        "op": 5,
+        "expected": 47,
+        "observed": 47,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 133,
+        "op": 5,
+        "expected": 208,
+        "observed": 208,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 134,
+        "op": 5,
+        "expected": 47,
+        "observed": 47,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 135,
+        "op": 5,
+        "expected": 61,
+        "observed": 61,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 136,
+        "op": 5,
+        "expected": 117,
+        "observed": 117,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 137,
+        "op": 5,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 138,
+        "op": 5,
+        "expected": 23,
+        "observed": 23,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 139,
+        "op": 5,
+        "expected": 8,
+        "observed": 8,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 140,
+        "op": 5,
+        "expected": 56,
+        "observed": 56,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 141,
+        "op": 5,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 142,
+        "op": 5,
+        "expected": 5,
+        "observed": 5,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 143,
+        "op": 5,
+        "expected": 107,
+        "observed": 107,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 144,
+        "op": 6,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 145,
+        "op": 6,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 146,
+        "op": 6,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 147,
+        "op": 6,
+        "expected": 1,
+        "observed": 1,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 148,
+        "op": 6,
+        "expected": 128,
+        "observed": 128,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 149,
+        "op": 6,
+        "expected": 128,
+        "observed": 128,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 150,
+        "op": 6,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 151,
+        "op": 6,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 152,
+        "op": 6,
+        "expected": 139,
+        "observed": 139,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 153,
+        "op": 6,
+        "expected": 249,
+        "observed": 249,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 154,
+        "op": 6,
+        "expected": 136,
+        "observed": 136,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 155,
+        "op": 6,
+        "expected": 76,
+        "observed": 76,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 156,
+        "op": 6,
+        "expected": 47,
+        "observed": 47,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 157,
+        "op": 6,
+        "expected": 208,
+        "observed": 208,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 158,
+        "op": 6,
+        "expected": 47,
+        "observed": 47,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 159,
+        "op": 6,
+        "expected": 61,
+        "observed": 61,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 160,
+        "op": 6,
+        "expected": 117,
+        "observed": 117,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 161,
+        "op": 6,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 162,
+        "op": 6,
+        "expected": 23,
+        "observed": 23,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 163,
+        "op": 6,
+        "expected": 8,
+        "observed": 8,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 164,
+        "op": 6,
+        "expected": 56,
+        "observed": 56,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 165,
+        "op": 6,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 166,
+        "op": 6,
+        "expected": 5,
+        "observed": 5,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 167,
+        "op": 6,
+        "expected": 107,
+        "observed": 107,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 168,
+        "op": 7,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 169,
+        "op": 7,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 170,
+        "op": 7,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 171,
+        "op": 7,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 172,
+        "op": 7,
+        "expected": 127,
+        "observed": 127,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 173,
+        "op": 7,
+        "expected": 128,
+        "observed": 128,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 174,
+        "op": 7,
+        "expected": 1,
+        "observed": 1,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 175,
+        "op": 7,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 176,
+        "op": 7,
+        "expected": 251,
+        "observed": 251,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 177,
+        "op": 7,
+        "expected": 253,
+        "observed": 253,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 178,
+        "op": 7,
+        "expected": 142,
+        "observed": 142,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 179,
+        "op": 7,
+        "expected": 20,
+        "observed": 20,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 180,
+        "op": 7,
+        "expected": 245,
+        "observed": 245,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 181,
+        "op": 7,
+        "expected": 7,
+        "observed": 7,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 182,
+        "op": 7,
+        "expected": 111,
+        "observed": 111,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 183,
+        "op": 7,
+        "expected": 241,
+        "observed": 241,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 184,
+        "op": 7,
+        "expected": 1,
+        "observed": 1,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 185,
+        "op": 7,
+        "expected": 123,
+        "observed": 123,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 186,
+        "op": 7,
+        "expected": 99,
+        "observed": 99,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 187,
+        "op": 7,
+        "expected": 232,
+        "observed": 232,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 188,
+        "op": 7,
+        "expected": 8,
+        "observed": 8,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 189,
+        "op": 7,
+        "expected": 131,
+        "observed": 131,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 190,
+        "op": 7,
+        "expected": 179,
+        "observed": 179,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      },
+      {
+        "id": 191,
+        "op": 7,
+        "expected": 155,
+        "observed": 155,
+        "total_ns": 239500,
+        "run_read_ns": 81100,
+        "read_ns": 34800,
+        "core_cycles": 5
+      }
+    ],
+    "sequential_result_rate_per_s": 4175.365344467641,
+    "raw_uart_bytes_per_s_upper_bound": 125000.0
+  },
+  "87": {
+    "cpb": 87,
+    "clock_hz": 10000000,
+    "baud": 114942.52873563218,
+    "returncode": 0,
+    "passed": true,
+    "vectors": 192,
+    "sram_checks": 32,
+    "latency_definition": "First operand-write start bit to completion of returned result byte, including six writes, RUN, 200-cycle host wait, READ, and UART response",
+    "timing": {
+      "total_ns": {
+        "min": 2392100,
+        "max": 2392100,
+        "mean": 2392100.0
+      },
+      "run_read_ns": {
+        "min": 669500,
+        "max": 669500,
+        "mean": 669500.0
+      },
+      "read_ns": {
+        "min": 362500,
+        "max": 362500,
+        "mean": 362500.0
+      },
+      "core_cycles": {
+        "min": 5,
+        "max": 5,
+        "mean": 5.0
+      }
+    },
+    "measurements": [
+      {
+        "id": 0,
+        "op": 0,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 1,
+        "op": 0,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 2,
+        "op": 0,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 3,
+        "op": 0,
+        "expected": 254,
+        "observed": 254,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 4,
+        "op": 0,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 5,
+        "op": 0,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 6,
+        "op": 0,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 7,
+        "op": 0,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 8,
+        "op": 0,
+        "expected": 172,
+        "observed": 172,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 9,
+        "op": 0,
+        "expected": 170,
+        "observed": 170,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 10,
+        "op": 0,
+        "expected": 170,
+        "observed": 170,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 11,
+        "op": 0,
+        "expected": 203,
+        "observed": 203,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 12,
+        "op": 0,
+        "expected": 8,
+        "observed": 8,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 13,
+        "op": 0,
+        "expected": 183,
+        "observed": 183,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 14,
+        "op": 0,
+        "expected": 176,
+        "observed": 176,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 15,
+        "op": 0,
+        "expected": 254,
+        "observed": 254,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 16,
+        "op": 0,
+        "expected": 118,
+        "observed": 118,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 17,
+        "op": 0,
+        "expected": 200,
+        "observed": 200,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 18,
+        "op": 0,
+        "expected": 32,
+        "observed": 32,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 19,
+        "op": 0,
+        "expected": 125,
+        "observed": 125,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 20,
+        "op": 0,
+        "expected": 79,
+        "observed": 79,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 21,
+        "op": 0,
+        "expected": 88,
+        "observed": 88,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 22,
+        "op": 0,
+        "expected": 26,
+        "observed": 26,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 23,
+        "op": 0,
+        "expected": 12,
+        "observed": 12,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 24,
+        "op": 1,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 25,
+        "op": 1,
+        "expected": 1,
+        "observed": 1,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 26,
+        "op": 1,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 27,
+        "op": 1,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 28,
+        "op": 1,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 29,
+        "op": 1,
+        "expected": 1,
+        "observed": 1,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 30,
+        "op": 1,
+        "expected": 2,
+        "observed": 2,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 31,
+        "op": 1,
+        "expected": 254,
+        "observed": 254,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 32,
+        "op": 1,
+        "expected": 74,
+        "observed": 74,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 33,
+        "op": 1,
+        "expected": 80,
+        "observed": 80,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 34,
+        "op": 1,
+        "expected": 114,
+        "observed": 114,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 35,
+        "op": 1,
+        "expected": 93,
+        "observed": 93,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 36,
+        "op": 1,
+        "expected": 226,
+        "observed": 226,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 37,
+        "op": 1,
+        "expected": 87,
+        "observed": 87,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 38,
+        "op": 1,
+        "expected": 46,
+        "observed": 46,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 39,
+        "op": 1,
+        "expected": 228,
+        "observed": 228,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 40,
+        "op": 1,
+        "expected": 140,
+        "observed": 140,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 41,
+        "op": 1,
+        "expected": 46,
+        "observed": 46,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 42,
+        "op": 1,
+        "expected": 166,
+        "observed": 166,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 43,
+        "op": 1,
+        "expected": 83,
+        "observed": 83,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 44,
+        "op": 1,
+        "expected": 193,
+        "observed": 193,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 45,
+        "op": 1,
+        "expected": 174,
+        "observed": 174,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 46,
+        "op": 1,
+        "expected": 76,
+        "observed": 76,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 47,
+        "op": 1,
+        "expected": 42,
+        "observed": 42,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 48,
+        "op": 2,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 49,
+        "op": 2,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 50,
+        "op": 2,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 51,
+        "op": 2,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 52,
+        "op": 2,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 53,
+        "op": 2,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 54,
+        "op": 2,
+        "expected": 1,
+        "observed": 1,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 55,
+        "op": 2,
+        "expected": 1,
+        "observed": 1,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 56,
+        "op": 2,
+        "expected": 177,
+        "observed": 177,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 57,
+        "op": 2,
+        "expected": 173,
+        "observed": 173,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 58,
+        "op": 2,
+        "expected": 12,
+        "observed": 12,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 59,
+        "op": 2,
+        "expected": 20,
+        "observed": 20,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 60,
+        "op": 2,
+        "expected": 17,
+        "observed": 17,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 61,
+        "op": 2,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 62,
+        "op": 2,
+        "expected": 65,
+        "observed": 65,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 63,
+        "op": 2,
+        "expected": 1,
+        "observed": 1,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 64,
+        "op": 2,
+        "expected": 1,
+        "observed": 1,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 65,
+        "op": 2,
+        "expected": 73,
+        "observed": 73,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 66,
+        "op": 2,
+        "expected": 33,
+        "observed": 33,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 67,
+        "op": 2,
+        "expected": 128,
+        "observed": 128,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 68,
+        "op": 2,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 69,
+        "op": 2,
+        "expected": 129,
+        "observed": 129,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 70,
+        "op": 2,
+        "expected": 35,
+        "observed": 35,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 71,
+        "op": 2,
+        "expected": 17,
+        "observed": 17,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 72,
+        "op": 3,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 73,
+        "op": 3,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 74,
+        "op": 3,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 75,
+        "op": 3,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 76,
+        "op": 3,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 77,
+        "op": 3,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 78,
+        "op": 3,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 79,
+        "op": 3,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 80,
+        "op": 3,
+        "expected": 251,
+        "observed": 251,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 81,
+        "op": 3,
+        "expected": 253,
+        "observed": 253,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 82,
+        "op": 3,
+        "expected": 158,
+        "observed": 158,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 83,
+        "op": 3,
+        "expected": 183,
+        "observed": 183,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 84,
+        "op": 3,
+        "expected": 247,
+        "observed": 247,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 85,
+        "op": 3,
+        "expected": 183,
+        "observed": 183,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 86,
+        "op": 3,
+        "expected": 111,
+        "observed": 111,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 87,
+        "op": 3,
+        "expected": 253,
+        "observed": 253,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 88,
+        "op": 3,
+        "expected": 117,
+        "observed": 117,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 89,
+        "op": 3,
+        "expected": 127,
+        "observed": 127,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 90,
+        "op": 3,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 91,
+        "op": 3,
+        "expected": 253,
+        "observed": 253,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 92,
+        "op": 3,
+        "expected": 79,
+        "observed": 79,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 93,
+        "op": 3,
+        "expected": 215,
+        "observed": 215,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 94,
+        "op": 3,
+        "expected": 247,
+        "observed": 247,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 95,
+        "op": 3,
+        "expected": 251,
+        "observed": 251,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 96,
+        "op": 4,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 97,
+        "op": 4,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 98,
+        "op": 4,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 99,
+        "op": 4,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 100,
+        "op": 4,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 101,
+        "op": 4,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 102,
+        "op": 4,
+        "expected": 254,
+        "observed": 254,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 103,
+        "op": 4,
+        "expected": 254,
+        "observed": 254,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 104,
+        "op": 4,
+        "expected": 74,
+        "observed": 74,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 105,
+        "op": 4,
+        "expected": 80,
+        "observed": 80,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 106,
+        "op": 4,
+        "expected": 146,
+        "observed": 146,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 107,
+        "op": 4,
+        "expected": 163,
+        "observed": 163,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 108,
+        "op": 4,
+        "expected": 230,
+        "observed": 230,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 109,
+        "op": 4,
+        "expected": 183,
+        "observed": 183,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 110,
+        "op": 4,
+        "expected": 46,
+        "observed": 46,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 111,
+        "op": 4,
+        "expected": 252,
+        "observed": 252,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 112,
+        "op": 4,
+        "expected": 116,
+        "observed": 116,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 113,
+        "op": 4,
+        "expected": 54,
+        "observed": 54,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 114,
+        "op": 4,
+        "expected": 222,
+        "observed": 222,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 115,
+        "op": 4,
+        "expected": 125,
+        "observed": 125,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 116,
+        "op": 4,
+        "expected": 79,
+        "observed": 79,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 117,
+        "op": 4,
+        "expected": 86,
+        "observed": 86,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 118,
+        "op": 4,
+        "expected": 212,
+        "observed": 212,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 119,
+        "op": 4,
+        "expected": 234,
+        "observed": 234,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 120,
+        "op": 5,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 121,
+        "op": 5,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 122,
+        "op": 5,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 123,
+        "op": 5,
+        "expected": 1,
+        "observed": 1,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 124,
+        "op": 5,
+        "expected": 128,
+        "observed": 128,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 125,
+        "op": 5,
+        "expected": 128,
+        "observed": 128,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 126,
+        "op": 5,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 127,
+        "op": 5,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 128,
+        "op": 5,
+        "expected": 139,
+        "observed": 139,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 129,
+        "op": 5,
+        "expected": 249,
+        "observed": 249,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 130,
+        "op": 5,
+        "expected": 136,
+        "observed": 136,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 131,
+        "op": 5,
+        "expected": 76,
+        "observed": 76,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 132,
+        "op": 5,
+        "expected": 47,
+        "observed": 47,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 133,
+        "op": 5,
+        "expected": 208,
+        "observed": 208,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 134,
+        "op": 5,
+        "expected": 47,
+        "observed": 47,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 135,
+        "op": 5,
+        "expected": 61,
+        "observed": 61,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 136,
+        "op": 5,
+        "expected": 117,
+        "observed": 117,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 137,
+        "op": 5,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 138,
+        "op": 5,
+        "expected": 23,
+        "observed": 23,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 139,
+        "op": 5,
+        "expected": 8,
+        "observed": 8,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 140,
+        "op": 5,
+        "expected": 56,
+        "observed": 56,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 141,
+        "op": 5,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 142,
+        "op": 5,
+        "expected": 5,
+        "observed": 5,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 143,
+        "op": 5,
+        "expected": 107,
+        "observed": 107,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 144,
+        "op": 6,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 145,
+        "op": 6,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 146,
+        "op": 6,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 147,
+        "op": 6,
+        "expected": 1,
+        "observed": 1,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 148,
+        "op": 6,
+        "expected": 128,
+        "observed": 128,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 149,
+        "op": 6,
+        "expected": 128,
+        "observed": 128,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 150,
+        "op": 6,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 151,
+        "op": 6,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 152,
+        "op": 6,
+        "expected": 139,
+        "observed": 139,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 153,
+        "op": 6,
+        "expected": 249,
+        "observed": 249,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 154,
+        "op": 6,
+        "expected": 136,
+        "observed": 136,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 155,
+        "op": 6,
+        "expected": 76,
+        "observed": 76,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 156,
+        "op": 6,
+        "expected": 47,
+        "observed": 47,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 157,
+        "op": 6,
+        "expected": 208,
+        "observed": 208,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 158,
+        "op": 6,
+        "expected": 47,
+        "observed": 47,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 159,
+        "op": 6,
+        "expected": 61,
+        "observed": 61,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 160,
+        "op": 6,
+        "expected": 117,
+        "observed": 117,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 161,
+        "op": 6,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 162,
+        "op": 6,
+        "expected": 23,
+        "observed": 23,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 163,
+        "op": 6,
+        "expected": 8,
+        "observed": 8,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 164,
+        "op": 6,
+        "expected": 56,
+        "observed": 56,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 165,
+        "op": 6,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 166,
+        "op": 6,
+        "expected": 5,
+        "observed": 5,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 167,
+        "op": 6,
+        "expected": 107,
+        "observed": 107,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 168,
+        "op": 7,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 169,
+        "op": 7,
+        "expected": 0,
+        "observed": 0,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 170,
+        "op": 7,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 171,
+        "op": 7,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 172,
+        "op": 7,
+        "expected": 127,
+        "observed": 127,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 173,
+        "op": 7,
+        "expected": 128,
+        "observed": 128,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 174,
+        "op": 7,
+        "expected": 1,
+        "observed": 1,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 175,
+        "op": 7,
+        "expected": 255,
+        "observed": 255,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 176,
+        "op": 7,
+        "expected": 251,
+        "observed": 251,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 177,
+        "op": 7,
+        "expected": 253,
+        "observed": 253,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 178,
+        "op": 7,
+        "expected": 142,
+        "observed": 142,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 179,
+        "op": 7,
+        "expected": 20,
+        "observed": 20,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 180,
+        "op": 7,
+        "expected": 245,
+        "observed": 245,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 181,
+        "op": 7,
+        "expected": 7,
+        "observed": 7,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 182,
+        "op": 7,
+        "expected": 111,
+        "observed": 111,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 183,
+        "op": 7,
+        "expected": 241,
+        "observed": 241,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 184,
+        "op": 7,
+        "expected": 1,
+        "observed": 1,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 185,
+        "op": 7,
+        "expected": 123,
+        "observed": 123,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 186,
+        "op": 7,
+        "expected": 99,
+        "observed": 99,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 187,
+        "op": 7,
+        "expected": 232,
+        "observed": 232,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 188,
+        "op": 7,
+        "expected": 8,
+        "observed": 8,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 189,
+        "op": 7,
+        "expected": 131,
+        "observed": 131,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 190,
+        "op": 7,
+        "expected": 179,
+        "observed": 179,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      },
+      {
+        "id": 191,
+        "op": 7,
+        "expected": 155,
+        "observed": 155,
+        "total_ns": 2392100,
+        "run_read_ns": 669500,
+        "read_ns": 362500,
+        "core_cycles": 5
+      }
+    ],
+    "sequential_result_rate_per_s": 418.04272396638936,
+    "raw_uart_bytes_per_s_upper_bound": 11494.252873563219
+  }
+}

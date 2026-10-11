@@ -1,0 +1,14 @@
+{
+    "json_h": "/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/05-yosys-jsonheader/NanoCGRA_Lite.h.json",
+    "nl": "/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/06-yosys-synthesis/NanoCGRA_Lite.nl.v",
+    "metrics": {
+        "design__lint_error__count": 0,
+        "design__lint_timing_construct__count": 0,
+        "design__lint_warning__count": 298,
+        "design__inferred_latch__count": 0,
+        "design__instance__count": 5539,
+        "design__instance__area": 129736.32,
+        "design__instance_unmapped__count": 0,
+        "synthesis__check_error__count": 0
+    }
+}

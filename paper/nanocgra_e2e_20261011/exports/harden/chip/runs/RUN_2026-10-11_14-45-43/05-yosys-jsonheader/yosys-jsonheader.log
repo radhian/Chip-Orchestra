@@ -1,0 +1,828 @@
+
+
+1. Executing Verilog-2005 frontend: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v
+Parsing SystemVerilog input from `/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/runs/RUN_2026-10-11_14-45-43/tmp/4aa3e3ba69f849238a9320839934f56b.bb.v' to AST representation.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__addf_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__addf_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__addf_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__addf_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__addh_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__addh_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__addh_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__addh_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__and2_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__and2_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__and2_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__and2_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__and3_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__and3_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__and3_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__and3_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__and4_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__and4_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__and4_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__and4_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__antenna'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__antenna_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__aoi211_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__aoi211_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__aoi211_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__aoi211_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__aoi21_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__aoi21_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__aoi21_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__aoi21_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__aoi221_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__aoi221_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__aoi221_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__aoi221_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__aoi222_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__aoi222_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__aoi222_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__aoi222_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__aoi22_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__aoi22_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__aoi22_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__aoi22_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__buf_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__buf_12'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__buf_16'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__buf_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__buf_20'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__buf_3'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__buf_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__buf_8'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__buf_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__bufz_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__bufz_12'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__bufz_16'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__bufz_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__bufz_3'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__bufz_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__bufz_8'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__bufz_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__clkbuf_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__clkbuf_12'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__clkbuf_16'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__clkbuf_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__clkbuf_20'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__clkbuf_3'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__clkbuf_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__clkbuf_8'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__clkbuf_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__clkinv_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__clkinv_12'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__clkinv_16'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__clkinv_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__clkinv_20'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__clkinv_3'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__clkinv_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__clkinv_8'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__clkinv_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffnq_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffnq_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffnq_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffnq_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffnrnq_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffnrnq_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffnrnq_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffnrnq_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffnrsnq_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffnrsnq_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffnrsnq_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffnrsnq_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffnsnq_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffnsnq_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffnsnq_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffnsnq_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffq_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffq_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffq_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffq_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffrnq_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffrnq_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffrnq_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffrnq_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffrsnq_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffrsnq_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffrsnq_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffrsnq_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffsnq_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffsnq_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffsnq_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dffsnq_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dlya_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dlya_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dlya_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dlya_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dlyb_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dlyb_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dlyb_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dlyb_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dlyc_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dlyc_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dlyc_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dlyc_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dlyd_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dlyd_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dlyd_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__dlyd_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__endcap'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__endcap_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__fill_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__fill_16'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__fill_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__fill_32'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__fill_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__fill_64'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__fill_8'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__fill_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__fillcap_16'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__fillcap_32'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__fillcap_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__fillcap_64'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__fillcap_8'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__fillcap_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__filltie'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__filltie_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__hold'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__hold_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__icgtn_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__icgtn_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__icgtn_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__icgtn_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__icgtp_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__icgtp_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__icgtp_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__icgtp_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__inv_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__inv_12'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__inv_16'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__inv_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__inv_20'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__inv_3'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__inv_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__inv_8'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__inv_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__invz_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__invz_12'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__invz_16'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__invz_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__invz_3'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__invz_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__invz_8'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__invz_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__latq_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__latq_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__latq_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__latq_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__latrnq_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__latrnq_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__latrnq_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__latrnq_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__latrsnq_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__latrsnq_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__latrsnq_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__latrsnq_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__latsnq_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__latsnq_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__latsnq_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__latsnq_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__mux2_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__mux2_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__mux2_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__mux2_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__mux4_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__mux4_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__mux4_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__mux4_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nand2_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nand2_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nand2_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nand2_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nand3_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nand3_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nand3_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nand3_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nand4_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nand4_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nand4_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nand4_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nor2_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nor2_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nor2_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nor2_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nor3_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nor3_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nor3_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nor3_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nor4_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nor4_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nor4_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__nor4_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai211_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai211_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai211_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai211_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai21_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai21_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai21_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai21_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai221_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai221_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai221_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai221_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai222_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai222_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai222_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai222_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai22_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai22_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai22_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai22_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai31_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai31_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai31_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai31_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai32_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai32_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai32_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai32_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai33_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai33_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai33_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__oai33_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__or2_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__or2_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__or2_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__or2_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__or3_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__or3_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__or3_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__or3_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__or4_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__or4_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__or4_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__or4_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__sdffq_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__sdffq_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__sdffq_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__sdffq_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__sdffrnq_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__sdffrnq_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__sdffrnq_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__sdffrnq_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__sdffrsnq_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__sdffrsnq_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__sdffrsnq_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__sdffrsnq_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__sdffsnq_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__sdffsnq_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__sdffsnq_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__sdffsnq_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__tieh'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__tieh_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__tiel'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__tiel_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__xnor2_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__xnor2_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__xnor2_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__xnor2_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__xnor3_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__xnor3_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__xnor3_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__xnor3_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__xor2_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__xor2_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__xor2_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__xor2_func'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__xor3_1'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__xor3_2'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__xor3_4'.
+Generating RTLIL representation for module `\gf180mcu_fd_sc_mcu7t5v0__xor3_func'.
+Successfully finished Verilog frontend.
+wtaf
+
+2. Executing Verilog-2005 frontend: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v
+Parsing SystemVerilog input from `/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v' to AST representation.
+Storing AST representation for module `$abstract\bus_decoder'.
+Successfully finished Verilog frontend.
+
+3. Executing Verilog-2005 frontend: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/cgra.v
+Parsing SystemVerilog input from `/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/cgra.v' to AST representation.
+Storing AST representation for module `$abstract\cgra'.
+Successfully finished Verilog frontend.
+
+4. Executing Verilog-2005 frontend: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/nano_controller.v
+Parsing SystemVerilog input from `/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/nano_controller.v' to AST representation.
+Storing AST representation for module `$abstract\nano_controller'.
+Successfully finished Verilog frontend.
+
+5. Executing Verilog-2005 frontend: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/nanocgra_lite.v
+Parsing SystemVerilog input from `/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/nanocgra_lite.v' to AST representation.
+Storing AST representation for module `$abstract\NanoCGRA_Lite'.
+Successfully finished Verilog frontend.
+
+6. Executing Verilog-2005 frontend: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/pe.v
+Parsing SystemVerilog input from `/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/pe.v' to AST representation.
+Storing AST representation for module `$abstract\pe'.
+Successfully finished Verilog frontend.
+
+7. Executing Verilog-2005 frontend: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v
+Parsing SystemVerilog input from `/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v' to AST representation.
+Storing AST representation for module `$abstract\sram'.
+Successfully finished Verilog frontend.
+
+8. Executing Verilog-2005 frontend: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart.v
+Parsing SystemVerilog input from `/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart.v' to AST representation.
+Storing AST representation for module `$abstract\uart'.
+Successfully finished Verilog frontend.
+
+9. Executing Verilog-2005 frontend: /mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart_bridge.v
+Parsing SystemVerilog input from `/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart_bridge.v' to AST representation.
+Storing AST representation for module `$abstract\uart_bridge'.
+Successfully finished Verilog frontend.
+
+10. Executing HIERARCHY pass (managing design hierarchy).
+
+11. Executing AST frontend in derive mode using pre-parsed AST for module `\NanoCGRA_Lite'.
+Generating RTLIL representation for module `\NanoCGRA_Lite'.
+
+11.1. Analyzing design hierarchy..
+Top module:  \NanoCGRA_Lite
+Parameter \DW = 8
+
+11.2. Executing AST frontend in derive mode using pre-parsed AST for module `\cgra'.
+Parameter \DW = 8
+Generating RTLIL representation for module `$paramod\cgra\DW=s32'00000000000000000000000000001000'.
+Parameter \DW = 8
+Parameter \CLK_PER_BIT = 87
+
+11.3. Executing AST frontend in derive mode using pre-parsed AST for module `\uart'.
+Parameter \DW = 8
+Parameter \CLK_PER_BIT = 87
+Generating RTLIL representation for module `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart'.
+Parameter \DW = 8
+Parameter \AW = 5
+Parameter \DEPTH = 32
+
+11.4. Executing AST frontend in derive mode using pre-parsed AST for module `\sram'.
+Parameter \DW = 8
+Parameter \AW = 5
+Parameter \DEPTH = 32
+Generating RTLIL representation for module `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram'.
+Parameter \DW = 8
+Parameter \AW = 5
+
+11.5. Executing AST frontend in derive mode using pre-parsed AST for module `\nano_controller'.
+Parameter \DW = 8
+Parameter \AW = 5
+Generating RTLIL representation for module `$paramod$2ac8c588e17821101c23c62380820e6621af5831\nano_controller'.
+Parameter \DW = 8
+Parameter \AW = 8
+
+11.6. Executing AST frontend in derive mode using pre-parsed AST for module `\bus_decoder'.
+Parameter \DW = 8
+Parameter \AW = 8
+Generating RTLIL representation for module `$paramod$000cc2b270b42b131af50c15269800a3b20033de\bus_decoder'.
+Parameter \DW = 8
+Parameter \AW = 8
+
+11.7. Executing AST frontend in derive mode using pre-parsed AST for module `\uart_bridge'.
+Parameter \DW = 8
+Parameter \AW = 8
+Generating RTLIL representation for module `$paramod$000cc2b270b42b131af50c15269800a3b20033de\uart_bridge'.
+
+11.8. Analyzing design hierarchy..
+Top module:  \NanoCGRA_Lite
+Used module:     $paramod\cgra\DW=s32'00000000000000000000000000001000
+Used module:     $paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart
+Used module:     $paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram
+Used module:     $paramod$2ac8c588e17821101c23c62380820e6621af5831\nano_controller
+Used module:     $paramod$000cc2b270b42b131af50c15269800a3b20033de\bus_decoder
+Used module:     $paramod$000cc2b270b42b131af50c15269800a3b20033de\uart_bridge
+Parameter \DW = 8
+
+11.9. Executing AST frontend in derive mode using pre-parsed AST for module `\pe'.
+Parameter \DW = 8
+Generating RTLIL representation for module `$paramod\pe\DW=s32'00000000000000000000000000001000'.
+Parameter \DW = 8
+Found cached RTLIL representation for module `$paramod\pe\DW=s32'00000000000000000000000000001000'.
+Parameter \DW = 8
+Found cached RTLIL representation for module `$paramod\pe\DW=s32'00000000000000000000000000001000'.
+Parameter \DW = 8
+Found cached RTLIL representation for module `$paramod\pe\DW=s32'00000000000000000000000000001000'.
+Parameter \DW = 8
+Found cached RTLIL representation for module `$paramod\pe\DW=s32'00000000000000000000000000001000'.
+Parameter \DW = 8
+Found cached RTLIL representation for module `$paramod\pe\DW=s32'00000000000000000000000000001000'.
+Parameter \DW = 8
+Found cached RTLIL representation for module `$paramod\pe\DW=s32'00000000000000000000000000001000'.
+Parameter \DW = 8
+Found cached RTLIL representation for module `$paramod\pe\DW=s32'00000000000000000000000000001000'.
+Parameter \DW = 8
+Found cached RTLIL representation for module `$paramod\pe\DW=s32'00000000000000000000000000001000'.
+
+11.10. Analyzing design hierarchy..
+Top module:  \NanoCGRA_Lite
+Used module:     $paramod\cgra\DW=s32'00000000000000000000000000001000
+Used module:         $paramod\pe\DW=s32'00000000000000000000000000001000
+Used module:     $paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart
+Used module:     $paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram
+Used module:     $paramod$2ac8c588e17821101c23c62380820e6621af5831\nano_controller
+Used module:     $paramod$000cc2b270b42b131af50c15269800a3b20033de\bus_decoder
+Used module:     $paramod$000cc2b270b42b131af50c15269800a3b20033de\uart_bridge
+
+11.11. Analyzing design hierarchy..
+Top module:  \NanoCGRA_Lite
+Used module:     $paramod\cgra\DW=s32'00000000000000000000000000001000
+Used module:         $paramod\pe\DW=s32'00000000000000000000000000001000
+Used module:     $paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart
+Used module:     $paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram
+Used module:     $paramod$2ac8c588e17821101c23c62380820e6621af5831\nano_controller
+Used module:     $paramod$000cc2b270b42b131af50c15269800a3b20033de\bus_decoder
+Used module:     $paramod$000cc2b270b42b131af50c15269800a3b20033de\uart_bridge
+Removing unused module `$abstract\uart_bridge'.
+Removing unused module `$abstract\uart'.
+Removing unused module `$abstract\sram'.
+Removing unused module `$abstract\pe'.
+Removing unused module `$abstract\NanoCGRA_Lite'.
+Removing unused module `$abstract\nano_controller'.
+Removing unused module `$abstract\cgra'.
+Removing unused module `$abstract\bus_decoder'.
+Removed 8 unused modules.
+Renaming module NanoCGRA_Lite to NanoCGRA_Lite.
+
+12. Executing PROC pass (convert processes to netlists).
+
+12.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Cleaned up 0 empty switches.
+
+12.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).
+Marked 1 switch rules as full_case in process $proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/nanocgra_lite.v:71$2 in module NanoCGRA_Lite.
+Removed 1 dead cases from process $proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart_bridge.v:73$169 in module $paramod$000cc2b270b42b131af50c15269800a3b20033de\uart_bridge.
+Marked 7 switch rules as full_case in process $proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart_bridge.v:73$169 in module $paramod$000cc2b270b42b131af50c15269800a3b20033de\uart_bridge.
+Marked 3 switch rules as full_case in process $proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:34$168 in module $paramod$000cc2b270b42b131af50c15269800a3b20033de\bus_decoder.
+Marked 2 switch rules as full_case in process $proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/nano_controller.v:55$157 in module $paramod$2ac8c588e17821101c23c62380820e6621af5831\nano_controller.
+Marked 2 switch rules as full_case in process $proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:24$76 in module $paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.
+Marked 1 switch rules as full_case in process $proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart.v:166$42 in module $paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.
+Removed 1 dead cases from process $proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart.v:116$29 in module $paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.
+Marked 6 switch rules as full_case in process $proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart.v:116$29 in module $paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.
+Marked 1 switch rules as full_case in process $proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart.v:106$27 in module $paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.
+Removed 1 dead cases from process $proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart.v:41$12 in module $paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.
+Marked 7 switch rules as full_case in process $proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart.v:41$12 in module $paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.
+Marked 3 switch rules as full_case in process $proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/pe.v:76$182 in module $paramod\pe\DW=s32'00000000000000000000000000001000.
+Removed 1 dead cases from process $proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/pe.v:61$176 in module $paramod\pe\DW=s32'00000000000000000000000000001000.
+Marked 1 switch rules as full_case in process $proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/pe.v:61$176 in module $paramod\pe\DW=s32'00000000000000000000000000001000.
+Removed 1 dead cases from process $proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/pe.v:46$174 in module $paramod\pe\DW=s32'00000000000000000000000000001000.
+Marked 1 switch rules as full_case in process $proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/pe.v:46$174 in module $paramod\pe\DW=s32'00000000000000000000000000001000.
+Removed a total of 5 dead cases.
+
+12.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).
+Removed 9 redundant assignments.
+Promoted 41 assignments to connections.
+
+12.4. Executing PROC_INIT pass (extract init attributes).
+
+12.5. Executing PROC_ARST pass (detect async resets in processes).
+
+12.6. Executing PROC_ROM pass (convert switches to ROMs).
+Converted 0 switches.
+<suppressed ~43 debug messages>
+
+12.7. Executing PROC_MUX pass (convert decision trees to multiplexers).
+Creating decoders for process `\NanoCGRA_Lite.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/nanocgra_lite.v:71$2'.
+     1/12: $0\res_reg[7:0]
+     2/12: $0\opb_reg[7:0]
+     3/12: $0\opa_reg[7:0]
+     4/12: $0\cfg8[7:0]
+     5/12: $0\cfg7[7:0]
+     6/12: $0\cfg6[7:0]
+     7/12: $0\cfg5[7:0]
+     8/12: $0\cfg4[7:0]
+     9/12: $0\cfg3[7:0]
+    10/12: $0\cfg2[7:0]
+    11/12: $0\cfg1[7:0]
+    12/12: $0\cfg0[7:0]
+Creating decoders for process `$paramod$000cc2b270b42b131af50c15269800a3b20033de\uart_bridge.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart_bridge.v:73$169'.
+     1/10: $0\bus_re[0:0]
+     2/10: $0\bus_we[0:0]
+     3/10: $0\state[3:0]
+     4/10: $0\rd_cap[7:0]
+     5/10: $0\data_reg[7:0]
+     6/10: $0\addr_reg[7:0]
+     7/10: $0\cmd_reg[7:0]
+     8/10: $0\byte_idx[1:0]
+     9/10: $0\bus_wdata[7:0]
+    10/10: $0\bus_addr[7:0]
+Creating decoders for process `$paramod$000cc2b270b42b131af50c15269800a3b20033de\bus_decoder.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:34$168'.
+     1/3: $3\rdata[7:0]
+     2/3: $2\rdata[7:0]
+     3/3: $1\rdata[7:0]
+Creating decoders for process `$paramod$2ac8c588e17821101c23c62380820e6621af5831\nano_controller.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/nano_controller.v:55$157'.
+     1/5: $0\state[2:0]
+     2/5: $0\done[0:0]
+     3/5: $0\data_b[7:0]
+     4/5: $0\data_a[7:0]
+     5/5: $0\m_sram_addr[4:0]
+Creating decoders for process `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:24$76'.
+     1/40: $2$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:31$75_EN[7:0]$150
+     2/40: $2$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:31$75_DATA[7:0]$149
+     3/40: $2$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:31$75_ADDR[4:0]$148
+     4/40: $0\dout[7:0]
+     5/40: $1\i[31:0]
+     6/40: $1$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$74_EN[7:0]$144
+     7/40: $1$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$73_EN[7:0]$143
+     8/40: $1$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$72_EN[7:0]$142
+     9/40: $1$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$71_EN[7:0]$141
+    10/40: $1$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$70_EN[7:0]$140
+    11/40: $1$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$69_EN[7:0]$139
+    12/40: $1$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$68_EN[7:0]$138
+    13/40: $1$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$67_EN[7:0]$137
+    14/40: $1$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$66_EN[7:0]$136
+    15/40: $1$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$65_EN[7:0]$135
+    16/40: $1$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$64_EN[7:0]$134
+    17/40: $1$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$63_EN[7:0]$133
+    18/40: $1$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$62_EN[7:0]$132
+    19/40: $1$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$61_EN[7:0]$131
+    20/40: $1$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$60_EN[7:0]$130
+    21/40: $1$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$59_EN[7:0]$129
+    22/40: $1$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$58_EN[7:0]$128
+    23/40: $1$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$57_EN[7:0]$127
+    24/40: $1$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$56_EN[7:0]$126
+    25/40: $1$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$55_EN[7:0]$125
+    26/40: $1$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$54_EN[7:0]$124
+    27/40: $1$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$53_EN[7:0]$123
+    28/40: $1$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$52_EN[7:0]$122
+    29/40: $1$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$51_EN[7:0]$121
+    30/40: $1$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$50_EN[7:0]$120
+    31/40: $1$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$49_EN[7:0]$119
+    32/40: $1$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$48_EN[7:0]$118
+    33/40: $1$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$47_EN[7:0]$117
+    34/40: $1$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$46_EN[7:0]$116
+    35/40: $1$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$45_EN[7:0]$115
+    36/40: $1$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$44_EN[7:0]$114
+    37/40: $1$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$43_EN[7:0]$113
+    38/40: $1$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:31$75_EN[7:0]$147
+    39/40: $1$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:31$75_DATA[7:0]$146
+    40/40: $1$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:31$75_ADDR[4:0]$145
+Creating decoders for process `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart.v:166$42'.
+     1/1: $1\rdata[7:0]
+Creating decoders for process `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart.v:116$29'.
+     1/6: $0\rx_cnt[15:0]
+     2/6: $0\rx_valid[0:0]
+     3/6: $0\rx_data[7:0]
+     4/6: $0\rx_shift[7:0]
+     5/6: $0\rx_bit[2:0]
+     6/6: $0\rx_state[1:0]
+Creating decoders for process `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart.v:106$27'.
+     1/2: $0\rx_sync1[0:0]
+     2/2: $0\rx_sync0[0:0]
+Creating decoders for process `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart.v:94$22'.
+Creating decoders for process `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart.v:41$12'.
+     1/6: $0\uart_tx[0:0]
+     2/6: $0\tx_cnt[15:0]
+     3/6: $0\tx_busy[0:0]
+     4/6: $0\tx_shift[7:0]
+     5/6: $0\tx_bit[2:0]
+     6/6: $0\tx_state[1:0]
+Creating decoders for process `$paramod\pe\DW=s32'00000000000000000000000000001000.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/pe.v:76$182'.
+     1/3: $0\acc[15:0]
+     2/3: $0\local_reg[7:0]
+     3/3: $0\cfg_reg[7:0]
+Creating decoders for process `$paramod\pe\DW=s32'00000000000000000000000000001000.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/pe.v:61$176'.
+     1/1: $1\alu_r[7:0]
+Creating decoders for process `$paramod\pe\DW=s32'00000000000000000000000000001000.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/pe.v:46$174'.
+     1/1: $1\opb[7:0]
+
+12.8. Executing PROC_DLATCH pass (convert process syncs to latches).
+No latch inferred for signal `$paramod$000cc2b270b42b131af50c15269800a3b20033de\bus_decoder.\rdata' from process `$paramod$000cc2b270b42b131af50c15269800a3b20033de\bus_decoder.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:34$168'.
+No latch inferred for signal `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.\rdata' from process `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart.v:166$42'.
+No latch inferred for signal `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.\tx_start' from process `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart.v:94$22'.
+No latch inferred for signal `$paramod\pe\DW=s32'00000000000000000000000000001000.\alu_r' from process `$paramod\pe\DW=s32'00000000000000000000000000001000.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/pe.v:61$176'.
+No latch inferred for signal `$paramod\pe\DW=s32'00000000000000000000000000001000.\opb' from process `$paramod\pe\DW=s32'00000000000000000000000000001000.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/pe.v:46$174'.
+
+12.9. Executing PROC_DFF pass (convert process syncs to FFs).
+Creating register for signal `\NanoCGRA_Lite.\cfg0' using process `\NanoCGRA_Lite.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/nanocgra_lite.v:71$2'.
+  created $dff cell `$procdff$918' with positive edge clock.
+Creating register for signal `\NanoCGRA_Lite.\cfg1' using process `\NanoCGRA_Lite.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/nanocgra_lite.v:71$2'.
+  created $dff cell `$procdff$919' with positive edge clock.
+Creating register for signal `\NanoCGRA_Lite.\cfg2' using process `\NanoCGRA_Lite.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/nanocgra_lite.v:71$2'.
+  created $dff cell `$procdff$920' with positive edge clock.
+Creating register for signal `\NanoCGRA_Lite.\cfg3' using process `\NanoCGRA_Lite.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/nanocgra_lite.v:71$2'.
+  created $dff cell `$procdff$921' with positive edge clock.
+Creating register for signal `\NanoCGRA_Lite.\cfg4' using process `\NanoCGRA_Lite.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/nanocgra_lite.v:71$2'.
+  created $dff cell `$procdff$922' with positive edge clock.
+Creating register for signal `\NanoCGRA_Lite.\cfg5' using process `\NanoCGRA_Lite.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/nanocgra_lite.v:71$2'.
+  created $dff cell `$procdff$923' with positive edge clock.
+Creating register for signal `\NanoCGRA_Lite.\cfg6' using process `\NanoCGRA_Lite.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/nanocgra_lite.v:71$2'.
+  created $dff cell `$procdff$924' with positive edge clock.
+Creating register for signal `\NanoCGRA_Lite.\cfg7' using process `\NanoCGRA_Lite.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/nanocgra_lite.v:71$2'.
+  created $dff cell `$procdff$925' with positive edge clock.
+Creating register for signal `\NanoCGRA_Lite.\cfg8' using process `\NanoCGRA_Lite.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/nanocgra_lite.v:71$2'.
+  created $dff cell `$procdff$926' with positive edge clock.
+Creating register for signal `\NanoCGRA_Lite.\opa_reg' using process `\NanoCGRA_Lite.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/nanocgra_lite.v:71$2'.
+  created $dff cell `$procdff$927' with positive edge clock.
+Creating register for signal `\NanoCGRA_Lite.\opb_reg' using process `\NanoCGRA_Lite.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/nanocgra_lite.v:71$2'.
+  created $dff cell `$procdff$928' with positive edge clock.
+Creating register for signal `\NanoCGRA_Lite.\res_reg' using process `\NanoCGRA_Lite.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/nanocgra_lite.v:71$2'.
+  created $dff cell `$procdff$929' with positive edge clock.
+Creating register for signal `$paramod$000cc2b270b42b131af50c15269800a3b20033de\uart_bridge.\bus_addr' using process `$paramod$000cc2b270b42b131af50c15269800a3b20033de\uart_bridge.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart_bridge.v:73$169'.
+  created $dff cell `$procdff$930' with positive edge clock.
+Creating register for signal `$paramod$000cc2b270b42b131af50c15269800a3b20033de\uart_bridge.\bus_we' using process `$paramod$000cc2b270b42b131af50c15269800a3b20033de\uart_bridge.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart_bridge.v:73$169'.
+  created $dff cell `$procdff$931' with positive edge clock.
+Creating register for signal `$paramod$000cc2b270b42b131af50c15269800a3b20033de\uart_bridge.\bus_re' using process `$paramod$000cc2b270b42b131af50c15269800a3b20033de\uart_bridge.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart_bridge.v:73$169'.
+  created $dff cell `$procdff$932' with positive edge clock.
+Creating register for signal `$paramod$000cc2b270b42b131af50c15269800a3b20033de\uart_bridge.\bus_wdata' using process `$paramod$000cc2b270b42b131af50c15269800a3b20033de\uart_bridge.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart_bridge.v:73$169'.
+  created $dff cell `$procdff$933' with positive edge clock.
+Creating register for signal `$paramod$000cc2b270b42b131af50c15269800a3b20033de\uart_bridge.\state' using process `$paramod$000cc2b270b42b131af50c15269800a3b20033de\uart_bridge.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart_bridge.v:73$169'.
+  created $dff cell `$procdff$934' with positive edge clock.
+Creating register for signal `$paramod$000cc2b270b42b131af50c15269800a3b20033de\uart_bridge.\byte_idx' using process `$paramod$000cc2b270b42b131af50c15269800a3b20033de\uart_bridge.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart_bridge.v:73$169'.
+  created $dff cell `$procdff$935' with positive edge clock.
+Creating register for signal `$paramod$000cc2b270b42b131af50c15269800a3b20033de\uart_bridge.\cmd_reg' using process `$paramod$000cc2b270b42b131af50c15269800a3b20033de\uart_bridge.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart_bridge.v:73$169'.
+  created $dff cell `$procdff$936' with positive edge clock.
+Creating register for signal `$paramod$000cc2b270b42b131af50c15269800a3b20033de\uart_bridge.\addr_reg' using process `$paramod$000cc2b270b42b131af50c15269800a3b20033de\uart_bridge.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart_bridge.v:73$169'.
+  created $dff cell `$procdff$937' with positive edge clock.
+Creating register for signal `$paramod$000cc2b270b42b131af50c15269800a3b20033de\uart_bridge.\data_reg' using process `$paramod$000cc2b270b42b131af50c15269800a3b20033de\uart_bridge.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart_bridge.v:73$169'.
+  created $dff cell `$procdff$938' with positive edge clock.
+Creating register for signal `$paramod$000cc2b270b42b131af50c15269800a3b20033de\uart_bridge.\rd_cap' using process `$paramod$000cc2b270b42b131af50c15269800a3b20033de\uart_bridge.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart_bridge.v:73$169'.
+  created $dff cell `$procdff$939' with positive edge clock.
+Creating register for signal `$paramod$2ac8c588e17821101c23c62380820e6621af5831\nano_controller.\m_sram_addr' using process `$paramod$2ac8c588e17821101c23c62380820e6621af5831\nano_controller.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/nano_controller.v:55$157'.
+  created $dff cell `$procdff$940' with positive edge clock.
+Creating register for signal `$paramod$2ac8c588e17821101c23c62380820e6621af5831\nano_controller.\data_a' using process `$paramod$2ac8c588e17821101c23c62380820e6621af5831\nano_controller.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/nano_controller.v:55$157'.
+  created $dff cell `$procdff$941' with positive edge clock.
+Creating register for signal `$paramod$2ac8c588e17821101c23c62380820e6621af5831\nano_controller.\data_b' using process `$paramod$2ac8c588e17821101c23c62380820e6621af5831\nano_controller.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/nano_controller.v:55$157'.
+  created $dff cell `$procdff$942' with positive edge clock.
+Creating register for signal `$paramod$2ac8c588e17821101c23c62380820e6621af5831\nano_controller.\done' using process `$paramod$2ac8c588e17821101c23c62380820e6621af5831\nano_controller.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/nano_controller.v:55$157'.
+  created $dff cell `$procdff$943' with positive edge clock.
+Creating register for signal `$paramod$2ac8c588e17821101c23c62380820e6621af5831\nano_controller.\state' using process `$paramod$2ac8c588e17821101c23c62380820e6621af5831\nano_controller.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/nano_controller.v:55$157'.
+  created $dff cell `$procdff$944' with positive edge clock.
+Creating register for signal `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.\i' using process `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:24$76'.
+  created $dff cell `$procdff$945' with positive edge clock.
+Creating register for signal `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.\dout' using process `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:24$76'.
+  created $dff cell `$procdff$946' with positive edge clock.
+Creating register for signal `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$43_EN' using process `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:24$76'.
+  created $dff cell `$procdff$947' with positive edge clock.
+Creating register for signal `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$44_EN' using process `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:24$76'.
+  created $dff cell `$procdff$948' with positive edge clock.
+Creating register for signal `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$45_EN' using process `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:24$76'.
+  created $dff cell `$procdff$949' with positive edge clock.
+Creating register for signal `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$46_EN' using process `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:24$76'.
+  created $dff cell `$procdff$950' with positive edge clock.
+Creating register for signal `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$47_EN' using process `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:24$76'.
+  created $dff cell `$procdff$951' with positive edge clock.
+Creating register for signal `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$48_EN' using process `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:24$76'.
+  created $dff cell `$procdff$952' with positive edge clock.
+Creating register for signal `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$49_EN' using process `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:24$76'.
+  created $dff cell `$procdff$953' with positive edge clock.
+Creating register for signal `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$50_EN' using process `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:24$76'.
+  created $dff cell `$procdff$954' with positive edge clock.
+Creating register for signal `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$51_EN' using process `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:24$76'.
+  created $dff cell `$procdff$955' with positive edge clock.
+Creating register for signal `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$52_EN' using process `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:24$76'.
+  created $dff cell `$procdff$956' with positive edge clock.
+Creating register for signal `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$53_EN' using process `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:24$76'.
+  created $dff cell `$procdff$957' with positive edge clock.
+Creating register for signal `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$54_EN' using process `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:24$76'.
+  created $dff cell `$procdff$958' with positive edge clock.
+Creating register for signal `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$55_EN' using process `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:24$76'.
+  created $dff cell `$procdff$959' with positive edge clock.
+Creating register for signal `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$56_EN' using process `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:24$76'.
+  created $dff cell `$procdff$960' with positive edge clock.
+Creating register for signal `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$57_EN' using process `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:24$76'.
+  created $dff cell `$procdff$961' with positive edge clock.
+Creating register for signal `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$58_EN' using process `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:24$76'.
+  created $dff cell `$procdff$962' with positive edge clock.
+Creating register for signal `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$59_EN' using process `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:24$76'.
+  created $dff cell `$procdff$963' with positive edge clock.
+Creating register for signal `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$60_EN' using process `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:24$76'.
+  created $dff cell `$procdff$964' with positive edge clock.
+Creating register for signal `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$61_EN' using process `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:24$76'.
+  created $dff cell `$procdff$965' with positive edge clock.
+Creating register for signal `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$62_EN' using process `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:24$76'.
+  created $dff cell `$procdff$966' with positive edge clock.
+Creating register for signal `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$63_EN' using process `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:24$76'.
+  created $dff cell `$procdff$967' with positive edge clock.
+Creating register for signal `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$64_EN' using process `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:24$76'.
+  created $dff cell `$procdff$968' with positive edge clock.
+Creating register for signal `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$65_EN' using process `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:24$76'.
+  created $dff cell `$procdff$969' with positive edge clock.
+Creating register for signal `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$66_EN' using process `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:24$76'.
+  created $dff cell `$procdff$970' with positive edge clock.
+Creating register for signal `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$67_EN' using process `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:24$76'.
+  created $dff cell `$procdff$971' with positive edge clock.
+Creating register for signal `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$68_EN' using process `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:24$76'.
+  created $dff cell `$procdff$972' with positive edge clock.
+Creating register for signal `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$69_EN' using process `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:24$76'.
+  created $dff cell `$procdff$973' with positive edge clock.
+Creating register for signal `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$70_EN' using process `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:24$76'.
+  created $dff cell `$procdff$974' with positive edge clock.
+Creating register for signal `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$71_EN' using process `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:24$76'.
+  created $dff cell `$procdff$975' with positive edge clock.
+Creating register for signal `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$72_EN' using process `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:24$76'.
+  created $dff cell `$procdff$976' with positive edge clock.
+Creating register for signal `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$73_EN' using process `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:24$76'.
+  created $dff cell `$procdff$977' with positive edge clock.
+Creating register for signal `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:27$74_EN' using process `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:24$76'.
+  created $dff cell `$procdff$978' with positive edge clock.
+Creating register for signal `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:31$75_ADDR' using process `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:24$76'.
+  created $dff cell `$procdff$979' with positive edge clock.
+Creating register for signal `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:31$75_DATA' using process `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:24$76'.
+  created $dff cell `$procdff$980' with positive edge clock.
+Creating register for signal `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$memwr$\mem$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:31$75_EN' using process `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:24$76'.
+  created $dff cell `$procdff$981' with positive edge clock.
+Creating register for signal `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.\rx_state' using process `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart.v:116$29'.
+  created $dff cell `$procdff$982' with positive edge clock.
+Creating register for signal `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.\rx_cnt' using process `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart.v:116$29'.
+  created $dff cell `$procdff$983' with positive edge clock.
+Creating register for signal `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.\rx_bit' using process `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart.v:116$29'.
+  created $dff cell `$procdff$984' with positive edge clock.
+Creating register for signal `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.\rx_shift' using process `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart.v:116$29'.
+  created $dff cell `$procdff$985' with positive edge clock.
+Creating register for signal `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.\rx_data' using process `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart.v:116$29'.
+  created $dff cell `$procdff$986' with positive edge clock.
+Creating register for signal `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.\rx_valid' using process `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart.v:116$29'.
+  created $dff cell `$procdff$987' with positive edge clock.
+Creating register for signal `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.\rx_sync0' using process `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart.v:106$27'.
+  created $dff cell `$procdff$988' with positive edge clock.
+Creating register for signal `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.\rx_sync1' using process `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart.v:106$27'.
+  created $dff cell `$procdff$989' with positive edge clock.
+Creating register for signal `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.\uart_tx' using process `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart.v:41$12'.
+  created $dff cell `$procdff$990' with positive edge clock.
+Creating register for signal `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.\tx_state' using process `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart.v:41$12'.
+  created $dff cell `$procdff$991' with positive edge clock.
+Creating register for signal `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.\tx_cnt' using process `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart.v:41$12'.
+  created $dff cell `$procdff$992' with positive edge clock.
+Creating register for signal `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.\tx_bit' using process `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart.v:41$12'.
+  created $dff cell `$procdff$993' with positive edge clock.
+Creating register for signal `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.\tx_shift' using process `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart.v:41$12'.
+  created $dff cell `$procdff$994' with positive edge clock.
+Creating register for signal `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.\tx_busy' using process `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart.v:41$12'.
+  created $dff cell `$procdff$995' with positive edge clock.
+Creating register for signal `$paramod\pe\DW=s32'00000000000000000000000000001000.\cfg_reg' using process `$paramod\pe\DW=s32'00000000000000000000000000001000.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/pe.v:76$182'.
+  created $dff cell `$procdff$996' with positive edge clock.
+Creating register for signal `$paramod\pe\DW=s32'00000000000000000000000000001000.\local_reg' using process `$paramod\pe\DW=s32'00000000000000000000000000001000.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/pe.v:76$182'.
+  created $dff cell `$procdff$997' with positive edge clock.
+Creating register for signal `$paramod\pe\DW=s32'00000000000000000000000000001000.\acc' using process `$paramod\pe\DW=s32'00000000000000000000000000001000.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/pe.v:76$182'.
+  created $dff cell `$procdff$998' with positive edge clock.
+
+12.10. Executing PROC_MEMWR pass (convert process memory writes to cells).
+
+12.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Found and cleaned up 3 empty switches in `\NanoCGRA_Lite.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/nanocgra_lite.v:71$2'.
+Removing empty process `NanoCGRA_Lite.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/nanocgra_lite.v:71$2'.
+Found and cleaned up 7 empty switches in `$paramod$000cc2b270b42b131af50c15269800a3b20033de\uart_bridge.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart_bridge.v:73$169'.
+Removing empty process `$paramod$000cc2b270b42b131af50c15269800a3b20033de\uart_bridge.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart_bridge.v:73$169'.
+Found and cleaned up 3 empty switches in `$paramod$000cc2b270b42b131af50c15269800a3b20033de\bus_decoder.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:34$168'.
+Removing empty process `$paramod$000cc2b270b42b131af50c15269800a3b20033de\bus_decoder.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/bus_decoder.v:34$168'.
+Found and cleaned up 3 empty switches in `$paramod$2ac8c588e17821101c23c62380820e6621af5831\nano_controller.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/nano_controller.v:55$157'.
+Removing empty process `$paramod$2ac8c588e17821101c23c62380820e6621af5831\nano_controller.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/nano_controller.v:55$157'.
+Found and cleaned up 2 empty switches in `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:24$76'.
+Removing empty process `$paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/sram.v:24$76'.
+Found and cleaned up 1 empty switch in `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart.v:166$42'.
+Removing empty process `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart.v:166$42'.
+Found and cleaned up 8 empty switches in `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart.v:116$29'.
+Removing empty process `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart.v:116$29'.
+Found and cleaned up 1 empty switch in `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart.v:106$27'.
+Removing empty process `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart.v:106$27'.
+Removing empty process `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart.v:94$22'.
+Found and cleaned up 7 empty switches in `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart.v:41$12'.
+Removing empty process `$paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/uart.v:41$12'.
+Found and cleaned up 6 empty switches in `$paramod\pe\DW=s32'00000000000000000000000000001000.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/pe.v:76$182'.
+Removing empty process `$paramod\pe\DW=s32'00000000000000000000000000001000.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/pe.v:76$182'.
+Found and cleaned up 1 empty switch in `$paramod\pe\DW=s32'00000000000000000000000000001000.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/pe.v:61$176'.
+Removing empty process `$paramod\pe\DW=s32'00000000000000000000000000001000.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/pe.v:61$176'.
+Found and cleaned up 1 empty switch in `$paramod\pe\DW=s32'00000000000000000000000000001000.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/pe.v:46$174'.
+Removing empty process `$paramod\pe\DW=s32'00000000000000000000000000001000.$proc$/mnt/d/LinkedinProjects/Chip-Orchestra/paper/nanocgra_e2e_20261011/exports/harden/chip/src/pe.v:46$174'.
+Cleaned up 43 empty switches.
+
+12.12. Executing OPT_EXPR pass (perform const folding).
+Optimizing module NanoCGRA_Lite.
+<suppressed ~13 debug messages>
+Optimizing module $paramod$000cc2b270b42b131af50c15269800a3b20033de\uart_bridge.
+<suppressed ~16 debug messages>
+Optimizing module $paramod$000cc2b270b42b131af50c15269800a3b20033de\bus_decoder.
+Optimizing module $paramod$2ac8c588e17821101c23c62380820e6621af5831\nano_controller.
+<suppressed ~9 debug messages>
+Optimizing module $paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.
+<suppressed ~40 debug messages>
+Optimizing module $paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.
+<suppressed ~27 debug messages>
+Optimizing module $paramod\cgra\DW=s32'00000000000000000000000000001000.
+Optimizing module $paramod\pe\DW=s32'00000000000000000000000000001000.
+<suppressed ~5 debug messages>
+
+13. Executing FLATTEN pass (flatten design).
+Deleting now unused module $paramod$000cc2b270b42b131af50c15269800a3b20033de\uart_bridge.
+Deleting now unused module $paramod$000cc2b270b42b131af50c15269800a3b20033de\bus_decoder.
+Deleting now unused module $paramod$2ac8c588e17821101c23c62380820e6621af5831\nano_controller.
+Deleting now unused module $paramod$42fb895c52102b726af8d020df739a0a7996e8c2\sram.
+Deleting now unused module $paramod$7eca5051680112d836dfd6d6c9bb49f902e01f79\uart.
+Deleting now unused module $paramod\cgra\DW=s32'00000000000000000000000000001000.
+Deleting now unused module $paramod\pe\DW=s32'00000000000000000000000000001000.
+<suppressed ~15 debug messages>
+
+14. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \NanoCGRA_Lite..
+Removed 70 unused cells and 700 unused wires.
+<suppressed ~275 debug messages>
