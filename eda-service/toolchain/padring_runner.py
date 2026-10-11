@@ -283,16 +283,16 @@ def _bbox_center(bbox: Tuple[Tuple[float, float], Tuple[float, float]]) -> Tuple
 # After the padframe + core are merged into CHIP_TOP, we draw chip-level metal
 # wires connecting each IO pad's inner-edge pin to the corresponding core pin.
 # GF180MCU routing layers used here:
-#   * Metal2 (layer 30) — thin signal routes (clk / rst_n / uart_rx / uart_tx)
-#   * Metal3 (layer 34) — wide power straps (DVDD / DVSS)
+#   * Metal2 (layer 36) — thin signal routes (clk / rst_n / uart_rx / uart_tx)
+#   * Metal3 (layer 42) — wide power straps (DVDD / DVSS)
 # Pad pins are approximated from the RING_PAD placement geometry and core pins
 # from the placed core bounding-box edges (the core GDS carries no signal-level
 # pin shapes in this flow), so the routes are representative Manhattan wires
 # rather than signoff-accurate connections.
 # ---------------------------------------------------------------------------
-METAL2_LAYER = 30            # GF180MCU Metal2 — signal routing
+METAL2_LAYER = 36            # GF180MCU Metal2 from the PDK stream map
 METAL2_DATATYPE = 0
-METAL3_LAYER = 34            # GF180MCU Metal3 — power straps
+METAL3_LAYER = 42            # GF180MCU Metal3 from the PDK stream map
 METAL3_DATATYPE = 0
 _SIGNAL_ROUTE_WIDTH_UM = 0.5     # Metal2 signal wire width
 _POWER_STRAP_WIDTH_UM = 1.0      # Metal3 power strap width
@@ -645,7 +645,41 @@ def _merge_gds(path: Path, cfg: Dict, top: str, design: str, workspace: Path) ->
 
 
 def _render_gds_preview(gds_path: Path, image_path: Path, title: str) -> bool:
-    """Render a KLayout-style black-background preview with legend and scale bar."""
+    """Prefer a native hierarchy-aware KLayout preview to avoid flattening IOs."""
+    import shutil
+    import subprocess
+    klayout = shutil.which(_klayout())
+    if klayout:
+        native_png = image_path if image_path.suffix.lower() == ".png" else image_path.with_suffix(".png")
+        script = image_path.parent / "render_chip_preview.py"
+        script.parent.mkdir(parents=True, exist_ok=True)
+        script.write_text(
+            "import pya, os\n"
+            "window=pya.Application.instance().main_window()\n"
+            "window.load_layout(os.environ['PADFRAME_PREVIEW_GDS'],0)\n"
+            "view=window.current_view()\n"
+            "view.add_missing_layers()\nview.max_hier()\nview.zoom_fit()\n"
+            "view.set_config('background-color','#ffffff')\n"
+            "view.set_config('grid-visible','false')\n"
+            "view.set_config('text-visible','false')\n"
+            "view.save_image(os.environ['PADFRAME_PREVIEW_PNG'],2200,2200)\n"
+            "pya.Application.instance().exit(0)\n"
+        )
+        env = os.environ.copy()
+        env.setdefault("QT_QPA_PLATFORM", "offscreen")
+        env.update(PADFRAME_PREVIEW_GDS=str(gds_path.resolve()), PADFRAME_PREVIEW_PNG=str(native_png.resolve()))
+        try:
+            res = subprocess.run([klayout, "-z", "-r", str(script)], env=env,
+                                 stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=90)
+            if res.returncode == 0 and native_png.is_file():
+                if image_path.suffix.lower() == ".svg":
+                    import base64
+                    data = base64.b64encode(native_png.read_bytes()).decode("ascii")
+                    image_path.write_text('<svg xmlns="http://www.w3.org/2000/svg" width="2200" height="2200">'
+                                          '<image width="2200" height="2200" href="data:image/png;base64,' + data + '"/></svg>')
+                return True
+        except (OSError, subprocess.TimeoutExpired):
+            pass
     try:
         import gdspy
         import matplotlib
@@ -657,13 +691,12 @@ def _render_gds_preview(gds_path: Path, image_path: Path, title: str) -> bool:
         return False
 
     layer_colors = {
-        22: ("Metal1", "#3b82f6"),
-        30: ("Metal2", "#00ff50"),
-        34: ("Metal3", "#ffdc00"),
-        36: ("Metal4", "#ef4444"),
-        42: ("Metal5", "#a855f7"),
-        62: ("Top metal", "#f8fafc"),
-        235: ("Boundary", "#94a3b8"),
+        34: ("Metal1", "#3b82f6"),
+        36: ("Metal2", "#00ff50"),
+        42: ("Metal3", "#ffdc00"),
+        46: ("Metal4", "#ef4444"),
+        81: ("Metal5", "#a855f7"),
+        0: ("Boundary", "#94a3b8"),
     }
     fallback_colors = ["#38bdf8", "#fb7185", "#a3e635", "#facc15", "#c084fc", "#2dd4bf"]
 
@@ -784,7 +817,7 @@ def _render_gds_preview(gds_path: Path, image_path: Path, title: str) -> bool:
         if routing_polygons.get(layer) or routing_lines.get(layer):
             seen_layers[layer] = layer_colors.get(layer, (f"L{layer}", "#ffffff"))[0]
 
-    polygons_by_spec = top_cell.get_polygons(by_spec=True, depth=None)
+    polygons_by_spec = top_cell.get_polygons(by_spec=True, depth=1)
     for spec, polygons in sorted(polygons_by_spec.items(), key=lambda item: str(item[0])):
         if not (isinstance(spec, tuple) and len(spec) == 2):
             continue
@@ -856,13 +889,13 @@ def _render_gds_preview(gds_path: Path, image_path: Path, title: str) -> bool:
         if isinstance(spec, tuple) and len(spec) == 2
     }
 
-    for key in (30, 34):
+    for key in (METAL2_LAYER, METAL3_LAYER):
         if key in seen_layers or key in polygon_layer_keys:
             name, color = layer_colors.get(key, (f"L{key}", "#ffffff"))
             handles.append(Patch(facecolor=color, label=name))
 
     for layer, name in sorted(seen_layers.items()):
-        if layer in (30, 34):
+        if layer in (METAL2_LAYER, METAL3_LAYER):
             continue
         color = layer_colors.get(layer, (name, fallback_colors[layer % len(fallback_colors)]))[1]
         handles.append(Patch(facecolor=color, label=name))
@@ -982,7 +1015,15 @@ def run_padring(
     merge_stats: Dict[str, object] = {}
     gds_is_binary = False
     try:
-        merge_stats = _merge_gds(gds_file, cfg, top, f"{top}_chip", workspace)
+        if opts.get("assembly_manifest"):
+            from .pin_assembly import assemble
+            manifest = opts["assembly_manifest"]
+            if not isinstance(manifest, dict):
+                import json
+                manifest = json.loads((workspace / str(manifest)).read_text())
+            merge_stats = assemble(gds_file, _ring_pad_gds(), manifest, workspace)
+        else:
+            merge_stats = _merge_gds(gds_file, cfg, top, f"{top}_chip", workspace)
         gds_is_binary = True
         log_lines.append("[padring] Python-native gdspy assembly succeeded.")
         for key, value in merge_stats.items():
@@ -1018,7 +1059,7 @@ def run_padring(
     except Exception:  # noqa: BLE001
         pass
 
-    pad_summary = _pad_summary(cfg)
+    pad_summary = merge_stats.get("actual_pad_summary") or _pad_summary(cfg)
     report.design = design
     report.pad_summary = pad_summary
     report.deliverables = deliverables
@@ -1038,6 +1079,8 @@ def run_padring(
         "routes_signal": merge_stats.get("routes_signal", 0),
         "routes_power": merge_stats.get("routes_power", 0),
         "route_layers": merge_stats.get("route_layers", ""),
+        "supporting_def_lef_are_signoff_views": False,
+        "assembly_manifest_used": bool(opts.get("assembly_manifest")),
     }
     report.summary = (
         f"Assembled {config_id} pad ring '{design}' ({pad_summary['total_cells']} cells: "

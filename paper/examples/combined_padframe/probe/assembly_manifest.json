@@ -1,0 +1,91 @@
+{
+  "top": "ChipOrchestraDualCore_chip",
+  "pdk_root": "/home/wlmoi/.volare",
+  "cores": [
+    {
+      "instance": "u_cgra",
+      "top": "NanoCGRA_Lite",
+      "gds": "/mnt/d/LinkedinProjects/Chip-Orchestra/output/nanocgra_lite_3x3_opt/gds/nanocgra_lite_3x3_opt.gds",
+      "def": "/mnt/d/LinkedinProjects/Chip-Orchestra/output/nanocgra_lite_3x3_opt/pnr/nanocgra_lite_3x3_opt.def",
+      "origin_um": [
+        1170,
+        1250
+      ]
+    },
+    {
+      "instance": "u_fulladder",
+      "top": "fulladder",
+      "gds": "/mnt/d/LinkedinProjects/Chip-Orchestra/paper/examples/fulladder/gds/fulladder.gds",
+      "def": "/mnt/d/LinkedinProjects/Chip-Orchestra/paper/examples/fulladder/pnr/fulladder.def",
+      "origin_um": [
+        1880,
+        1430
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "net": "clk",
+      "core": "u_cgra",
+      "pin": "clk",
+      "direction": "INPUT",
+      "pad_reference": 346
+    },
+    {
+      "net": "rst_n",
+      "core": "u_cgra",
+      "pin": "rst_n",
+      "direction": "INPUT",
+      "pad_reference": 345
+    },
+    {
+      "net": "uart_rx",
+      "core": "u_cgra",
+      "pin": "uart_rx",
+      "direction": "INPUT",
+      "pad_reference": 315
+    },
+    {
+      "net": "uart_tx",
+      "core": "u_cgra",
+      "pin": "uart_tx",
+      "direction": "OUTPUT",
+      "pad_reference": 316
+    },
+    {
+      "net": "fa_a",
+      "core": "u_fulladder",
+      "pin": "a",
+      "direction": "INPUT",
+      "pad_reference": 337
+    },
+    {
+      "net": "fa_b",
+      "core": "u_fulladder",
+      "pin": "b",
+      "direction": "INPUT",
+      "pad_reference": 338
+    },
+    {
+      "net": "fa_cin",
+      "core": "u_fulladder",
+      "pin": "cin",
+      "direction": "INPUT",
+      "pad_reference": 334
+    },
+    {
+      "net": "fa_sum",
+      "core": "u_fulladder",
+      "pin": "sum",
+      "direction": "OUTPUT",
+      "pad_reference": 328
+    },
+    {
+      "net": "fa_cout",
+      "core": "u_fulladder",
+      "pin": "cout",
+      "direction": "OUTPUT",
+      "pad_reference": 326
+    }
+  ]
+}

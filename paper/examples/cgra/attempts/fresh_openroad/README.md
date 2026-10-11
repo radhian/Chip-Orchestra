@@ -1,0 +1,1 @@
+This extra fresh hardening attempt was stopped during detailed routing. It produced no routed GDS. It is not the source of the final example core. The retained physical core provenance is recorded in ../../reports/provenance.json.

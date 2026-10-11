@@ -1,0 +1,2 @@
+TEST PASSED fulladder checks=8
+/mnt/d/LinkedinProjects/Chip-Orchestra/paper/examples/fulladder/tb/fulladder_tb.v:14: $finish called at 80000 (1ps)

@@ -1,0 +1,342 @@
+OpenROAD b16bda7e82721d10566ff7e2b68f1ff0be9f9e38 
+Features included (+) or not (-): +Charts +GPU +GUI +Python
+This program is licensed under the BSD-3 license. See the LICENSE file for details.
+Components of this program may be licensed under more restrictive licenses which must be honored.
+[INFO ODB-0388] unsupported LEF58_EOLENCLOSURE property for layer Via1 :"
+  	EOLENCLOSURE 0.34 0.06 ;"
+[INFO ODB-0388] unsupported LEF58_EOLENCLOSURE property for layer Via2 :" EOLENCLOSURE 0.34 0.06 ; "
+[INFO ODB-0388] unsupported LEF58_EOLENCLOSURE property for layer Via3 :" EOLENCLOSURE 0.34 0.06 ; "
+[INFO ODB-0388] unsupported LEF58_EOLENCLOSURE property for layer Via4 :" EOLENCLOSURE 0.34 0.06 ; "
+[INFO ODB-0227] LEF file: /home/wlmoi/.volare/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/techlef/gf180mcu_fd_sc_mcu7t5v0__nom.tlef, created 15 layers, 56 vias
+[WARNING ODB-0220] WARNING (LEFPARS-2008): NOWIREEXTENSIONATPIN statement is obsolete in version 5.6 or later.
+The NOWIREEXTENSIONATPIN statement will be ignored. See file /home/wlmoi/.volare/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/lef/gf180mcu_fd_sc_mcu7t5v0.lef at line 2.
+
+[INFO ODB-0227] LEF file: /home/wlmoi/.volare/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/lef/gf180mcu_fd_sc_mcu7t5v0.lef, created 229 library cells
+[WARNING IFP-0028] Core area lower left (10.000, 10.000) snapped to (10.080, 11.760).
+[INFO IFP-0001] Added 14 rows of 107 site GF018hv5v_mcu_sc7.
+=== DIE/CORE AREA AFTER FLOORPLAN ===
+DIE  = 0.0 0.0 80.0 80.0
+CORE = 10.08 11.76 70.0 66.64
+Found 0 macro blocks.
+Using 2 tracks default min distance between IO pins.
+[INFO PPL-0010] Tentative 0 to set up sections.
+[INFO PPL-0001] Number of slots           284
+[INFO PPL-0002] Number of I/O             5
+[INFO PPL-0003] Number of I/O w/sink      5
+[INFO PPL-0004] Number of I/O w/o sink    0
+[INFO PPL-0005] Slots per section         200
+[INFO PPL-0006] Slots increase factor     0.01
+[INFO PPL-0008] Successfully assigned pins to sections.
+[INFO PPL-0012] I/O nets HPWL: 206.96 um.
+[INFO TAP-0004] Inserted 28 endcaps.
+[INFO TAP-0005] Inserted 18 tapcells.
+[INFO PDN-0001] Inserting grid: stdcell_grid
+[INFO GPL-0002] DBU: 2000
+[INFO GPL-0003] SiteSize: (  0.560  3.920 ) um
+[INFO GPL-0004] CoreBBox: ( 10.080 11.760 ) ( 70.000 66.640 ) um
+[INFO GPL-0006] NumInstances:                22
+[INFO GPL-0007] NumPlaceInstances:            4
+[INFO GPL-0008] NumFixedInstances:           18
+[INFO GPL-0009] NumDummyInstances:            0
+[INFO GPL-0010] NumNets:                      7
+[INFO GPL-0011] NumPins:                     19
+[INFO GPL-0012] DieBBox:  (  0.000  0.000 ) ( 80.000 80.000 ) um
+[INFO GPL-0013] CoreBBox: ( 10.080 11.760 ) ( 70.000 66.640 ) um
+[INFO GPL-0016] CoreArea:              3288.410 um^2
+[INFO GPL-0017] NonPlaceInstsArea:       79.027 um^2
+[INFO GPL-0018] PlaceInstsArea:          90.003 um^2
+[INFO GPL-0019] Util:                     2.804 %
+[INFO GPL-0020] StdInstsArea:            90.003 um^2
+[INFO GPL-0021] MacroInstsArea:           0.000 um^2
+[InitialPlace]  Iter: 1 CG residual: 0.00000006 HPWL: 468440
+[InitialPlace]  Iter: 2 CG residual: 0.00000000 HPWL: 182776
+[InitialPlace]  Iter: 3 CG residual: 0.00000000 HPWL: 181876
+[InitialPlace]  Iter: 4 CG residual: 0.00000007 HPWL: 181884
+[InitialPlace]  Iter: 5 CG residual: 0.00000000 HPWL: 181888
+[INFO GPL-0031] FillerInit:NumGCells:       167
+[INFO GPL-0032] FillerInit:NumGNets:          7
+[INFO GPL-0033] FillerInit:NumGPins:         19
+[INFO GPL-0023] TargetDensity:            0.700
+[INFO GPL-0024] AvrgPlaceInstArea:       22.501 um^2
+[INFO GPL-0025] IdealBinArea:            32.144 um^2
+[INFO GPL-0026] IdealBinCnt:                102
+[INFO GPL-0027] TotalBinArea:          3288.410 um^2
+[INFO GPL-0028] BinCnt:         8      8
+[INFO GPL-0029] BinSize: (  7.490  6.860 )
+[INFO GPL-0030] NumBins: 64
+[NesterovSolve] Iter:    1 overflow: 0.000 HPWL: 205975
+[NesterovSolve] Finished with Overflow: 0.000000
+[INFO RSZ-0058] Using max wire length 6985um.
+[INFO RSZ-0039] Resized 3 instances.
+Placement Analysis
+---------------------------------
+total displacement         15.0 u
+average displacement        0.3 u
+max displacement            5.7 u
+original HPWL             110.9 u
+legalized HPWL            137.0 u
+delta HPWL                   24 %
+
+[INFO DPL-0020] Mirrored 2 instances
+[INFO DPL-0021] HPWL before             137.0 u
+[INFO DPL-0022] HPWL after              134.9 u
+[INFO DPL-0023] HPWL delta               -1.6 %
+[INFO DRT-0149] Reading tech and libs.
+[WARNING DRT-0349] LEF58_ENCLOSURE with no CUTCLASS is not supported. Skipping for layer Via1
+[WARNING DRT-0349] LEF58_ENCLOSURE with no CUTCLASS is not supported. Skipping for layer Via1
+[WARNING DRT-0349] LEF58_ENCLOSURE with no CUTCLASS is not supported. Skipping for layer Via2
+[WARNING DRT-0349] LEF58_ENCLOSURE with no CUTCLASS is not supported. Skipping for layer Via2
+[WARNING DRT-0349] LEF58_ENCLOSURE with no CUTCLASS is not supported. Skipping for layer Via3
+[WARNING DRT-0349] LEF58_ENCLOSURE with no CUTCLASS is not supported. Skipping for layer Via3
+[WARNING DRT-0349] LEF58_ENCLOSURE with no CUTCLASS is not supported. Skipping for layer Via4
+[WARNING DRT-0349] LEF58_ENCLOSURE with no CUTCLASS is not supported. Skipping for layer Via4
+
+Units:                2000
+Number of layers:     11
+Number of macros:     229
+Number of vias:       60
+Number of viarulegen: 16
+
+[INFO DRT-0150] Reading design.
+
+Design:                   fulladder
+Die area:                 ( 0 0 ) ( 160000 160000 )
+Number of track patterns: 10
+Number of DEF vias:       0
+Number of components:     50
+Number of terminals:      5
+Number of snets:          2
+Number of nets:           7
+
+[INFO DRT-0167] List of default vias:
+  Layer Via1
+    default via: Via1_HV
+  Layer Via2
+    default via: Via2_VH
+  Layer Via3
+    default via: Via3_HV
+  Layer Via4
+    default via: Via4_VH
+[INFO DRT-0162] Library cell analysis.
+[INFO DRT-0163] Instance analysis.
+[INFO DRT-0164] Number of unique instances = 10.
+[INFO DRT-0168] Init region query.
+[INFO DRT-0024]   Complete Poly2.
+[INFO DRT-0024]   Complete CON.
+[INFO DRT-0024]   Complete Metal1.
+[INFO DRT-0024]   Complete Via1.
+[INFO DRT-0024]   Complete Metal2.
+[INFO DRT-0024]   Complete Via2.
+[INFO DRT-0024]   Complete Metal3.
+[INFO DRT-0024]   Complete Via3.
+[INFO DRT-0024]   Complete Metal4.
+[INFO DRT-0024]   Complete Via4.
+[INFO DRT-0024]   Complete Metal5.
+[INFO DRT-0033] Poly2 shape region query size = 0.
+[INFO DRT-0033] CON shape region query size = 0.
+[INFO DRT-0033] Metal1 shape region query size = 346.
+[INFO DRT-0033] Via1 shape region query size = 69.
+[INFO DRT-0033] Metal2 shape region query size = 51.
+[INFO DRT-0033] Via2 shape region query size = 69.
+[INFO DRT-0033] Metal3 shape region query size = 46.
+[INFO DRT-0033] Via3 shape region query size = 69.
+[INFO DRT-0033] Metal4 shape region query size = 30.
+[INFO DRT-0033] Via4 shape region query size = 36.
+[INFO DRT-0033] Metal5 shape region query size = 6.
+[INFO DRT-0165] Start pin access.
+[INFO DRT-0078]   Complete 14 pins.
+[INFO DRT-0081]   Complete 4 unique inst patterns.
+[INFO DRT-0084]   Complete 3 groups.
+#scanned instances     = 50
+#unique  instances     = 10
+#stdCellGenAp          = 140
+#stdCellValidPlanarAp  = 0
+#stdCellValidViaAp     = 111
+#stdCellPinNoAp        = 0
+#stdCellPinCnt         = 14
+#instTermValidViaApCnt = 0
+#macroGenAp            = 0
+#macroValidPlanarAp    = 0
+#macroValidViaAp       = 0
+#macroNoAp             = 0
+[INFO DRT-0166] Complete pin access.
+[INFO DRT-0267] cpu time = 00:00:02, elapsed time = 00:00:00, memory = 193.22 (MB), peak = 192.82 (MB)
+
+Number of guides:     39
+
+[INFO DRT-0169] Post process guides.
+[INFO DRT-0176] GCELLGRID X 0 DO 9 STEP 16800 ;
+[INFO DRT-0177] GCELLGRID Y 0 DO 9 STEP 16800 ;
+[INFO DRT-0028]   Complete Poly2.
+[INFO DRT-0028]   Complete CON.
+[INFO DRT-0028]   Complete Metal1.
+[INFO DRT-0028]   Complete Via1.
+[INFO DRT-0028]   Complete Metal2.
+[INFO DRT-0028]   Complete Via2.
+[INFO DRT-0028]   Complete Metal3.
+[INFO DRT-0028]   Complete Via3.
+[INFO DRT-0028]   Complete Metal4.
+[INFO DRT-0028]   Complete Via4.
+[INFO DRT-0028]   Complete Metal5.
+[INFO DRT-0178] Init guide query.
+[INFO DRT-0035]   Complete Poly2 (guide).
+[INFO DRT-0035]   Complete CON (guide).
+[INFO DRT-0035]   Complete Metal1 (guide).
+[INFO DRT-0035]   Complete Via1 (guide).
+[INFO DRT-0035]   Complete Metal2 (guide).
+[INFO DRT-0035]   Complete Via2 (guide).
+[INFO DRT-0035]   Complete Metal3 (guide).
+[INFO DRT-0035]   Complete Via3 (guide).
+[INFO DRT-0035]   Complete Metal4 (guide).
+[INFO DRT-0035]   Complete Via4 (guide).
+[INFO DRT-0035]   Complete Metal5 (guide).
+[INFO DRT-0036] Poly2 guide region query size = 0.
+[INFO DRT-0036] CON guide region query size = 0.
+[INFO DRT-0036] Metal1 guide region query size = 10.
+[INFO DRT-0036] Via1 guide region query size = 0.
+[INFO DRT-0036] Metal2 guide region query size = 11.
+[INFO DRT-0036] Via2 guide region query size = 0.
+[INFO DRT-0036] Metal3 guide region query size = 5.
+[INFO DRT-0036] Via3 guide region query size = 0.
+[INFO DRT-0036] Metal4 guide region query size = 0.
+[INFO DRT-0036] Via4 guide region query size = 0.
+[INFO DRT-0036] Metal5 guide region query size = 0.
+[INFO DRT-0179] Init gr pin query.
+[INFO DRT-0245] skipped writing guide updates to database.
+[INFO DRT-0185] Post process initialize RPin region query.
+[INFO DRT-0181] Start track assignment.
+[INFO DRT-0184] Done with 11 vertical wires in 1 frboxes and 15 horizontal wires in 1 frboxes.
+[INFO DRT-0186] Done with 5 vertical wires in 1 frboxes and 1 horizontal wires in 1 frboxes.
+[INFO DRT-0182] Complete track assignment.
+[INFO DRT-0267] cpu time = 00:00:00, elapsed time = 00:00:00, memory = 193.47 (MB), peak = 193.07 (MB)
+[INFO DRT-0187] Start routing data preparation.
+[INFO DRT-0267] cpu time = 00:00:00, elapsed time = 00:00:00, memory = 193.47 (MB), peak = 193.07 (MB)
+[INFO DRT-0194] Start detail routing.
+[INFO DRT-0195] Start 0th optimization iteration.
+    Completing 10% with 0 violations.
+    elapsed time = 00:00:00, memory = 193.72 (MB).
+    Completing 20% with 0 violations.
+    elapsed time = 00:00:00, memory = 193.72 (MB).
+    Completing 30% with 0 violations.
+    elapsed time = 00:00:00, memory = 193.72 (MB).
+    Completing 40% with 0 violations.
+    elapsed time = 00:00:00, memory = 193.72 (MB).
+[INFO DRT-0199]   Number of violations = 0.
+[INFO DRT-0267] cpu time = 00:00:00, elapsed time = 00:00:00, memory = 502.32 (MB), peak = 501.95 (MB)
+Total wire length = 140 um.
+Total wire length on LAYER Metal1 = 6 um.
+Total wire length on LAYER Metal2 = 117 um.
+Total wire length on LAYER Metal3 = 16 um.
+Total wire length on LAYER Metal4 = 0 um.
+Total wire length on LAYER Metal5 = 0 um.
+Total number of vias = 24.
+Up-via summary (total 24):
+
+-------------
+  Poly2     0
+ Metal1    17
+ Metal2     7
+ Metal3     0
+ Metal4     0
+-------------
+           24
+
+
+[INFO DRT-0198] Complete detail routing.
+Total wire length = 140 um.
+Total wire length on LAYER Metal1 = 6 um.
+Total wire length on LAYER Metal2 = 117 um.
+Total wire length on LAYER Metal3 = 16 um.
+Total wire length on LAYER Metal4 = 0 um.
+Total wire length on LAYER Metal5 = 0 um.
+Total number of vias = 24.
+Up-via summary (total 24):
+
+-------------
+  Poly2     0
+ Metal1    17
+ Metal2     7
+ Metal3     0
+ Metal4     0
+-------------
+           24
+
+
+[INFO DRT-0267] cpu time = 00:00:00, elapsed time = 00:00:00, memory = 502.32 (MB), peak = 501.95 (MB)
+
+[INFO DRT-0180] Post processing.
+[INFO DPL-0001] Placed 63 filler instances.
+[WARNING STA-0450] virtual clock clk can not be propagated.
+=================== STA REPORT ===================
+Startpoint: b (input port clocked by clk)
+Endpoint: sum (output port clocked by clk)
+Path Group: clk
+Path Type: max
+
+Fanout      Cap     Slew    Delay     Time   Description
+---------------------------------------------------------------------------------
+                   0.000    0.000    0.000   clock clk (rise edge)
+                            0.000    0.000   clock network delay (ideal)
+                           20.000   20.000 ^ input external delay
+     3    0.023    0.419    0.220   20.220 ^ b (in)
+                                             b (net)
+                   0.419    0.000   20.220 ^ _3_/A1 (gf180mcu_fd_sc_mcu7t5v0__xor3_2)
+     1    0.053    0.357    1.299   21.519 v _3_/Z (gf180mcu_fd_sc_mcu7t5v0__xor3_2)
+                                             sum (net)
+                   0.357    0.001   21.520 v sum (out)
+                                    21.520   data arrival time
+
+                   0.000  100.000  100.000   clock clk (rise edge)
+                            0.000  100.000   clock network delay (ideal)
+                            0.000  100.000   clock reconvergence pessimism
+                          -20.000   80.000   output external delay
+                                    80.000   data required time
+---------------------------------------------------------------------------------
+                                    80.000   data required time
+                                   -21.520   data arrival time
+---------------------------------------------------------------------------------
+                                    58.480   slack (MET)
+
+
+Startpoint: a (input port clocked by clk)
+Endpoint: cout (output port clocked by clk)
+Path Group: clk
+Path Type: min
+
+Fanout      Cap     Slew    Delay     Time   Description
+---------------------------------------------------------------------------------
+                   0.000    0.000    0.000   clock clk (rise edge)
+                            0.000    0.000   clock network delay (ideal)
+                           20.000   20.000 v input external delay
+     2    0.016    0.178    0.095   20.095 v a (in)
+                                             a (net)
+                   0.178    0.000   20.095 v _4_/B (gf180mcu_fd_sc_mcu7t5v0__oai21_2)
+     1    0.021    0.391    0.288   20.382 ^ _4_/ZN (gf180mcu_fd_sc_mcu7t5v0__oai21_2)
+                                             _1_ (net)
+                   0.391    0.001   20.383 ^ _5_/A2 (gf180mcu_fd_sc_mcu7t5v0__nand2_4)
+     1    0.054    0.274    0.206   20.589 v _5_/ZN (gf180mcu_fd_sc_mcu7t5v0__nand2_4)
+                                             cout (net)
+                   0.274    0.002   20.590 v cout (out)
+                                    20.590   data arrival time
+
+                   0.000    0.000    0.000   clock clk (rise edge)
+                            0.000    0.000   clock network delay (ideal)
+                            0.000    0.000   clock reconvergence pessimism
+                          -20.000  -20.000   output external delay
+                                   -20.000   data required time
+---------------------------------------------------------------------------------
+                                   -20.000   data required time
+                                   -20.590   data arrival time
+---------------------------------------------------------------------------------
+                                    40.590   slack (MET)
+
+
+wns 0.00
+tns 0.00
+worst slack 58.48
+worst slack 40.59
+Clock clk
+No launch/capture paths found.
+
+Design area 345 u^2 10% utilization.
+FLOW_DONE

@@ -1,0 +1,7 @@
+{
+  "physical_core": "Retained existing optimized NanoCGRA core, not a fresh hardening result",
+  "source": "output/nanocgra_lite_3x3_opt",
+  "gds_sha256": "20591a5cf827bc7a672d508c33ee75af49018898c3fd5990ce7a2b20875b549e",
+  "fresh_uart_verification": "224 passing checks at divisor 87",
+  "fresh_padframe_generation": true
+}

@@ -127,8 +127,8 @@ def test_padring_routing_adds_top_level_metal(tmp_path: Path, monkeypatch) -> No
     # RING_PAD / core references (which also carry Metal2), so this returns
     # exactly the top-level routing wires.
     own_polys = chip_top.get_polygons(by_spec=True, depth=0)
-    metal2 = own_polys.get((30, 0))
-    assert metal2, "expected Metal2 (layer 30, datatype 0) routing geometry in CHIP_TOP"
+    metal2 = own_polys.get((36, 0))
+    assert metal2, "expected Metal2 (layer 36, datatype 0) routing geometry in CHIP_TOP"
 
     # The Metal2 routing must extend well beyond the small centered core, i.e.
     # the wires actually reach out toward the pads at the die edges.
@@ -141,7 +141,7 @@ def test_padring_routing_adds_top_level_metal(tmp_path: Path, monkeypatch) -> No
     assert route_w > core_w or route_h > core_h
 
     # Metal3 power straps and routing metrics are recorded.
-    assert own_polys.get((34, 0)), "expected Metal3 (layer 34, datatype 0) power straps in CHIP_TOP"
+    assert own_polys.get((42, 0)), "expected Metal3 (layer 42, datatype 0) power straps in CHIP_TOP"
     assert rep.metrics["assembly_routes_signal"] == 4          # clk, rst_n, uart_rx, uart_tx
     assert rep.metrics["assembly_routes_power"] >= 2           # dvdd + dvss straps
     assert rep.metrics["assembly_routes_total"] >= 6

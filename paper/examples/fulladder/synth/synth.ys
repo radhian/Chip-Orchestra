@@ -1,0 +1,13 @@
+read_verilog -I/mnt/d/LinkedinProjects/Chip-Orchestra/paper/examples/fulladder/rtl /mnt/d/LinkedinProjects/Chip-Orchestra/paper/examples/fulladder/rtl/fulladder.v
+hierarchy -check -top fulladder
+synth -top fulladder -flatten
+dfflibmap -liberty /home/wlmoi/.volare/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/lib/gf180mcu_fd_sc_mcu7t5v0__tt_025C_5v00.lib
+abc -liberty /home/wlmoi/.volare/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/lib/gf180mcu_fd_sc_mcu7t5v0__tt_025C_5v00.lib -D 100000
+setundef -zero
+hilomap -hicell gf180mcu_fd_sc_mcu7t5v0__tieh Z -locell gf180mcu_fd_sc_mcu7t5v0__tiel ZN
+splitnets
+opt_clean
+read_liberty -lib /home/wlmoi/.volare/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/lib/gf180mcu_fd_sc_mcu7t5v0__tt_025C_5v00.lib
+check -assert
+write_verilog -noattr /mnt/d/LinkedinProjects/Chip-Orchestra/paper/examples/fulladder/synth/fulladder.v
+tee -o /mnt/d/LinkedinProjects/Chip-Orchestra/paper/examples/fulladder/reports/synth_stat.txt stat -liberty /home/wlmoi/.volare/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/lib/gf180mcu_fd_sc_mcu7t5v0__tt_025C_5v00.lib

@@ -1,0 +1,22 @@
+{
+  "generated_combined_padframe": true,
+  "physical_core_instances": [
+    "RING_PAD",
+    "u_cgra__NanoCGRA_Lite",
+    "u_fulladder__fulladder"
+  ],
+  "fulladder_post_route_checks": 8,
+  "cgra_default_uart_checks": 224,
+  "official_gf180_pad_model_checks": 232,
+  "backend_regression_tests_passed": 7,
+  "signal_connections_verified": 9,
+  "power_connections_verified": 4,
+  "top_level_vias_verified": 580,
+  "signal_shorts": 0,
+  "orphan_vias": 0,
+  "cgra_physical_source": "Retained existing optimized NanoCGRA core, not a fresh hardening result",
+  "fulladder_physical_source": "Fresh Yosys/OpenROAD/KLayout implementation",
+  "full_chip_foundry_drc_or_device_lvs_claimed": false,
+  "gds_bytes": 24315494,
+  "gds_sha256": "e0912e03671798683365b9f2b44846561c4df72b522d13bf09a8cc5ddcde66d1"
+}

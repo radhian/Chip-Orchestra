@@ -1,0 +1,5 @@
+After DEF read: 20 cells
+   top: fulladder
+After cell GDS merge: 250 cells
+After prune: 250 cells
+WROTE /mnt/d/LinkedinProjects/Chip-Orchestra/paper/examples/fulladder/gds/fulladder.gds

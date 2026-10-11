@@ -1,0 +1,20 @@
+read_verilog -I/mnt/d/LinkedinProjects/Chip-Orchestra/paper/examples/cgra/rtl /mnt/d/LinkedinProjects/Chip-Orchestra/paper/examples/cgra/rtl/bus_decoder.v
+read_verilog -I/mnt/d/LinkedinProjects/Chip-Orchestra/paper/examples/cgra/rtl /mnt/d/LinkedinProjects/Chip-Orchestra/paper/examples/cgra/rtl/cgra.v
+read_verilog -I/mnt/d/LinkedinProjects/Chip-Orchestra/paper/examples/cgra/rtl /mnt/d/LinkedinProjects/Chip-Orchestra/paper/examples/cgra/rtl/nano_controller.v
+read_verilog -I/mnt/d/LinkedinProjects/Chip-Orchestra/paper/examples/cgra/rtl /mnt/d/LinkedinProjects/Chip-Orchestra/paper/examples/cgra/rtl/nanocgra_lite.v
+read_verilog -I/mnt/d/LinkedinProjects/Chip-Orchestra/paper/examples/cgra/rtl /mnt/d/LinkedinProjects/Chip-Orchestra/paper/examples/cgra/rtl/pe.v
+read_verilog -I/mnt/d/LinkedinProjects/Chip-Orchestra/paper/examples/cgra/rtl /mnt/d/LinkedinProjects/Chip-Orchestra/paper/examples/cgra/rtl/sram.v
+read_verilog -I/mnt/d/LinkedinProjects/Chip-Orchestra/paper/examples/cgra/rtl /mnt/d/LinkedinProjects/Chip-Orchestra/paper/examples/cgra/rtl/uart.v
+read_verilog -I/mnt/d/LinkedinProjects/Chip-Orchestra/paper/examples/cgra/rtl /mnt/d/LinkedinProjects/Chip-Orchestra/paper/examples/cgra/rtl/uart_bridge.v
+hierarchy -check -top NanoCGRA_Lite
+synth -top NanoCGRA_Lite -flatten
+dfflibmap -liberty /home/wlmoi/.volare/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/lib/gf180mcu_fd_sc_mcu7t5v0__tt_025C_5v00.lib
+abc -liberty /home/wlmoi/.volare/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/lib/gf180mcu_fd_sc_mcu7t5v0__tt_025C_5v00.lib -D 100000
+setundef -zero
+hilomap -hicell gf180mcu_fd_sc_mcu7t5v0__tieh Z -locell gf180mcu_fd_sc_mcu7t5v0__tiel ZN
+splitnets
+opt_clean
+read_liberty -lib /home/wlmoi/.volare/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/lib/gf180mcu_fd_sc_mcu7t5v0__tt_025C_5v00.lib
+check -assert
+write_verilog -noattr /mnt/d/LinkedinProjects/Chip-Orchestra/paper/examples/cgra/synth/NanoCGRA_Lite.v
+tee -o /mnt/d/LinkedinProjects/Chip-Orchestra/paper/examples/cgra/reports/synth_stat.txt stat -liberty /home/wlmoi/.volare/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/lib/gf180mcu_fd_sc_mcu7t5v0__tt_025C_5v00.lib

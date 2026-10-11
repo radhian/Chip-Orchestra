@@ -1,0 +1,12 @@
+import pya,os
+window=pya.Application.instance().main_window()
+window.load_layout(os.environ['CHIP_GDS'],0)
+view=window.current_view()
+view.add_missing_layers()
+view.max_hier()
+view.zoom_box(pya.DBox(1080,1140,2070,1840))
+view.set_config('background-color','#ffffff')
+view.set_config('grid-visible','false')
+view.set_config('text-visible','false')
+view.save_image(os.environ['CHIP_IMAGE'],2200,1600)
+pya.Application.instance().exit(0)

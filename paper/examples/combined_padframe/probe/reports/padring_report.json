@@ -1,0 +1,446 @@
+{
+  "stage": "PADRING",
+  "summary": "Assembled gf180-v1 pad ring 'ChipOrchestraDualCore_padring' (73 cells: 69 IO + 4 corners) on 2935x2935 um die. Deliverables: padring/ChipOrchestraDualCore_padring.cfg, padring/ChipOrchestraDualCore_padring.def, padring/ChipOrchestraDualCore_padring.svg, padring/ChipOrchestraDualCore_padring.v, padring/ChipOrchestraDualCore_padring.lef, padring/ChipOrchestraDualCore_chip.gds, padring/ChipOrchestraDualCore_chip_preview.png, padring/ChipOrchestraDualCore_chip.svg.",
+  "metrics": {
+    "config": "gf180-v1",
+    "pdk": "gf180mcuD",
+    "die_width_um": 2935.0,
+    "die_height_um": 2935.0,
+    "die_area_um2": 8614225.0,
+    "used_real_tools": true,
+    "pads_analog": 58,
+    "pads_clk": 1,
+    "pads_rst_n": 1,
+    "pads_uart_rx": 1,
+    "pads_uart_tx": 1,
+    "pads_dvdd": 3,
+    "pads_dvss": 4,
+    "pads_corners": 4,
+    "pads_total_io": 69,
+    "pads_total_cells": 73,
+    "assembly_top_cell": "ChipOrchestraDualCore_chip",
+    "assembly_core_count": 2,
+    "assembly_cores": [
+      "u_cgra",
+      "u_fulladder"
+    ],
+    "assembly_ring_cell": "RING_PAD",
+    "assembly_merged_cells": 1013,
+    "assembly_routes_signal": 9,
+    "assembly_routes_total": 13,
+    "assembly_routes_power": 4,
+    "assembly_pad_control_ties": 168,
+    "assembly_stream_layers": {
+      "Via1": 35,
+      "Via2": 38,
+      "Via3": 40,
+      "Via4": 41,
+      "Via5": 82,
+      "Metal1": 34,
+      "Metal2": 36,
+      "Metal3": 42,
+      "Metal4": 46,
+      "Metal5": 81
+    },
+    "assembly_actual_pad_census": {
+      "gf180mcu_fd_io__asig_5p0": 18,
+      "gf180mcu_fd_io__fill10": 184,
+      "gf180mcu_fd_io__fill5": 87,
+      "gf180mcu_fd_io__cor": 4,
+      "gf180mcu_fd_io__dvss": 14,
+      "gf180mcu_fd_io__dvdd": 8,
+      "gf180mcu_fd_io__bi_t": 15,
+      "gf180mcu_fd_io__brk5_vss_dvss": 3,
+      "gf180mcu_fd_io__brk5_vss_dvdd": 1,
+      "gf180mcu_fd_io__in_c": 18,
+      "gf180mcu_fd_io__brk5_vss_vdd": 1,
+      "pad_fill_75": 15
+    },
+    "assembly_pin_geometry_checked": true,
+    "assembly_new_route_shorts": 0,
+    "assembly_full_chip_drc_passed": false,
+    "assembly_full_chip_lvs_passed": false,
+    "assembly_power_routes_to_both_cores": true,
+    "assembly_connections": [
+      {
+        "net": "clk",
+        "core": "u_cgra",
+        "pin": "clk",
+        "direction": "INPUT",
+        "pad_reference": 346,
+        "pad_cell": "gf180mcu_fd_io__in_c",
+        "pad_pin": "Y",
+        "pad_point_um": [
+          1271.35,
+          369.8
+        ],
+        "core_point_um": [
+          1405.2,
+          1250.26
+        ],
+        "core_layer": "Metal2",
+        "grid_steps": 98,
+        "pin_geometry_checked": true
+      },
+      {
+        "net": "rst_n",
+        "core": "u_cgra",
+        "pin": "rst_n",
+        "direction": "INPUT",
+        "pad_reference": 345,
+        "pad_cell": "gf180mcu_fd_io__in_c",
+        "pad_pin": "Y",
+        "pad_point_um": [
+          1371.35,
+          369.8
+        ],
+        "core_point_um": [
+          1402.96,
+          1250.26
+        ],
+        "core_layer": "Metal2",
+        "grid_steps": 85,
+        "pin_geometry_checked": true
+      },
+      {
+        "net": "uart_rx",
+        "core": "u_cgra",
+        "pin": "uart_rx",
+        "direction": "INPUT",
+        "pad_reference": 315,
+        "pad_cell": "gf180mcu_fd_io__bi_t",
+        "pad_pin": "Y",
+        "pad_point_um": [
+          369.8,
+          904.25
+        ],
+        "core_point_um": [
+          1404.08,
+          1250.26
+        ],
+        "core_layer": "Metal2",
+        "grid_steps": 130,
+        "pin_geometry_checked": true
+      },
+      {
+        "net": "uart_tx",
+        "core": "u_cgra",
+        "pin": "uart_tx",
+        "direction": "OUTPUT",
+        "pad_reference": 316,
+        "pad_cell": "gf180mcu_fd_io__bi_t",
+        "pad_pin": "A",
+        "pad_point_um": [
+          369.8,
+          1005.7099999999998
+        ],
+        "core_point_um": [
+          1401.84,
+          1250.26
+        ],
+        "core_layer": "Metal2",
+        "grid_steps": 117,
+        "pin_geometry_checked": true
+      },
+      {
+        "net": "fa_a",
+        "core": "u_fulladder",
+        "pin": "a",
+        "direction": "INPUT",
+        "pad_reference": 337,
+        "pad_cell": "gf180mcu_fd_io__in_c",
+        "pad_pin": "Y",
+        "pad_point_um": [
+          2605.8,
+          471.35
+        ],
+        "core_point_um": [
+          1917.52,
+          1430.26
+        ],
+        "core_layer": "Metal2",
+        "grid_steps": 160,
+        "pin_geometry_checked": true
+      },
+      {
+        "net": "fa_b",
+        "core": "u_fulladder",
+        "pin": "b",
+        "direction": "INPUT",
+        "pad_reference": 338,
+        "pad_cell": "gf180mcu_fd_io__in_c",
+        "pad_pin": "Y",
+        "pad_point_um": [
+          2605.8,
+          571.35
+        ],
+        "core_point_um": [
+          1922.0,
+          1430.26
+        ],
+        "core_layer": "Metal2",
+        "grid_steps": 134,
+        "pin_geometry_checked": true
+      },
+      {
+        "net": "fa_cin",
+        "core": "u_fulladder",
+        "pin": "cin",
+        "direction": "INPUT",
+        "pad_reference": 334,
+        "pad_cell": "gf180mcu_fd_io__in_c",
+        "pad_pin": "Y",
+        "pad_point_um": [
+          2605.8,
+          671.35
+        ],
+        "core_point_um": [
+          1919.76,
+          1430.26
+        ],
+        "core_layer": "Metal2",
+        "grid_steps": 136,
+        "pin_geometry_checked": true
+      },
+      {
+        "net": "fa_sum",
+        "core": "u_fulladder",
+        "pin": "sum",
+        "direction": "OUTPUT",
+        "pad_reference": 328,
+        "pad_cell": "gf180mcu_fd_io__bi_t",
+        "pad_pin": "A",
+        "pad_point_um": [
+          405.71,
+          2605.8
+        ],
+        "core_point_um": [
+          1918.64,
+          1430.26
+        ],
+        "core_layer": "Metal2",
+        "grid_steps": 264,
+        "pin_geometry_checked": true
+      },
+      {
+        "net": "fa_cout",
+        "core": "u_fulladder",
+        "pin": "cout",
+        "direction": "OUTPUT",
+        "pad_reference": 326,
+        "pad_cell": "gf180mcu_fd_io__bi_t",
+        "pad_pin": "A",
+        "pad_point_um": [
+          369.8,
+          2405.71
+        ],
+        "core_point_um": [
+          1920.88,
+          1430.26
+        ],
+        "core_layer": "Metal2",
+        "grid_steps": 262,
+        "pin_geometry_checked": true
+      }
+    ],
+    "assembly_power_connections": [
+      {
+        "core": "u_cgra",
+        "net": "VDD",
+        "pad_rail_point_um": [
+          1000.8000000000001,
+          334.8
+        ],
+        "core_point_um": [
+          1610.08,
+          1261.76
+        ],
+        "pin_geometry_checked": true
+      },
+      {
+        "core": "u_cgra",
+        "net": "VSS",
+        "pad_rail_point_um": [
+          1000.8000000000001,
+          341.8
+        ],
+        "core_point_um": [
+          1590.08,
+          1261.76
+        ],
+        "pin_geometry_checked": true
+      },
+      {
+        "core": "u_fulladder",
+        "net": "VDD",
+        "pad_rail_point_um": [
+          2500.8,
+          334.8
+        ],
+        "core_point_um": [
+          1920.08,
+          1445.68
+        ],
+        "pin_geometry_checked": true
+      },
+      {
+        "core": "u_fulladder",
+        "net": "VSS",
+        "pad_rail_point_um": [
+          2500.8,
+          341.8
+        ],
+        "core_point_um": [
+          1940.08,
+          1441.76
+        ],
+        "pin_geometry_checked": true
+      }
+    ],
+    "assembly_gds_bytes": 24314946,
+    "assembly_route_layers": "36/0,42/0,46/0,81/0",
+    "routes_total": 13,
+    "routes_signal": 9,
+    "routes_power": 4,
+    "route_layers": "36/0,42/0,46/0,81/0"
+  },
+  "artifacts": [
+    {
+      "path": "padring/ChipOrchestraDualCore_padring.cfg",
+      "kind": "config",
+      "stage": "PADRING",
+      "size": 698,
+      "mime": "application/octet-stream",
+      "summary": "resolved gf180-v1 pad-ring config",
+      "created_at": "2026-10-11T10:43:19.173833+00:00"
+    },
+    {
+      "path": "padring/ChipOrchestraDualCore_padring.def",
+      "kind": "def",
+      "stage": "PADRING",
+      "size": 5360,
+      "mime": "application/octet-stream",
+      "summary": "pad/corner/filler placement",
+      "created_at": "2026-10-11T10:43:19.204422+00:00"
+    },
+    {
+      "path": "padring/ChipOrchestraDualCore_padring.svg",
+      "kind": "layout_preview",
+      "stage": "PADRING",
+      "size": 7527,
+      "mime": "image/svg+xml",
+      "summary": "pad-ring visual preview",
+      "created_at": "2026-10-11T10:43:19.229660+00:00"
+    },
+    {
+      "path": "padring/ChipOrchestraDualCore_padring.v",
+      "kind": "netlist",
+      "stage": "PADRING",
+      "size": 3280,
+      "mime": "application/octet-stream",
+      "summary": "pad-ring Verilog netlist",
+      "created_at": "2026-10-11T10:43:19.253372+00:00"
+    },
+    {
+      "path": "padring/ChipOrchestraDualCore_padring.lef",
+      "kind": "lef",
+      "stage": "PADRING",
+      "size": 186,
+      "mime": "application/octet-stream",
+      "summary": "pad-ring abstract LEF",
+      "created_at": "2026-10-11T10:43:19.280807+00:00"
+    },
+    {
+      "path": "padring/ChipOrchestraDualCore_chip.gds",
+      "kind": "gds",
+      "stage": "PADRING",
+      "size": 24314946,
+      "mime": "application/octet-stream",
+      "summary": "chip-level pad-ring GDSII (primary deliverable)",
+      "created_at": "2026-10-11T10:43:35.302695+00:00"
+    },
+    {
+      "path": "padring/ChipOrchestraDualCore_chip_preview.png",
+      "kind": "layout_preview",
+      "stage": "PADRING",
+      "size": 555638,
+      "mime": "image/png",
+      "summary": "chip-level GDS preview with layer legend and scale bar",
+      "created_at": "2026-10-11T10:43:40.693803+00:00"
+    },
+    {
+      "path": "padring/ChipOrchestraDualCore_chip.svg",
+      "kind": "layout_preview",
+      "stage": "PADRING",
+      "size": 740990,
+      "mime": "image/svg+xml",
+      "summary": "chip-level GDS SVG render",
+      "created_at": "2026-10-11T10:43:45.812441+00:00"
+    },
+    {
+      "path": "gds/ChipOrchestraDualCore_padring.gds",
+      "kind": "gds",
+      "stage": "PADRING",
+      "size": 24314946,
+      "mime": "application/octet-stream",
+      "summary": "pad-ring GDS (workspace gds/ copy)",
+      "created_at": "2026-10-11T10:43:46.147457+00:00"
+    },
+    {
+      "path": "logs/padring.log",
+      "kind": "log",
+      "stage": "PADRING",
+      "size": 5080,
+      "mime": "application/octet-stream",
+      "summary": "",
+      "created_at": "2026-10-11T10:43:46.179532+00:00"
+    },
+    {
+      "path": "padring/padring.log",
+      "kind": "log",
+      "stage": "PADRING",
+      "size": 5080,
+      "mime": "application/octet-stream",
+      "summary": "",
+      "created_at": "2026-10-11T10:43:46.196215+00:00"
+    }
+  ],
+  "warnings": [],
+  "errors": [],
+  "raw_log_paths": [
+    "logs/padring.log",
+    "padring/padring.log"
+  ],
+  "design": "ChipOrchestraDualCore_padring",
+  "config": "gf180-v1",
+  "cfg_file": "padring/ChipOrchestraDualCore_padring.cfg",
+  "def_file": "padring/ChipOrchestraDualCore_padring.def",
+  "gds": "padring/ChipOrchestraDualCore_chip.gds",
+  "lef": "padring/ChipOrchestraDualCore_padring.lef",
+  "svg": "padring/ChipOrchestraDualCore_padring.svg",
+  "verilog": "padring/ChipOrchestraDualCore_padring.v",
+  "deliverables": [
+    "padring/ChipOrchestraDualCore_padring.cfg",
+    "padring/ChipOrchestraDualCore_padring.def",
+    "padring/ChipOrchestraDualCore_padring.svg",
+    "padring/ChipOrchestraDualCore_padring.v",
+    "padring/ChipOrchestraDualCore_padring.lef",
+    "padring/ChipOrchestraDualCore_chip.gds",
+    "padring/ChipOrchestraDualCore_chip_preview.png",
+    "padring/ChipOrchestraDualCore_chip.svg"
+  ],
+  "pad_summary": {
+    "analog": 58,
+    "clk": 1,
+    "rst_n": 1,
+    "uart_rx": 1,
+    "uart_tx": 1,
+    "dvdd": 3,
+    "dvss": 4,
+    "corners": 4,
+    "total_io": 69,
+    "total_cells": 73
+  },
+  "used_real_tools": true,
+  "skipped": false
+}

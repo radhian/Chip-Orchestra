@@ -1,0 +1,20 @@
+Collecting redis==5.2.0
+  Downloading redis-5.2.0-py3-none-any.whl.metadata (9.1 kB)
+Collecting sqlalchemy==2.0.36
+  Downloading SQLAlchemy-2.0.36-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (9.7 kB)
+Collecting typing-extensions>=4.6.0 (from sqlalchemy==2.0.36)
+  Using cached typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+Collecting greenlet!=0.4.17 (from sqlalchemy==2.0.36)
+  Downloading greenlet-3.5.6-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl.metadata (3.8 kB)
+Downloading redis-5.2.0-py3-none-any.whl (261 kB)
+Downloading SQLAlchemy-2.0.36-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (3.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.2/3.2 MB 37.5 MB/s  0:00:00
+Downloading greenlet-3.5.6-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (621 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 621.4/621.4 kB 27.2 MB/s  0:00:00
+Using cached typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+Installing collected packages: typing-extensions, redis, greenlet, sqlalchemy
+
+Successfully installed greenlet-3.5.6 redis-5.2.0 sqlalchemy-2.0.36 typing-extensions-4.16.0
+WARNING: Target directory /mnt/d/LinkedinProjects/Chip-Orchestra/paper/eda_runtime/__pycache__ already exists. Specify --upgrade to force replacement.
+WARNING: Target directory /mnt/d/LinkedinProjects/Chip-Orchestra/paper/eda_runtime/typing_extensions-4.16.0.dist-info already exists. Specify --upgrade to force replacement.
+WARNING: Target directory /mnt/d/LinkedinProjects/Chip-Orchestra/paper/eda_runtime/typing_extensions.py already exists. Specify --upgrade to force replacement.

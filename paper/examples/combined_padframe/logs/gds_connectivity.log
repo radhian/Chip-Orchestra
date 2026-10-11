@@ -1,0 +1,10 @@
+{
+  "gds": "/mnt/d/LinkedinProjects/Chip-Orchestra/paper/examples/combined_padframe/padring/ChipOrchestraDualCore_chip.gds",
+  "independent_signal_connections_verified": 9,
+  "signal_shorts": 0,
+  "orphan_vias": 0,
+  "top_level_vias_checked": 580,
+  "independent_power_connections_verified": 4,
+  "actual_pad_and_core_endpoint_overlap": true,
+  "scope": "Top-level metal/via extraction plus actual referenced pin overlap, not full-chip device LVS"
+}

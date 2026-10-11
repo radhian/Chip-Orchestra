@@ -1,0 +1,12 @@
+import pya, os
+window=pya.Application.instance().main_window()
+window.load_layout(os.environ['PADFRAME_PREVIEW_GDS'],0)
+view=window.current_view()
+view.add_missing_layers()
+view.max_hier()
+view.zoom_fit()
+view.set_config('background-color','#ffffff')
+view.set_config('grid-visible','false')
+view.set_config('text-visible','false')
+view.save_image(os.environ['PADFRAME_PREVIEW_PNG'],2200,2200)
+pya.Application.instance().exit(0)

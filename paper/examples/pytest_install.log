@@ -1,0 +1,22 @@
+Collecting pytest==8.3.3
+  Downloading pytest-8.3.3-py3-none-any.whl.metadata (7.5 kB)
+Collecting pytest-asyncio==0.24.0
+  Downloading pytest_asyncio-0.24.0-py3-none-any.whl.metadata (3.9 kB)
+Collecting iniconfig (from pytest==8.3.3)
+  Using cached iniconfig-2.3.1-py3-none-any.whl.metadata (2.8 kB)
+Collecting packaging (from pytest==8.3.3)
+  Using cached packaging-26.3-py3-none-any.whl.metadata (3.5 kB)
+Collecting pluggy<2,>=1.5 (from pytest==8.3.3)
+  Using cached pluggy-1.6.0-py3-none-any.whl.metadata (4.8 kB)
+Downloading pytest-8.3.3-py3-none-any.whl (342 kB)
+Downloading pytest_asyncio-0.24.0-py3-none-any.whl (18 kB)
+Using cached pluggy-1.6.0-py3-none-any.whl (20 kB)
+Using cached iniconfig-2.3.1-py3-none-any.whl (7.6 kB)
+Using cached packaging-26.3-py3-none-any.whl (129 kB)
+Installing collected packages: pluggy, packaging, iniconfig, pytest, pytest-asyncio
+
+Successfully installed iniconfig-2.3.1 packaging-26.3 pluggy-1.6.0 pytest-8.3.3 pytest-asyncio-0.24.0
+WARNING: Target directory /mnt/d/LinkedinProjects/Chip-Orchestra/paper/eda_runtime/__pycache__ already exists. Specify --upgrade to force replacement.
+WARNING: Target directory /mnt/d/LinkedinProjects/Chip-Orchestra/paper/eda_runtime/packaging-26.3.dist-info already exists. Specify --upgrade to force replacement.
+WARNING: Target directory /mnt/d/LinkedinProjects/Chip-Orchestra/paper/eda_runtime/packaging already exists. Specify --upgrade to force replacement.
+WARNING: Target directory /mnt/d/LinkedinProjects/Chip-Orchestra/paper/eda_runtime/bin already exists. Specify --upgrade to force replacement.

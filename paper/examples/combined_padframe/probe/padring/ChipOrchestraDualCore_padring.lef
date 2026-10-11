@@ -1,0 +1,9 @@
+VERSION 5.8 ;
+BUSBITCHARS "[]" ;
+DIVIDERCHAR "/" ;
+MACRO ChipOrchestraDualCore_padring
+  CLASS BLOCK ;
+  ORIGIN 0 0 ;
+  SIZE 2935 BY 2935 ;
+END ChipOrchestraDualCore_padring
+END LIBRARY

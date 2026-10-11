@@ -1,0 +1,48 @@
+
+20. Printing statistics.
+
+=== NanoCGRA_Lite ===
+
+   Number of wires:               6195
+   Number of wire bits:           6195
+   Number of public wires:        1516
+   Number of public wire bits:    1516
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:               5296
+     gf180mcu_fd_sc_mcu7t5v0__and2_1    148
+     gf180mcu_fd_sc_mcu7t5v0__and3_1     27
+     gf180mcu_fd_sc_mcu7t5v0__and4_1      6
+     gf180mcu_fd_sc_mcu7t5v0__aoi211_1     62
+     gf180mcu_fd_sc_mcu7t5v0__aoi21_1    447
+     gf180mcu_fd_sc_mcu7t5v0__aoi221_1    113
+     gf180mcu_fd_sc_mcu7t5v0__aoi222_1     13
+     gf180mcu_fd_sc_mcu7t5v0__aoi22_1    217
+     gf180mcu_fd_sc_mcu7t5v0__clkinv_1    519
+     gf180mcu_fd_sc_mcu7t5v0__dffq_1    617
+     gf180mcu_fd_sc_mcu7t5v0__mux2_1     16
+     gf180mcu_fd_sc_mcu7t5v0__mux4_1     13
+     gf180mcu_fd_sc_mcu7t5v0__nand2_1    867
+     gf180mcu_fd_sc_mcu7t5v0__nand3_1    158
+     gf180mcu_fd_sc_mcu7t5v0__nand4_1     25
+     gf180mcu_fd_sc_mcu7t5v0__nor2_1    494
+     gf180mcu_fd_sc_mcu7t5v0__nor3_1     70
+     gf180mcu_fd_sc_mcu7t5v0__nor4_1     16
+     gf180mcu_fd_sc_mcu7t5v0__oai211_1     79
+     gf180mcu_fd_sc_mcu7t5v0__oai21_1    414
+     gf180mcu_fd_sc_mcu7t5v0__oai221_1     20
+     gf180mcu_fd_sc_mcu7t5v0__oai222_1      1
+     gf180mcu_fd_sc_mcu7t5v0__oai22_1    298
+     gf180mcu_fd_sc_mcu7t5v0__oai31_1     26
+     gf180mcu_fd_sc_mcu7t5v0__oai32_1     11
+     gf180mcu_fd_sc_mcu7t5v0__or2_1     51
+     gf180mcu_fd_sc_mcu7t5v0__or3_1     17
+     gf180mcu_fd_sc_mcu7t5v0__or4_1      3
+     gf180mcu_fd_sc_mcu7t5v0__xnor2_1     88
+     gf180mcu_fd_sc_mcu7t5v0__xnor3_1     36
+     gf180mcu_fd_sc_mcu7t5v0__xor2_1    270
+     gf180mcu_fd_sc_mcu7t5v0__xor3_1    154
+
+   Chip area for module '\NanoCGRA_Lite': 123361.459200
+

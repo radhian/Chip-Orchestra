@@ -1,0 +1,19 @@
+
+13. Printing statistics.
+
+=== fulladder ===
+
+   Number of wires:                  7
+   Number of wire bits:              7
+   Number of public wires:           5
+   Number of public wire bits:       5
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                  4
+     gf180mcu_fd_sc_mcu7t5v0__nand2_1      2
+     gf180mcu_fd_sc_mcu7t5v0__oai21_1      1
+     gf180mcu_fd_sc_mcu7t5v0__xor3_1      1
+
+   Chip area for module '\fulladder': 90.003200
+
