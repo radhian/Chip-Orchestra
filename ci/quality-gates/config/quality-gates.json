@@ -1,0 +1,33 @@
+{
+  "rtl_groups": [
+    {
+      "name": "nanocgra_lite_3x3_opt",
+      "patterns": ["output/nanocgra_lite_3x3_opt/rtl/**/*.v", "output/nanocgra_lite_3x3_opt/rtl/**/*.sv"],
+      "include_dirs": ["output/nanocgra_lite_3x3_opt/rtl"]
+    }
+  ],
+  "lint": {
+    "tool_preference": ["verilator", "iverilog"],
+    "verilator_args": ["--lint-only", "-Wall", "-Wno-fatal", "--timing"],
+    "iverilog_args": ["-g2012", "-t", "null"],
+    "warning_threshold": 500
+  },
+  "style": {
+    "block_tabs": false,
+    "block_trailing_whitespace": false,
+    "block_crlf": true,
+    "warn_line_length": 160
+  },
+  "cdc_reset": {
+    "reset_regex": "(rst|reset)",
+    "critical_on_multi_domain_writes": true,
+    "critical_on_async_reset_not_checked": true
+  },
+  "summary": {
+    "design_roots": [
+      "output/nanocgra_lite",
+      "output/nanocgra_lite_3x3_opt",
+      "output/NanoCGRA-SoC"
+    ]
+  }
+}
