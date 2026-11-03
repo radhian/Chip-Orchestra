@@ -17,31 +17,11 @@ project:
   discord: "rads"
   description: "A compact 3x3 coarse-grained reconfigurable array with a 32-byte SRAM and a 4-pin UART-only interface (clk, rst_n, uart_rx, uart_tx), implemented in GF180MCU. The internal UART bridge exposes an 8-bit MMIO command protocol for SRAM, PE configuration, operands, start/status control, and UART registers."
   lvs_config: "output/nanocgra_lite_3x3_opt/lvs_config.json"
-<<<<<<< HEAD
   gf_def_ready: false          # block-level DEF/GDS; GF pad-frame DEF is not included
   ws_def_ready: false          # block-level DEF/GDS; wafer-space pad-frame DEF is not included
   drc_ready: true               # GF180MCU DRC report is clean
   lvs_ready: true               # device and standard-cell LVS sign-off is clean
   export_control: "documents/Export_Control_GF_Rev8.2.docx"   # Required export control document
-
-pins:
-  - name: vss
-    io_type: ground
-  - name: clk
-    io_type: input_schmitt
-  - name: rst_n
-    io_type: input_cmos
-  - name: uart_rx
-    io_type: input_cmos
-  - name: uart_tx
-    io_type: bidirectional
-  - name: vdd
-    io_type: power
-=======
-  gf_def_ready: true
-  ws_def_ready: false
-  drc_ready: true
-  lvs_ready: true
 
 # ======================================================
 # Pin list (must match the padring / info.yaml section
@@ -63,4 +43,3 @@ pins:
     io_type: bidirectional       # UART TX from the internal uart_bridge
   - name: vdd
     io_type: power               # trailing power pin closes the I/O power rail
->>>>>>> f63c8c1daa12c02ae26691cd6ae7bb115d64b53c
