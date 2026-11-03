@@ -4,8 +4,9 @@
 # http://www.apache.org/licenses/
 # ----- ------ ----- ----- ------ ----- ----- ------ -----
 
-# Data will be pulled from the main branch of the repo.
-# Please be sure that the main branch contains the data you want to submit.
+# data will be pulled from main branch of the repo.
+# please be sure that the main branch contains the data you want to submit.
+# This file will be updated with more information later
 
 # ======================================================
 # Project metadata (used for documentation / review)
@@ -16,3 +17,22 @@ project:
   discord: "rads"
   description: "A compact 3x3 coarse-grained reconfigurable array with 32-byte SRAM and a UART-only interface, implemented in GF180MCU."
   lvs_config: "output/nanocgra_lite_3x3_opt/lvs_config.json"
+  gf_def_ready: false          # block-level DEF/GDS; GF pad-frame DEF is not included
+  ws_def_ready: false          # block-level DEF/GDS; wafer-space pad-frame DEF is not included
+  drc_ready: true               # GF180MCU DRC report is clean
+  lvs_ready: true               # device and standard-cell LVS sign-off is clean
+  export_control: "documents/Export_Control_GF_Rev8.2.docx"   # Required export control document
+
+pins:
+  - name: vss
+    io_type: ground
+  - name: clk
+    io_type: input_schmitt
+  - name: rst_n
+    io_type: input_cmos
+  - name: uart_rx
+    io_type: input_cmos
+  - name: uart_tx
+    io_type: bidirectional
+  - name: vdd
+    io_type: power
