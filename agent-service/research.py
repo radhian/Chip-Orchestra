@@ -495,17 +495,27 @@ def _gh_headers() -> dict:
 
 
 def _gh_hdl_paths(user: str, repo: str, headers: dict, max_files: int):
-    """List up to max_files HDL blob paths in a GitHub repo + the default branch."""
+    """List up to max_files HDL blob paths, preferring the ``main`` branch."""
     import requests
     info = requests.get(f"https://api.github.com/repos/{user}/{repo}", headers=headers, timeout=12)
     if not info.ok:
         return "main", []
-    branch = info.json().get("default_branch", "main")
-    tree = requests.get(
-        f"https://api.github.com/repos/{user}/{repo}/git/trees/{branch}?recursive=1",
-        headers=headers, timeout=15)
-    if not tree.ok:
-        return branch, []
+    default_branch = info.json().get("default_branch", "main")
+    branches = ["main"]
+    if default_branch != "main":
+        branches.append(default_branch)
+    tree = None
+    branch = "main"
+    for candidate in branches:
+        candidate_tree = requests.get(
+            f"https://api.github.com/repos/{user}/{repo}/git/trees/{candidate}?recursive=1",
+            headers=headers, timeout=15)
+        if candidate_tree.ok:
+            branch = candidate
+            tree = candidate_tree
+            break
+    if tree is None:
+        return default_branch, []
     paths = [t["path"] for t in tree.json().get("tree", [])
              if t.get("type") == "blob"
              and t["path"].lower().endswith((".v", ".sv", ".vh", ".svh", ".vhd"))]

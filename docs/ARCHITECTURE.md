@@ -1484,7 +1484,7 @@ agent-memory/{stage_name}/{yyyy}/{mm}/
 Git is the source of editable design content and templates.
 
 **Recommended branch model**
-- `main` or `master`: stable project branch
+- `main`: preferred stable project branch (fall back to the repository default only when unavailable)
 - `tasks/{task_id}/attempt-{n}`: task-scoped working branch
 - `templates/{template_id}`: starter references
 
