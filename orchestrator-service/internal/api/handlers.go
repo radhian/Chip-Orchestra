@@ -128,6 +128,7 @@ type taskDetailResponse struct {
 func (a *App) RegisterRoutes(router *gin.Engine) {
 	router.GET("/health", a.health)
 	router.POST("/api/v1/auth/login", a.login)
+	router.POST("/api/v1/auth/bootstrap", a.bootstrapAuth)
 	router.GET("/ws/tasks/:id/events", a.taskEventsWS)
 
 	api := router.Group("/api/v1")
@@ -189,6 +190,28 @@ func (a *App) login(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid credentials"})
 		return
 	}
+	a.writeAuthResponse(c, user)
+}
+
+func (a *App) bootstrapAuth(c *gin.Context) {
+	if !strings.EqualFold(strings.TrimSpace(os.Getenv("SKIP_LOGIN")), "true") {
+		c.JSON(http.StatusNotFound, gin.H{"error": "not found"})
+		return
+	}
+
+	username := strings.TrimSpace(os.Getenv("DEFAULT_USERNAME"))
+	if username == "" {
+		username = "admin"
+	}
+	var user models.User
+	if err := a.DB.WithContext(c.Request.Context()).Where("username = ?", username).First(&user).Error; err != nil {
+		c.JSON(http.StatusServiceUnavailable, gin.H{"error": "default user is not available"})
+		return
+	}
+	a.writeAuthResponse(c, user)
+}
+
+func (a *App) writeAuthResponse(c *gin.Context, user models.User) {
 	// 24h token: image/download URLs embed the JWT (`?token=`), and a 1-hour
 	// expiry made every <img> in a long-open tab break with 401s.
 	token, err := middleware.IssueToken(user, a.JWTSecret, 24*time.Hour)

@@ -31,6 +31,16 @@ if ti is None:
     print("ERROR: top cell %s not found" % top_name)
     raise SystemExit(1)
 
+# KLayout's DEF reader represents generated vias as separate VIA_* helper cells.
+# Flatten only those helpers into the top-level routed geometry. This preserves
+# standard-cell hierarchy while allowing each via landing to merge with its
+# routed metal, so minimum area is satisfied without post-route metal growth.
+via_indices = {cell.cell_index() for cell in layout.each_cell() if cell.name.startswith("VIA_")}
+via_instances = [instance for instance in ti.each_inst() if instance.cell_index in via_indices]
+for instance in via_instances:
+    instance.flatten()
+print("Flattened %d generated via instances into routed top-level geometry" % len(via_instances))
+
 # Prune cells not referenced by the top hierarchy (unused std cells from merged GDS)
 keep = set(ti.called_cells())
 keep.add(ti.cell_index())

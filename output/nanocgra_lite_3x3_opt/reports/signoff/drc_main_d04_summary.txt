@@ -1,0 +1,7 @@
+DRC MAIN D04 summary
+============================================================
+Report database: reports/signoff/drc_main_d04.lyrdb
+Top cell: NanoCGRA_Lite
+Total violations: 0
+
+PASS: no violation items were reported.

@@ -348,6 +348,21 @@ def _golden_ips(sc: StageContext) -> List[Dict[str, Any]]:
             if isinstance(ip, dict) and ip.get("name") and not _is_header_ip(ip)]
 
 
+def _single_module_contract_top(sc: StageContext) -> Optional[str]:
+    """The approved contract's single top module, when a one-file fallback is safe.
+
+    This is only true when the golden contract defines exactly one non-header IP,
+    and that module name matches the task's top module (if one is set)."""
+    ips = _golden_ips(sc)
+    if len(ips) != 1:
+        return None
+    name = str(ips[0].get("name", "")).strip()
+    top = str(sc.top_module or "").strip()
+    if not name or (top and name != top):
+        return None
+    return name
+
+
 def _golden_headers(sc: StageContext) -> List[Dict[str, Any]]:
     """The contract's include files — written and `include`d, never instantiated."""
     ips = _golden_summary(sc).get("ips")
@@ -1621,6 +1636,9 @@ def _assert_contract_satisfied(sc: StageContext, status: Dict[str, Any],
 def run_rtl_gen(sc: StageContext) -> AgentResult:
     agent = "RTLAuthor"
     top = sc.top_module
+    single_contract_top = _single_module_contract_top(sc)
+    if single_contract_top:
+        top = single_contract_top
 
     if _deep_enabled(sc):
         from .deep_agent import PITFALLS
@@ -1945,12 +1963,14 @@ def run_rtl_gen(sc: StageContext) -> AgentResult:
     # The one-shot author writes a SINGLE rtl/<top>.v from the brief alone. That
     # is a reasonable floor for a contract-less run, but against an approved
     # golden contract it is a silent downgrade: one stub module named after the
-    # task, replacing the decomposition the user signed off on. Refuse it.
-    if _golden_ips(sc):
+    # task, replacing the decomposition the user signed off on. Refuse it unless
+    # the approved contract itself is exactly one top module.
+    if _golden_ips(sc) and not single_contract_top:
         contracted = ", ".join(str(ip.get("name", "?")) for ip in _golden_ips(sc))
         raise RuntimeError(
             "RTL_GEN produced no usable RTL from the golden contract, and the single-file "
-            f"fallback author cannot satisfy it (contracted modules: {contracted}). "
+            "fallback author is only allowed for a single-module top-level contract "
+            f"(contracted modules: {contracted}). "
             "Writing one rtl/<task>.v stub here would hand a design downstream that the "
             "user never approved. Check logs/rtl_gen_deep_agent*.md for why the deep agent "
             "wrote no modules."

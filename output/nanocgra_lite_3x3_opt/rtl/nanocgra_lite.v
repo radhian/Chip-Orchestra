@@ -26,7 +26,7 @@
 //============================================================================
 `include "params.vh"
 
-module NanoCGRA_Lite #(
+module NanoCGRA_Lite_core #(
     parameter DW = `DATA_WIDTH,
     parameter AW = `ADDR_WIDTH,
     parameter UART_CLK_PER_BIT = 87

@@ -4,6 +4,7 @@ import asyncio
 import contextlib
 import json
 import os
+import time
 from contextlib import asynccontextmanager
 from typing import Any, Dict
 from uuid import uuid4
@@ -51,13 +52,44 @@ class CreateEDAJobRequest(BaseModel):
         }
 
 
-def build_services():
+def _startup_retry_timeout_seconds() -> float:
+    raw = os.getenv("STARTUP_RETRY_TIMEOUT", "120s").strip()
+    if raw.endswith("ms"):
+        return max(float(raw[:-2]) / 1000.0, 1.0)
+    if raw.endswith("s"):
+        return max(float(raw[:-1]), 1.0)
+    if raw.endswith("m"):
+        return max(float(raw[:-1]) * 60.0, 1.0)
+    try:
+        return max(float(raw), 1.0)
+    except ValueError:
+        return 120.0
+
+
+async def build_services():
     database_url = os.getenv("DATABASE_URL", "mysql+pymysql://chip:chip@mysql:3306/chip_orchestra")
     redis_url = os.getenv("REDIS_URL", "redis://redis:6379/0")
-    redis_client = Redis.from_url(redis_url, decode_responses=True)
-    manager = EDAJobManager(database_url=database_url, redis_client=redis_client)
-    manager.create_tables()
-    return redis_client, manager
+    deadline = time.monotonic() + _startup_retry_timeout_seconds()
+    attempt = 0
+    last_error: Exception | None = None
+    while True:
+        attempt += 1
+        redis_client = Redis.from_url(redis_url, decode_responses=True)
+        try:
+            manager = EDAJobManager(database_url=database_url, redis_client=redis_client)
+            manager.create_tables()
+            await redis_client.ping()
+            return redis_client, manager
+        except Exception as exc:
+            last_error = exc
+            close = getattr(redis_client, "aclose", None)
+            if callable(close):
+                with contextlib.suppress(Exception):
+                    await close()
+            if time.monotonic() >= deadline:
+                raise RuntimeError(f"EDA dependencies not ready after retries: {last_error}") from last_error
+            print(f"[startup] waiting for mysql/redis (attempt {attempt}): {exc}", flush=True)
+            await asyncio.sleep(2)
 
 
 def _assign_services(app: FastAPI, redis_client: Redis, manager: EDAJobManager):
@@ -72,7 +104,7 @@ def create_app(*, redis_client: Redis | None = None, manager: EDAJobManager | No
     @asynccontextmanager
     async def lifespan(app: FastAPI):
         if not hasattr(app.state, "manager"):
-            built_redis, built_manager = build_services()
+            built_redis, built_manager = await build_services()
             _assign_services(app, built_redis, built_manager)
         worker = None
         if run_worker:

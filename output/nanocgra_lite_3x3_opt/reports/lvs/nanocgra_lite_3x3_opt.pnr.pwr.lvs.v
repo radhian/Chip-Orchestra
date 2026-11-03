@@ -5313,8 +5313,7 @@ module NanoCGRA_Lite (clk,
  wire \u_uart.tx_state_1_ ;
  wire \u_uart.tx_state_2_ ;
  wire \u_uart.tx_state_3_ ;
- wire \u_uart.uart_tx ;
- wire net1;
+  wire net1;
  wire net2;
  wire net3;
  wire net4;
@@ -43008,7 +43007,7 @@ module NanoCGRA_Lite (clk,
     .VSS(VSS));
  gf180mcu_fd_sc_mcu7t5v0__dffq_2 _9651_ (.D(_0309_),
     .CLK(clknet_leaf_12_clk),
-    .Q(\u_uart.uart_tx ),
+    .Q(uart_tx),
     .VDD(VDD),
     .VNW(VDD),
     .VPW(VSS),
@@ -48257,63 +48256,179 @@ module NanoCGRA_Lite (clk,
  gf180mcu_fd_sc_mcu7t5v0__filltie TAP_1490 (.VDD(VDD),
     .VSS(VSS));
  gf180mcu_fd_sc_mcu7t5v0__buf_16 repeater1 (.I(_1350_),
-    .Z(net1));
+    .Z(net1),
+    .VDD(VDD),
+    .VNW(VDD),
+    .VPW(VSS),
+    .VSS(VSS));
  gf180mcu_fd_sc_mcu7t5v0__buf_8 repeater2 (.I(net3),
-    .Z(net2));
+    .Z(net2),
+    .VDD(VDD),
+    .VNW(VDD),
+    .VPW(VSS),
+    .VSS(VSS));
  gf180mcu_fd_sc_mcu7t5v0__buf_8 repeater3 (.I(rst_n),
-    .Z(net3));
+    .Z(net3),
+    .VDD(VDD),
+    .VNW(VDD),
+    .VPW(VSS),
+    .VSS(VSS));
  gf180mcu_fd_sc_mcu7t5v0__buf_8 repeater4 (.I(net5),
-    .Z(net4));
+    .Z(net4),
+    .VDD(VDD),
+    .VNW(VDD),
+    .VPW(VSS),
+    .VSS(VSS));
  gf180mcu_fd_sc_mcu7t5v0__buf_8 repeater5 (.I(net11),
-    .Z(net5));
+    .Z(net5),
+    .VDD(VDD),
+    .VNW(VDD),
+    .VPW(VSS),
+    .VSS(VSS));
  gf180mcu_fd_sc_mcu7t5v0__buf_8 repeater6 (.I(net7),
-    .Z(net6));
+    .Z(net6),
+    .VDD(VDD),
+    .VNW(VDD),
+    .VPW(VSS),
+    .VSS(VSS));
  gf180mcu_fd_sc_mcu7t5v0__buf_12 repeater7 (.I(net8),
-    .Z(net7));
+    .Z(net7),
+    .VDD(VDD),
+    .VNW(VDD),
+    .VPW(VSS),
+    .VSS(VSS));
  gf180mcu_fd_sc_mcu7t5v0__buf_8 repeater8 (.I(net10),
-    .Z(net8));
+    .Z(net8),
+    .VDD(VDD),
+    .VNW(VDD),
+    .VPW(VSS),
+    .VSS(VSS));
  gf180mcu_fd_sc_mcu7t5v0__buf_8 repeater9 (.I(net10),
-    .Z(net9));
+    .Z(net9),
+    .VDD(VDD),
+    .VNW(VDD),
+    .VPW(VSS),
+    .VSS(VSS));
  gf180mcu_fd_sc_mcu7t5v0__buf_8 repeater10 (.I(net11),
-    .Z(net10));
+    .Z(net10),
+    .VDD(VDD),
+    .VNW(VDD),
+    .VPW(VSS),
+    .VSS(VSS));
  gf180mcu_fd_sc_mcu7t5v0__buf_8 repeater11 (.I(rst_n),
-    .Z(net11));
+    .Z(net11),
+    .VDD(VDD),
+    .VNW(VDD),
+    .VPW(VSS),
+    .VSS(VSS));
  gf180mcu_fd_sc_mcu7t5v0__buf_8 repeater12 (.I(net13),
-    .Z(net12));
+    .Z(net12),
+    .VDD(VDD),
+    .VNW(VDD),
+    .VPW(VSS),
+    .VSS(VSS));
  gf180mcu_fd_sc_mcu7t5v0__buf_8 repeater13 (.I(rst_n),
-    .Z(net13));
+    .Z(net13),
+    .VDD(VDD),
+    .VNW(VDD),
+    .VPW(VSS),
+    .VSS(VSS));
  gf180mcu_fd_sc_mcu7t5v0__clkbuf_16 clkbuf_leaf_0_clk (.I(clknet_1_0__leaf_clk),
-    .Z(clknet_leaf_0_clk));
+    .Z(clknet_leaf_0_clk),
+    .VDD(VDD),
+    .VNW(VDD),
+    .VPW(VSS),
+    .VSS(VSS));
  gf180mcu_fd_sc_mcu7t5v0__clkbuf_16 clkbuf_leaf_1_clk (.I(clknet_1_0__leaf_clk),
-    .Z(clknet_leaf_1_clk));
+    .Z(clknet_leaf_1_clk),
+    .VDD(VDD),
+    .VNW(VDD),
+    .VPW(VSS),
+    .VSS(VSS));
  gf180mcu_fd_sc_mcu7t5v0__clkbuf_16 clkbuf_leaf_2_clk (.I(clknet_1_0__leaf_clk),
-    .Z(clknet_leaf_2_clk));
+    .Z(clknet_leaf_2_clk),
+    .VDD(VDD),
+    .VNW(VDD),
+    .VPW(VSS),
+    .VSS(VSS));
  gf180mcu_fd_sc_mcu7t5v0__clkbuf_16 clkbuf_leaf_3_clk (.I(clknet_1_1__leaf_clk),
-    .Z(clknet_leaf_3_clk));
+    .Z(clknet_leaf_3_clk),
+    .VDD(VDD),
+    .VNW(VDD),
+    .VPW(VSS),
+    .VSS(VSS));
  gf180mcu_fd_sc_mcu7t5v0__clkbuf_16 clkbuf_leaf_4_clk (.I(clknet_1_1__leaf_clk),
-    .Z(clknet_leaf_4_clk));
+    .Z(clknet_leaf_4_clk),
+    .VDD(VDD),
+    .VNW(VDD),
+    .VPW(VSS),
+    .VSS(VSS));
  gf180mcu_fd_sc_mcu7t5v0__clkbuf_16 clkbuf_leaf_5_clk (.I(clknet_1_1__leaf_clk),
-    .Z(clknet_leaf_5_clk));
+    .Z(clknet_leaf_5_clk),
+    .VDD(VDD),
+    .VNW(VDD),
+    .VPW(VSS),
+    .VSS(VSS));
  gf180mcu_fd_sc_mcu7t5v0__clkbuf_16 clkbuf_leaf_6_clk (.I(clknet_1_1__leaf_clk),
-    .Z(clknet_leaf_6_clk));
+    .Z(clknet_leaf_6_clk),
+    .VDD(VDD),
+    .VNW(VDD),
+    .VPW(VSS),
+    .VSS(VSS));
  gf180mcu_fd_sc_mcu7t5v0__clkbuf_16 clkbuf_leaf_7_clk (.I(clknet_1_1__leaf_clk),
-    .Z(clknet_leaf_7_clk));
+    .Z(clknet_leaf_7_clk),
+    .VDD(VDD),
+    .VNW(VDD),
+    .VPW(VSS),
+    .VSS(VSS));
  gf180mcu_fd_sc_mcu7t5v0__clkbuf_16 clkbuf_leaf_8_clk (.I(clknet_1_1__leaf_clk),
-    .Z(clknet_leaf_8_clk));
+    .Z(clknet_leaf_8_clk),
+    .VDD(VDD),
+    .VNW(VDD),
+    .VPW(VSS),
+    .VSS(VSS));
  gf180mcu_fd_sc_mcu7t5v0__clkbuf_16 clkbuf_leaf_9_clk (.I(clknet_1_0__leaf_clk),
-    .Z(clknet_leaf_9_clk));
+    .Z(clknet_leaf_9_clk),
+    .VDD(VDD),
+    .VNW(VDD),
+    .VPW(VSS),
+    .VSS(VSS));
  gf180mcu_fd_sc_mcu7t5v0__clkbuf_16 clkbuf_leaf_10_clk (.I(clknet_1_0__leaf_clk),
-    .Z(clknet_leaf_10_clk));
+    .Z(clknet_leaf_10_clk),
+    .VDD(VDD),
+    .VNW(VDD),
+    .VPW(VSS),
+    .VSS(VSS));
  gf180mcu_fd_sc_mcu7t5v0__clkbuf_16 clkbuf_leaf_11_clk (.I(clknet_1_0__leaf_clk),
-    .Z(clknet_leaf_11_clk));
+    .Z(clknet_leaf_11_clk),
+    .VDD(VDD),
+    .VNW(VDD),
+    .VPW(VSS),
+    .VSS(VSS));
  gf180mcu_fd_sc_mcu7t5v0__clkbuf_16 clkbuf_leaf_12_clk (.I(clknet_1_0__leaf_clk),
-    .Z(clknet_leaf_12_clk));
+    .Z(clknet_leaf_12_clk),
+    .VDD(VDD),
+    .VNW(VDD),
+    .VPW(VSS),
+    .VSS(VSS));
  gf180mcu_fd_sc_mcu7t5v0__clkbuf_16 clkbuf_0_clk (.I(clk),
-    .Z(clknet_0_clk));
+    .Z(clknet_0_clk),
+    .VDD(VDD),
+    .VNW(VDD),
+    .VPW(VSS),
+    .VSS(VSS));
  gf180mcu_fd_sc_mcu7t5v0__clkbuf_16 clkbuf_1_0__f_clk (.I(clknet_0_clk),
-    .Z(clknet_1_0__leaf_clk));
+    .Z(clknet_1_0__leaf_clk),
+    .VDD(VDD),
+    .VNW(VDD),
+    .VPW(VSS),
+    .VSS(VSS));
  gf180mcu_fd_sc_mcu7t5v0__clkbuf_16 clkbuf_1_1__f_clk (.I(clknet_0_clk),
-    .Z(clknet_1_1__leaf_clk));
+    .Z(clknet_1_1__leaf_clk),
+    .VDD(VDD),
+    .VNW(VDD),
+    .VPW(VSS),
+    .VSS(VSS));
  gf180mcu_fd_sc_mcu7t5v0__fill_32 FILLER_0_2 ();
  gf180mcu_fd_sc_mcu7t5v0__fill_1 FILLER_0_34 ();
  gf180mcu_fd_sc_mcu7t5v0__fill_8 FILLER_0_37 ();
@@ -53533,5 +53648,4 @@ module NanoCGRA_Lite (clk,
  gf180mcu_fd_sc_mcu7t5v0__fill_4 FILLER_112_788 ();
  gf180mcu_fd_sc_mcu7t5v0__fill_2 FILLER_112_792 ();
  gf180mcu_fd_sc_mcu7t5v0__fill_1 FILLER_112_794 ();
- assign uart_tx = \u_uart.uart_tx ;
-endmodule
+ endmodule

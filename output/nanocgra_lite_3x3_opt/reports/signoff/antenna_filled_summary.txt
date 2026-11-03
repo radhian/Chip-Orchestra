@@ -1,0 +1,7 @@
+ANTENNA FILLED DRC summary
+============================================================
+Report database: reports/signoff/antenna_filled.lyrdb
+Top cell: NanoCGRA_Lite
+Total violations: 0
+
+PASS: no violation items were reported.
