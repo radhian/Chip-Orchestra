@@ -4,8 +4,9 @@
 # http://www.apache.org/licenses/
 # ----- ------ ----- ----- ------ ----- ----- ------ -----
 
-# Data will be pulled from the main branch of the repo.
-# Please be sure that the main branch contains the data you want to submit.
+# data will be pulled from main branch of the repo.
+# please be sure that the main branch contains the data you want to submit.
+# This file will be updated with more information later
 
 # ======================================================
 # Project metadata (used for documentation / review)
@@ -14,30 +15,66 @@ project:
   title: "NanoCGRA 3x3"
   team: "Chip Orchestra"
   discord: "rads"
-  description: "A compact 3x3 coarse-grained reconfigurable array with a 32-byte SRAM and a 4-pin UART-only interface (clk, rst_n, uart_rx, uart_tx), implemented in GF180MCU. The internal UART bridge exposes an 8-bit MMIO command protocol for SRAM, PE configuration, operands, start/status control, and UART registers."
+  description: "A compact 3x3 coarse-grained reconfigurable array with 32-byte SRAM and a 4-pin UART-only interface, implemented in GF180MCU."
   lvs_config: "output/nanocgra_lite_3x3_opt/lvs_config.json"
-  gf_def_ready: true
-  ws_def_ready: false
-  drc_ready: true
-  lvs_ready: true
+  gf_def_ready: false          # block-level DEF/GDS; GF pad-frame DEF is not included
+  ws_def_ready: false          # block-level DEF/GDS; wafer-space pad-frame DEF is not included
+  drc_ready: true               # GF180MCU DRC report is clean
+  lvs_ready: true               # device and standard-cell LVS sign-off is clean
+  export_control: "documents/Export_Control_GF_Rev8.2.docx"   # Required export control document
 
-# ======================================================
-# Pin list (must match the padring / info.yaml section
-# consumed by the Chipathon wrapper flow).
-#
-# Top module: NanoCGRA_Lite
-# Signals   : clk, rst_n, uart_rx, uart_tx
-# ======================================================
+# There are 7 i/o pin types and the associated connections from the user area to the i/o pad cell
+# all control signals must be connected
+# ground:
+#   <name> connects to DVSS
+# power:
+#   <name> connects to DVDD
+# input_cmos: digital input with no hysteresis
+#   <name> connects to Y
+#   control pins:
+#     <name_PD>: connects to PD. weak pull down when enabled
+#     <name_PU>: connects to PU. weak pull up when enabled
+# input_schmitt: digital input with hysteresis
+#   <name> connects to Y
+#   control pins:
+#     <name_PD>: connects to PD. weak pull down when enabled
+#     <name_PU>: connects to PU. weak pull up when enabled
+# bidirectional: programmable drive strength PDRV[1:0] - 00: 4mA, 01: 8mA, 10: 12mA, 11: 16mA
+#   <name>_IN connects to Y
+#   <name>_OUT connects to A
+#   control pins:
+#     <name_PD>: connects to PD. weak pull down when enabled
+#     <name_PU>: connects to PU. weak pull up when enabled
+#     <name_CS>: input type - low is cmos buffer, high is schmitt trigger
+#     <name_SL>: output slew rate - low is fast, high is slow
+#     <name_IE>: input enable - high for input PAD -> Y
+#     <name_OE>: output enable - high for output A -> PAD
+#     <name_PDRV0>: drive strength lsb
+#     <name_PDRV1>: drive strength msb
+# bidirectional_24ma: fixed drive strength 24mA
+#   <name>_IN connects to Y
+#   <name>_OUT connects to A
+#   control pins:
+#     <name_PD>: connects to PD. weak pull down when enabled
+#     <name_PU>: connects to PU. weak pull up when enabled
+#     <name_CS>: input type - low is cmos buffer, high is schmitt trigger
+#     <name_SL>: output slew rate - low is fast, high is slow
+#     <name_IE>: input enable - high for input PAD -> Y
+#     <name_OE>: output enable - high for output A -> PAD
+# analog:
+#   <name> connects to ASIG5V
+#   Note: secondary_esd flag is ignored
+
 pins:
   - name: vss
-    io_type: ground              # first pin MUST be a ground connection
+    io_type: ground
   - name: clk
-    io_type: input_schmitt       # system clock
+    io_type: input_schmitt
   - name: rst_n
-    io_type: input_schmitt       # active-low reset
+    io_type: input_schmitt
   - name: uart_rx
-    io_type: input_cmos          # UART RX into the internal uart_bridge
+    io_type: input_cmos
   - name: uart_tx
-    io_type: bidirectional       # UART TX from the internal uart_bridge
+    io_type: bidirectional
   - name: vdd
-    io_type: power               # trailing power pin closes the I/O power rail
+    io_type: power
